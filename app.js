@@ -22,13 +22,13 @@ require('./global').run(function(){
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
     
-    var session = require('express-session')
-    var RedisStore = require('connect-redis')(session);
-        
-    app.use(session({
-      store: new RedisStore({host: config.redis.host, port: config.redis.port, db: config.redis.db.express}),
-      secret: config.session.secret
-    }));
+    // var session = require('express-session')
+    // var RedisStore = require('connect-redis')(session);
+
+    // app.use(session({
+    //   store: new RedisStore({host: config.redis.host, port: config.redis.port, db: config.redis.db.express}),
+    //   secret: config.session.secret
+    // }));
     
     app.use(function(req, res, next){
         req.paramlist = req.paramlist || {};

@@ -18,8 +18,8 @@ exports.login = function(req, res, next) {
             return response.err(req, res, 'USER_LOGIN_FAIL');
 
         var user = userLogic.output(resp);
-        req.sessionStore.user = req.sessionStore.user || {};
-        req.sessionStore.user[req.sessionID] = user.uid;
+        // req.sessionStore.user = req.sessionStore.user || {};
+        // req.sessionStore.user[req.sessionID] = user.uid;
         
         return response.ok(req, res, user);
     });
@@ -62,14 +62,14 @@ exports.register = function(req, res, next) {
 };
 
 exports.auth = function(req, res, next) {
-    console.log('============' + req.sessionID + '===============');
-    req.sessionStore.user = req.sessionStore.user || {};
-    if (req.sessionStore.user[req.sessionID]) {
+    // console.log('============' + req.sessionID + '===============');
+    // req.sessionStore.user = req.sessionStore.user || {};
+    // if (req.sessionStore.user[req.sessionID]) {
         next();
-    }
-    else {
-        response.err(req, res, 'USER_TOKEN_EXPIRE');
-    }
+    // }
+    // else {
+    //     response.err(req, res, 'USER_TOKEN_EXPIRE');
+    // }
 };
 
 exports.getDetail = function(req, res, next) {
