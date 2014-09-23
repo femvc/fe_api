@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ebbinghaus Intelligent Remember [v1.0]</title>
+<script type="text/javascript" src="js/hj_quicklogin.js"></script>
+<script type="text/javascript" src="js/hj_passnew.js"></script>
+<script type="text/javascript" src="js/hj_action.js"></script>
+
+<style>
+.hui_checkbox{float:left;}
+.hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
+.hui_radioinput .hui_radioinput_input{display:none;}
+.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
+.hui_radioinput .hui_radioinput_text{float:left;}
+.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
+.hui_radioinputgroup{overflow:hidden;float:left;}
+.hui_checkbox .hui_checkbox_label{}
+.hui_checkbox .hui_checkbox_label a{font-size:14px;}
+.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
+.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
+.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+
+</style>
+<script type="text/javascript">
+'use strict';
+var form;
+window.onload = function(){
+    hui.Control.init(document.body);
+    
+    var paramlist = hui.Master.parseLocator().query;
+    if (paramlist.atcid) {
+        hui.g('title').innerHTML = '修改题目';
+        Requester.get('/ue_api/internal/get_article', {
+            data: {atcid: paramlist.atcid},
+            onsuccess: function (result) {
+                alert(result[1]);
+                var data = result[1];
+                data.content = JSON.parse(data.content);
+                
+                form.setValueByTree(data);
+            }
+        });
+    }
+    
+    
+    form = hui.Control.getByFormName('form');
+    form.addOption = function () {
+        var content = form.getByFormName('content').getMain();
+        var index = (content.index || hui.t('textarea', content).length) + 1;
+        content.index = index;
+        var tpl = 
+            '<div id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">#{index}' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"></textarea>' +
+            '    <a href="javascript:" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
+            '</div>';
+        hui.util.appendHTML(content, hui.format(tpl, {index: index}));
+        hui.Control.create(hui.g('content'+index));
+    };
+    form.removeOption = function (index) {
+        var content = form.getByFormName('content');
+        content.getByFormName(index).dispose();
+
+    };
+    
+    var submit = form.getByFormName('submit');
+    submit.onclick = function () {
+        var data = hui.Control.getByFormName('form').getParamMap();
+        data.content = JSON.stringify(data.content);
+        console.log(data);
+        Requester.get('/ue_api/internal/save_article', {
+            data: data,
+            onsuccess: function (err, result) {
+                alert(result);
+            }
+        });
+    };
+    var add = form.getByFormName('add');
+    add.onclick = form.addOption;
+    
+    form.addOption();
+    form.addOption();
+    form.addOption();
+    form.addOption();
+};
+//-->
+</script>
+
+</head>
+
+<body style="">
+<!--target:test-->
+<h3 id="title">增加题目</h3>
+<div ui="type:'Panel',formName:'form'">
+    <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+    题目：<textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'"></textarea>
+    <button ui="type:'Button',formName:'submit'">Save</button>
+    <br/><br/>
+    <div ui="type:'Panel',formName:'content',isFormItem: true">
+        选项：<a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+    </div>
+    
+    
+</div>
+
+</body>
+
+</html>

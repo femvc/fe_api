@@ -6,7 +6,7 @@
 
 'use strict';
 
-//以“INTERNAL_”开头的，是不展现给用户看的，后期需要打日志，分析程序bug和错误原因的用的。
+//以INTERNAL_开头的，是不展现给用户看的，后期需要打日志，分析程序bug和错误原因的用的。
 var err_map = {
     INTERNAL_UNKNOWN_ERROR: '未知错误',
     INTERNAL_INVALIDE_PARAMETER: '参数格式不正确或缺少参数',

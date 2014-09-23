@@ -175,7 +175,7 @@ module.exports = {
 					console.log(err);
 					return next(err, null);
 				}
-				collection.update(query, update, upsert, multi, this);
+				collection.update(query, update, {upsert: upsert, multi: multi}, this);
 			},
 			function (err, resp) {
 				if (err) {

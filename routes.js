@@ -16,7 +16,9 @@ app.all('/*', function(req, res, next) {
 app.options('*', function(req, res, next) { res.send(200); });
 
 //Test
-app.get('/hello', function(req, res) { res.send('hello world');});
+app.get('/hello', function(req, res) { 
+    res.send('hello world');
+});
 
 // Account
 app.get('/ue_api/account/foo'       , account.foo);
