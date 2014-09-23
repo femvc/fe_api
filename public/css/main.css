@@ -1,0 +1,16 @@
+.hui_table { }
+.hui_table_head { }
+.hui_table_head .hui_table_row { }
+.hui_table_head .hui_table_row .hui_table_thsel { }
+.hui_table_head .hui_table_row .hui_table_thcntr {
+ 
+    text-align: left;
+}
+.hui_table_head .hui_table_row .hui_table_thtext { }
+.hui_table_head .hui_table_row .hui_table_thsort { }
+.hui_table_body { }
+.hui_table_body .hui_table_row { }
+.hui_table_body .hui_table_row .hui_table_tdsel { }
+.hui_table_body .hui_table_row .hui_table_tdcntr {
+    display: inline-block;
+ }

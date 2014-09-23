@@ -9,6 +9,8 @@
 <script type="text/javascript" src="js/hj_action.js"></script>
 <script type="text/javascript" src="js/table.js"></script>
 
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
 <style>
 .hui_checkbox{float:left;}
 .hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
@@ -34,20 +36,20 @@ var form;
 window.listTable = [
     {
         width: 296,
-        title: 'lang.fieldName',
+        title: 'n1',
         sortable: true,
         field: 'name',
         content: function(item) {return item['name'];}
     },
     {
         width: 296,
-        title: 'lang.fieldName',
+        title: 'n2',
         field: 'name',
         content: function(item) {return item['name'];}
     },
     {
         width: 296,
-        title: 'lang.fieldName',
+        title: 'n3',
         field: 'name',
         content: function(item) {return item['name'];}
     }
@@ -61,16 +63,32 @@ window.listData = [
 
 
 window.onload = function(){
-    hui.Control.init(document.body);
+    
 
     Requester.get('/ue_api/internal/get_articles', {
         onsuccess: function (result) {
-            var data = result[1],
-                tpl = '<tr><td>#{index}</td><td>#{title}</td><td>#{}</td></tr>';
+            var data = result[1];
             if (data) {
-                for (var i = data.length - 1; i >= 0; i--) {
-                    
-                };
+                
+                window.listTable = [
+                    {
+                        width: 296,
+                        title: '题目',
+                        sortable: true,
+                        field: 'title',
+                        content: function(item) {return item['title'];}
+                    },
+                    {
+                        width: 296,
+                        title: 'create_time',
+                        field: 'create_time',
+                        content: function(item) {return item['create_time'];}
+                    }
+                ];
+
+                window.listData = data.items;
+
+                hui.Control.init(document.body);
                 
             };
             
@@ -86,7 +104,7 @@ window.onload = function(){
 <body style="">
 <!--target:test-->
 <h3 id="title">题目列表</h3>
-<div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,width:600"></div>
+<div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:600}"></div>
 
 </body>
 

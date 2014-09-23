@@ -63,7 +63,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 return;
             }
             // me.setInnerHTML(me, me.getMainHtml());
-
+            me.setSize();
             // 如果未绘制过，初始化main元素
             if (!me.isRendered) {
                 me._width = me.getWidth();
@@ -125,16 +125,12 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
          * @return {number}
          */
         getWidth: function () {
-            if (this.width) {
-                return this.width;
-            }
-
-            // FIXME 有可能算出的width为0
             var me = this,
-                width,
-                rulerDiv = document.createElement('div'),
-                parent = me.getMain().parentNode;
-
+                width;
+            // FIXME 有可能算出的width为0
+            var rulerDiv = document.createElement('div'),
+                parent = me.getMain();
+            rulerDiv.innerHTML = '&nbsp;';
             parent.appendChild(rulerDiv);
             width = rulerDiv.offsetWidth;
             parent.removeChild(rulerDiv);
@@ -153,7 +149,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 title: function () {
                     return '<input type="checkbox" id="' + this.getId('selectAll') + '" onclick="' + "hui.Control.getById('" + this.id + "').toggleSelectAll()" + '" />';
                 },
-
                 content: function (item, index) {
                     return '<input type="checkbox" id="' + this.getId('multiSelect') + index + '" onclick="' + "hui.Control.getById('" + this.id + "').rowCheckboxClick(" + index + ")" + '" />';
                 }
@@ -176,7 +171,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 }
             };
         },
-
         /**
          * @name 初始化表格的字段
          * @protected
@@ -186,7 +180,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
             if (!fields) {
                 return;
             }
-
             // 避免刷新时重新注入
             var _fields = fields.slice(0),
                 len = _fields.length;
@@ -200,7 +193,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
             if (!this.select) {
                 return;
             }
-
             switch (String(this.select).toLowerCase()) {
             case 'multi':
                 _fields.unshift(this.checkboxField());
@@ -210,7 +202,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 break;
             }
         },
-
         /**
          * @name 获取列表体容器素
          * @public
@@ -219,7 +210,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         getBody: function () {
             return hui.g(this.getId('body'));
         },
-
         /**
          * @name 获取列表头容器元素
          * @public
@@ -228,7 +218,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         getHead: function () {
             return hui.g(this.getId('head'));
         },
-
         /**
          * @name 获取checkbox选择列表格头部的checkbox表单
          * @private
@@ -237,9 +226,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         getHeadCheckbox: function () {
             return hui.g(this.getId('selectAll'));
         },
-
         onselect: function (index) {},
-
         /**
          * @name 行的checkbox点击时间处理函数
          * @private
@@ -251,7 +238,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 this.preSelectIndex = index;
             }
         },
-
         /**
          * @name 根据checkbox是否全部选中，更新头部以及body的checkbox状态
          * @private
@@ -311,7 +297,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
             }
             selectAll.checked = allChecked;
         },
-
         /**
          * @name 单选选取
          * @private
@@ -330,7 +315,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 hui.Control.addClass(this.getRow(index), selectedClass);
             }
         },
-
         /**
          * @name 全选/不选 所有的checkbox表单
          * @private
@@ -338,7 +322,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         toggleSelectAll: function () {
             this.selectAll(this.getHeadCheckbox().checked);
         },
-
         /**
          * @name 更新所有checkbox的选择状态
          * @private
@@ -372,7 +355,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
             this.onselect(selected);
         },
-
         /**
          * @name 绘制表格头
          * @private
@@ -421,8 +403,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
 
             // 拼装html
-            html.push('<div class="ui-table-head-row">');
-            html.push(hui.Control.format(me.tplTablePrefix, me._width - 2, me.id));
+            html.push('<div class="' + me.getClass('row') + '">');
+            html.push(hui.Control.format(me.getTplTablePrefix(), me._width - 2, me.id));
             html.push('<tr>');
             for (i = 0; i < len; i++) {
                 field = fields[i];
@@ -687,7 +669,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                     "hui.Control.getById('" + me.id + "').rowOutHandler(" + index + ")",
                     "hui.Control.getById('" + me.id + "').rowClickHandler(" + index + ")"
                 ),
-                hui.Control.format(me.tplTablePrefix, me._width - 2, me.id));
+                hui.Control.format(me.getTplTablePrefix(), me._width - 2, me.id));
 
             for (var i = 0; i < fieldLen; i++) {
                 field = fields[i];
@@ -811,4 +793,9 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
     // hui.Table 继承了 hui.Control 
     hui.inherits(hui.Table, hui.Control);
+
+    hui.util.importCssString(
+
+    );
+
 });
