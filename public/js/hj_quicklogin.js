@@ -71,8 +71,7 @@ hui.require.parseModuleUrl = function (n, conf, type) {
     if (n.indexOf('./') === 0) {
         url = (conf && conf.source ? conf.source : './') + 'hui_modules/' + m + '/' +
             (conf && conf.fileName ? conf.fileName : fname);
-    }
-    else {
+    } else {
         url = window.location.protocol + '//' + window.location.host + '/hui_modules/' + m + '/' +
             (conf && conf.fileName ? conf.fileName : fname);
     }
@@ -180,11 +179,9 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.g = function (id, parentNode) {
         if (!parentNode) {
             return document.getElementById(id);
-        }
-        else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
+        } else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
             return hui.bocument.getElementById(id);
-        }
-        else {
+        } else {
             var i,
                 len,
                 childNode,
@@ -225,8 +222,7 @@ hui.define('hui_util', ['hui'], function () {
                 }
             }
             return result;
-        }
-        else {
+        } else {
             searchClass = searchClass !== null ? String(searchClass).replace(/\s+/g, ' ') : '';
             node = node || document;
             tag = tag || '*';
@@ -368,8 +364,7 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.util.addClass(element[i], className);
             }
-        }
-        else if (element) {
+        } else if (element) {
             hui.util.removeClass(element, className);
             element.className = (element.className + ' ' + className).replace(/(\s)+/ig, ' ');
         }
@@ -381,8 +376,7 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.util.removeClass(element[i], className);
             }
-        }
-        else if (element) {
+        } else if (element) {
             var list = className.replace(/\s+/ig, ' ').split(' '),
                 /* Attention: str need two spaces!! */
                 str = (' ' + (element.className || '').replace(/(\s)/ig, '  ') + ' '),
@@ -417,14 +411,12 @@ hui.define('hui_util', ['hui'], function () {
                 if (c && c.owningElement && c.owningElement.id === id) {
                     result = c.owningElement;
                     break;
-                }
-                else if (c && c.ownerNode && c.ownerNode.id === id) {
+                } else if (c && c.ownerNode && c.ownerNode.id === id) {
                     result = c.ownerNode;
                     break;
                 }
             }
-        }
-        else if ((sheets = doc.getElementsByTagName('style'))) {
+        } else if ((sheets = doc.getElementsByTagName('style'))) {
             for (var i = 0, len = sheets.length; i < len; i++) {
                 c = sheets[i];
                 if (c.id === id) {
@@ -495,8 +487,7 @@ hui.define('hui_util', ['hui'], function () {
         // all browsers, except IE before version 9
         if (sheet.insertRule) {
             sheet.insertRule(className + '{' + cssText + '}', index);
-        }
-        else {
+        } else {
             // Internet Explorer before version 9
             if (sheet.addRule) {
                 sheet.addRule(className, cssText, index);
@@ -510,8 +501,7 @@ hui.define('hui_util', ['hui'], function () {
         doc = doc || document;
         if (doc.createStyleSheet) {
             doc.createStyleSheet(uri);
-        }
-        else {
+        } else {
             var link = hui.util.createElement('link');
             link.rel = 'stylesheet';
             link.href = uri;
@@ -544,8 +534,7 @@ hui.define('hui_util', ['hui'], function () {
                 while (part) {
                     if (cur[part] !== undefined) {
                         cur = cur[part];
-                    }
-                    else {
+                    } else {
                         cur = undefined;
                         break;
                     }
@@ -580,17 +569,14 @@ hui.define('hui_util', ['hui'], function () {
                 if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
                     m = parseInt(m, 10);
                     n = parseInt(n, 10);
-                }
-                else {
+                } else {
                     if (m > n) {
                         m = 1;
                         n = -m;
-                    }
-                    else if (m < n) {
+                    } else if (m < n) {
                         m = -1;
                         n = -m;
-                    }
-                    else {
+                    } else {
                         m = 1;
                         n = m;
                     }
@@ -607,8 +593,7 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.on = function (elem, eventName, handler) {
         if (elem.addEventListener) {
             elem.addEventListener(eventName, handler, false);
-        }
-        else if (elem.attachEvent) {
+        } else if (elem.attachEvent) {
             elem.attachEvent('on' + eventName, handler);
             // elem.attachEvent('on' + eventName, function(){handler.call(elem)}); 
             //此处使用回调函数call()，让 this指向elem //注释掉原因：无法解绑
@@ -793,8 +778,7 @@ hui.define('hui_util', ['hui'], function () {
 
         if (source instanceof Date) {
             result = new Date(source.getTime());
-        }
-        else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
+        } else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
             for (j = 0, len2 = oldArr.length; j < len2; j++) {
                 if (oldArr[j] == source) {
                     exist = j;
@@ -804,8 +788,7 @@ hui.define('hui_util', ['hui'], function () {
             if (exist != -1) {
                 result = newArr[exist];
                 exist = -1;
-            }
-            else {
+            } else {
                 if (source instanceof Array) {
                     result = [];
                     oldArr.push(source);
@@ -814,8 +797,7 @@ hui.define('hui_util', ['hui'], function () {
                     for (i = 0, len = source.length; i < len; i++) {
                         result[resultLen++] = hui.util.clone(source[i], oldArr, newArr);
                     }
-                }
-                else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
+                } else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
                     result = {};
                     oldArr.push(source);
                     newArr.push(result);
@@ -949,8 +931,7 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = fr.length - 1; i > -1; i--) {
                 str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
             }
-        }
-        else {
+        } else {
             for (var i = 0, l = fr.length; i < l; i++) {
                 str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
             }
@@ -972,8 +953,7 @@ hui.define('hui_util', ['hui'], function () {
         if (!elem) return;
         if (elem.textContent !== undefined) {
             elem.textContent = text;
-        }
-        else {
+        } else {
             elem.innerText = text;
         }
     };
@@ -1083,8 +1063,7 @@ hui.define('hui_eventdispatcher', ['hui@0.0.1'], function () {
             // 只清除指定类型
             else if (this._listeners[eventType]) {
                 this._listeners[eventType] = [];
-            }
-            else if (Object.prototype.toString.call(eventType) === '[object Array]') {
+            } else if (Object.prototype.toString.call(eventType) === '[object Array]') {
                 for (var i = 0, len = eventType.length; i < len; i++) {
                     this.clear(eventType[i]);
                 }
@@ -1222,8 +1201,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var main = this.getMain();
             try {
                 main.focus();
-            }
-            catch (e) {}
+            } catch (e) {}
         },
         /**
          * @name 获取控件的innerHTML
@@ -1237,8 +1215,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 html = '';
             if (elem.getInnerHTML) {
                 html = elem.getInnerHTML();
-            }
-            else if (elem.innerHTML !== undefined) {
+            } else if (elem.innerHTML !== undefined) {
                 html = elem.innerHTML;
             }
             return html;
@@ -1375,8 +1352,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                         }
                         if (Object.prototype.toString.call(paramMap[formName]) === '[object Object]' && ctr.controlMap) {
                             ctr.showErrorByTree(paramMap[formName], code);
-                        }
-                        else if (ctr.showError) {
+                        } else if (ctr.showError) {
                             ctr.showError(paramMap[formName], code);
                         }
                         ctr = null;
@@ -1403,8 +1379,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this;
             if (me.controlMap) {
                 me.setValueByTree(this.value);
-            }
-            else {
+            } else {
                 me.getMain().value = paramMap;
             }
         },
@@ -1429,15 +1404,13 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                             ctr.constructor.prototype.hasOwnProperty('setValue')) {
 
                             ctr.setValue(paramMap[formName]);
-                        }
-                        else if (ctr.controlMap) {
+                        } else if (ctr.controlMap) {
                             ctr.setValueByTree(paramMap[formName]);
-                        }
-                        else if (ctr.getMain || ctr.main) {
+                        } else if (ctr.getMain || ctr.main) {
                             main = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)) || {};
                             main.value = paramMap[formName];
                         }
-                        
+
                         ctr = null;
                     }
                 }
@@ -1465,12 +1438,10 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                             if (ctr.getValue) {
                                 value = ctr.getValue();
                                 paramMap[formName].push(value);
-                            }
-                            else if (ctr.getMain || ctr.main) {
+                            } else if (ctr.getMain || ctr.main) {
                                 value = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)).value;
                                 paramMap[formName].push(value);
-                            }
-                            else if (ctr.controlMap) {
+                            } else if (ctr.controlMap) {
                                 value = ctr.getParamMap();
                                 paramMap[formName].push(value);
                             }
@@ -1536,8 +1507,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
             if (main.disabled) {
                 hui.addClass(main, me.getClass('disabled'));
-            }
-            else {
+            } else {
                 hui.removeClass(main, me.getClass('disabled'));
             }
             return me;
@@ -1650,16 +1620,14 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 ];
                 for (var i = 0, len = list.length; i < len; i++) {
                     try {
-		        main[list[i]] = Function('');
-                    }
-                    catch (e) {}
+                        main[list[i]] = Function('');
+                    } catch (e) {}
                 }
 
                 // 清空HTML内容
                 if (main.setInnerHTML) {
                     main.setInnerHTML(main, '');
-                }
-                else if (main.innerHTML) {
+                } else if (main.innerHTML) {
                     main.innerHTML = '';
                 }
                 main.parentNode.removeChild(main);
@@ -1769,8 +1737,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
             if (uiObj.initBehaviorByTree) {
                 uiObj.initBehaviorByTree();
-            }
-            else if (uiObj.initBehavior) {
+            } else if (uiObj.initBehavior) {
                 uiObj.initBehavior();
             }
 
@@ -2025,17 +1992,24 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 str = type.getAttribute(hui.Control.UI_ATTRIBUTE || 'ui');
                 try {
                     attrs = hui.Control.parseCustomAttribute(str);
-                }
-                catch (e) {
+                } catch (e) {
                     attrs = hui.Control.parseCustomAttribute(str.replace(/\\\'/g, '\'').replace(/\\\"/g, '\"'));
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 window.JSON && window.JSON.stringify && window.console && window.console.log({
                     type: type,
                     options: options
                 });
                 return;
+            }
+
+            for (var i in attrs) {
+                var text = attrs[i];
+                if (text && Object.prototype.toString.call(text) === '[object String]') {
+                    if (text.indexOf('&') === 0) {
+                        attrs[i] = window[text.replace('&', '')];
+                    }
+                }
             }
 
             for (var i in options) {
@@ -2260,8 +2234,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
         if (id === undefined || (parentControl && parentControl.getId && id === parentControl.getId())) {
             result = parentControl;
-        }
-        else if (parentControl) {
+        } else if (parentControl) {
             list = hui.Control.findAllControl(parentControl);
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i].id == id) {
@@ -2333,8 +2306,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     break;
                 }
             }
-        }
-        else {
+        } else {
             result = list[0];
         }
 
@@ -2357,8 +2329,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 if (main.parentNode === parentNode) {
                     result = true;
                     main = null;
-                }
-                else {
+                } else {
                     main = main.parentNode;
                 }
             }
@@ -2385,16 +2356,14 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
     hui.Control.error = function (str) {
         if (hui.window && hui.window.console && hui.window.console.error) {
             hui.window.console.error(str);
-        }
-        else if (typeof (window) !== 'undefined' && window.console && window.console.error) {
+        } else if (typeof (window) !== 'undefined' && window.console && window.console.error) {
             window.console.error(str);
         }
     };
     hui.Control.log = function (str) {
         if (hui.window && hui.window.console && hui.window.console.log) {
             hui.window.console.log(str);
-        }
-        else if (typeof (window) !== 'undefined' && window.console && window.console.log) {
+        } else if (typeof (window) !== 'undefined' && window.console && window.console.log) {
             window.console.log(str);
         }
     };
@@ -2404,8 +2373,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.BaseModel':
             if (typeof hui !== 'undefined' && hui.BaseModel) {
                 result = hui.BaseModel;
-            }
-            else {
+            } else {
                 result.get = new Function();
                 result.set = new Function();
             }
@@ -2413,8 +2381,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.Validator':
             if (typeof hui !== 'undefined' && hui.Validator) {
                 result = hui.Validator;
-            }
-            else {
+            } else {
                 result.cancelNotice = new Function();
                 result.set = new Function();
             }
@@ -2422,16 +2389,14 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.Action':
             if (typeof hui !== 'undefined' && hui.Validator) {
                 result = hui.Validator;
-            }
-            else {
+            } else {
                 result.get = new Function();
             }
             break;
         case 'hui.context':
             if (typeof hui !== 'undefined' && hui.context) {
                 result = hui.context;
-            }
-            else {
+            } else {
                 result = {};
                 result.get = new Function();
             }
@@ -2498,14 +2463,11 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
         parse: function (text, type) {
             if (type === 'int') {
                 return parseInt(text, 10);
-            }
-            else if (type === 'float') {
+            } else if (type === 'float') {
                 return parseFloat(text);
-            }
-            else if (type === 'date') {
+            } else if (type === 'date') {
                 return hui.Validator.parseDate(text);
-            }
-            else {
+            } else {
                 return text;
             }
         },
@@ -2708,12 +2670,10 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
             // return ['ERROR_LENGTH_RANGE', min_length, max_length]
             else if (Object.prototype.toString.call(error) === '[object Array]') {
                 errorText = hui.Validator.format(me.errorMsg[error[0]], error.splice(1, error.length));
-            }
-            else if (error !== 0) { //TODO:这种形式是要被历史遗弃的
+            } else if (error !== 0) { //TODO:这种形式是要被历史遗弃的
                 if ('object' == typeof rule.noticeText) {
                     errorText = rule.noticeText[error];
-                }
-                else {
+                } else {
                     errorText = rule.noticeText;
                 }
             }
@@ -2724,8 +2684,7 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
                 if (error === 0 || error === 'SUCCESS') {
                     var showOK = rule.showOK || me.showOK;
                     showOK(control, errorText);
-                }
-                else {
+                } else {
                     var showError = rule.showError || me.showError;
                     showError(control, errorText);
                 }
@@ -2958,8 +2917,7 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
                 title: 'hui.Validator.setRule() Error: ',
                 name: 'rule "' + ruleName + '" exist.'
             };
-        }
-        else {
+        } else {
             hui.Validator.ruleMap[ruleName] = ruleContent;
         }
     };
@@ -3061,38 +3019,32 @@ hui.define('hui_requester', [], function () {
                         window.setTimeout(function () {
                             handler('failure', xhr);
                         }, 0);
-                    }
-                    else {
+                    } else {
                         if (xhr.eventHandlers['datatype'] == 'XML') {
                             try {
                                 xhr.xhr.responseXML;
                                 xhr.responseCallback(handler, xhr.xhr.responseXML);
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
                                 return;
                             }
-                        }
-                        else if (xhr.eventHandlers['datatype'] == 'TEXT') {
+                        } else if (xhr.eventHandlers['datatype'] == 'TEXT') {
                             try {
                                 xhr.xhr.responseText;
                                 xhr.responseCallback(handler, xhr.xhr.responseText);
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
                                 return;
                             }
-                        }
-                        else { //if (xhr.eventHandlers['datatype'] == 'JSON')
+                        } else { //if (xhr.eventHandlers['datatype'] == 'JSON')
                             // 处理获取xhr.responseText导致出错的情况,比如请求图片地址. 
                             try {
                                 xhr.xhr.responseText;
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
@@ -3115,8 +3067,7 @@ hui.define('hui_requester', [], function () {
                                 }
 
                                 xhr.responseCallback(handler, data);
-                            }
-                            else if (text.indexOf('{') === 0) {
+                            } else if (text.indexOf('{') === 0) {
                                 // {success:true,message: 
                                 // 插入表单验证错误提示 
                                 var JSON_Parser;
@@ -3130,8 +3081,7 @@ hui.define('hui_requester', [], function () {
                                     data = JSON_Parser();
                                 }
                                 xhr.responseCallback(handler, data);
-                            }
-                            else {
+                            } else {
                                 window.setTimeout(function () {
                                     handler(null, text);
                                 }, 0);
@@ -3242,12 +3192,10 @@ hui.define('hui_requester', [], function () {
                     try {
                         if (username) {
                             xhr.xhr.open(method, url, async, username, password);
-                        }
-                        else {
+                        } else {
                             xhr.xhr.open(method, url, async);
                         }
-                    }
-                    catch (e) {
+                    } catch (e) {
                         //debugger;
                         //alert(e.message ? e.message : String(e));
                     }
@@ -3282,8 +3230,7 @@ hui.define('hui_requester', [], function () {
                     if (!async) {
                         stateChangeHandler.call(xhr);
                     }
-                }
-                catch (ex) {
+                } catch (ex) {
                     xhr.fire('failure');
                 }
             }
@@ -3300,8 +3247,7 @@ hui.define('hui_requester', [], function () {
             if (xhr.xhr.readyState == 4) {
                 try {
                     stat = xhr.xhr.status;
-                }
-                catch (ex) {
+                } catch (ex) {
                     // 在请求时，如果网络中断，Firefox会无法取得status 
                     xhr.fire('failure');
                     return;
@@ -3324,12 +3270,10 @@ hui.define('hui_requester', [], function () {
                     // 如上，两次请求会共用同一个XHR对象从而造成status=0的错误，因此需要标识请求是否已成功返回
                     xhr.status = 'finished';
                     xhr.fire('success');
-                }
-                else {
+                } else {
                     if (stat === 0 && !xhr.online) {
                         xhr.fire('success');
-                    }
-                    else {
+                    } else {
                         if (stat === 0 && window.console && window.console.log) {
                             window.console.error('XHR Error: Cross domain, cannot access: %s.', xhr.url);
                         }
@@ -3381,8 +3325,7 @@ hui.define('hui_requester', [], function () {
                 for (var i = fr.length - 1; i > -1; i--) {
                     str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
                 }
-            }
-            else {
+            } else {
                 for (var i = 0, l = fr.length; i < l; i++) {
                     str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
                 }
@@ -3477,8 +3420,7 @@ hui.define('hui_requester', [], function () {
                     for (j = i - 1; j > -1; j--) {
                         if (list[j] === '\\') {
                             lineNum++;
-                        }
-                        else {
+                        } else {
                             j = -1;
                         }
                     }
@@ -3512,8 +3454,7 @@ hui.define('hui_requester', [], function () {
                     for (j = i - 1; j > -1; j--) {
                         if (/^[\t\r\n\s ]+$/.test(list[j])) {
                             continue;
-                        }
-                        else {
+                        } else {
                             if (list[j] === ',') list[j] = '';
                             break;
                         }
@@ -3580,8 +3521,7 @@ hui.define('hui_requester', [], function () {
         permit = Permission.checkRequest(url, opt_options);
         if (permit && permit[0] == 'notpermit') {
             return null;
-        }
-        else {
+        } else {
             url = permit ? permit[1] : url;
         }
 
@@ -3797,8 +3737,7 @@ function doit() {
         case 'hui.Permission':
             if (typeof hui !== 'undefined' && hui.Permission) {
                 result = hui.Permission;
-            }
-            else {
+            } else {
                 result.checkRequest = new Function();
                 result.set = new Function();
             }
@@ -3806,8 +3745,7 @@ function doit() {
         case 'hui.Mockup':
             if (typeof hui !== 'undefined' && hui.Mockup) {
                 result = hui.Mockup;
-            }
-            else {
+            } else {
                 result.find = new Function();
                 result.get = new Function();
             }
@@ -3846,8 +3784,7 @@ function doit() {
             else if (Object.prototype.toString.call(target) === '[object Array]') {
                 if (Object.prototype.toString.call(target[0]) === '[object Array]') {
                     result = target[(new Date()).getTime() % target.length];
-                }
-                else {
+                } else {
                     result = target;
                 }
             }
@@ -4054,8 +3991,7 @@ hui.define('hui_template', ['hui'], function () {
                     if (key.indexOf('(') !== -1) {
                         // #{Math.floor(user.age, user.birth)}
                         replacer = hui.runWithoutStrict(key, data);
-                    }
-                    else {
+                    } else {
                         parts = hui.Template.overloadOperator(key).split('.');
                         cur = data;
                         part = parts.shift();
@@ -4078,8 +4014,7 @@ hui.define('hui_template', ['hui'], function () {
             msg = 'Template: ' + msg;
             if (hui.window.console) {
                 hui.window.console.log(msg);
-            }
-            else throw Error(msg);
+            } else throw Error(msg);
         },
         varConvert: function (token, model, strMap, str) {
             var s2,
@@ -4106,8 +4041,7 @@ hui.define('hui_template', ['hui'], function () {
 
                             c = hui.Template.expCalculate(m, model, strMap, 'keep_var');
                             c.parent[c.child] = value;
-                        }
-                        else {
+                        } else {
                             model[s2[j]] = value;
                         }
                     }
@@ -4150,8 +4084,7 @@ hui.define('hui_template', ['hui'], function () {
                         for (var j = i - 1; j > -1; j--) {
                             if (list[j] === '\\') {
                                 lineNum++;
-                            }
-                            else {
+                            } else {
                                 j = -1;
                             }
                         }
@@ -4167,8 +4100,7 @@ hui.define('hui_template', ['hui'], function () {
                                 notValue = true;
                                 preQuot = -1;
                             }
-                        }
-                        else {
+                        } else {
                             t1.push(c);
                         }
                     }
@@ -4187,8 +4119,7 @@ hui.define('hui_template', ['hui'], function () {
                             preQuot = -1;
                         }
                     }
-                }
-                else {
+                } else {
                     // is String value
                     if (!notValue) {
                         t1.push(c);
@@ -4200,8 +4131,7 @@ hui.define('hui_template', ['hui'], function () {
                             preBracket.push(c);
 
                             s1.push(c);
-                        }
-                        else if (c === '}' || c === ']') {
+                        } else if (c === '}' || c === ']') {
                             if (preBracket[preBracket.length - 1] === (c === '}' ? '{' : '[')) {
                                 preBracket.pop();
                             }
@@ -4225,8 +4155,7 @@ hui.define('hui_template', ['hui'], function () {
                             s2.push(s1);
                             s2.push('=');
                             s1 = [];
-                        }
-                        else if (c === '#' && list[i + 1] === '{') {
+                        } else if (c === '#' && list[i + 1] === '{') {
                             s1.push(' ');
                             for (var j = i + 2; j < ilen; j++) {
                                 if (list[j] === '}') {
@@ -4236,8 +4165,7 @@ hui.define('hui_template', ['hui'], function () {
                                 s1.push(list[j]);
                             }
                             s1.push(' ');
-                        }
-                        else {
+                        } else {
                             s1.push(c);
                         }
                     }
@@ -4285,8 +4213,7 @@ hui.define('hui_template', ['hui'], function () {
                         m = c[j];
                         c[j] = hui.Template.overloadOperator(m);
                     }
-                }
-                else {
+                } else {
                     s3[i] = hui.Template.overloadOperator(c);
                 }
             }
@@ -4411,8 +4338,7 @@ hui.define('hui_template', ['hui'], function () {
                 c.parent[c.child] = result + (list.opr === '++' ? 1 : -1);
                 result = list[0] === '++' || list[0] === '--' ? c.parent[c.child] : result;
 
-            }
-            else if (list.opr === '.') {
+            } else if (list.opr === '.') {
                 for (var i = 0, ilen = list.length; i < ilen; i++) {
                     c = list[i];
                     if (Object.prototype.toString.call(c) === '[object Array]') {
@@ -4439,15 +4365,13 @@ hui.define('hui_template', ['hui'], function () {
                     parent: data || {},
                     child: list[list.length - 1]
                 } : data;
-            }
-            else {
+            } else {
                 for (var i = 0, ilen = list.length; i < ilen; i++) {
                     c = list[i];
                     if (Object.prototype.toString.call(c) === '[object Array]') {
                         c = hui.Template.expCalculate(c, model, strMap);
                         list[i] = c;
-                    }
-                    else {
+                    } else {
                         list[i] = hui.Template.expIsOperator(c) ? list[i] : hui.Template.getKeyValue(c, model, strMap);
                     }
 
@@ -4458,17 +4382,14 @@ hui.define('hui_template', ['hui'], function () {
                     for (var i = list.length - 1; i > -1; i--) {
                         result = !m;
                     }
-                }
-                else if (list.opr === '?') {
+                } else if (list.opr === '?') {
                     c = list[0];
                     if (c) {
                         result = list[2];
-                    }
-                    else {
+                    } else {
                         result = list[4];
                     }
-                }
-                else if (list.opr === '||') {
+                } else if (list.opr === '||') {
                     result = false || list[0];
                     for (var i = 1, ilen = list.length; i < ilen && !result; i++) {
                         c = list[i];
@@ -4478,8 +4399,7 @@ hui.define('hui_template', ['hui'], function () {
                         }
                         i++;
                     }
-                }
-                else if (list.opr === '&&') {
+                } else if (list.opr === '&&') {
                     result = true && list[0];
                     for (var i = 1, ilen = list.length; i < ilen && result; i++) {
                         c = list[i];
@@ -4489,75 +4409,63 @@ hui.define('hui_template', ['hui'], function () {
                         }
                         i++;
                     }
-                }
-                else if (list.opr === '!==' || list.opr === '===' || list.opr === '!=' || list.opr === '==') {
+                } else if (list.opr === '!==' || list.opr === '===' || list.opr === '!=' || list.opr === '==') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '!==' || c === '!=') {
                             result = String(result) !== String(m);
-                        }
-                        else if (c === '===' || c === '==') {
+                        } else if (c === '===' || c === '==') {
                             result = String(result) === String(m);
                         }
                         i++;
                     }
-                }
-                else if (list.opr === '>' || list.opr === '>=' || list.opr === '<' || list.opr === '<=') {
+                } else if (list.opr === '>' || list.opr === '>=' || list.opr === '<' || list.opr === '<=') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '>') {
                             result = result > m;
-                        }
-                        else if (c === '>=') {
+                        } else if (c === '>=') {
                             result = result >= m;
-                        }
-                        else if (c === '<') {
+                        } else if (c === '<') {
                             result = result < m;
-                        }
-                        else if (c === '<=') {
+                        } else if (c === '<=') {
                             result = result <= m;
                         }
                         i++;
                     }
-                }
-                else if (list.opr === '+' || list.opr === '-') {
+                } else if (list.opr === '+' || list.opr === '-') {
                     if (list[0] === '+' || list[0] === '-') {
                         result = list.pop();
                         for (var i = list.length - 1; i > -1; i--) {
                             result = list[i] === '-' ? 0 - result : result;
                         }
-                    }
-                    else {
+                    } else {
                         result = list[0];
                         for (var i = 1, ilen = list.length; i < ilen; i++) {
                             c = list[i];
                             m = list[i + 1];
                             if (c === '+') {
                                 result = result + m;
-                            }
-                            else if (c === '-') {
+                            } else if (c === '-') {
                                 result = result - m;
                             }
                             i++;
                         }
                     }
-                }
-                else if (list.opr === '*' || list.opr === '/' || list.opr === '%') {
+                } else if (list.opr === '*' || list.opr === '/' || list.opr === '%') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '*') {
                             result = result * m;
-                        }
-                        else if (c === '/') {
+                        } else if (c === '/') {
                             result = result / m;
-                        }
-                        else if (c === '%') {
+                        } else if (c === '%') {
                             result = result % m;
                         }
                         i++;
@@ -4641,16 +4549,14 @@ hui.define('hui_template', ['hui'], function () {
                     isOperator = true;
                     if (',++,--,==,!=,>=,<=,&&,||,'.indexOf(pre) !== -1 || /\d\.\d/.test(next)) {
                         s1.push(c);
-                    }
-                    else {
+                    } else {
                         if (s1.length) {
                             s2.push(s1);
                         }
                         s1 = [];
                         s1.push(c);
                     }
-                }
-                else if (c === '#') {
+                } else if (c === '#') {
                     if (s1.length) {
                         s2.push(s1);
                     }
@@ -4664,14 +4570,11 @@ hui.define('hui_template', ['hui'], function () {
                     }
                     s2.push(s1);
                     s1 = [];
-                }
-                else if (c === ' ' || c === '\t') {
+                } else if (c === ' ' || c === '\t') {
                     continue;
-                }
-                else if (list[i - 1] === '.' && '0123456789'.indexOf(c) !== -1) {
+                } else if (list[i - 1] === '.' && '0123456789'.indexOf(c) !== -1) {
                     s1.push(c);
-                }
-                else {
+                } else {
                     if (isOperator) {
                         isOperator = false;
                         if (s1.length) {
@@ -4715,16 +4618,14 @@ hui.define('hui_template', ['hui'], function () {
                     parent.push(cur);
                     list.push(cur);
 
-                }
-                else if (list.length > 1 && c === ')' || c === ']') {
+                } else if (list.length > 1 && c === ')' || c === ']') {
                     list.pop();
                     cur = parent || cur;
                     if (c === ']') {
                         //cur.push(c);
                     }
                     parent = list[list.length - 2];
-                }
-                else {
+                } else {
                     cur.push(c);
                 }
 
@@ -4812,8 +4713,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4823,12 +4723,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid Dot(.) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -4856,12 +4754,10 @@ hui.define('hui_template', ['hui'], function () {
                         n.opr = c;
                         newtoken.push(n);
                         i++;
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid Increment(++),Decrement(--) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -4877,8 +4773,7 @@ hui.define('hui_template', ['hui'], function () {
                     if (hui.Template.expIsOperand(pre)) {
                         if (pre && pre.lev && pre.lev === cd) {
                             pre.unshift(c);
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.unshift(newtoken.shift());
                             pre.unshift(c);
@@ -4886,12 +4781,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.unshift(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid Negative(+),Positive(-) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.unshift(c);
                 }
             }
@@ -4909,8 +4802,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4920,12 +4812,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid MUL(*),DIV(/),(MOD)% operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -4943,8 +4833,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4954,12 +4843,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid ADD(+) or SUB(-) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -4977,8 +4864,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4988,12 +4874,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid Morethan(>,>=),Lessthan(<=,<) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -5011,8 +4895,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -5022,12 +4905,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid Equal(==,!==) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -5045,8 +4926,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -5056,12 +4936,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid AND(&&) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -5079,8 +4957,7 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        }
-                        else {
+                        } else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -5090,12 +4967,10 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid OR(||) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.push(c);
                 }
             }
@@ -5120,12 +4995,10 @@ hui.define('hui_template', ['hui'], function () {
                         nxt.lev = cd;
                         nxt.opr = c;
                         newtoken.unshift(nxt);
-                    }
-                    else {
+                    } else {
                         throw new Error('SyntaxError: invalid "A ? B : C"  operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                }
-                else {
+                } else {
                     newtoken.unshift(c);
                 }
             }
@@ -5326,8 +5199,7 @@ hui.define('hui_template', ['hui'], function () {
                     curentParent.childNodes.push(elem);
                     // elem.parentNode = curentParent.getGUID();
                     elem.parentNode = curentParent;
-                }
-                else if (token.nodeType == 'startTag') {
+                } else if (token.nodeType == 'startTag') {
                     // 'if,elif,else' is special.
                     if (token.tagName == 'if') {
                         elem = me.createElement('ifif', {});
@@ -5348,14 +5220,12 @@ hui.define('hui_template', ['hui'], function () {
                         elem.childNodes = [];
                         curentParent = elem;
                     }
-                }
-                else if (token.nodeType == 'endTag') {
+                } else if (token.nodeType == 'endTag') {
                     if (!me.typeCloseSelf[token.tagName]) {
 
                         if (token.tagName == curentParent.tagName) {
                             curentParent = curentParent.parentNode;
-                        }
-                        else if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
+                        } else if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
                             parentElem = curentParent.parentNode;
                             if (parentElem.tagName == 'ifif') {
                                 curentParent = parentElem.parentNode;
@@ -5367,15 +5237,13 @@ hui.define('hui_template', ['hui'], function () {
                             while (parentElem) {
                                 if (parentElem.tagName == token.tagName) {
                                     curentParent = parentElem.parentNode;
-                                }
-                                else {
+                                } else {
                                     parentElem = parentElem.parentNode;
                                 }
                             }
                         }
                     }
-                }
-                else if (token.nodeType == 'typeEndAndStart') {
+                } else if (token.nodeType == 'typeEndAndStart') {
                     if (me.typeEndAndStart[token.tagName]) {
                         if (~',if,elif,'.indexOf(',' + curentParent.tagName + ',') && ~',elif,else,'.indexOf(',' + token.tagName)) {
                             curentParent = curentParent.parentNode;
@@ -5433,8 +5301,7 @@ hui.define('hui_template', ['hui'], function () {
                     model = nodeItem.getScopeChainModel();
                     hui.Template.varConvert(list.token, model, list.strMap, str);
                     nodeItem.updateScopeChainModel(model);
-                }
-                else if (tagName === 'ifif') {
+                } else if (tagName === 'ifif') {
                     model = nodeItem.getScopeChainModel();
                     result = '';
                     for (var i = 0, ilen = nodeItem.childNodes.length; i < ilen; i++) {
@@ -5446,8 +5313,7 @@ hui.define('hui_template', ['hui'], function () {
                             }
                             result = tplList.join('');
                             break;
-                        }
-                        else {
+                        } else {
                             k = hui.Template.varTokenization(c.nodeValue);
                             var k2 = hui.Template.getExpValue(k.token[0][0], model, k.strMap);
                             if (k2) {
@@ -5460,8 +5326,7 @@ hui.define('hui_template', ['hui'], function () {
                             }
                         }
                     }
-                }
-                else if (tagName === 'for') {
+                } else if (tagName === 'for') {
                     str = nodeItem.nodeValue;
                     var scopeChain = nodeItem.scopeChain;
                     model = nodeItem.getScopeChainModel();
@@ -5503,13 +5368,11 @@ hui.define('hui_template', ['hui'], function () {
                     //varStr = hui.Template.format(varStr, model);
                     me.parse('<!--var:' + varStr + '-->', null, nodeItem);
                     result = me.parse(targetContent, null, nodeItem);
-                }
-                else if (tagName === 'nodetext') {
+                } else if (tagName === 'nodetext') {
                     str = nodeItem.nodeValue;
                     model = nodeItem.getScopeChainModel();
                     result = hui.Template.format(str, model);
-                }
-                else {
+                } else {
                     result = nodeItem.labelValue;
                 }
             }
@@ -5842,11 +5705,9 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 var code = str.charCodeAt(i); //获取当前字符的unicode编码
                 if (code >= 65281 && code <= 65373) { //在这个unicode编码范围中的是所有的英文字母已及各种字符
                     result += String.fromCharCode(str.charCodeAt(i) - 65248); //把全角字符的unicode编码转换为对应半角字符的unicode码
-                }
-                else if (code == 12288) { //空格
+                } else if (code == 12288) { //空格
                     result += String.fromCharCode(str.charCodeAt(i) - 12288 + 32);
-                }
-                else {
+                } else {
                     result += str.charAt(i);
                 }
             }
@@ -5888,8 +5749,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 me.hidePlaceholder();
                 me.showEye();
                 //this.getFocusHandler();
-            }
-            else {
+            } else {
                 me.showPlaceholder();
                 me.hideEye();
                 //this.getBlurHandler();
@@ -5915,8 +5775,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             }
             if (disabled) {
                 this.getMain().disabled = 'disabled';
-            }
-            else {
+            } else {
                 this.getMain().removeAttribute('disabled');
             }
         },
@@ -5972,8 +5831,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 if (me.agent) {
                     main.appendChild(elem);
                     main.insertBefore(elem, main.firstChild);
-                }
-                else {
+                } else {
                     main.parentNode.insertBefore(elem, main.parentNode.firstChild);
                 }
             }
@@ -5989,8 +5847,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 if (me.agent) {
                     main.appendChild(elem);
                     main.insertBefore(elem, main.firstChild);
-                }
-                else {
+                } else {
                     main.parentNode.insertBefore(elem, main.parentNode.firstChild);
                 }
             }
@@ -6158,11 +6015,9 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             if (placeholder) {
                 if (sign === false) {
                     placeholder.style.display = 'block';
-                }
-                else if (sign === 'force') {
+                } else if (sign === 'force') {
                     placeholder.style.display = 'none';
-                }
-                else {
+                } else {
                     placeholder.style.display = input.value ? 'none' : 'block';
                 }
             }
@@ -6177,11 +6032,9 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             if (eye) {
                 if (sign === false) {
                     eye.style.display = 'block';
-                }
-                else if (sign === 'force') {
+                } else if (sign === 'force') {
                     eye.style.display = 'none';
-                }
-                else {
+                } else {
                     eye.style.display = input.value ? 'block' : 'none';
                 }
             }
@@ -6254,9 +6107,8 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             hui.Control.prototype.dispose.call(this);
         }
     };
-    /*通过hui.Control派生hui.Button*/
-    //hui.Control.derive(hui.TextInput);
-    /* hui.TextInput 继承了 hui.Control */
+
+    // hui.TextInput 继承了 hui.Control
     hui.inherits(hui.TextInput, hui.Control);
 
 });
@@ -6453,8 +6305,7 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
                     me.getClass('label'),
                     me.label
                 ));
-            }
-            else {
+            } else {
                 main.appendChild(label);
             }
         },
@@ -6514,8 +6365,7 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
             if (checked === false) {
                 input.checked = false;
                 hui.removeClass(main, me.getClass('checked'));
-            }
-            else {
+            } else {
                 input.checked = true;
                 hui.addClass(main, me.getClass('checked'));
             }
@@ -6592,23 +6442,19 @@ hui.define('hui_mask', ['hui@0.0.1'], function () {
                 // '>=IE9, FF, Chrome';
                 mask.style.width = width + 'px';
                 mask.style.height = height + 'px';
-            }
-            else if (!window.XMLHttpRequest) {
+            } else if (!window.XMLHttpRequest) {
                 // 'IE6';
                 mask.style.width = width - 21 + 'px';
                 mask.style.height = height + 'px';
-            }
-            else if (!document.querySelector) {
+            } else if (!document.querySelector) {
                 // 'IE7';
                 mask.style.width = width + 'px';
                 mask.style.height = height + 'px';
-            }
-            else if (!document.addEventListener) {
+            } else if (!document.addEventListener) {
                 // 'IE8';
                 mask.style.width = width - 21 + 'px';
                 mask.style.height = height - 7 + 'px';
-            }
-            else {
+            } else {
                 // '>= IE9';
                 mask.style.width = width - 18 + 'px';
                 mask.style.height = height + 30 + 'px';
@@ -6646,8 +6492,7 @@ hui.define('hui_mask', ['hui@0.0.1'], function () {
 
             if (window.addEventListener) {
                 window.addEventListener('scroll', hui.Mask.resizeHandler, false);
-            }
-            else if (window.attachEvent) {
+            } else if (window.attachEvent) {
                 window.attachEvent('on' + 'scroll', hui.Mask.resizeHandler);
                 //此处使用回调函数call()，让 this指向elem
             }
@@ -6772,11 +6617,9 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var len = text.length;
             if (len === 0) {
                 return 1;
-            }
-            else if (len < 2 || len > 12 || !(/^[_a-zA-Z\d\u4E00-\uFA29]+$/.test(text))) {
+            } else if (len < 2 || len > 12 || !(/^[_a-zA-Z\d\u4E00-\uFA29]+$/.test(text))) {
                 return 2;
-            }
-            else if (text.replace(/[0-9]/ig, '') === '') {
+            } else if (text.replace(/[0-9]/ig, '') === '') {
                 return 3;
             }
             var me = this;
@@ -6821,11 +6664,9 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var len = text.length;
             if (len === 0) {
                 return 1;
-            }
-            else if (len < 6) {
+            } else if (len < 6) {
                 return 2;
-            }
-            else if (control_id) {
+            } else if (control_id) {
                 var ctr = hui.Control.getById(control_id, parentControl) || hui.Control.getByFormName(control_id, parentControl),
                     value = ctr.getValue();
                 if (text === value) {
@@ -6885,8 +6726,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var f = /^\d{6}$/.test(text);
             if (text.length === 0) {
                 return 1;
-            }
-            else if (!!text && !f) {
+            } else if (!!text && !f) {
                 return 2;
             }
             return 0;
@@ -6906,11 +6746,9 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var f = /^(13\d|15\d|18\d|14\d|170)\d{8}$/.test(text);
             if (len === 0) {
                 return 1;
-            }
-            else if (len !== 11) {
+            } else if (len !== 11) {
                 return 2;
-            }
-            else if (!f) {
+            } else if (!f) {
                 return 3;
             }
             var me = this;
@@ -6932,11 +6770,9 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var len = text.length;
             if (len === 0) {
                 return 1;
-            }
-            else if (len > 64) {
+            } else if (len > 64) {
                 return 2;
-            }
-            else if (!/^([^@\s\u4E00-\uFA29]+)@((?:[-a-zA-Z0-9]+\.)+[a-zA-Z]{2,})$/ig.test(text)) {
+            } else if (!/^([^@\s\u4E00-\uFA29]+)@((?:[-a-zA-Z0-9]+\.)+[a-zA-Z]{2,})$/ig.test(text)) {
                 return 3;
             }
             var me = this;
@@ -7264,8 +7100,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                         me.monitorList['hj_reg_mobile_success']();
                     }
                     module.startTimer();
-                }
-                else if (module_name == 'hj_reg_email_success') {
+                } else if (module_name == 'hj_reg_email_success') {
                     // 邮箱注册成功页 
                     if (me.monitorList['hj_reg_email_success']) {
                         me.monitorList['hj_reg_email_success']();
@@ -7274,60 +7109,52 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                     hui.c('hj001_close_btn')[0].onclick = function () {
                         window.location.reload && window.location.reload();
                     };
-                }
-                else if (module_name == 'hj_reg_mobile') {
+                } else if (module_name == 'hj_reg_mobile') {
                     // 在手机注册页的邮箱注册点击 
                     if (inner !== 'inner') {
                         // 点击页面上的注册 
                         if (me.monitorList['hj_reg']) {
                             me.monitorList['hj_reg']();
                         }
-                    }
-                    else {
+                    } else {
                         if (me.monitorList['hj_reg_email_mobile']) {
                             me.monitorList['hj_reg_email_mobile']();
                         }
                     }
                     module.getByFormName('mobile').mainFocus();
-                }
-                else if (module_name == 'hj_reg_email') {
+                } else if (module_name == 'hj_reg_email') {
                     // 在邮箱注册页的手机注册点击 
                     if (inner !== 'inner') {
                         // 点击页面上的注册 
                         if (me.monitorList['hj_reg']) {
                             me.monitorList['hj_reg']();
                         }
-                    }
-                    else {
+                    } else {
                         if (me.monitorList['hj_reg_mobile_email']) {
                             me.monitorList['hj_reg_mobile_email']();
                         }
                     }
                     module.getByFormName('email').mainFocus();
-                }
-                else if (module_name == 'hj_reg_login') {
+                } else if (module_name == 'hj_reg_login') {
                     // 登录沪江页展示 
                     if (me.monitorList['hj_reg_login']) {
                         me.monitorList['hj_reg_login']();
                     }
                     module.getByFormName('account').mainFocus();
-                }
-                else if (module_name == 'hj_reg_onekey') {
+                } else if (module_name == 'hj_reg_onekey') {
                     // 登录沪江页展示 
                     if (me.monitorList['hj_reg_login']) {
                         me.monitorList['hj_reg_login']();
                     }
                     module.getByFormName('mobile').mainFocus();
-                }
-                else if (module_name == 'hj_reg_onekey_next') {
+                } else if (module_name == 'hj_reg_onekey_next') {
                     // 登录沪江页展示 
                     if (me.monitorList['hj_reg_login']) {
                         me.monitorList['hj_reg_login']();
                     }
                     module.getByFormName('username').mainFocus();
                 }
-            }
-            else {
+            } else {
                 // 关闭按钮事件
                 if (me.monitorList['hj_reg_close']) {
                     me.monitorList['hj_reg_close']();
@@ -7396,23 +7223,18 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                             me.parentControl.onRegisteSuccess(me, result);
                         };
                         me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken));
-                    }
-                    else {
+                    } else {
                         var code = result.code;
                         var field = {};
                         if (~'1100,1101,9004'.indexOf(code)) {
                             field.mobile = result.message;
-                        }
-                        else if (~'1102,1103,1104,3003,3004,3005,3006'.indexOf(code)) {
+                        } else if (~'1102,1103,1104,3003,3004,3005,3006'.indexOf(code)) {
                             field.validationcode = result.message;
-                        }
-                        else if (~'1130,1131'.indexOf(code)) {
+                        } else if (~'1130,1131'.indexOf(code)) {
                             field.email = result.message;
-                        }
-                        else if (~'1214,1221,1222'.indexOf(code)) {
+                        } else if (~'1214,1221,1222'.indexOf(code)) {
                             field.username = result.message;
-                        }
-                        else if (~'1223,1224'.indexOf(code)) {
+                        } else if (~'1223,1224'.indexOf(code)) {
                             field.password = result.message;
                         }
 
@@ -7433,8 +7255,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             if (value && mobile.validate('not_show')) {
                 sendsms.setDisabled(false);
                 me.parentControl.checkMobileExist(me);
-            }
-            else {
+            } else {
                 sendsms.setDisabled(true);
             }
         },
@@ -7468,13 +7289,11 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                             mobile.showError(4, 'by_code');
                             mobile.isExist = 'exist';
                             me.getByFormName('sendsms').setDisabled();
-                        }
-                        else if (result && result.code === 0 && result.data === false) {
+                        } else if (result && result.code === 0 && result.data === false) {
                             mobile.showOK();
                             mobile.existValue = '';
                             me.getByFormName('sendsms').setDisabled(false);
-                        }
-                        else {
+                        } else {
                             mobile.showError(result.message);
                             me.getByFormName('sendsms').setDisabled();
                         }
@@ -7520,12 +7339,10 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                         if (result && result.code === 0 && result.data === false) {
                             email.isExist = '';
                             email.showOK();
-                        }
-                        else if (result && result.code === 0 && result.data === true) {
+                        } else if (result && result.code === 0 && result.data === true) {
                             email.isExist = 'exist';
                             email.showError(4, 'by_code');
-                        }
-                        else {
+                        } else {
                             email.showError(result.message);
                         }
                     }
@@ -7570,12 +7387,10 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                         if (result && result.code === 0 && result.data === false) {
                             username.isExist = '';
                             username.showOK();
-                        }
-                        else if (result && result.code === 0 && result.data === true) {
+                        } else if (result && result.code === 0 && result.data === true) {
                             username.isExist = 'exist';
                             username.showError(4, 'by_code');
-                        }
-                        else {
+                        } else {
                             username.showError(result.message);
                         }
 
@@ -7626,8 +7441,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
 
             if (me.getFormName() == 'hj_reg_mobile') {
                 me.parentControl.showDialog('hj_reg_mobile_success');
-            }
-            else {
+            } else {
                 me.parentControl.showDialog('hj_reg_email_success');
             }
         },
@@ -7667,8 +7481,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                     window.clearTimeout(hj_quicklogin.updateSSOTimer);
                 }
                 hj_quicklogin.updateSSO.callback && hj_quicklogin.updateSSO.callback();
-            }
-            else {
+            } else {
                 hj_quicklogin.ssonum = hj_quicklogin.ssonum ? hj_quicklogin.ssonum : 1;
                 hj_quicklogin.ssonum += 1;
             }
@@ -7696,8 +7509,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 /*if (!hui.util.hasCssString('hj001_quicklogin_fixed_7181549444794655')) {
                     hui.util.importCssString('.hj001_quicklogin {_top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px");_left: expression(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2 + "px")}}', 'hj001_quicklogin_fixed_7181549444794655');
                 }*/
-            }
-            else {
+            } else {
                 hui.util.importCssString('.hj001_quicklogin.hj001_login_box {top:' + top + 'px;left:' + left + 'px; margin-left:0px;}', 'hj001_quicklogin_fixed_7181549444794655');
             }
 
@@ -7709,8 +7521,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             e.stopPropagation && e.stopPropagation();
             if (e.preventDefault) {
                 e.preventDefault();
-            }
-            else {
+            } else {
                 window.event.returnValue = false;
             }
             return false;
@@ -7837,8 +7648,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 onsuccess: function (result) {
                     if (result.code !== 0) {
                         me.getByFormName('mobile').showError(result.message);
-                    }
-                    else if (result.data && result.data.ticket) {
+                    } else if (result.data && result.data.ticket) {
                         window.Requester.JSONP(me.parentControl.getSubName() + '/account/', {
                             data: {
                                 //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
@@ -7877,8 +7687,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 sendsms.leftSeconds = 90;
                 sendsms.setDisabled(false);
                 sendsms.setContent('重新发送');
-            }
-            else {
+            } else {
                 sendsms.leftSeconds--;
                 sendsms.setDisabled(true);
                 sendsms.setContent('重新发送(' + sendsms.leftSeconds + ')');
@@ -8005,32 +7814,27 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             var keyCode = e.keyCode || e.which;
             if (keyCode == 13) { //enter
                 cur && email.choose(cur);
-            }
-            else if (keyCode == 38) { //up arrow
+            } else if (keyCode == 38) { //up arrow
                 if (!cur) {
                     item = hui.util.findSiblingByClassName(list[0], 'hj001_row', 'last');
-                }
-                else {
+                } else {
                     item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'pre');
                     if (item == cur) {
                         item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'last');
                     }
                 }
                 item && hui.addClass(item, 'hj001_row_over');
-            }
-            else if (keyCode == 40) { //down arrow
+            } else if (keyCode == 40) { //down arrow
                 if (!cur) {
                     item = hui.util.findSiblingByClassName(list[0], 'hj001_row', 'first');
-                }
-                else {
+                } else {
                     item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'next');
                     if (item == cur) {
                         item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'first');
                     }
                 }
                 item && hui.addClass(item, 'hj001_row_over');
-            }
-            else {
+            } else {
                 //email.setValue(value);
                 if (value) {
                     email.tpl_suggestion = email.tpl_suggestion || email.email_list.innerHTML;
@@ -8167,8 +7971,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 }
                 if (me.getByFormName('hj001_rememberlogin').getChecked()) {
                     hui.setCookie('hj001_rememberlogin', 'true', 30 * 60 * 1000);
-                }
-                else {
+                } else {
                     hui.removeCookie('hj001_rememberlogin');
                 }
 
@@ -8191,13 +7994,11 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                                 me.parentControl.onLoginSuccess(result);
                             };
                             me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), hui.getCookie('hj001_rememberlogin') ? 14 : null);
-                        }
-                        else {
+                        } else {
                             var field = {};
                             if (~'1106'.indexOf(code)) {
                                 field.code = result.message;
-                            }
-                            else {
+                            } else {
                                 field.account = result.message;
                             }
                             me.hideError();
@@ -8243,8 +8044,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 });
 
                 hui.Control.getByFormName('hj_quicklogin').getByFormName('hj_reg_login').getByFormName('code').mainFocus();
-            }
-            else {
+            } else {
                 hj001_captcha_code.style.display = 'none';
             }
         }
@@ -8300,8 +8100,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 value = mobile.getValue();
             if (value && mobile.validate('not_show')) {
                 sendsms.setDisabled(false);
-            }
-            else {
+            } else {
                 sendsms.setDisabled(true);
             }
         },
@@ -8327,27 +8126,21 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                             var field = {};
                             if (result.code === 1010) {
                                 field.mobile = '手机号不正确';
-                            }
-                            else if (result.code === 1011) {
+                            } else if (result.code === 1011) {
                                 field.validationcode = '验证码不能为空';
-                            }
-                            else if (result.code === 1012) {
+                            } else if (result.code === 1012) {
                                 field.validationcode = '验证码不正确或已超时';
-                            }
-                            else if (result.code === 1013) {
+                            } else if (result.code === 1013) {
                                 field.validationcode = '验证码输入错误次数过多，请重新获取';
-                            }
-                            else if (result.code === 1014) {
+                            } else if (result.code === 1014) {
                                 field.validationcode = '未知错误';
                             }
                             me.showErrorByTree(field);
                             me.getByFormName('submit').setDisabled(false).setContent('登  录');
-                        }
-                        else if (result && result.data) {
+                        } else if (result && result.data) {
                             if (result.data.require_modify) {
                                 me.requireModify();
-                            }
-                            else {
+                            } else {
                                 me.parentControl.onLoginSuccess(result);
                             }
                             me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), null);
@@ -8374,19 +8167,15 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                             var field = {};
                             if (result.code === 1000) {
                                 field.validationcode = '90秒内只能获取一次';
-                            }
-                            else if (result.code === 1001) {
+                            } else if (result.code === 1001) {
                                 field.mobile = '已达到一天获取验证码的上限';
-                            }
-                            else if (result.code === 1002) {
+                            } else if (result.code === 1002) {
                                 field.mobile = '不正确的手机号';
-                            }
-                            else {
+                            } else {
                                 field.validationcode = '验证码错误';
                             }
                             me.showErrorByTree(field);
-                        }
-                        else if (result && result.data && result.data.ticket) {
+                        } else if (result && result.data && result.data.ticket) {
                             window.Requester.JSONP(me.parentControl.getPassName() + '.hujiang.com/quick/account/?act=send_login_validcode&mobile=' + mobile.getValue(), {
                                 data: {
                                     ticket: result.data.ticket
@@ -8396,14 +8185,11 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                                         var field = {};
                                         if (result.code === 1000) {
                                             field.mobile = '60秒内只能获取一次';
-                                        }
-                                        else if (result.code === 1001) {
+                                        } else if (result.code === 1001) {
                                             field.mobile = '已达到一天获取验证码的上限';
-                                        }
-                                        else if (result.code === 1002) {
+                                        } else if (result.code === 1002) {
                                             field.mobile = '不正确的手机号';
-                                        }
-                                        else {
+                                        } else {
                                             field.validationcode = '验证码错误';
                                         }
                                         me.showErrorByTree(field);
@@ -8428,8 +8214,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                 sendsms.leftSeconds = 90;
                 sendsms.setDisabled(false);
                 sendsms.setContent('重新发送');
-            }
-            else {
+            } else {
                 sendsms.leftSeconds--;
                 sendsms.setDisabled(true);
                 sendsms.setContent('重新发送(' + sendsms.leftSeconds + ')');
@@ -8531,33 +8316,26 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
                             var field = {};
                             if (result.code === 3000) {
                                 field.username = '用户名为空';
-                            }
-                            else if (result.code === 3001) {
+                            } else if (result.code === 3001) {
                                 field.username = '用户名已存在或不能使用';
-                            }
-                            else if (result.code === 3002) {
+                            } else if (result.code === 3002) {
                                 field.email = '电子邮件地址不正确';
-                            }
-                            else if (result.code === 3003) {
+                            } else if (result.code === 3003) {
                                 field.email = '电子邮件地址已存在';
-                            }
-                            else if (result.code === 3004) {
+                            } else if (result.code === 3004) {
                                 field.password = '密码不符合要求';
-                            }
-                            else {
+                            } else {
                                 field.username = '系统错误';
                             }
                             me.showErrorByTree(field);
                             me.getByFormName('submit').setDisabled(false);
-                        }
-                        else if (result) {
+                        } else if (result) {
                             if (result.data && result.data.ssotoken) {
                                 me.parentControl.updateSSO.callback = function () {
                                     me.parentControl.onLoginSuccess(result);
                                 };
                                 me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), null);
-                            }
-                            else {
+                            } else {
                                 me.parentControl.onLoginSuccess(result);
                             }
                         }
@@ -8608,8 +8386,7 @@ hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1'
             if (me.leftSecond < 1) {
                 hui.Control.getByFormName('hj_quicklogin').showDialog('');
                 hui.Control.getByFormName('hj_quicklogin').onRegisteSuccessMobile();
-            }
-            else {
+            } else {
                 var left_time = hui.c('hj001_left_time', me.getMain())[0];
                 me.setInnerHTML(left_time, me.leftSecond);
                 me.timer = window.setTimeout(function () {

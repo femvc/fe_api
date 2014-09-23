@@ -2,7 +2,9 @@
 var articleModel = require('../models/article').createNew();
 
 exports.saveArticle = function (req, res, next) {
-    var id = req.paramlist.atcid, article = {}, callback, date;
+    var id = req.paramlist.atcid,
+        article = {},
+        callback, date;
 
     if (!req.paramlist.title) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'title');
@@ -12,7 +14,7 @@ exports.saveArticle = function (req, res, next) {
     }
 
     article.title = req.paramlist.title;
-    article.content = req.paramlist.content;
+    article.content = JSON.parse(req.paramlist.content);
 
     callback = function (err, doc) {
         if (err) {
@@ -25,8 +27,7 @@ exports.saveArticle = function (req, res, next) {
     if (id) {
         article.update_time = date;
         articleModel.updateById(id, article, callback);
-    }
-    else {
+    } else {
         article.create_time = date;
         articleModel.insert(article, callback);
     }
@@ -64,7 +65,10 @@ exports.getArticles = function (req, res, next) {
     var params = req.paramlist,
         current = params.current || 1,
         count = params.count || 100,
-        sort = { "update_time": -1, "create_time": -1 },
+        sort = {
+            "update_time": -1,
+            "create_time": -1
+        },
         filter = {};
 
     if (params.title)
@@ -76,6 +80,8 @@ exports.getArticles = function (req, res, next) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-        response.ok(req, res, { items: doc });
+        response.ok(req, res, {
+            items: doc
+        });
     });
 }

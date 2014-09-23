@@ -40,7 +40,7 @@ window.onload = function(){
             onsuccess: function (result) {
                 alert(result[1]);
                 var data = result[1];
-                data.content = JSON.parse(data.content);
+                //data.content = JSON.parse(data.content);
                 
                 form.setValueByTree(data);
             }
