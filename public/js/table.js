@@ -417,9 +417,9 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 orderClass = '';
                 if (sortable) {
                     if (currentSort) {
-                        orderClass = ' ' + me.getClass('th' + me.order) + ' ' + me.getClass('thcntr-sort');
+                        orderClass = ' ' + me.getClass('th' + me.order) + ' ' + me.getClass('thcntr_sort');
                     }
-                    sortIconHtml = hui.Control.format(me.tplSortIcon,
+                    sortIconHtml = hui.Control.format(me.getTplSortIcon(),
                         sortClass);
                 }
 
@@ -435,14 +435,17 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                     thTextClass,
                     contentHtml,
                     sortIconHtml);
-                html.push('<th id="' + this.getTitleCellId(i) + '" index="' + i + '"',
-                    sortAction(field, i),
-                    ' style="width:' + me.colsWidth[i] + 'px">',
-                    '<div class="' + thCntrClass + orderClass +
-                    (field.select ? ' ' + selClass : '') + '">',
-                    contentHtml,
-                    tipHtml,
-                    '</div></th>');
+                html.push(
+                    hui.format('<th id="#{0}" index="#{1}" #{2} style="width:#{3}px"><div class="#{4}">#{5} #{6}</div></th>',
+                        this.getTitleCellId(i),
+                        i,
+                        sortAction(field, i),
+                        me.colsWidth[i],
+                        thCntrClass + orderClass + (field.select ? ' ' + selClass : ''),
+                        contentHtml,
+                        tipHtml
+                    )
+                );
             }
             html.push('</tr></table></div>');
             return html.join('');
@@ -478,9 +481,12 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         },
 
 
-
-        tplSortIcon: '<div class="#{0}"></div>',
-        tplTipIcon: '<div class="#{0}" #{1}></div>',
+        getTplSortIcon: function () {
+            return '<div class="#{0}"></div>';
+        },
+        tplTipIcon: function () {
+            return '<div class="#{0}" #{1}></div>';
+        },
 
         /**
          * @name 表格头单元格鼠标移入的事件handler
@@ -572,7 +578,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
             while (len--) {
                 th = ths[len];
-                hui.Control.removeClass(th.firstChild, this.getClass('thcntr-sort'));
+                hui.Control.removeClass(th.firstChild, this.getClass('thcntr_sort'));
             }
         },
 

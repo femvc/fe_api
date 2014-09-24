@@ -1,16 +1,31 @@
-.hui_table { }
-.hui_table_head { }
-.hui_table_head .hui_table_row { }
-.hui_table_head .hui_table_row .hui_table_thsel { }
-.hui_table_head .hui_table_row .hui_table_thcntr {
- 
-    text-align: left;
-}
-.hui_table_head .hui_table_row .hui_table_thtext { }
-.hui_table_head .hui_table_row .hui_table_thsort { }
-.hui_table_body { }
-.hui_table_body .hui_table_row { }
-.hui_table_body .hui_table_row .hui_table_tdsel { }
-.hui_table_body .hui_table_row .hui_table_tdcntr {
-    display: inline-block;
- }
+.hui_table{}
+.hui_table_head{}
+.hui_table_head .hui_table_row{}
+.hui_table_head .hui_table_row .hui_table_thsel{}
+.hui_table_head .hui_table_row .hui_table_thcntr{text-align:left;}
+.hui_table_head .hui_table_row .hui_table_thtext{float:left;}
+.hui_table_head .hui_table_row .hui_table_thsort{height:0;width:0;border:10px solid #9c9c9c;border-color:transparent;border-width:10px 5px;float:right;margin-top:-5px;margin-bottom:-10px;margin-right:5px;}
+.hui_table_head .hui_table_thasc  .hui_table_thsort{border-bottom-color:#9c9c9c;margin-top:-5px;display: inline;}
+.hui_table_head .hui_table_thdesc .hui_table_thsort{border-top-color:#9c9c9c;margin-top:5px;display: inline;}
+.hui_table_body{}
+.hui_table_body .hui_table_row{}
+.hui_table_body .hui_table_row .hui_table_tdsel{}
+.hui_table_body .hui_table_row .hui_table_tdcntr{display:inline-block;}
+
+
+
+.hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
+.hui_radioinput .hui_radioinput_input{display:none;}
+.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
+.hui_radioinput .hui_radioinput_text{float:left;}
+.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
+.hui_radioinputgroup{overflow:hidden;float:left;}
+.hui_checkbox{float:left;}
+.hui_checkbox .hui_checkbox_label{}
+.hui_checkbox .hui_checkbox_label a{font-size:14px;}
+.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
+.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
+.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}

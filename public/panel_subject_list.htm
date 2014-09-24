@@ -50,8 +50,8 @@ window.listTable = [
     {
         width: 296,
         title: 'n3',
-        field: 'name',
-        content: function(item) {return item['name'];}
+        field: '_id',
+        content: function(item) {return item['_id'];}
     }
 ];
 window.listData = [
@@ -59,12 +59,10 @@ window.listData = [
     {'name':'bbbb'}
 ];
 
-
-
+var form;
 
 window.onload = function(){
-    
-
+    // subject_list
     Requester.get('/ue_api/internal/get_articles', {
         onsuccess: function (result) {
             var data = result[1];
@@ -83,18 +81,81 @@ window.onload = function(){
                         title: 'create_time',
                         field: 'create_time',
                         content: function(item) {return item['create_time'];}
+                    },
+                    {
+                        width: 296,
+                        title: 'action',
+                        field: '_id',
+                        content: function(item) {return '<a href="?atcid=' + item['_id'] + '">edit</a>';}
                     }
                 ];
 
                 window.listData = data.items;
 
-                hui.Control.init(document.body);
+                hui.Control.init(hui.g('subject_list'));
                 
             };
             
         }
     });
     
+    // subject_add
+    hui.Control.init(hui.g('subject_add'));
+    var paramlist = hui.Master.parseLocator().query;
+    if (paramlist.atcid) {
+        hui.g('title').innerHTML = '修改题目';
+        Requester.get('/ue_api/internal/get_article', {
+            data: {atcid: paramlist.atcid},
+            onsuccess: function (result) {
+                alert(result[1]);
+                var data = result[1];
+                //data.content = JSON.parse(data.content);
+                
+                form.setValueByTree(data);
+            }
+        });
+    }
+    
+    
+    form = hui.Control.getByFormName('form');
+    form.addOption = function () {
+        var content = form.getByFormName('content').getMain();
+        var index = (content.index || hui.t('textarea', content).length) + 1;
+        content.index = index;
+        var tpl = 
+            '<div id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">#{index}' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"></textarea>' +
+            '    <a href="javascript:" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
+            '</div>';
+        hui.util.appendHTML(content, hui.format(tpl, {index: index}));
+        hui.Control.create(hui.g('content'+index));
+    };
+    form.removeOption = function (index) {
+        var content = form.getByFormName('content');
+        content.getByFormName(index).dispose();
+
+    };
+    
+    var submit = form.getByFormName('submit');
+    submit.onclick = function () {
+        var data = hui.Control.getByFormName('form').getParamMap();
+        data.content = JSON.stringify(data.content);
+        console.log(data);
+        Requester.get('/ue_api/internal/save_article', {
+            data: data,
+            onsuccess: function (err, result) {
+                alert(result);
+            }
+        });
+    };
+    var add = form.getByFormName('add');
+    add.onclick = form.addOption;
+    
+    form.addOption();
+    form.addOption();
+    form.addOption();
+    form.addOption();
 };
 //-->
 </script>
@@ -103,9 +164,24 @@ window.onload = function(){
 
 <body style="">
 <!--target:test-->
-<h3 id="title">题目列表</h3>
-<div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:600}"></div>
+<div id="subject_list">
+    <h3 id="title">题目列表</h3>
+    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:600}"></div>
+</div>
 
+<div id="subject_add">
+<!--target:test-->
+<h3 id="title">增加题目</h3>
+    <div ui="type:'Panel',formName:'form'">
+        <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+        题目：<textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'"></textarea>
+        <button ui="type:'Button',formName:'submit'">Save</button>
+        <br/><br/>
+        <div ui="type:'Panel',formName:'content',isFormItem: true">
+            选项：<a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
