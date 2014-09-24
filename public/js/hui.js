@@ -71,7 +71,8 @@ hui.require.parseModuleUrl = function (n, conf, type) {
     if (n.indexOf('./') === 0) {
         url = (conf && conf.source ? conf.source : './') + 'hui_modules/' + m + '/' +
             (conf && conf.fileName ? conf.fileName : fname);
-    } else {
+    }
+    else {
         url = window.location.protocol + '//' + window.location.host + '/hui_modules/' + m + '/' +
             (conf && conf.fileName ? conf.fileName : fname);
     }
@@ -179,9 +180,11 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.g = function (id, parentNode) {
         if (!parentNode) {
             return document.getElementById(id);
-        } else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
+        }
+        else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
             return hui.bocument.getElementById(id);
-        } else {
+        }
+        else {
             var i,
                 len,
                 childNode,
@@ -222,7 +225,8 @@ hui.define('hui_util', ['hui'], function () {
                 }
             }
             return result;
-        } else {
+        }
+        else {
             searchClass = searchClass !== null ? String(searchClass).replace(/\s+/g, ' ') : '';
             node = node || document;
             tag = tag || '*';
@@ -364,7 +368,8 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.util.addClass(element[i], className);
             }
-        } else if (element) {
+        }
+        else if (element) {
             hui.util.removeClass(element, className);
             element.className = (element.className + ' ' + className).replace(/(\s)+/ig, ' ');
         }
@@ -376,7 +381,8 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.util.removeClass(element[i], className);
             }
-        } else if (element) {
+        }
+        else if (element) {
             var list = className.replace(/\s+/ig, ' ').split(' '),
                 /* Attention: str need two spaces!! */
                 str = (' ' + (element.className || '').replace(/(\s)/ig, '  ') + ' '),
@@ -411,12 +417,14 @@ hui.define('hui_util', ['hui'], function () {
                 if (c && c.owningElement && c.owningElement.id === id) {
                     result = c.owningElement;
                     break;
-                } else if (c && c.ownerNode && c.ownerNode.id === id) {
+                }
+                else if (c && c.ownerNode && c.ownerNode.id === id) {
                     result = c.ownerNode;
                     break;
                 }
             }
-        } else if ((sheets = doc.getElementsByTagName('style'))) {
+        }
+        else if ((sheets = doc.getElementsByTagName('style'))) {
             for (var i = 0, len = sheets.length; i < len; i++) {
                 c = sheets[i];
                 if (c.id === id) {
@@ -487,7 +495,8 @@ hui.define('hui_util', ['hui'], function () {
         // all browsers, except IE before version 9
         if (sheet.insertRule) {
             sheet.insertRule(className + '{' + cssText + '}', index);
-        } else {
+        }
+        else {
             // Internet Explorer before version 9
             if (sheet.addRule) {
                 sheet.addRule(className, cssText, index);
@@ -501,7 +510,8 @@ hui.define('hui_util', ['hui'], function () {
         doc = doc || document;
         if (doc.createStyleSheet) {
             doc.createStyleSheet(uri);
-        } else {
+        }
+        else {
             var link = hui.util.createElement('link');
             link.rel = 'stylesheet';
             link.href = uri;
@@ -534,7 +544,8 @@ hui.define('hui_util', ['hui'], function () {
                 while (part) {
                     if (cur[part] !== undefined) {
                         cur = cur[part];
-                    } else {
+                    }
+                    else {
                         cur = undefined;
                         break;
                     }
@@ -569,14 +580,17 @@ hui.define('hui_util', ['hui'], function () {
                 if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
                     m = parseInt(m, 10);
                     n = parseInt(n, 10);
-                } else {
+                }
+                else {
                     if (m > n) {
                         m = 1;
                         n = -m;
-                    } else if (m < n) {
+                    }
+                    else if (m < n) {
                         m = -1;
                         n = -m;
-                    } else {
+                    }
+                    else {
                         m = 1;
                         n = m;
                     }
@@ -593,7 +607,8 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.on = function (elem, eventName, handler) {
         if (elem.addEventListener) {
             elem.addEventListener(eventName, handler, false);
-        } else if (elem.attachEvent) {
+        }
+        else if (elem.attachEvent) {
             elem.attachEvent('on' + eventName, handler);
             // elem.attachEvent('on' + eventName, function(){handler.call(elem)}); 
             //此处使用回调函数call()，让 this指向elem //注释掉原因：无法解绑
@@ -778,7 +793,8 @@ hui.define('hui_util', ['hui'], function () {
 
         if (source instanceof Date) {
             result = new Date(source.getTime());
-        } else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
+        }
+        else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
             for (j = 0, len2 = oldArr.length; j < len2; j++) {
                 if (oldArr[j] == source) {
                     exist = j;
@@ -788,7 +804,8 @@ hui.define('hui_util', ['hui'], function () {
             if (exist != -1) {
                 result = newArr[exist];
                 exist = -1;
-            } else {
+            }
+            else {
                 if (source instanceof Array) {
                     result = [];
                     oldArr.push(source);
@@ -797,7 +814,8 @@ hui.define('hui_util', ['hui'], function () {
                     for (i = 0, len = source.length; i < len; i++) {
                         result[resultLen++] = hui.util.clone(source[i], oldArr, newArr);
                     }
-                } else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
+                }
+                else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
                     result = {};
                     oldArr.push(source);
                     newArr.push(result);
@@ -931,7 +949,8 @@ hui.define('hui_util', ['hui'], function () {
             for (var i = fr.length - 1; i > -1; i--) {
                 str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
             }
-        } else {
+        }
+        else {
             for (var i = 0, l = fr.length; i < l; i++) {
                 str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
             }
@@ -953,7 +972,8 @@ hui.define('hui_util', ['hui'], function () {
         if (!elem) return;
         if (elem.textContent !== undefined) {
             elem.textContent = text;
-        } else {
+        }
+        else {
             elem.innerText = text;
         }
     };
@@ -1063,7 +1083,8 @@ hui.define('hui_eventdispatcher', ['hui@0.0.1'], function () {
             // 只清除指定类型
             else if (this._listeners[eventType]) {
                 this._listeners[eventType] = [];
-            } else if (Object.prototype.toString.call(eventType) === '[object Array]') {
+            }
+            else if (Object.prototype.toString.call(eventType) === '[object Array]') {
                 for (var i = 0, len = eventType.length; i < len; i++) {
                     this.clear(eventType[i]);
                 }
@@ -1201,7 +1222,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var main = this.getMain();
             try {
                 main.focus();
-            } catch (e) {}
+            }
+            catch (e) {}
         },
         /**
          * @name 获取控件的innerHTML
@@ -1215,7 +1237,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 html = '';
             if (elem.getInnerHTML) {
                 html = elem.getInnerHTML();
-            } else if (elem.innerHTML !== undefined) {
+            }
+            else if (elem.innerHTML !== undefined) {
                 html = elem.innerHTML;
             }
             return html;
@@ -1352,7 +1375,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                         }
                         if (Object.prototype.toString.call(paramMap[formName]) === '[object Object]' && ctr.controlMap) {
                             ctr.showErrorByTree(paramMap[formName], code);
-                        } else if (ctr.showError) {
+                        }
+                        else if (ctr.showError) {
                             ctr.showError(paramMap[formName], code);
                         }
                         ctr = null;
@@ -1379,7 +1403,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this;
             if (me.controlMap) {
                 me.setValueByTree(this.value);
-            } else {
+            }
+            else {
                 me.getMain().value = paramMap;
             }
         },
@@ -1404,13 +1429,15 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                             ctr.constructor.prototype.hasOwnProperty('setValue')) {
 
                             ctr.setValue(paramMap[formName]);
-                        } else if (ctr.controlMap) {
+                        }
+                        else if (ctr.controlMap) {
                             ctr.setValueByTree(paramMap[formName]);
-                        } else if (ctr.getMain || ctr.main) {
+                        }
+                        else if (ctr.getMain || ctr.main) {
                             main = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)) || {};
                             main.value = paramMap[formName];
                         }
-
+                        
                         ctr = null;
                     }
                 }
@@ -1438,10 +1465,12 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                             if (ctr.getValue) {
                                 value = ctr.getValue();
                                 paramMap[formName].push(value);
-                            } else if (ctr.getMain || ctr.main) {
+                            }
+                            else if (ctr.getMain || ctr.main) {
                                 value = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)).value;
                                 paramMap[formName].push(value);
-                            } else if (ctr.controlMap) {
+                            }
+                            else if (ctr.controlMap) {
                                 value = ctr.getParamMap();
                                 paramMap[formName].push(value);
                             }
@@ -1474,6 +1503,9 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this,
                 main = me.getMain ? me.getMain() : me.getDocument().getElementById(me.main),
                 value = me.value || main.value;
+            if (me.controlMap) {
+                value = me.getParamMap();
+            }
             return value;
         },
         /**
@@ -1507,7 +1539,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
             if (main.disabled) {
                 hui.addClass(main, me.getClass('disabled'));
-            } else {
+            }
+            else {
                 hui.removeClass(main, me.getClass('disabled'));
             }
             return me;
@@ -1621,13 +1654,15 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 for (var i = 0, len = list.length; i < len; i++) {
                     try {
                         main[list[i]] = Function('');
-                    } catch (e) {}
+                    }
+                    catch (e) {}
                 }
 
                 // 清空HTML内容
                 if (main.setInnerHTML) {
                     main.setInnerHTML(main, '');
-                } else if (main.innerHTML) {
+                }
+                else if (main.innerHTML) {
                     main.innerHTML = '';
                 }
                 main.parentNode.removeChild(main);
@@ -1737,7 +1772,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
             if (uiObj.initBehaviorByTree) {
                 uiObj.initBehaviorByTree();
-            } else if (uiObj.initBehavior) {
+            }
+            else if (uiObj.initBehavior) {
                 uiObj.initBehavior();
             }
 
@@ -1992,10 +2028,12 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 str = type.getAttribute(hui.Control.UI_ATTRIBUTE || 'ui');
                 try {
                     attrs = hui.Control.parseCustomAttribute(str);
-                } catch (e) {
+                }
+                catch (e) {
                     attrs = hui.Control.parseCustomAttribute(str.replace(/\\\'/g, '\'').replace(/\\\"/g, '\"'));
                 }
-            } catch (e) {
+            }
+            catch (e) {
                 window.JSON && window.JSON.stringify && window.console && window.console.log({
                     type: type,
                     options: options
@@ -2003,11 +2041,27 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 return;
             }
 
+            var text, action, key;
             for (var i in attrs) {
-                var text = attrs[i];
+                text = attrs[i];
                 if (text && Object.prototype.toString.call(text) === '[object String]') {
                     if (text.indexOf('&') === 0) {
-                        attrs[i] = window[text.replace('&', '')];
+                        key = text.replace('&', '');
+                        attrs[i] = window[key];
+                    }
+                    else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Action.get) === 'function') {
+                        key = text.replace('&', '');
+                        action = hui.Action.get();
+                        if (action && action.model && (typeof action.model.get) === 'function') {
+                            attrs[i] = action.model.get(key);
+                        }
+                        else if (action && action.model) {
+                            attrs[i] = action.model[key];
+                        }
+                        else if (action) {
+                            attrs[i] = action[key];
+                        }
+
                     }
                 }
             }
@@ -2234,7 +2288,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
         if (id === undefined || (parentControl && parentControl.getId && id === parentControl.getId())) {
             result = parentControl;
-        } else if (parentControl) {
+        }
+        else if (parentControl) {
             list = hui.Control.findAllControl(parentControl);
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i].id == id) {
@@ -2306,7 +2361,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     break;
                 }
             }
-        } else {
+        }
+        else {
             result = list[0];
         }
 
@@ -2329,7 +2385,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 if (main.parentNode === parentNode) {
                     result = true;
                     main = null;
-                } else {
+                }
+                else {
                     main = main.parentNode;
                 }
             }
@@ -2356,14 +2413,16 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
     hui.Control.error = function (str) {
         if (hui.window && hui.window.console && hui.window.console.error) {
             hui.window.console.error(str);
-        } else if (typeof (window) !== 'undefined' && window.console && window.console.error) {
+        }
+        else if (typeof (window) !== 'undefined' && window.console && window.console.error) {
             window.console.error(str);
         }
     };
     hui.Control.log = function (str) {
         if (hui.window && hui.window.console && hui.window.console.log) {
             hui.window.console.log(str);
-        } else if (typeof (window) !== 'undefined' && window.console && window.console.log) {
+        }
+        else if (typeof (window) !== 'undefined' && window.console && window.console.log) {
             window.console.log(str);
         }
     };
@@ -2373,7 +2432,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.BaseModel':
             if (typeof hui !== 'undefined' && hui.BaseModel) {
                 result = hui.BaseModel;
-            } else {
+            }
+            else {
                 result.get = new Function();
                 result.set = new Function();
             }
@@ -2381,7 +2441,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.Validator':
             if (typeof hui !== 'undefined' && hui.Validator) {
                 result = hui.Validator;
-            } else {
+            }
+            else {
                 result.cancelNotice = new Function();
                 result.set = new Function();
             }
@@ -2389,14 +2450,16 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         case 'hui.Action':
             if (typeof hui !== 'undefined' && hui.Validator) {
                 result = hui.Validator;
-            } else {
+            }
+            else {
                 result.get = new Function();
             }
             break;
         case 'hui.context':
             if (typeof hui !== 'undefined' && hui.context) {
                 result = hui.context;
-            } else {
+            }
+            else {
                 result = {};
                 result.get = new Function();
             }
@@ -2463,11 +2526,14 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
         parse: function (text, type) {
             if (type === 'int') {
                 return parseInt(text, 10);
-            } else if (type === 'float') {
+            }
+            else if (type === 'float') {
                 return parseFloat(text);
-            } else if (type === 'date') {
+            }
+            else if (type === 'date') {
                 return hui.Validator.parseDate(text);
-            } else {
+            }
+            else {
                 return text;
             }
         },
@@ -2670,10 +2736,12 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
             // return ['ERROR_LENGTH_RANGE', min_length, max_length]
             else if (Object.prototype.toString.call(error) === '[object Array]') {
                 errorText = hui.Validator.format(me.errorMsg[error[0]], error.splice(1, error.length));
-            } else if (error !== 0) { //TODO:这种形式是要被历史遗弃的
+            }
+            else if (error !== 0) { //TODO:这种形式是要被历史遗弃的
                 if ('object' == typeof rule.noticeText) {
                     errorText = rule.noticeText[error];
-                } else {
+                }
+                else {
                     errorText = rule.noticeText;
                 }
             }
@@ -2684,7 +2752,8 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
                 if (error === 0 || error === 'SUCCESS') {
                     var showOK = rule.showOK || me.showOK;
                     showOK(control, errorText);
-                } else {
+                }
+                else {
                     var showError = rule.showError || me.showError;
                     showError(control, errorText);
                 }
@@ -2917,7 +2986,8 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
                 title: 'hui.Validator.setRule() Error: ',
                 name: 'rule "' + ruleName + '" exist.'
             };
-        } else {
+        }
+        else {
             hui.Validator.ruleMap[ruleName] = ruleContent;
         }
     };
@@ -3019,32 +3089,38 @@ hui.define('hui_requester', [], function () {
                         window.setTimeout(function () {
                             handler('failure', xhr);
                         }, 0);
-                    } else {
+                    }
+                    else {
                         if (xhr.eventHandlers['datatype'] == 'XML') {
                             try {
                                 xhr.xhr.responseXML;
                                 xhr.responseCallback(handler, xhr.xhr.responseXML);
-                            } catch (error) {
+                            }
+                            catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
                                 return;
                             }
-                        } else if (xhr.eventHandlers['datatype'] == 'TEXT') {
+                        }
+                        else if (xhr.eventHandlers['datatype'] == 'TEXT') {
                             try {
                                 xhr.xhr.responseText;
                                 xhr.responseCallback(handler, xhr.xhr.responseText);
-                            } catch (error) {
+                            }
+                            catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
                                 return;
                             }
-                        } else { //if (xhr.eventHandlers['datatype'] == 'JSON')
+                        }
+                        else { //if (xhr.eventHandlers['datatype'] == 'JSON')
                             // 处理获取xhr.responseText导致出错的情况,比如请求图片地址. 
                             try {
                                 xhr.xhr.responseText;
-                            } catch (error) {
+                            }
+                            catch (error) {
                                 window.setTimeout(function () {
                                     handler('error', xhr);
                                 }, 0);
@@ -3067,7 +3143,8 @@ hui.define('hui_requester', [], function () {
                                 }
 
                                 xhr.responseCallback(handler, data);
-                            } else if (text.indexOf('{') === 0) {
+                            }
+                            else if (text.indexOf('{') === 0) {
                                 // {success:true,message: 
                                 // 插入表单验证错误提示 
                                 var JSON_Parser;
@@ -3081,7 +3158,8 @@ hui.define('hui_requester', [], function () {
                                     data = JSON_Parser();
                                 }
                                 xhr.responseCallback(handler, data);
-                            } else {
+                            }
+                            else {
                                 window.setTimeout(function () {
                                     handler(null, text);
                                 }, 0);
@@ -3192,10 +3270,12 @@ hui.define('hui_requester', [], function () {
                     try {
                         if (username) {
                             xhr.xhr.open(method, url, async, username, password);
-                        } else {
+                        }
+                        else {
                             xhr.xhr.open(method, url, async);
                         }
-                    } catch (e) {
+                    }
+                    catch (e) {
                         //debugger;
                         //alert(e.message ? e.message : String(e));
                     }
@@ -3230,7 +3310,8 @@ hui.define('hui_requester', [], function () {
                     if (!async) {
                         stateChangeHandler.call(xhr);
                     }
-                } catch (ex) {
+                }
+                catch (ex) {
                     xhr.fire('failure');
                 }
             }
@@ -3247,7 +3328,8 @@ hui.define('hui_requester', [], function () {
             if (xhr.xhr.readyState == 4) {
                 try {
                     stat = xhr.xhr.status;
-                } catch (ex) {
+                }
+                catch (ex) {
                     // 在请求时，如果网络中断，Firefox会无法取得status 
                     xhr.fire('failure');
                     return;
@@ -3270,10 +3352,12 @@ hui.define('hui_requester', [], function () {
                     // 如上，两次请求会共用同一个XHR对象从而造成status=0的错误，因此需要标识请求是否已成功返回
                     xhr.status = 'finished';
                     xhr.fire('success');
-                } else {
+                }
+                else {
                     if (stat === 0 && !xhr.online) {
                         xhr.fire('success');
-                    } else {
+                    }
+                    else {
                         if (stat === 0 && window.console && window.console.log) {
                             window.console.error('XHR Error: Cross domain, cannot access: %s.', xhr.url);
                         }
@@ -3325,7 +3409,8 @@ hui.define('hui_requester', [], function () {
                 for (var i = fr.length - 1; i > -1; i--) {
                     str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
                 }
-            } else {
+            }
+            else {
                 for (var i = 0, l = fr.length; i < l; i++) {
                     str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
                 }
@@ -3420,7 +3505,8 @@ hui.define('hui_requester', [], function () {
                     for (j = i - 1; j > -1; j--) {
                         if (list[j] === '\\') {
                             lineNum++;
-                        } else {
+                        }
+                        else {
                             j = -1;
                         }
                     }
@@ -3454,7 +3540,8 @@ hui.define('hui_requester', [], function () {
                     for (j = i - 1; j > -1; j--) {
                         if (/^[\t\r\n\s ]+$/.test(list[j])) {
                             continue;
-                        } else {
+                        }
+                        else {
                             if (list[j] === ',') list[j] = '';
                             break;
                         }
@@ -3521,7 +3608,8 @@ hui.define('hui_requester', [], function () {
         permit = Permission.checkRequest(url, opt_options);
         if (permit && permit[0] == 'notpermit') {
             return null;
-        } else {
+        }
+        else {
             url = permit ? permit[1] : url;
         }
 
@@ -3737,7 +3825,8 @@ function doit() {
         case 'hui.Permission':
             if (typeof hui !== 'undefined' && hui.Permission) {
                 result = hui.Permission;
-            } else {
+            }
+            else {
                 result.checkRequest = new Function();
                 result.set = new Function();
             }
@@ -3745,7 +3834,8 @@ function doit() {
         case 'hui.Mockup':
             if (typeof hui !== 'undefined' && hui.Mockup) {
                 result = hui.Mockup;
-            } else {
+            }
+            else {
                 result.find = new Function();
                 result.get = new Function();
             }
@@ -3784,7 +3874,8 @@ function doit() {
             else if (Object.prototype.toString.call(target) === '[object Array]') {
                 if (Object.prototype.toString.call(target[0]) === '[object Array]') {
                     result = target[(new Date()).getTime() % target.length];
-                } else {
+                }
+                else {
                     result = target;
                 }
             }
@@ -3991,7 +4082,8 @@ hui.define('hui_template', ['hui'], function () {
                     if (key.indexOf('(') !== -1) {
                         // #{Math.floor(user.age, user.birth)}
                         replacer = hui.runWithoutStrict(key, data);
-                    } else {
+                    }
+                    else {
                         parts = hui.Template.overloadOperator(key).split('.');
                         cur = data;
                         part = parts.shift();
@@ -4014,7 +4106,8 @@ hui.define('hui_template', ['hui'], function () {
             msg = 'Template: ' + msg;
             if (hui.window.console) {
                 hui.window.console.log(msg);
-            } else throw Error(msg);
+            }
+            else throw Error(msg);
         },
         varConvert: function (token, model, strMap, str) {
             var s2,
@@ -4041,7 +4134,8 @@ hui.define('hui_template', ['hui'], function () {
 
                             c = hui.Template.expCalculate(m, model, strMap, 'keep_var');
                             c.parent[c.child] = value;
-                        } else {
+                        }
+                        else {
                             model[s2[j]] = value;
                         }
                     }
@@ -4084,7 +4178,8 @@ hui.define('hui_template', ['hui'], function () {
                         for (var j = i - 1; j > -1; j--) {
                             if (list[j] === '\\') {
                                 lineNum++;
-                            } else {
+                            }
+                            else {
                                 j = -1;
                             }
                         }
@@ -4100,7 +4195,8 @@ hui.define('hui_template', ['hui'], function () {
                                 notValue = true;
                                 preQuot = -1;
                             }
-                        } else {
+                        }
+                        else {
                             t1.push(c);
                         }
                     }
@@ -4119,7 +4215,8 @@ hui.define('hui_template', ['hui'], function () {
                             preQuot = -1;
                         }
                     }
-                } else {
+                }
+                else {
                     // is String value
                     if (!notValue) {
                         t1.push(c);
@@ -4131,7 +4228,8 @@ hui.define('hui_template', ['hui'], function () {
                             preBracket.push(c);
 
                             s1.push(c);
-                        } else if (c === '}' || c === ']') {
+                        }
+                        else if (c === '}' || c === ']') {
                             if (preBracket[preBracket.length - 1] === (c === '}' ? '{' : '[')) {
                                 preBracket.pop();
                             }
@@ -4155,7 +4253,8 @@ hui.define('hui_template', ['hui'], function () {
                             s2.push(s1);
                             s2.push('=');
                             s1 = [];
-                        } else if (c === '#' && list[i + 1] === '{') {
+                        }
+                        else if (c === '#' && list[i + 1] === '{') {
                             s1.push(' ');
                             for (var j = i + 2; j < ilen; j++) {
                                 if (list[j] === '}') {
@@ -4165,7 +4264,8 @@ hui.define('hui_template', ['hui'], function () {
                                 s1.push(list[j]);
                             }
                             s1.push(' ');
-                        } else {
+                        }
+                        else {
                             s1.push(c);
                         }
                     }
@@ -4213,7 +4313,8 @@ hui.define('hui_template', ['hui'], function () {
                         m = c[j];
                         c[j] = hui.Template.overloadOperator(m);
                     }
-                } else {
+                }
+                else {
                     s3[i] = hui.Template.overloadOperator(c);
                 }
             }
@@ -4338,7 +4439,8 @@ hui.define('hui_template', ['hui'], function () {
                 c.parent[c.child] = result + (list.opr === '++' ? 1 : -1);
                 result = list[0] === '++' || list[0] === '--' ? c.parent[c.child] : result;
 
-            } else if (list.opr === '.') {
+            }
+            else if (list.opr === '.') {
                 for (var i = 0, ilen = list.length; i < ilen; i++) {
                     c = list[i];
                     if (Object.prototype.toString.call(c) === '[object Array]') {
@@ -4365,13 +4467,15 @@ hui.define('hui_template', ['hui'], function () {
                     parent: data || {},
                     child: list[list.length - 1]
                 } : data;
-            } else {
+            }
+            else {
                 for (var i = 0, ilen = list.length; i < ilen; i++) {
                     c = list[i];
                     if (Object.prototype.toString.call(c) === '[object Array]') {
                         c = hui.Template.expCalculate(c, model, strMap);
                         list[i] = c;
-                    } else {
+                    }
+                    else {
                         list[i] = hui.Template.expIsOperator(c) ? list[i] : hui.Template.getKeyValue(c, model, strMap);
                     }
 
@@ -4382,14 +4486,17 @@ hui.define('hui_template', ['hui'], function () {
                     for (var i = list.length - 1; i > -1; i--) {
                         result = !m;
                     }
-                } else if (list.opr === '?') {
+                }
+                else if (list.opr === '?') {
                     c = list[0];
                     if (c) {
                         result = list[2];
-                    } else {
+                    }
+                    else {
                         result = list[4];
                     }
-                } else if (list.opr === '||') {
+                }
+                else if (list.opr === '||') {
                     result = false || list[0];
                     for (var i = 1, ilen = list.length; i < ilen && !result; i++) {
                         c = list[i];
@@ -4399,7 +4506,8 @@ hui.define('hui_template', ['hui'], function () {
                         }
                         i++;
                     }
-                } else if (list.opr === '&&') {
+                }
+                else if (list.opr === '&&') {
                     result = true && list[0];
                     for (var i = 1, ilen = list.length; i < ilen && result; i++) {
                         c = list[i];
@@ -4409,63 +4517,75 @@ hui.define('hui_template', ['hui'], function () {
                         }
                         i++;
                     }
-                } else if (list.opr === '!==' || list.opr === '===' || list.opr === '!=' || list.opr === '==') {
+                }
+                else if (list.opr === '!==' || list.opr === '===' || list.opr === '!=' || list.opr === '==') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '!==' || c === '!=') {
                             result = String(result) !== String(m);
-                        } else if (c === '===' || c === '==') {
+                        }
+                        else if (c === '===' || c === '==') {
                             result = String(result) === String(m);
                         }
                         i++;
                     }
-                } else if (list.opr === '>' || list.opr === '>=' || list.opr === '<' || list.opr === '<=') {
+                }
+                else if (list.opr === '>' || list.opr === '>=' || list.opr === '<' || list.opr === '<=') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '>') {
                             result = result > m;
-                        } else if (c === '>=') {
+                        }
+                        else if (c === '>=') {
                             result = result >= m;
-                        } else if (c === '<') {
+                        }
+                        else if (c === '<') {
                             result = result < m;
-                        } else if (c === '<=') {
+                        }
+                        else if (c === '<=') {
                             result = result <= m;
                         }
                         i++;
                     }
-                } else if (list.opr === '+' || list.opr === '-') {
+                }
+                else if (list.opr === '+' || list.opr === '-') {
                     if (list[0] === '+' || list[0] === '-') {
                         result = list.pop();
                         for (var i = list.length - 1; i > -1; i--) {
                             result = list[i] === '-' ? 0 - result : result;
                         }
-                    } else {
+                    }
+                    else {
                         result = list[0];
                         for (var i = 1, ilen = list.length; i < ilen; i++) {
                             c = list[i];
                             m = list[i + 1];
                             if (c === '+') {
                                 result = result + m;
-                            } else if (c === '-') {
+                            }
+                            else if (c === '-') {
                                 result = result - m;
                             }
                             i++;
                         }
                     }
-                } else if (list.opr === '*' || list.opr === '/' || list.opr === '%') {
+                }
+                else if (list.opr === '*' || list.opr === '/' || list.opr === '%') {
                     result = list[0];
                     for (var i = 1, ilen = list.length; i < ilen; i++) {
                         c = list[i];
                         m = list[i + 1];
                         if (c === '*') {
                             result = result * m;
-                        } else if (c === '/') {
+                        }
+                        else if (c === '/') {
                             result = result / m;
-                        } else if (c === '%') {
+                        }
+                        else if (c === '%') {
                             result = result % m;
                         }
                         i++;
@@ -4549,14 +4669,16 @@ hui.define('hui_template', ['hui'], function () {
                     isOperator = true;
                     if (',++,--,==,!=,>=,<=,&&,||,'.indexOf(pre) !== -1 || /\d\.\d/.test(next)) {
                         s1.push(c);
-                    } else {
+                    }
+                    else {
                         if (s1.length) {
                             s2.push(s1);
                         }
                         s1 = [];
                         s1.push(c);
                     }
-                } else if (c === '#') {
+                }
+                else if (c === '#') {
                     if (s1.length) {
                         s2.push(s1);
                     }
@@ -4570,11 +4692,14 @@ hui.define('hui_template', ['hui'], function () {
                     }
                     s2.push(s1);
                     s1 = [];
-                } else if (c === ' ' || c === '\t') {
+                }
+                else if (c === ' ' || c === '\t') {
                     continue;
-                } else if (list[i - 1] === '.' && '0123456789'.indexOf(c) !== -1) {
+                }
+                else if (list[i - 1] === '.' && '0123456789'.indexOf(c) !== -1) {
                     s1.push(c);
-                } else {
+                }
+                else {
                     if (isOperator) {
                         isOperator = false;
                         if (s1.length) {
@@ -4618,14 +4743,16 @@ hui.define('hui_template', ['hui'], function () {
                     parent.push(cur);
                     list.push(cur);
 
-                } else if (list.length > 1 && c === ')' || c === ']') {
+                }
+                else if (list.length > 1 && c === ')' || c === ']') {
                     list.pop();
                     cur = parent || cur;
                     if (c === ']') {
                         //cur.push(c);
                     }
                     parent = list[list.length - 2];
-                } else {
+                }
+                else {
                     cur.push(c);
                 }
 
@@ -4713,7 +4840,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4723,10 +4851,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid Dot(.) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4754,10 +4884,12 @@ hui.define('hui_template', ['hui'], function () {
                         n.opr = c;
                         newtoken.push(n);
                         i++;
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid Increment(++),Decrement(--) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4773,7 +4905,8 @@ hui.define('hui_template', ['hui'], function () {
                     if (hui.Template.expIsOperand(pre)) {
                         if (pre && pre.lev && pre.lev === cd) {
                             pre.unshift(c);
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.unshift(newtoken.shift());
                             pre.unshift(c);
@@ -4781,10 +4914,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.unshift(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid Negative(+),Positive(-) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.unshift(c);
                 }
             }
@@ -4802,7 +4937,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4812,10 +4948,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid MUL(*),DIV(/),(MOD)% operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4833,7 +4971,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4843,10 +4982,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid ADD(+) or SUB(-) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4864,7 +5005,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4874,10 +5016,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid Morethan(>,>=),Lessthan(<=,<) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4895,7 +5039,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4905,10 +5050,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid Equal(==,!==) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4926,7 +5073,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4936,10 +5084,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid AND(&&) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4957,7 +5107,8 @@ hui.define('hui_template', ['hui'], function () {
                             pre.push(c);
                             pre.push(token[i + 1]);
                             i++;
-                        } else {
+                        }
+                        else {
                             pre = [];
                             pre.push(newtoken.pop());
                             pre.push(c);
@@ -4967,10 +5118,12 @@ hui.define('hui_template', ['hui'], function () {
                             pre.opr = c;
                             newtoken.push(pre);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid OR(||) operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.push(c);
                 }
             }
@@ -4995,10 +5148,12 @@ hui.define('hui_template', ['hui'], function () {
                         nxt.lev = cd;
                         nxt.opr = c;
                         newtoken.unshift(nxt);
-                    } else {
+                    }
+                    else {
                         throw new Error('SyntaxError: invalid "A ? B : C"  operand in "' + token[i - 1] + ' ' + token[i] + ' ' + token[i + 1] + '"');
                     }
-                } else {
+                }
+                else {
                     newtoken.unshift(c);
                 }
             }
@@ -5199,7 +5354,8 @@ hui.define('hui_template', ['hui'], function () {
                     curentParent.childNodes.push(elem);
                     // elem.parentNode = curentParent.getGUID();
                     elem.parentNode = curentParent;
-                } else if (token.nodeType == 'startTag') {
+                }
+                else if (token.nodeType == 'startTag') {
                     // 'if,elif,else' is special.
                     if (token.tagName == 'if') {
                         elem = me.createElement('ifif', {});
@@ -5220,12 +5376,14 @@ hui.define('hui_template', ['hui'], function () {
                         elem.childNodes = [];
                         curentParent = elem;
                     }
-                } else if (token.nodeType == 'endTag') {
+                }
+                else if (token.nodeType == 'endTag') {
                     if (!me.typeCloseSelf[token.tagName]) {
 
                         if (token.tagName == curentParent.tagName) {
                             curentParent = curentParent.parentNode;
-                        } else if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
+                        }
+                        else if (token.tagName == 'if' && ~',if,elif,else,'.indexOf(',' + curentParent.tagName)) {
                             parentElem = curentParent.parentNode;
                             if (parentElem.tagName == 'ifif') {
                                 curentParent = parentElem.parentNode;
@@ -5237,13 +5395,15 @@ hui.define('hui_template', ['hui'], function () {
                             while (parentElem) {
                                 if (parentElem.tagName == token.tagName) {
                                     curentParent = parentElem.parentNode;
-                                } else {
+                                }
+                                else {
                                     parentElem = parentElem.parentNode;
                                 }
                             }
                         }
                     }
-                } else if (token.nodeType == 'typeEndAndStart') {
+                }
+                else if (token.nodeType == 'typeEndAndStart') {
                     if (me.typeEndAndStart[token.tagName]) {
                         if (~',if,elif,'.indexOf(',' + curentParent.tagName + ',') && ~',elif,else,'.indexOf(',' + token.tagName)) {
                             curentParent = curentParent.parentNode;
@@ -5301,7 +5461,8 @@ hui.define('hui_template', ['hui'], function () {
                     model = nodeItem.getScopeChainModel();
                     hui.Template.varConvert(list.token, model, list.strMap, str);
                     nodeItem.updateScopeChainModel(model);
-                } else if (tagName === 'ifif') {
+                }
+                else if (tagName === 'ifif') {
                     model = nodeItem.getScopeChainModel();
                     result = '';
                     for (var i = 0, ilen = nodeItem.childNodes.length; i < ilen; i++) {
@@ -5313,7 +5474,8 @@ hui.define('hui_template', ['hui'], function () {
                             }
                             result = tplList.join('');
                             break;
-                        } else {
+                        }
+                        else {
                             k = hui.Template.varTokenization(c.nodeValue);
                             var k2 = hui.Template.getExpValue(k.token[0][0], model, k.strMap);
                             if (k2) {
@@ -5326,7 +5488,8 @@ hui.define('hui_template', ['hui'], function () {
                             }
                         }
                     }
-                } else if (tagName === 'for') {
+                }
+                else if (tagName === 'for') {
                     str = nodeItem.nodeValue;
                     var scopeChain = nodeItem.scopeChain;
                     model = nodeItem.getScopeChainModel();
@@ -5368,11 +5531,13 @@ hui.define('hui_template', ['hui'], function () {
                     //varStr = hui.Template.format(varStr, model);
                     me.parse('<!--var:' + varStr + '-->', null, nodeItem);
                     result = me.parse(targetContent, null, nodeItem);
-                } else if (tagName === 'nodetext') {
+                }
+                else if (tagName === 'nodetext') {
                     str = nodeItem.nodeValue;
                     model = nodeItem.getScopeChainModel();
                     result = hui.Template.format(str, model);
-                } else {
+                }
+                else {
                     result = nodeItem.labelValue;
                 }
             }
@@ -5448,6 +5613,1361 @@ hui.define('hui_template', ['hui'], function () {
         };
     })();
 });
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+/**
+ * @name @name 页面流程控制类
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
+
+    hui.BaseModel = function (data) {
+        hui.EventDispatcher.call(this);
+
+        var _model = {};
+        /**
+         * @name 设置新的值，如果两个值不同，就会触发PropertyChangedEvent.
+         * @param {String|Object} propertyName 需要设置的属性或数据对象.
+         * @param {Any} value 属性的值.
+         * @comment 接受`"key", value` 和 `{key: value}`两种的方式赋值.
+         */
+        this.set = function (propertyName, newValue) {
+            var attr,
+                attrs,
+                changes = [],
+                newValue,
+                className = Object.prototype.toString.call(propertyName);
+
+            if ((className !== '[object Object]' && className !== '[object String]') ||
+                (className === '[object Object]' && newValue !== undefined)) {
+                return this.trigger('SET_ERROR', propertyName, newValue);
+            }
+
+            if (className == '[object String]') {
+                attrs = {};
+                attrs[propertyName] = newValue;
+            }
+            else {
+                attrs = propertyName;
+            }
+
+            for (attr in attrs) {
+                if (!Object.prototype.hasOwnProperty.call(_model, attr)) {
+                    changes.push([attr, undefined, hui.clone(attrs[attr])]);
+                    _model[attr] = newValue;
+                }
+                else if (typeof JSON !== 'undefined' && JSON.stringify(_model[attr]) != JSON.stringify(attrs[attr])) {
+                    changes.push([attr, hui.clone(_model[attr]), hui.clone(attrs[attr])]);
+                    _model[attr] = attrs[attr];
+                }
+                // IE6,7 can not use JSON.stringify(), just use simple compare.
+                else if (_model[attr] !== attrs[attr]) {
+                    changes.push([attr, hui.clone(_model[attr]), hui.clone(attrs[attr])]);
+                    _model[attr] = attrs[attr];
+                }
+            }
+
+            // Trigger all relevant attribute changes.
+            for (var i = 0, len = changes.length; i < len; i++) {
+                this.trigger('change:' + changes[i][0], changes[i][1], changes[i][2]);
+            }
+            if (changes.length) {
+                this.trigger('change');
+            }
+        };
+
+        /**
+         * @name 获取指定属性值
+         * @param {String} propertyName 属性名.
+         * @return {*} 属性的值.
+         */
+        this.get = function (propertyName) {
+            return hui.clone(_model[propertyName]);
+        };
+        /**
+         * @name 获取所有的属性值
+         * @return {Map} 所有的属性值.
+         */
+        this.getData = function () {
+            return hui.clone(_model);
+        };
+        /**
+         * @name 移除指定属性值
+         * @param {String} propertyName 属性名.
+         * @return {*} 属性的值.
+         */
+        this.remove = function (propertyName) {
+            var value = _model[propertyName];
+            this.set(propertyName, undefined);
+            delete _model[propertyName];
+            return value;
+        };
+        /**
+         * @name 销毁Model
+         * @return {void}
+         */
+        this.dispose = function () {
+            this._listeners = undefined;
+            _model = undefined;
+        };
+
+        hui.extend(_model, data);
+    };
+
+    hui.inherits(hui.BaseModel, hui.EventDispatcher);
+
+
+    hui.Flow = function () {
+        this.que = []; // 注：存放要调用的函数列表
+        this.id = Math.random(); // 注：仅用于标示，不会被调用（即使删掉也没什么影响）
+    };
+
+    /**  
+     * @name 添加需要异步执行的函数
+     * @param {Function} fn 需要异步执行的函数
+     * @return {this} 返回主体以便于后续操作
+     */
+    hui.Flow.prototype.push = function (fn, target) {
+        var me = this,
+            _fn = target ? hui.fn(fn, target) : fn,
+            callback = hui.fn(me.next, me);
+
+        fn = function () {
+            _fn(callback);
+        };
+        me.que.push(fn);
+
+        return me;
+    };
+
+    /**  
+     * @name 开始执行异步队列
+     * @param {Function} callback 嵌套时的回调函数，其实就是hui.Flow.prototype.next
+     * @return {void}
+     */
+    hui.Flow.prototype.next = function (callback) {
+        if (callback) {
+            callback();
+        }
+
+        if (this.que.length > 0) {
+            var fn = this.que.shift();
+            fn();
+        }
+    };
+
+    /**  
+     * @name Javascript简单异步框架 
+     * @property {Array} que 保存回调队列  
+     * @method {Function} push 添加需要异步执行的函数
+     * @method {Function} next 开始执行异步队列
+     * @comment 异步队列中的函数需要实现callback的接口
+     * @example
+         function doit() {
+            alert('a');
+            
+            var que1 = new hui.Flow();
+            que1.push(a);
+            que1.push(d); 
+            setTimeout(function(){
+                que1.next();
+            },400);
+        }
+
+         function a(callback) {
+            alert('a');
+            
+            var que2 = new hui.Flow();
+            que2.push(b).push(c).push(callback); 
+            
+            setTimeout(function(){
+                que2.next();
+            },400);
+        }
+        function b(callback) {
+            alert('b');
+            callback&&callback();
+        }
+        function c(callback) {
+            alert('c');
+            callback&&callback();
+        }
+     */
+
+
+    hui.Action = function (options) {
+        // 防止重复执行!!
+        if (this.baseConstructed) {
+            return this;
+        }
+        hui.Action.superClass.call(this, options, 'pending');
+        /**
+         * @name Action的页面主元素ID[容器]
+         * @public
+         * @return {Map}
+         */
+        this.main = null;
+        // Action的模板名
+        this.view = null;
+        // Action实例化时需要提前加载的model数据
+        this.PARAM_MAP = {};
+        // Action的数据模型
+        var baseModel = hui.Action.getExtClass('hui.BaseModel');
+        this.model = new baseModel();
+        // Action的顶层控件容器
+        this.controlMap = {};
+        // 声明类型
+        this.type = 'action';
+
+        // 是否执行过构造过程
+        this.baseConstructed = true;
+
+        hui.Control.appendControl(hui.Action, this);
+
+        // enterControl需要在实例化时调用，这里不能直接进!
+        // this.enterControl()
+    };
+
+    hui.Action.prototype = {
+        /**
+         * @name 获取视图模板名
+         * @protected
+         * @return {String} target名字
+         * @default 默认为action的id
+         */
+        getView: function () {
+            var view = (this.view === null ? this.id : this.view);
+            // 获取view
+            if (typeof view === 'function') {
+                view = view();
+            }
+            view = hui.Action.getExtClass('hui.Template').getTarget(String(view));
+
+            return view;
+        },
+        /**
+         * @name Action的主要处理流程
+         * @protected
+         * @param {Object} argMap arg表.
+         */
+        enterControl: function (args) {
+            var me = this,
+                que;
+            // 创建一个异步队列     
+            que = new hui.Flow(); // 注：可以参照hui_flow.js文件。非常简单，不到30行代码
+            que.push(function (next) {
+                var me = this;
+                //Action渲染过程中禁止跳转，否则容易造成死循环。
+                hui.Action.getExtClass('hui.Master').ready = false;
+
+                // 设为活动action 
+                me.active = true;
+
+                var elem,
+                    uiObj = me,
+                    MAIN_ID = hui.g(hui.Action.MAIN_ID);
+                // 注：默认增加一个空元素作为控件主元素!
+                elem = (uiObj.getMain ? uiObj.getMain() : null) || (uiObj.createMain ? uiObj.createMain() : hui.Control.prototype.createMain.call(uiObj));
+                if (elem && MAIN_ID) {
+                    hui.g(hui.Action.MAIN_ID).appendChild(elem);
+                }
+                if (!elem) {
+                    return hui.Control.error('Action\'s main element is invalid');
+                }
+                // 便于通过elem.control找到control
+                elem.control = uiObj.getId ? uiObj.getId() : uiObj.id;
+
+                // 保存通过URL传过来的参数
+                me.args = args;
+
+                // 判断model是否存在，不存在则新建一个
+                if (!me.model) {
+                    var baseModel = hui.Action.getExtClass('hui.BaseModel');
+                    me.model = new baseModel();
+                }
+
+                // 先将PARAM_MAP中的key/value装入model
+                for (var k in me.PARAM_MAP) {
+                    if (k) {
+                        me.model.set(k, me.PARAM_MAP[k]);
+                    }
+                }
+
+                next && next();
+            }, me);
+
+            // 初始化Model
+            que.push(me.initModel, me);
+            // 初始化View
+            que.push(me.initView, me);
+
+            que.push(function (next) {
+                var me = this;
+                var mainHTML,
+                    tpl;
+                // 渲染视图
+                if (me.main) {
+                    tpl = me.getView();
+                    mainHTML = hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData());
+                    me.setInnerHTML(me, mainHTML);
+                }
+                me.render();
+                me.rendered = 'true';
+
+                // 渲染当前view中的控件
+                hui.Action.getExtClass('hui.Control').init(me.getMain(), me.model, me);
+
+                // 控件事件绑定
+                me.initBehavior(me.controlMap);
+
+                // hui.Action.getExtClass('hui.Mask').hideLoading();
+                // 渲染结束，检查渲染期间是否有新请求
+                hui.Action.getExtClass('hui.Master').checkNewRequest();
+
+                next && next();
+            }, me);
+
+            que.next();
+        },
+        /**
+         * @name 初始化数据模型
+         * @protected
+         * @param {Object} argMap 初始化的参数.
+         */
+        initModel: function (callback) {
+            callback && callback();
+        },
+        // checkAuthority: function(){},
+        /**
+         * @name 根据控件formName找到对应控件
+         * @static
+         * @param {String} 控件formName
+         */
+        getByFormName: function (formName) {
+            return hui.Control.getByFormName(formName, this);
+        },
+        /**
+         * @name 提交完成的事件处理函数,提示完成
+         * @private
+         * @param {Object} data 提交的返回数据.
+         */
+        onsubmitfinished: function (data) {
+            // Todo: 
+        },
+        /**
+         * @name 释放控件
+         * @protected
+         */
+        dispose: function () {
+            var me = this;
+
+            me.leave();
+
+            hui.Control.prototype.dispose.call(me);
+
+            if (me.model && me.model.dispose) {
+                me.model.dispose();
+                me.model = undefined;
+            }
+
+            me.active = null;
+
+            me.clear();
+        },
+        /**
+         * @name 后退
+         * @protected
+         */
+        back: function () {
+            hui.Action.getExtClass('hui.Master').back();
+        },
+        /**
+         * @name 退出
+         * @public
+         */
+        leave: function () {}
+    };
+
+    hui.inherits(hui.Action, hui.Control);
+
+    /**
+     * @name 通过Action类派生出action
+     * @public
+     * @param {Object} action 对象
+     * @public
+     */
+    hui.Action.derive = function (action) {
+        var me,
+            i,
+            instance,
+            func = function () {},
+            type = Object.prototype.toString.call(action);
+        // 传进来的是一个Function
+        if (type == '[object Function]') {
+            hui.inherits(action, hui.Action);
+            hui.inherits(func, action);
+
+            // 相当于在传入的构造函数最前面执行hui.Action.call(this);
+            instance = new func();
+            hui.Action.call(instance);
+            action.call(instance);
+            /**/
+        }
+        // 传进来的是一个单例object
+        else if (type == '[object Object]' || type == '[object String]') {
+            action = type == '[object String]' ? hui.window[action] : action;
+
+            me = new hui.Action();
+            for (i in me) {
+                if (action[i] === undefined) {
+                    action[i] = me[i];
+                }
+            }
+            hui.Action.controlMap[action.id] = action;
+        }
+    };
+    hui.Action.MAIN_ID = 'main';
+    /**
+     * @name Action的静态属性[索引Action]
+     */
+    hui.Action.controlMap = {};
+
+    /**
+     * @name 获取action
+     * 获取控件用hui.Action.getExtClass('hui.Control').get(id, ctr||action)
+     */
+    hui.Action.get = function (id) {
+        var map = hui.Action.controlMap,
+            action,
+            v,
+            cur;
+        for (var i in map) {
+            v = map[i];
+            if (id !== undefined && v && v.id !== undefined && v.id == id) {
+                action = map[i];
+            }
+            if (v && v.active) {
+                cur = map[i];
+            }
+        }
+        return (id !== undefined ? action : cur);
+    };
+    /**
+     * @name 根据action的构造类或单例来从索引中找到已存在的action实例
+     * @param {Function|Object} actionName action的单例或构造类
+     */
+    hui.Action.getByActionName = function (actionName) { /*接收参数:Action子类|Action子类名|Object，返回action实例*/
+        var map = hui.Action.controlMap,
+            action = null,
+            v,
+            action_constructor;
+        if (actionName) {
+            // Action function
+            action_constructor = Object.prototype.toString.call(actionName) === '[object Function]' ? actionName : (hui[actionName] || hui.getObjectByName(actionName));
+            if (action_constructor && Object.prototype.toString.call(action_constructor) === '[object Function]') {
+                for (var i in map) {
+                    v = map[i];
+                    if (v instanceof action_constructor && v.constructor === action_constructor) {
+                        action = map[i];
+                    }
+                }
+            }
+            // Object
+            else {
+                for (var i in map) {
+                    v = map[i];
+                    if (v === actionName) {
+                        action = map[i];
+                    }
+                }
+            }
+        }
+
+        return action;
+    };
+
+    /**
+     * @name 移除action的索引
+     * @public
+     * @param {Object} action 对象
+     * @public
+     */
+    hui.Action.removeActionIndex = function (action) {
+        var map = hui.Action.controlMap,
+            i;
+        for (i in map) {
+            if (map[i] == action) {
+                map[i] = undefined;
+            }
+        }
+    };
+
+
+    /**
+     * @name 获取唯一id
+     * @public
+     * @return {String}
+     */
+    hui.Action.makeGUID = (function () {
+        var guid = 1;
+        return function (formName) {
+            return '_' + (formName ? formName : 'inner') + '_' + (guid++);
+        };
+    })();
+
+
+    hui.Action.getExtClass = function (clazz) {
+        var result = function () {};
+        switch (clazz) {
+        case 'hui.Control':
+            if (typeof hui !== 'undefined' && hui && hui.Control) {
+                result = hui.Control;
+            }
+            else {
+                result.get = new Function();
+                result.init = new Function();
+                result.prototype.validate = new Function();
+                result.prototype.getParamMap = new Function();
+                result.prototype.validateAndSubmit = new Function();
+            }
+            break;
+        case 'hui.Template':
+            if (typeof hui !== 'undefined' && hui && hui.Template) {
+                result = hui.Template;
+            }
+            else {
+                result.getTarget = new Function();
+                result.merge = new Function();
+            }
+            break;
+        case 'hui.Mask':
+            if (typeof hui !== 'undefined' && hui && hui.Mask) {
+                result = hui.Mask;
+            }
+            else {
+                result.hideLoading = new Function();
+            }
+            break;
+        case 'hui.Master':
+            if (typeof hui !== 'undefined' && hui && hui.Master) {
+                result = hui.Master;
+            }
+            else {
+                result.checkNewRequest = new Function();
+                result.back = new Function();
+            }
+            break;
+        case 'hui.BaseModel':
+            if (typeof hui !== 'undefined' && hui && hui.BaseModel) {
+                result = hui.BaseModel;
+            }
+            else {
+                result.prototype.set = new Function();
+            }
+            break;
+        default:
+        }
+        return result;
+    };
+
+
+    hui.Router = {
+        pathRules: [],
+        /**
+         * 根据location找到匹配的rule并返回对应的action
+         *
+         * @public
+         * @param {String} loc 路径
+         */
+        findAction: function (loc) {
+            var me = this,
+                pathRules = me.pathRules,
+                i, len, matches, rule,
+                action = null;
+            //匹配所有符合表达式的路径
+            for (i = 0, len = pathRules.length; i < len; i++) {
+                rule = pathRules[i].location;
+                if (rule && (rule instanceof RegExp) && (matches = rule.exec(loc)) !== null) {
+                    action = pathRules[i].action;
+                }
+            }
+            //[优先]匹配单独具体路径
+            for (i = 0, len = pathRules.length; i < len; i++) {
+                rule = pathRules[i].location;
+                if (rule && (typeof rule == 'string') && rule == loc) {
+                    action = pathRules[i].action;
+                }
+            }
+
+            if (!action && hui.window.console && hui.window.console.error) {
+                hui.window.console.error('Route \'%s\' is not defined. Please use hui.Router.setRule(\'%s\', \'xxx\');', loc, loc);
+            }
+
+            return action;
+        },
+        /**
+         * 设置rule
+         *
+         * @public
+         * @param {String} rule 路径
+         * @param {String} action 对应action
+         */
+        setRule: function (rule, action) {
+            this.pathRules.push({
+                'location': rule,
+                'action': action
+            });
+        },
+        /**
+         * 载入完成读取所有rule
+         *
+         * @protected
+         * @param {String} rule 路径
+         * @param {String} func 对应action
+         */
+        init: function (modules) {
+            // Todo:
+        },
+
+        //错误处理
+        error: function (msg) {
+            msg = 'error: ' + msg;
+            if (hui.window.console) {
+                hui.window.console.log(msg);
+            }
+            else throw Error(msg);
+        }
+    };
+
+    hui.Master = {
+        historyList: [],
+        newRequest: null,
+        ready: true,
+        checkNewRequest: function () {
+            var me = this,
+                url = me.newRequest;
+
+            me.ready = true;
+
+            if (url) {
+                me.newRequest = null;
+                me.forward(url);
+            }
+        },
+
+        //仅供redirect时调用,必须保证url对应的action是有效的,跳转过程中不操作url,不推荐外部直接调用!!!
+        forward: function (url) {
+            var me = this;
+            // 注：由于forward的过程中不改变url，因此将可能改变url的hui.Permission.checkRouter放到hui.Locator.switchToLocation中了
+            // 这里不可以通过me.getExtClass()去取!!
+            // if (hui.Permission && hui.Permission.checkRouter) {
+            //     hui.Permission.checkRouter(url, hui.fn(me.forwardCallback, me));
+            // }
+            // else {
+            me.forwardCallback(url);
+            //}
+        },
+        // 权限验证可能是一个异步过程!!
+        forwardCallback: function (url) {
+            var me = this,
+                result, loc, args,
+                action = null;
+
+            // Action渲染过程中禁止跳转，否则容易造成死循环，缓存新请求。
+            if (me.ready === false) {
+                me.newRequest = url;
+            }
+            if (me.ready === true) {
+                result = me.parseLocator(url);
+                loc = result['location'];
+                args = result['query'];
+
+                // 首先销毁当前action的实例
+                if (me.historyList[me.historyList.length - 1]) {
+                    me.disposeAction(me.parseLocator(me.historyList[me.historyList.length - 1])['location']);
+                }
+
+                // 找到匹配的路径规则(该过程中会创建action实例)
+                action = me.getActionInstance(me.findActionName(loc)); /* me.getActionInstance参数可以接收'变量名'|'单例'|'Action子类' */
+
+                if (action && action.enterControl) {
+                    //Action渲染过程中禁止跳转，否则容易造成死循环。
+                    // 注：为解决手动构造action当url变化时不能刷新的问题，将me.ready = false; 移到了enterControl()中
+                    //me.ready = false;
+                    //时间不长则无需显示等待中
+                    //hui.Mask.timer = hui.window.setTimeout('hui.Mask.showLoading()',300);
+                    //me.getExtClass('hui.Mask').showLoading();
+
+                    me.historyList.push(url);
+                    action.enterControl(args);
+                }
+            }
+        },
+        back: function () {
+            var me = this,
+                result, loc;
+
+            //有历史记录
+            if (me.historyList.length > 1) {
+                //当前action
+                result = me.parseLocator(me.historyList.pop());
+                loc = result['location'];
+
+                me.disposeAction(loc);
+
+                me.ready = true;
+                //后退一步
+                me.getExtClass('hui.Locator').redirect(me.historyList.pop());
+            }
+            //无历史记录
+            else {
+                //当前action
+                result = me.parseLocator(me.historyList[me.historyList.length - 1]);
+                loc = result['location'];
+
+                //跳转到指定后退location
+                loc = me.disposeAction(loc);
+                if (loc) {
+                    me.getExtClass('hui.Locator').redirect(loc);
+                }
+            }
+        },
+        /**
+         * @name 根据loc找到action
+         * @private
+         * @param {String} loc
+         * @param {String} log 是否显示错误提示，disposeAction()时无需显示错误提示
+         * @result {String} actionName
+         */
+        findActionName: function (loc, nolog) {
+            var me = this,
+                action = me.getExtClass('hui.Router').findAction(loc),
+                actionClazz = action ? me.getActionConstructor(action) : null;
+            if (!actionClazz) {
+                // 找不到对应Action
+                if (nolog !== 'nolog' && hui.window.console && hui.window.console.error) {
+                    hui.window.console.error('hui.Router.setRule(\'%s\', \'%s\'); Action \'%s\' is not exist.', loc, action, action);
+                }
+                // 找不到则返回404
+                if (loc !== '/404') {
+                    action = me.findActionName('/404');
+                }
+            }
+            return action;
+        },
+        /**
+         * @name 根据loc找到action
+         * @private
+         * @param {String} loc
+         */
+        disposeAction: function (loc) {
+            var me = this,
+                action = me.getExtClass('hui.Action').getByActionName(me.findActionName(loc, 'nolog')),
+                /* getByActionName参数可以接收'变量名'|'单例'|'Action子类' */
+                defaultBack = (action && action.BACK_LOCATION) ? action.BACK_LOCATION : null;
+
+            if (action && action.dispose) {
+                action.dispose();
+            }
+
+            return defaultBack;
+        },
+        /**
+         * @name 返回对应action的构造类
+         * @private
+         * @param {String} action clazz
+         */
+        getActionConstructor: function (action) {
+            if (hui[action]) {
+                action = hui[action];
+            }
+            else if (typeof action == 'string') {
+                action = hui.getObjectByName(action);
+            }
+            return action;
+        },
+        /**
+         * @name 返回对应action的实例
+         * @private
+         * @param {Function||Object} 有效的actionName，无效me.findActionName会报错
+         */
+        getActionInstance: function (actionName) {
+            var action = this.getActionConstructor(actionName);
+            /*
+            // 注: 注释原因是 [找到匹配的路径规则(该过程中会创建action实例)]过程中的me.findActionName(loc)已作处理
+            if (!action && hui.window.console && hui.window.console.error) {
+                hui.window.console.error('Action clazz \''+actionName+'\' not exist.');
+            }*/
+
+            if (action instanceof Function) {
+                action = this.getExtClass('hui.Action').getByActionName(action) || new action();
+            }
+
+            return action;
+        },
+        /**
+         * @name 解析获取到的location字符串
+         * @private
+         * @param {Object} loc
+         */
+        parseLocator: function (url) {
+            url = url === null || url === undefined ? window.location.href : String(url);
+            var pair,
+                query = {},
+                loc = '',
+                args = '',
+                list,
+                v,
+                str = url.split('#'),
+                href;
+
+            if (~url.indexOf('?')) {
+                // Parse ?aa=xxx
+                pair = str[0].match(/^([^\?]*)(\?(.*))?$/);
+                if (pair) {
+                    //loc = pair[1];
+                    args = (pair.length == 4 ? pair[3] : '') || '';
+                }
+                list = args ? args.split('&') : [];
+                for (var i = 0, len = list.length; i < len; i++) {
+                    v = list[i].split('=');
+                    v.push('');
+                    query[v[0]] = v[1];
+                }
+            }
+            if (~url.indexOf('#') || str.length === 1) {
+                href = str.length === 1 ? str[0] : str[1];
+                // Parse #~bb=xxx
+                pair = href.match(/^([^~]*)(~(.*))?$/);
+                if (pair) {
+                    loc = pair[1];
+                    args = (pair.length == 4 ? pair[3] : '') || '';
+                }
+                list = args ? args.split('&') : [];
+                for (var i = 0, len = list.length; i < len; i++) {
+                    v = list[i].split('=');
+                    v.push('');
+                    query[v[0]] = v[1];
+                }
+            }
+
+            return {
+                'location': loc,
+                'query': query
+            };
+        },
+        /**
+         * @name 初始化控制器,包括路由器和定位器locator
+         * @protected
+         * @param {String} rule 路径
+         * @param {String} func 对应action
+         */
+        init: function () {
+            //var me = this;
+        },
+        getExtClass: function (clazz) {
+            var result = function () {};
+            switch (clazz) {
+                //me.getExtClass('hui.Mask')
+            case 'hui.Mask':
+                if (typeof hui !== 'undefined' && hui && hui.Mask) {
+                    result = hui.Mask;
+                }
+                else {
+                    result.showLoading = new Function();
+                    result.hideLoading = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Locator')
+            case 'hui.Locator':
+                if (typeof hui !== 'undefined' && hui && hui.Locator) {
+                    result = hui.Locator;
+                }
+                else {
+                    result.redirect = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Action')
+            case 'hui.Action':
+                if (typeof hui !== 'undefined' && hui && hui.Action) {
+                    result = hui.Action;
+                }
+                else {
+                    result.getByActionName = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Router')
+            case 'hui.Router':
+                if (typeof hui !== 'undefined' && hui && hui.Router) {
+                    result = hui.Router;
+                }
+                else {
+                    result.findAction = new Function();
+                }
+                break;
+            default:
+            }
+            return result;
+        }
+    };
+
+    hui.Locator = {
+        /**
+         * @name 默认首次进入的路径.
+         * @default '/'
+         * @public
+         */
+        DEFAULT_INDEX: '/',
+        /**
+         * @name 当前路径.
+         * @public
+         */
+        currentLocation: null,
+        /**
+         * @name 使用iframe兼容早期IE版本无法通过onhashchange保存浏览历史的问题.
+         * @private
+         */
+        CONTROL_IFRAME_ID: 'ERHistroyRecordIframe' + String(Math.random()).replace('.', ''),
+        IFRAME_CONTENT: '<html><head></head><body><input type="text" id="save">' + '<script type="text/javascript">' + 'var loc = "#{0}";' + 'document.getElementById("save").value = loc;' + 'parent.hui.Locator.updateLocation(loc);' + 'parent.hui.Locator.switchToLocation(loc);' + '<' + '/script ></body></html>',
+        /**
+         * @name 获取location信息
+         * @private
+         * @return {String}
+         */
+        getLocation: function () {
+            var hash;
+
+            // firefox下location.hash会自动decode
+            // 体现在：
+            //   * 视觉上相当于decodeURI，
+            //   * 但是读取location.hash的值相当于decodeURIComponent
+            // 所以需要从location.href里取出hash值
+            if (/firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? +RegExp['\x241'] : undefined) {
+                hash = location.href.match(/#(.*)$/);
+                hash && (hash = hash[1]);
+            }
+            else {
+                hash = location.hash;
+            }
+
+            if (hash) {
+                return hash.replace(/^#/, '');
+            }
+
+            return '';
+        },
+        /**
+         * @name 更新hash信息
+         * @private
+         * @param {String} loc
+         */
+        updateLocation: function (loc) {
+            var me = this,
+                isChange = (me.currentLocation != loc);
+
+            // 存储当前信息
+            // opera下，相同的hash重复写入会在历史堆栈中重复记录
+            // 所以需要getLocation来判断
+            if (me.currentLocation != loc && me.getLocation() != loc) {
+                location.hash = loc;
+            }
+
+            me.currentLocation = loc;
+            return isChange;
+        },
+        /**
+         * @name 控制定位器转向
+         * @public
+         * @param {String} loc location位置
+         * @param {Object} opt_option 转向参数
+         */
+        redirect: function (loc, opt_option) {
+            var me = hui.Locator,
+                opt = opt_option || {},
+                hisList,
+                histotry = document.getElementById('histotry');
+
+            if (!hui.Locator.hisList) {
+                hui.Locator.hisList = [];
+            }
+            hisList = hui.Locator.hisList;
+            hisList.push(loc);
+
+            if (histotry) {
+                histotry.innerHTML = hisList.join('<br/>');
+            }
+
+            // 非string不做处理
+            if (typeof loc != 'string') {
+                return;
+            }
+
+            // 增加location带起始#号的容错性
+            // 可能有人直接读取location.hash，经过string处理后直接传入
+            loc = loc.replace(/^#/, '');
+
+            // 空string当成DEFAULT_INDEX处理
+            if (loc.length === 0) {
+                loc = me.DEFAULT_INDEX;
+            }
+
+            // 与当前location相同时不进行route
+            var isLocChanged = me.updateLocation(loc);
+            if (isLocChanged || opt.enforce) {
+                loc = me.currentLocation;
+
+                // 触发onredirect事件
+                me.onredirect(loc);
+
+                // 当location未变化，强制刷新时，直接route
+                if (isLocChanged === false) {
+                    hui.Locator.switchToLocation(loc);
+                }
+                else {
+                    // location被改变了,非强制跳转
+                    me.doRoute(loc);
+                }
+            }
+        },
+        /**
+         * @name 权限判断以及重定向
+         * @private
+         * @param {String} loc location位置
+         */
+        doRoute: function (loc) {
+            var me = this;
+            // 权限判断以及转向
+            var loc302 = me.authorize(loc);
+            if (loc302) {
+                me.redirect(loc302);
+                return;
+            }
+
+            // ie下使用中间iframe作为中转控制
+            // 其他浏览器直接调用控制器方法
+            var ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
+            if (ie && ie < 8) {
+                me.ieRoute(loc);
+            }
+            else {
+                me.switchToLocation(loc);
+            }
+        },
+        /**
+         * @name Location变化调用接口
+         * @public
+         */
+        switchToLocation: function (url) {
+            var me = this,
+                action,
+                loc = url;
+            // Check url whether illegal.
+            if (hui.Router && hui.Router.findAction) {
+                // hui.Master.parseLocator(url)
+                if (hui.Master && hui.Master.parseLocator) {
+                    loc = hui.Master.parseLocator(url);
+                    loc = loc ? loc.location : url;
+                }
+                action = hui.Router.findAction(loc);
+                url = action ? url : '/404';
+            }
+            // checkRouter的过程中可能会改变url
+            if (hui.Locator.checkRouter) {
+                hui.Locator.checkRouter(url, hui.fn(me.callMasterForward, me));
+            }
+            else {
+                me.callMasterForward(url);
+            }
+        },
+        /**
+         * @name 解析获取到的location字符串
+         * @private
+         * @param {Object} loc
+         *
+        // 注: 放在Master是因为可能用户会直接使用url而非hashchange来跳转!
+        parseLocator: function(url) {...},*/
+        /**
+         * @name 调用Master的forward接口 注：forward接口不推荐外部直接调用!!
+         * @private
+         */
+        callMasterForward: function (url) {
+            if (typeof hui != 'undefined' && hui.Master && hui.Master.forward) {
+                hui.Master.forward(url);
+            }
+        },
+        /**
+         * @name onredirect事件外部接口
+         * @interface
+         * @public
+         */
+        'onredirect': new Function(),
+        /**
+         * @name 强制刷新当前地址
+         * @method
+         * @public
+         */
+        'reload': function () {
+            var me = this;
+            if (me.currentLocation) {
+                me.redirect(me.currentLocation, {
+                    enforce: true
+                });
+            }
+        },
+        /**
+         * @name IE下调用router
+         * @method
+         * @private
+         * @param {String} loc 地址, iframe内容字符串的转义
+         */
+        ieRoute: function (loc) {
+            var me = this;
+            var iframe = document.getElementById(me.CONTROL_IFRAME_ID),
+                iframeDoc = iframe.contentWindow.document;
+
+            iframeDoc.open('text/html');
+            iframeDoc.write(
+                me.IFRAME_CONTENT.replace('#{0}',
+                    String(loc).replace(/\\/g, '\\\\').replace(/\"/g, '\\"')));
+            iframeDoc.close();
+
+        },
+        /**
+         * @name 初始化locator
+         * @public
+         */
+        init: function () {
+            var me = this,
+                ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
+            if (ie && ie < 8) {
+                me.ieCreateIframeRecorder();
+                window.setInterval(function () {
+                    me.changeListener();
+                }, 100);
+            }
+            else if ('onhashchange' in window) {
+                window.onhashchange = function (args) {
+                    me.changeListener(args);
+                };
+                me.changeListener();
+            }
+            else {
+                window.setInterval(function () {
+                    me.changeListener();
+                }, 100);
+            }
+        },
+        /**
+         * @name hash变化的事件监听器
+         * @method
+         * @private
+         */
+        changeListener: function () {
+            var me = this,
+                loc = me.getLocation();
+
+            if (!loc && !me.currentLocation) {
+                me.redirect(me.DEFAULT_INDEX);
+            }
+            else if (loc && me.updateLocation(loc)) {
+                me.doRoute(loc);
+            }
+        },
+        /**
+         * @name ie下创建记录与控制跳转的iframe
+         * @method
+         * @private
+         */
+        ieCreateIframeRecorder: function () {
+            var me = this;
+            var iframe = document.createElement('iframe'),
+                size = 200,
+                pos = '-1000px';
+
+            iframe.id = me.CONTROL_IFRAME_ID;
+            iframe.width = size;
+            iframe.height = size;
+            iframe.src = 'about:blank';
+
+            iframe.style.position = 'absolute';
+            iframe.style.top = pos;
+            iframe.style.left = pos;
+
+            document.documentElement.appendChild(iframe);
+        },
+        /**
+         * @name 路径权限规则列表
+         * @property
+         * @type {Array}
+         * @default []
+         * @public
+         */
+        authorizers: [],
+        /**
+         * @name 增加权限验证器
+         * @method
+         * @public
+         * @param {Function} authorizer 验证器，验证失败时验证器返回转向地址
+         */
+        addAuthorizer: function (authorizer) {
+            var me = this;
+            if ('function' == typeof authorizer) {
+                me.authorizers.push(authorizer);
+            }
+        },
+        /**
+         * @name 权限验证
+         * @method
+         * @private
+         * @return {String} 验证失败时验证器返回转向地址
+         */
+        authorize: function (currLoc) {
+            var me = this,
+                loc,
+                i,
+                len = me.authorizers.length;
+
+            for (i = 0; i < len; i++) {
+                loc = me.authorizers[i](currLoc);
+                if (loc) {
+                    return loc;
+                }
+            }
+        }
+    };
+
+    /**
+     * @name 预处理流程
+     * @public
+     * @author wanghaiyang
+     * @date 2014/05/05
+     */
+    hui.Action.start = function () {
+        var que = new hui.Flow();
+
+        /**
+         * @name before事件外部接口
+         * @public
+         */
+        if (hui.beforeinit) {
+            que.push(hui.beforeinit);
+        }
+        /**
+         * @name 载入预定义模板文件
+         * @private
+         */
+        if (hui.Template && hui.Template.loadAllTemplate && hui.Template.TEMPLATE_LIST) {
+            que.push(function (callback) {
+                hui.Template.onload = callback;
+                hui.Template.loadAllTemplate();
+            });
+        }
+
+        que.push(hui.Template.finishLoad);
+        /**
+         * @name afterinit事件外部接口，在hui.Template.finishLoad之后执行
+         * @public
+         */
+        if (hui.Action.afterStart) {
+            que.push(hui.Action.afterStart);
+        }
+
+        que.next();
+    };
+
+    hui.Action.afterStart = function (callback) {
+        // Todo
+        callback();
+    };
+
+    /**
+     * @name 模板载入完毕之后,初始化路由列表,启动location侦听
+     * @private
+     */
+    hui.Template.finishLoad = function (callback) {
+        callback && callback();
+
+        // 1.防止onload再次执行
+        if (hui.Template) {
+            hui.Template.loadedCount = -100000;
+            delete hui.Template.loadedCount;
+        }
+
+        // 2.初始化路由列表
+        if (hui.Router && hui.Router.init) {
+            hui.Router.init();
+        }
+        // 3.启动location侦听
+        if (hui.Locator && hui.Locator.init) {
+            // 默认首次进入的路径
+            hui.Locator.init();
+        }
+    };
+
+    /*============================================
+     * 404 page
+     ============================================*/
+    var page404;
+    page404 = function () {
+        hui.Action.call(this);
+        /**
+         * @name Action索引ID
+         * @comment 主要用于控件中通过onclick="hui.Control.getById('listTable','login');
+         */
+        this.id = 'page404';
+        // 初始化数据模型
+        // 使用了getView这里可以不用设置view属性
+        // this.view = 'page404';
+        // 初始化数据模型
+        var baseModel = hui.Action.getExtClass('hui.BaseModel');
+        this.model = new baseModel();
+    };
+
+    page404.prototype = {
+        getView: function () {
+            var str = hui.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.args);
+            return str;
+        },
+        initModel: function (callback) {
+            //var me = this;
+            //me.model.set('free', 'not free');
+            callback && callback();
+        },
+        render: function () {
+            //var me = this;
+            /*Requester.get('/mockup/user.json', {onsuccess:function(err, data){
+                me.setInnerHTML(me, hui.format(me.getInnerHTML(), {name: data.result}));
+            }});*/
+        },
+        /**
+         * @name 初始化列表行为
+         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
+         */
+        initBehavior: function (controlMap) {
+            //var me = this;
+
+        }
+    };
+
+    hui.inherits(page404, hui.Action);
+    hui.Router.setRule('/404', 'page404');
+
+    hui.window.page404 = page404;
+});
+
 
 'use strict';
 /*
@@ -5705,9 +7225,11 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 var code = str.charCodeAt(i); //获取当前字符的unicode编码
                 if (code >= 65281 && code <= 65373) { //在这个unicode编码范围中的是所有的英文字母已及各种字符
                     result += String.fromCharCode(str.charCodeAt(i) - 65248); //把全角字符的unicode编码转换为对应半角字符的unicode码
-                } else if (code == 12288) { //空格
+                }
+                else if (code == 12288) { //空格
                     result += String.fromCharCode(str.charCodeAt(i) - 12288 + 32);
-                } else {
+                }
+                else {
                     result += str.charAt(i);
                 }
             }
@@ -5749,7 +7271,8 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 me.hidePlaceholder();
                 me.showEye();
                 //this.getFocusHandler();
-            } else {
+            }
+            else {
                 me.showPlaceholder();
                 me.hideEye();
                 //this.getBlurHandler();
@@ -5775,7 +7298,8 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             }
             if (disabled) {
                 this.getMain().disabled = 'disabled';
-            } else {
+            }
+            else {
                 this.getMain().removeAttribute('disabled');
             }
         },
@@ -5831,7 +7355,8 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 if (me.agent) {
                     main.appendChild(elem);
                     main.insertBefore(elem, main.firstChild);
-                } else {
+                }
+                else {
                     main.parentNode.insertBefore(elem, main.parentNode.firstChild);
                 }
             }
@@ -5847,7 +7372,8 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 if (me.agent) {
                     main.appendChild(elem);
                     main.insertBefore(elem, main.firstChild);
-                } else {
+                }
+                else {
                     main.parentNode.insertBefore(elem, main.parentNode.firstChild);
                 }
             }
@@ -6015,9 +7541,11 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             if (placeholder) {
                 if (sign === false) {
                     placeholder.style.display = 'block';
-                } else if (sign === 'force') {
+                }
+                else if (sign === 'force') {
                     placeholder.style.display = 'none';
-                } else {
+                }
+                else {
                     placeholder.style.display = input.value ? 'none' : 'block';
                 }
             }
@@ -6032,9 +7560,11 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             if (eye) {
                 if (sign === false) {
                     eye.style.display = 'block';
-                } else if (sign === 'force') {
+                }
+                else if (sign === 'force') {
                     eye.style.display = 'none';
-                } else {
+                }
+                else {
                     eye.style.display = input.value ? 'block' : 'none';
                 }
             }
@@ -6305,7 +7835,8 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
                     me.getClass('label'),
                     me.label
                 ));
-            } else {
+            }
+            else {
                 main.appendChild(label);
             }
         },
@@ -6365,7 +7896,8 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
             if (checked === false) {
                 input.checked = false;
                 hui.removeClass(main, me.getClass('checked'));
-            } else {
+            }
+            else {
                 input.checked = true;
                 hui.addClass(main, me.getClass('checked'));
             }
@@ -6442,19 +7974,23 @@ hui.define('hui_mask', ['hui@0.0.1'], function () {
                 // '>=IE9, FF, Chrome';
                 mask.style.width = width + 'px';
                 mask.style.height = height + 'px';
-            } else if (!window.XMLHttpRequest) {
+            }
+            else if (!window.XMLHttpRequest) {
                 // 'IE6';
                 mask.style.width = width - 21 + 'px';
                 mask.style.height = height + 'px';
-            } else if (!document.querySelector) {
+            }
+            else if (!document.querySelector) {
                 // 'IE7';
                 mask.style.width = width + 'px';
                 mask.style.height = height + 'px';
-            } else if (!document.addEventListener) {
+            }
+            else if (!document.addEventListener) {
                 // 'IE8';
                 mask.style.width = width - 21 + 'px';
                 mask.style.height = height - 7 + 'px';
-            } else {
+            }
+            else {
                 // '>= IE9';
                 mask.style.width = width - 18 + 'px';
                 mask.style.height = height + 30 + 'px';
@@ -6492,7 +8028,8 @@ hui.define('hui_mask', ['hui@0.0.1'], function () {
 
             if (window.addEventListener) {
                 window.addEventListener('scroll', hui.Mask.resizeHandler, false);
-            } else if (window.attachEvent) {
+            }
+            else if (window.attachEvent) {
                 window.attachEvent('on' + 'scroll', hui.Mask.resizeHandler);
                 //此处使用回调函数call()，让 this指向elem
             }
@@ -6592,6 +8129,777 @@ hui.define('hui_label', ['hui@0.0.1'], function () {
 });
 
 'use strict';
+hui.define('hui_panel', ['hui'], function () {
+    hui.Panel = function (options, pending) {
+        this.isFormItem = false;
+        hui.Panel.superClass.call(this, options, 'pending');
+
+        this.type = 'panel';
+        this.controlMap = {};
+        
+        // 进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.Panel.prototype = {
+        /**
+         * @name 绘制对话框
+         * @public
+         */
+        render: function (options) {
+            hui.Panel.superClass.prototype.render.call(this);
+            var me = this;
+            // 渲染对话框
+            hui.Control.init(me.getMain(), {}, me);
+        }
+
+    };
+
+    // hui.Panel 继承了 hui.Control 
+    hui.inherits(hui.Panel, hui.Control);
+
+});
+
+
+hui.define('hui_boxpanel', ['hui'], function () {
+    hui.BoxPanel = function (options, pending) {
+        this.isFormItem = false;
+        hui.BoxPanel.superClass.call(this, options, 'pending');
+
+        this.type = 'boxpanel';
+        this.controlMap = {};
+        
+        // 进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.BoxPanel.prototype = {
+        /**
+         * @name 绘制对话框
+         * @public
+         */
+        render: function (options) {
+            hui.BoxPanel.superClass.prototype.render.call(this);
+            var me = this;
+            // 渲染对话框
+            hui.Control.init(me.getMain(), {}, me);
+            hui.util.addCssRule('.' + me.getClass('html'), 'background-image: url("about:blank");background-attachment: fixed;');
+            hui.util.addCssRule('.' + me.getClass(), 'z-index: 9000000;position: fixed; _position: absolute; _top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px"); background-color:white;border: 5px solid #c6c6c6;border-color: rgba(0,0,0,0.3); border-color: #c6c6c6\\0;*border-color: #c6c6c6; border-radius: 5px; display: none;');
+            hui.util.addCssRule('.' + me.getClass('close') + '{background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;right: -16px;top: -16px;width: 22px;}');
+            hui.util.addCssRule('.' + me.getClass('close:hover') + '{background-color: #f62626;color: #fff; }');
+        },
+        initBehavior: function () {
+            var me = this;
+            me.onresizeHandler = hui.fn(me.onresize, me);
+            if (!hui.cc(me.getClass('close'), me.getMain())) {
+                me.addCloseButton();
+            }
+        },
+        show: function () {
+            var me = this;
+            hui.on(window, 'resize', me.onresizeHandler);
+            hui.addClass(document.documentElement, me.getClass('html'));
+
+            hui.Mask && hui.Mask.show();
+            me.getMain().style.display = 'block';
+            me.onresizeCallback();
+        },
+        hide: function () {
+            var me = this;
+            hui.off(window, 'resize', me.onresizeHandler);
+            hui.removeClass(document.documentElement, me.getClass('html'));
+            me.getMain().style.display = 'none';
+            hui.Mask && hui.Mask.hide();
+        },
+        onresize: function () {
+            var me = this;
+            if (me.onresizeTimer) {
+                window.clearTimeout(me.onresizeTimer);
+            }
+            me.onresizeTimer = window.setTimeout(hui.fn(me.onresizeCallback, me), 30);
+        },
+        onresizeCallback: function () {
+            var me = this,
+                main = me.getMain();
+            me.onresizeTimer = null;
+
+            var top = Math.round(Math.max(0, (document.documentElement.clientHeight - main.clientHeight) * (me.top || 0.3)));
+            var left = Math.round(Math.max(0, (document.documentElement.clientWidth - main.clientWidth) * (me.left || 0.5)));
+            // IE6
+            if (window.ActiveXObject && !window.XMLHttpRequest) {
+                main.style.setExpression('top', 'eval(document.documentElement.scrollTop  + Math.max(0, (document.documentElement.clientHeight - 500)*0.4))');
+                main.style.setExpression('left', 'eval(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2)');
+            }
+            else {
+                hui.util.importCssString('.' + me.getClass() + '{top:' + top + 'px;left:' + left + 'px; margin-left:0px;}', me.getClass('7181549444794655'));
+            }
+
+            hui.Mask && hui.Mask.repaintMask();
+        },
+        addCloseButton: function () {
+            var me = this,
+                main = me.getMain(),
+                btn_close = document.createElement('A');
+            btn_close.href = '###';
+            btn_close.innerHTML = '╳';
+            btn_close.className = me.getClass('close');
+            main.insertBefore(btn_close, main.firstChild);
+
+            btn_close.onclick = hui.fn(function () {
+                this.hide();
+            }, me);
+        },
+        getValue: function () {
+            return this.getParamMap();
+        }
+
+    };
+
+    // hui.BoxPanel 继承了 hui.Control 
+    hui.inherits(hui.BoxPanel, hui.Control);
+
+});
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_dropdown', ['hui@0.0.1'], function () {
+
+    hui.Dropdown = function (options, pending) {
+        hui.Dropdown.superClass.call(this, options, 'pending');
+
+        this.type = 'dropdown';
+        this.data_value = this.data_value || 'value';
+        this.data_text = this.data_text || 'text';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+    hui.Dropdown.expandClassName = 'hui_dropdown_expand';
+
+    hui.Dropdown.prototype = {
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        initModel: function () {
+            var me = this;
+            if (me.options && typeof me.options == 'string') {
+                me.options = JSON.parse(me.options);
+            }
+        },
+        getTitle: function () {
+            var me = this,
+                main = me.getMain(),
+                title = hui.cc(me.getClass('title'), main);
+            if (!title) {
+                title = me.getDocument().createElement('DIV');
+                title.className = me.getClass('title');
+                title.innerHTML = '&nbsp;';
+                main.appendChild(title);
+                main.insertBefore(title, main.childNodes[0]);
+            }
+            return title;
+        },
+        getOptionContainer: function () {
+            var me = this,
+                main = me.getMain(),
+                optionContainer = hui.cc(me.getClass('options'), main);
+            if (!optionContainer) {
+                optionContainer = me.getDocument().createElement('DIV');
+                optionContainer.className = me.getClass('options');
+                me.getMain().appendChild(optionContainer);
+            }
+            return optionContainer;
+        },
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        render: function () {
+            hui.Dropdown.superClass.prototype.render.call(this);
+            var me = this;
+            // 绘制宽度和高度
+            me.setSize();
+            if (me.placeholder && !me.value) {
+                hui.setInnerText(me.getTitle(), me.placeholder);
+            }
+            me.renderOptions();
+        },
+        initBehavior: function () {
+            var me = this,
+                main = me.getMain(),
+                title = me.getTitle(),
+                optionContainer = me.getOptionContainer();
+            title.onclick = me.onTitleClick;
+            optionContainer.onclick = me.onOptionsClick;
+            main.onselectstart = new Function('return false;');
+            me.getShowOptionsHandler();
+
+            if (me.value !== undefined) {
+                me.setValue(me.value);
+            }
+        },
+        onTitleClick: function (e) {
+            e = e || window.event;
+            var elem = e.target || e.srcElement;
+            e.cancelBubble = true;
+            e.stopPropagation && e.stopPropagation();
+            var ctr;
+            if (elem && elem.parentNode) {
+                ctr = hui.Control.getById(elem.parentNode.control);
+                ctr && ctr.showOptions();
+            }
+        },
+        getShowOptionsHandler: function () {
+            // Use closure bind to body onclick
+            this.showOptions = this.showOptions || hui.fn(function (e) {
+                var me = this,
+                    main = me.getMain();
+                if (hui.hasClass(main, hui.Dropdown.expandClassName)) {
+                    me.hideAllOptions();
+                    hui.off(document.body, 'click', me.showOptions);
+                }
+                else {
+                    me.hideAllOptions();
+                    hui.addClass(main, hui.Dropdown.expandClassName);
+                    if (me.size && me.size.scrollTop && !me.size.doscrollTop) {
+                        hui.cc('hui_dropdown_options', main).scrollTop = me.size.scrollTop;
+                        me.size.doscrollTop = true;
+                    }
+                    hui.off(document.body, 'click', me.showOptions);
+                    hui.on(document.body, 'click', me.hideAllOptions);
+                }
+            }, this);
+            return this.showOptions;
+        },
+        hideAllOptions: function () {
+            var list = hui.c('hui_dropdown');
+            for (var i = 0, len = list.length; i < len; i++) {
+                hui.removeClass(list[i], hui.Dropdown.expandClassName);
+            }
+        },
+        onOptionsClick: function (e) {
+            e = e || window.event;
+            var elem = e.target || e.srcElement,
+                ctr = hui.Control.findElemControl(elem),
+                item,
+                value;
+            if (ctr) {
+                item = hui.util.findParentByClassName(elem, ctr.getClass('item'));
+                if (item && (item.value !== undefined || item.getAttribute('value') !== undefined)) {
+                    value = item.value !== undefined ? item.value : item.getAttribute('value');
+                    ctr.setValue(value);
+                    ctr.showOptions();
+                }
+            }
+        },
+        removeOption: function (value) {
+            if (value === undefined) {
+                return;
+            }
+            var me = this,
+                dataValue = me['data_value'],
+                optionContainer = me.getOptionContainer(),
+                list = hui.c(me.getClass('item'), optionContainer),
+                v,
+                item;
+            for (var i = list.length - 1; i > -1; i--) {
+                v = list[i].value === undefined ? list[i].getAttribute('value') : list[i].value;
+                if (v === value) {
+                    optionContainer.removeChild(list[i]);
+                }
+            }
+            for (var i = 0, len = me.options.length; i < len; i++) {
+                item = me.options[i];
+                v = typeof item == 'string' ? item : item[dataValue];
+                if (v === value) {
+                    me.options.splice(i, 1);
+                }
+            }
+        },
+        removeOptionAll: function () {
+            var me = this;
+            me.options = [];
+            hui.setInnerHTML(me.getOptionContainer(), '');
+        },
+        addOption: function (item) {
+            if (item === undefined) {
+                return;
+            }
+            var me = this,
+                dataValue = me['data_value'],
+                dataText = me['data_text'];
+
+            var elem = me.getDocument().createElement('DIV');
+            elem.value = typeof item == 'string' ? item : item[dataValue];
+            elem.className = me.getClass('item');
+            elem.setAttribute('value', elem.value);
+            hui.setInnerText(elem, typeof item == 'string' ? item : item[dataText]);
+
+            me.getOptionContainer().appendChild(elem);
+        },
+        renderOptions: function () {
+            var me = this,
+                start = Number(me.optionStart),
+                end = Number(me.optionEnd),
+                step = Number(me.optionStep),
+                index,
+                list = [];
+            if (!me.options && me.optionStart !== undefined && me.optionEnd !== undefined) {
+                start = start !== start ? 0 : start;
+                end = end !== end ? 0 : end;
+                step = step !== step ? 1 : step;
+                index = start;
+
+                for (var i = 0, len = Math.abs(end - start); i <= len; i += Math.abs(step)) {
+                    list.push({
+                        value: index,
+                        text: index
+                    });
+                    index += step;
+                }
+                me.options = list;
+            }
+            if (me.options) {
+                for (var i = 0, len = me.options.length; i < len; i++) {
+                    me.addOption(me.options[i]);
+                }
+            }
+        },
+        setOptions: function (options) {
+            var me = this;
+            me.removeOptionAll();
+
+            me.options = options;
+            me.renderOptions();
+        },
+        setValue: function (v) {
+            var me = this,
+                dataValue = me['data_value'],
+                dataText = me['data_text'],
+                // main = me.getMain(),
+                options = me.options,
+                c;
+
+            var value = (v && (typeof v) === 'object') ? v[dataValue] : v;
+            var text = (v && (typeof v) === 'object') ? v[dataText] : '';
+
+            for (var i = 0, len = options.length; i < len; i++) {
+                c = options[i];
+                if ((typeof c == 'string' && c === value) || c[dataValue] === value || (value === undefined && c[dataText] === text)) {
+                    hui.setInnerText(me.getTitle(), typeof c == 'string' ? c : c[dataText]);
+                    value = c[dataValue];
+
+                    if (value !== me.value) {
+                        c = me.getMain().value;
+                        me.getMain().value = value;
+                        me.onchange(value, c);
+                    }
+                    break;
+                }
+            }
+        },
+        getValue: function () {
+            var me = this,
+                item,
+                dataValue = me['data_value'],
+                selected = me.getMain().value;
+            if (me.options) {
+                for (var i = 0, len = me.options.length; i < len; i++) {
+                    item = me.options[i];
+                    if ((typeof item == 'string' && item === selected) || item[dataValue] === selected) {
+                        selected = item[dataValue];
+                        break;
+                    }
+                }
+            }
+            return selected;
+        },
+        getText: function () {
+            var me = this,
+                item,
+                dataText = me['data_text'],
+                dataValue = me['data_value'],
+                selected = me.getMain().value;
+            if (me.options) {
+                for (var i = 0, len = me.options.length; i < len; i++) {
+                    item = me.options[i];
+                    if ((typeof item == 'string' && item === selected) || item[dataValue] === selected) {
+                        selected = item[dataText];
+                        break;
+                    }
+                }
+            }
+            return selected;
+        },
+
+        onchange: function () {}
+    };
+
+    /* hui.Dropdown 继承了 hui.Control */
+    hui.inherits(hui.Dropdown, hui.Control);
+
+
+});
+
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_radioinputgroup', ['hui@0.0.1'], function () {
+
+    hui.RadioInputGroup = function (options, pending) {
+        hui.RadioInputGroup.superClass.call(this, options, 'pending');
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'radioinputgroup';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.RadioInputGroup.prototype = {
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.RadioInputGroup.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            me.setSize();
+            hui.Control.init(main);
+        },
+        setChecked: function (child) {
+            var me = this,
+                c;
+            for (var i in me.controlMap) {
+                c = me.controlMap[i];
+                if (c && c !== child && c.setChecked) {
+                    c.setChecked(false);
+                }
+            }
+        },
+        getValue: function () {
+            var me = this,
+                value,
+                c;
+            for (var i in me.controlMap) {
+                c = me.controlMap[i];
+                if (c && c.getChecked && c.getChecked()) {
+                    value = c.getValue();
+                    break;
+                }
+            }
+            return value;
+        },
+        setValue: function (v) {
+            var me = this,
+                value,
+                c;
+            v = !v ? '' : String(v);
+            for (var i in me.controlMap) {
+                c = me.controlMap[i];
+                if (c && v !== undefined && c.getPresetValue && String(c.getPresetValue()) === v && c.setChecked) {
+                    c.setChecked(true);
+                }
+                else if (c && c.setChecked) {
+                    c.setChecked(false);
+                }
+            }
+            return value;
+        }
+    };
+
+    /*通过hui.Control派生hui.RadioInputGroup*/
+    //hui.Control.derive(hui.RadioInputGroup);
+    /* hui.RadioInputGroup 继承了 hui.Control */
+    hui.inherits(hui.RadioInputGroup, hui.Control);
+
+
+});
+
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_radioinput', ['hui@0.0.1'], function () {
+
+    hui.RadioInput = function (options, pending) {
+        hui.RadioInput.superClass.call(this, options, 'pending');
+
+        this.type = 'radioinput';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.RadioInput.prototype = {
+        getInput: function () {
+            var me = this,
+                main = me.getMain(),
+                input = hui.cc(me.getClass('input'), main);
+            return input;
+        },
+        getIcon: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('icon'), main);
+            return icon;
+        },
+        getLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('label'), main);
+            return icon;
+        },
+        renderLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                label = me.getLabel(),
+                tpl = '<label class="#{0}">#{1}</label>';
+            if (!label) {
+                hui.appendHTML(main, hui.format(tpl,
+                    me.getClass('label'),
+                    me.label
+                ));
+            }
+            else {
+                main.appendChild(label);
+            }
+        },
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        render: function () {
+            hui.RadioInput.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            // 绘制宽度和高度
+            me.setSize();
+
+            var tpl = '<i class="#{1}"><input type="radio" class="#{0}" style="display:none" />&nbsp;</i>';
+            hui.appendHTML(main, hui.format(tpl,
+                me.getClass('input'),
+                me.getClass('icon')
+            ));
+            me.renderLabel();
+        },
+        initBehavior: function () {
+            var me = this,
+                icon = me.getIcon(),
+                label = me.getLabel();
+
+            me.setChecked(!!me.checked);
+            icon.onclick = label.onclick = hui.fn(me.getClickHandler, me);
+            icon.onselectstart = new Function('return false;');
+        },
+        setValue: function (value) {
+            var me = this;
+            me.setChecked(!!value);
+        },
+        getValue: function () {
+            var me = this,
+                value = me.getChecked() ? me.getPresetValue() : '';
+            return value;
+        },
+        getPresetValue: function () {
+            var me = this,
+                input = me.getInput(),
+                value = me.value;
+            if (value === undefined) {
+                value = me.getMain().value;
+            }
+            if (value === undefined) {
+                value = input.value;
+            }
+            if (value === undefined || value === null) {
+                value = '';
+            }
+            return String(value);
+        },
+        setPresetValue: function (value) {
+            var me = this,
+                input = me.getInput();
+            me.getMain().value = value;
+            input.value = value;
+        },
+        setChecked: function (checked) {
+            var me = this,
+                input = me.getInput(),
+                main = me.getMain();
+            if (checked && me.parentControl && me.parentControl.setChecked) {
+                me.parentControl.setChecked(me);
+            }
+            if (checked === false) {
+                input.checked = false;
+                hui.removeClass(main, me.getClass('checked'));
+            }
+            else {
+                input.checked = true;
+                hui.addClass(main, me.getClass('checked'));
+            }
+        },
+        getChecked: function () {
+            var me = this,
+                checked = !!me.getInput().checked;
+            return checked;
+        },
+        getClickHandler: function () {
+            var me = this;
+            me.setChecked(true);
+            me.onclick();
+        },
+        onclick: new Function()
+
+    };
+
+    /* hui.RadioInput 继承了 hui.Control */
+    hui.inherits(hui.RadioInput, hui.Control);
+
+
+});
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_checkboxgroup', ['hui@0.0.1', 'hui_checkbox@0.0.1'], function () {
+
+    hui.CheckboxGroup = function (options, pending) {
+        hui.CheckboxGroup.superClass.call(this, options, 'pending');
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'checkboxgroup';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.CheckboxGroup.prototype = {
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.CheckboxGroup.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            hui.Control.init(main);
+        },
+        getValue: function () {
+            var me = this,
+                value = [],
+                c;
+            for (var i in me.controlMap) {
+                c = me.controlMap[i];
+                if (c && c.getChecked && c.getChecked()) {
+                    value.push(c.getValue());
+                }
+            }
+            return value;
+        },
+        setValue: function (v) {
+            var me = this,
+                checkedMap = {},
+                c;
+            if (v && v.length && v.join) {
+                for (var i = 0, len = v.length; i < len; i++) {
+                    checkedMap[v[i]] = 1;
+                }
+            }
+            for (var i in me.controlMap) {
+                c = me.controlMap[i];
+                if (c && c.getFormName && checkedMap[c.getFormName()] && c.setChecked) {
+                    c.setChecked(true);
+                }
+                else if (c && c.setChecked) {
+                    c.setChecked(false);
+                }
+            }
+        },
+        renderOptions: function (datasource, checked) {
+            datasource = datasource && datasource.length && datasource.join ? datasource : [];
+            checked = checked && checked.length && checked.join ? checked : [];
+            var me = this,
+                html = '',
+                c,
+                m;
+            var tpl =
+                '<label class="hui_checkbox" ui="type:\'Checkbox\',formName:\'#{id}\',value:\'#{id}\',checked:\'#{checked}\'">' +
+                '    <span class="hui_checkbox_label">#{title}</span>' +
+                '</label>';
+            var checkedMap = {};
+            for (var i = 0, len = checked.length; i < len; i++) {
+                checkedMap[checked[i]] = 1;
+            }
+            me.disposeChild && me.disposeChild();
+
+            for (var i = 0, len = datasource.length; i < len; i++) {
+                c = datasource[i];
+                m = {
+                    id: c.id,
+                    title: c.title,
+                    checked: (checkedMap[c.id] ? 'checked' : '')
+                };
+                html += hui.format(tpl, m);
+            }
+            me.setInnerHTML(me, html);
+
+            hui.Control.init(me.getMain());
+        }
+
+    };
+
+    // hui.CheckboxGroup 继承了 hui.Control 
+    hui.inherits(hui.CheckboxGroup, hui.Control);
+
+
+});
+
+'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     
 //  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
 //  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
@@ -6603,1992 +8911,698 @@ hui.define('hui_label', ['hui@0.0.1'], function () {
 //                                                                   
 
 /**
- * @name 对话框控件
+ * @name 按钮控件
  * @public
  * @author wanghaiyang
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
  */
+hui.define('hui_birthdaydropdown', ['hui@0.0.1'], function () {
 
-hui.define('hj_quicklogin', ['hui@0.0.1', 'hui_requester@0.0.1', 'hui_md5@0.0.1', 'hui_textinput@0.0.1', 'hui_button@0.0.1', 'hui_checkbox@0.0.1'], function () {
+    hui.BirthdayDropdown = function (options, pending) {
+        hui.BirthdayDropdown.superClass.call(this, options, 'pending');
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'birthdaydropdown';
 
-    hui.Validator.setRule('username', {
-        'validate': function (text) {
-            var len = text.length;
-            if (len === 0) {
-                return 1;
-            } else if (len < 2 || len > 12 || !(/^[_a-zA-Z\d\u4E00-\uFA29]+$/.test(text))) {
-                return 2;
-            } else if (text.replace(/[0-9]/ig, '') === '') {
-                return 3;
-            }
-            var me = this;
-            if (me.existValue == text && me.isExist == 'exist') {
-                return 4;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '用户名不能为空',
-            2: '用户名由2-12位字母,数字,下划线,中文组成,不含标点符号',
-            3: '用户名应至少包含一个字母或汉字',
-            4: '用户名已存在'
-        }
-    }, 'force');
-    hui.Validator.setRule('accountname', {
-        'validate': function (text) {
-            var len = text.length;
-            if (len === 0) {
-                return 1;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '用户名不能为空'
-        }
-    }, 'force');
-    hui.Validator.setRule('accountpassword', {
-        'validate': function (text) {
-            var len = text.length;
-            if (len === 0) {
-                return 1;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '密码不能为空'
-        }
-    }, 'force');
-    hui.Validator.setRule('password', {
-        'validate': function (text, control_id, parentControl) {
-            var len = text.length;
-            if (len === 0) {
-                return 1;
-            } else if (len < 6) {
-                return 2;
-            } else if (control_id) {
-                var ctr = hui.Control.getById(control_id, parentControl) || hui.Control.getByFormName(control_id, parentControl),
-                    value = ctr.getValue();
-                if (text === value) {
-                    return 4;
-                }
-
-                // weak password
-                var weak_password = ['000000', '111111', '1111111', '11111111', '112233', '123123', '123321', '123456', '12345678', '654321', '666666', '888888', 'abcdef', 'abcabc', 'abc123', 'a1b2c3', 'aaa111', '123qwe', 'qwerty', 'qweasd', 'admin', 'password', 'p@ssword', 'passwd', 'iloveyou', '5201314', 'password', '123456', '12345678', 'qwerty', 'abc123', 'monkey', '1234567', 'letmein', 'trustno1', 'dragon', 'baseball', '111111', 'iloveyou', 'master', 'sunshine', 'ashley', 'bailey', 'passw0rd', 'shadow', '123123', '654321', 'superman', 'qazwsx', 'michael', 'football'];
-                for (var i = 0; i < weak_password.length; i++) {
-                    if (text == weak_password[i]) {
-                        return 3;
-                    }
-                }
-            }
-
-            return 0;
-        },
-        'noticeText': {
-            1: '密码不能为空',
-            2: '密码至少6位',
-            3: '请不要使用弱密码',
-            4: '密码不能与用户名相同'
-        },
-        checkStrong: function (psw) {
-            var level;
-            // blank
-            if (psw === '') {
-                level = -1;
-                return level;
-            }
-            // normal
-            level = 0;
-            psw = psw.replace(/\s/g, '');
-            if (psw.length <= 5) return level;
-            var str;
-            str = psw.replace(/[a-z]/g, '');
-            if (str !== psw) level++;
-            psw = str;
-            str = psw.replace(/[A-Z]/g, '');
-            if (str !== psw) level++;
-            psw = str;
-            str = psw.replace(/[0-9]/g, '');
-            if (str !== psw) level++;
-            psw = str;
-            if (str.length > 0) level++;
-            psw = str;
-
-            if (level > 3) {
-                level = 3;
-            }
-
-            return level;
-        }
-    }, 'force');
-    hui.Validator.setRule('validationcode', {
-        'validate': function (text) {
-            var f = /^\d{6}$/.test(text);
-            if (text.length === 0) {
-                return 1;
-            } else if (!!text && !f) {
-                return 2;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '短信验证码不能为空',
-            2: '短信验证码格式不正确'
-        }
-    }, 'force');
-
-    hui.Validator.setRule('mobile', {
-        'validate': function (text) {
-            var len = text.length;
-            text = text.replace(/[^0-9]/ig, '');
-            text = text.replace(/^86/ig, '');
-
-            var f = /^(13\d|15\d|18\d|14\d|170)\d{8}$/.test(text);
-            if (len === 0) {
-                return 1;
-            } else if (len !== 11) {
-                return 2;
-            } else if (!f) {
-                return 3;
-            }
-            var me = this;
-            if (me.existValue == text && me.isExist == 'exist') {
-                return 4;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '手机号码不能为空',
-            2: '手机号码由11位数字组成',
-            3: '目前只支持13*、15*、18*、14*、170号段',
-            4: '手机号已存在'
-        }
-    }, 'force');
-
-    hui.Validator.setRule('email', {
-        'validate': function (text) {
-            var len = text.length;
-            if (len === 0) {
-                return 1;
-            } else if (len > 64) {
-                return 2;
-            } else if (!/^([^@\s\u4E00-\uFA29]+)@((?:[-a-zA-Z0-9]+\.)+[a-zA-Z]{2,})$/ig.test(text)) {
-                return 3;
-            }
-            var me = this;
-            if (me.existValue == text && me.isExist == 'exist') {
-                return 4;
-            }
-            return 0;
-        },
-        'noticeText': {
-            1: '邮箱地址不能为空',
-            2: '邮箱地址不能超过64位',
-            3: '邮箱地址格式错误',
-            4: '邮箱地址已存在'
-        }
-    }, 'force');
-
-    // 构造函数
-    hui.HJ_QuickLogin = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_QuickLogin.superClass.call(this, options, 'pending');
-
-        this.type = 'hj_quicklogin';
-        this.controlMap = {};
-
-        // 监控事件接口
-        this.monitorList = {};
-
-
-        // 进入控件处理主流程!
+        //进入控件处理主流程!
         if (pending != 'pending') {
             this.enterControl();
         }
     };
 
-    hui.HJ_QuickLogin.prototype = {
-        getCaptcha: function () {
-            return '<img alt="点击更换验证码" width="150" height="40" class="hj001_captcha" id="hj001_captcha_img" onclick="this.src=this.getAttribute(\'src_bak\')+\'&\'+Math.random()" src_bak="http://captcha.yeshj.com/captcha_v2.php?token=28c880b9635a58d351932ad844fa7510&amp;w=150&amp;h=40&amp;r=0.5453804655216155">';
-        },
-        getTpl: function () {
-            var tpl =
-                '<div class="hj001_login_container">' +
-                '   <a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'\');"  class="hj001_close_btn">╳</a>' +
-                '   <!-- 手机号注册-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_mobile\',formName:\'hj_reg_mobile\'" style="display:none">' +
-                '       <div class="hj001_title">' +
-                '           <div class="hj001_title_item hj001_title_item_mobile hj001_title_item_selected">手机注册</div>' +
-                '           <div class="hj001_title_item"><a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_email\', \'inner\')">邮箱注册</a></div>' +
-                '           <a href="###" class="hj001_title_login" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_login\', \'inner\')">' +
-                '               <span class="hj001_title_login_txt">登录</span> ' +
-                '               <span class="hj001_icon_gt">〉</span></a>' +
-                '       </div>' +
-                '       <div class="hj001_login_warp">' +
-                '           <div class="hj001_item">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'mobile\',rule:\'mobile\',placeholder:\'手机号\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true"  class="hj001_ipt" maxlength="11" tabindex="1">' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'validationcode\',rule:\'validationcode\',placeholder:\'短信验证码\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt_short" maxlength="6" tabindex="2">' +
-                '               <a class="hj001_send_btn hui_btn" ui="type:\'Button\',formName:\'sendsms\',disabled:true" href="###"><span class="hui_btn_label">获取短信验证码</span></a>' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input ui="type:\'TextInput\',formName:\'username\',rule:\'username\',placeholder:\'用户名\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" type="text" class="hj001_ipt" maxlength="12" tabindex="3">' +
-                '           </div>' +
-                '           <div class="hj001_pwd_warp">' +
-                '               <input type="password" ui="type:\'TextInput\',formName:\'password\',rule:\'password,username,hj_reg_mobile\',placeholder:\'密码\',useEye:true,autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt" maxlength="20"  tabindex="4">' +
-                '               <div class="hj001_pwd_complex_warp hj001_complex_-1">' +
-                '                   <i class="hj001_pwd_complex_bg"></i>' +
-                '                   <i class="hj001_pwd_complex"></i>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade01">弱</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade02">中</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade03">强</span>' +
-                '               </div>        ' +
-                '           </div>' +
-                '           <div class="hj001_agreement">' +
-                '               <div class="hui_checkbox" ui="type:\'Checkbox\',formName:\'agree\',value:\'agree\',checked:\'checked\'">' +
-                '                   <label class="hui_checkbox_label">同意沪江的《<a target="_blank" onclick="event.cancelBubble = true;event.stopPropagation&&event.stopPropagation();" href="/signup/agreement/">用户协议</a>》</label>' +
-                '               </div>' +
-                '           </div>' +
-                '       </div>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\',disabled:\'true\'" class="hj001_login_btn" tabindex="5">注&nbsp;&nbsp;册</a>' +
-                '       <a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_email\', \'inner\')" class="hj001_another">选择邮箱注册</a>' +
-                '   </div>' +
-                '   <!-- 邮箱注册-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_email\',formName:\'hj_reg_email\'" style="display:none;">' +
-                '       <div class="hj001_title">' +
-                '           <div class="hj001_title_item hj001_title_item_mobile"><a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_mobile\', \'inner\')">手机注册</a></div>' +
-                '           <div class="hj001_title_item hj001_title_item_selected">邮箱注册</div>' +
-                '           <a href="###" class="hj001_title_login" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_login\', \'inner\')">' +
-                '               <span class="hj001_title_login_txt">登录</span> ' +
-                '               <span class="hj001_icon_gt">〉</span></a>' +
-                '       </div>' +
-                '       <div class="hj001_login_warp">' +
-                '           <div class="hj001_item" style="z-index:50">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'email\',rule:\'email\',placeholder:\'邮箱\',autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt" maxlength="50"  tabindex="1" style="ime-mode: disabled">' +
-                '               <div class="hj001_email_list">' +
-                '                   <div class="hj001_row hj001_first">请选择邮箱类型</div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@qq.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@163.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@126.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@sina.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@hotmail.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@gmail.com</a></div>' +
-                '               </div>' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input ui="type:\'TextInput\',formName:\'username\',rule:\'username\',placeholder:\'用户名\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" type="text" class="hj001_ipt" maxlength="12" tabindex="3">' +
-                '           </div>' +
-                '           <div class="hj001_pwd_warp">' +
-                '               <input type="password" ui="type:\'TextInput\',formName:\'password\',rule:\'password,username,hj_reg_email\',placeholder:\'密码\',useEye:true,autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt" maxlength="20"  tabindex="4">' +
-                '               <div class="hj001_pwd_complex_warp hj001_complex_-1">' +
-                '                   <i class="hj001_pwd_complex_bg"></i>' +
-                '                   <i class="hj001_pwd_complex"></i>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade01">弱</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade02">中</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade03">强</span>' +
-                '               </div>        ' +
-                '           </div>' +
-                '           <div class="hj001_agreement">' +
-                '               <div class="hui_checkbox" ui="type:\'Checkbox\',formName:\'agree\',value:\'agree\',checked:\'checked\'">' +
-                '                   <label class="hui_checkbox_label">同意沪江的《<a target="_blank" onclick="event.cancelBubble = true;event.stopPropagation&&event.stopPropagation();" href="/signup/agreement/">用户协议</a>》</label>' +
-                '               </div>' +
-                '           </div>' +
-                '       </div>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\',disabled:\'true\'" class="hj001_login_btn"  tabindex="14">注&nbsp;&nbsp;册</a>' +
-                '       <a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_mobile\', \'inner\')" class="hj001_another">选择手机注册</a>' +
-                '   </div>' +
-                '   <!-- 登录-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_login\',formName:\'hj_reg_login\'" style="display:none;">' +
-                '       <div class="hj001_title">' +
-                '           <div class="hj001_title_item hj001_title_item_mobile hj001_title_item_selected">账号登录</div>' +
-                '           <div class="hj001_title_item"><a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_onekey\', \'inner\')">短信登录</a></div>' +
-                '           <a href="###" class="hj001_title_login" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(window.hjquicklogin.prefer === \'email\' ? \'hj_reg_email\' : \'hj_reg_mobile\', \'inner\')">' +
-                '               <span class="hj001_title_login_txt">注册</span> ' +
-                '               <span class="hj001_icon_gt">〉</span></a>' +
-                '       </div>' +
-                '       <div class="hj001_login_warp hj001_panel_login">' +
-                '           <div class="hj001_item">' +
-                '               <input ui="type:\'TextInput\',formName:\'account\',rule:\'accountname\',placeholder:\'用户名/手机号/邮箱\',autoValidate:true,autoHideError:true,hideBlankError:true,DBC2SBC:false" type="text" maxLength="50"  class="hj001_ipt"   tabindex="21" />' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input type="password" ui="type:\'TextInput\',formName:\'password\',rule:\'accountpassword\',placeholder:\'密码\',autoHideError:true,hideBlankError:true,useEye:true,DBC2SBC:true" class="hj001_ipt" maxlength="20" tabindex="22">' +
-                '           </div>' +
-                '           <div class="hj001_item" id="hj001_captcha_code" style="display: none">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'code\',rule:\'\',placeholder:\'验证码\',autoValidate:true,allowSpace:false,DBC2SBC:true" maxLength="16" class="hj001_ipt_short" tabindex="23">' +
-                '               <a class="hj001_send_btn" title="点击更换验证码" href="###">    ' + this.getCaptcha() + ' </a>' +
-                '           </div>' +
-                '           <div class="hj001_agreement">' +
-                '               <div class="hj001_check">' +
-                '                   <div ui="type:\'Checkbox\',formName:\'hj001_rememberlogin\',value:true,label:\'两周内免登录\',checked:\'checked\',isFormItem:false"></div>' +
-                '               </div>' +
-                '               <a target="_blank" href="http://pass.hujiang.com/forgot_password/" title="忘记密码？" class="hj001_forget_pwd">忘记密码？</a>' +
-                '           </div>' +
-                '       </div>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\'" class="hj001_login_btn" tabindex="24">登&nbsp;&nbsp;录</a>' +
-                '       <div class="hj001_other_login" id="other_login">' +
-                '           <span class="hj001_txt">合作账号直接登录：</span>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/qq/?returnurl=#{cur_location}"     onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_qq\'    ]()" class="hj001_login_link hj001_icon_qq"      ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/sina/?returnurl=#{cur_location}"   onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_weibo\' ]()" class="hj001_login_link hj001_icon_weibo"   ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/renren/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_renren\']()" class="hj001_login_link hj001_icon_renren"  ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/baidu/?returnurl=#{cur_location}"  onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_baidu\' ]()" class="hj001_login_link hj001_icon_baidu"   ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/douban/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_douban\']()" class="hj001_login_link hj001_icon_douban"  ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/alipay/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_zhifu\' ]()" class="hj001_login_link hj001_icon_zhifu"   ></a>' +
-                '       </div>' +
-                '       <hr class="hj001_clearfix" />' +
-                '   </div>' +
-                '   <!-- 免注册一键登录-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_onekey\',formName:\'hj_reg_onekey\'" style="display:none">' +
-                '       <div class="hj001_title">' +
-                '           <div class="hj001_title_item"><a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_login\', \'inner\')">账号登录</a></div>' +
-                '           <div class="hj001_title_item hj001_title_item_mobile hj001_title_item_selected">短信登录</div>' +
-                '           <a href="###" class="hj001_title_login" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(window.hjquicklogin.prefer === \'email\' ? \'hj_reg_email\' : \'hj_reg_mobile\', \'inner\')">' +
-                '               <span class="hj001_title_login_txt">注册</span> ' +
-                '               <span class="hj001_icon_gt">〉</span></a>' +
-                '       </div>' +
-                '       <div class="hj001_login_warp">' +
-                '           <div class="hj001_item">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'mobile\',rule:\'mobile\',placeholder:\'手机号，未注册将自动创建沪江账号\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true"  class="hj001_ipt" maxlength="11" tabindex="1">' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'validationcode\',rule:\'validationcode\',placeholder:\'短信验证码\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt_short" maxlength="6" tabindex="2">' +
-                '               <a class="hj001_send_btn hui_btn" ui="type:\'Button\',formName:\'sendsms\',disabled:true" href="###"><span class="hui_btn_label">获取短信验证码</span></a>' +
-                '           </div>' +
-                '       </div>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\'" class="hj001_login_btn" tabindex="5">登&nbsp;&nbsp;录</a>' +
-                '       <a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_email\', \'inner\')" class="hj001_another">选择邮箱注册</a>' +
-                '       <div class="hj001_other_login" id="other_login">' +
-                '           <span class="hj001_txt">合作账号直接登录：</span>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/qq/?returnurl=#{cur_location}"     onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_qq\'    ]()" class="hj001_login_link hj001_icon_qq"      ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/sina/?returnurl=#{cur_location}"   onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_weibo\' ]()" class="hj001_login_link hj001_icon_weibo"   ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/renren/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_renren\']()" class="hj001_login_link hj001_icon_renren"  ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/baidu/?returnurl=#{cur_location}"  onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_baidu\' ]()" class="hj001_login_link hj001_icon_baidu"   ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/douban/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_douban\']()" class="hj001_login_link hj001_icon_douban"  ></a>' +
-                '           <a target="_blank" href="http://app.hujiang.com/outapp/binds/alipay/?returnurl=#{cur_location}" onclick="hui.Control.getByFormName(\'hj_quicklogin\').monitorList[\'hj_reg_login_zhifu\' ]()" class="hj001_login_link hj001_icon_zhifu"   ></a>' +
-                '       </div>' +
-                '       <hr class="hj001_clearfix" />' +
-                '   </div>' +
-                '   <!-- 免注册一键登录成功-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_onekey_next\',formName:\'hj_reg_onekey_next\'" style="display:none">' +
-                '       <div class="hj001_success">' +
-                '           <i class="hj001_icon_ok"></i>' +
-                '           <span class="hj001_span">恭喜您注册成功！</span>' +
-                '       </div>' +
-                '       <div class="hj001_login_warp">' +
-                '           <div class="hj001_onekey_next_tip2">' +
-                '               <div class="hj001_tiptxt">首次登录，请完善您的个人信息。</div>' +
-                '           </div>' +
-                '           <div class="hj001_item">' +
-                '               <input ui="type:\'TextInput\',formName:\'username\',rule:\'username\',placeholder:\'用户名\',autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" type="text" class="hj001_ipt" maxlength="12" tabindex="3">' +
-                '           </div>' +
-                '           <div class="hj001_pwd_warp">' +
-                '               <input type="password" ui="type:\'TextInput\',formName:\'password\',rule:\'password,username,hj_reg_mobile\',placeholder:\'密码\',useEye:true,autoValidate:true,autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt" maxlength="20"  tabindex="4">' +
-                '               <div class="hj001_pwd_complex_warp hj001_complex_-1">' +
-                '                   <i class="hj001_pwd_complex_bg"></i>' +
-                '                   <i class="hj001_pwd_complex"></i>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade01">弱</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade02">中</span>' +
-                '                   <span class="hj001_pwd_complex_txt hj001_grade03">强</span>' +
-                '               </div>        ' +
-                '           </div>' +
-                '           <div class="hj001_item" style="z-index:50">' +
-                '               <input type="text" ui="type:\'TextInput\',formName:\'email\',rule:\'email\',placeholder:\'邮箱\',autoHideError:true,allowSpace:false,hideBlankError:true,DBC2SBC:true" class="hj001_ipt" maxlength="50"  tabindex="5" style="ime-mode: disabled">' +
-                '               <div class="hj001_email_list">' +
-                '                   <div class="hj001_row hj001_first">请选择邮箱类型</div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@qq.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@163.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@126.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@sina.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@hotmail.com</a></div>' +
-                '                   <div class="hj001_row"><a href="###" onclick="hui.Control.getByFormName(\'email\').choose(this)">123456@gmail.com</a></div>' +
-                '               </div>' +
-                '           </div>' +
-                '       </div>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\'" class="hj001_login_btn" tabindex="6">确认并继续浏览</a>' +
-                '       <a href="###" onclick="hui.Control.getByFormName(\'hj_quicklogin\').showDialog(\'hj_reg_email\', \'inner\')" class="hj001_another">选择邮箱注册</a>' +
-                '       <div class="hj001_onekey_next_tip">快速完善个人信息，享受更多优质服务</div>' +
-                '       <hr class="hj001_clearfix" />' +
-                '   </div>' +
-                '   <!-- 邮箱注册成功-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_email_success\',formName:\'hj_reg_email_success\'" style="display:none;">' +
-                '       <div class="hj001_success">' +
-                '           <i class="hj001_icon_ok"></i>' +
-                '           <span class="hj001_span">恭喜您注册成功！</span>' +
-                '       </div>' +
-                '       <p class="hj001_txt">通过学习，成就更好的自己！</br>畅学沪江网，和千万沪友一起进步！</p>' +
-                '       <a href="###" ui="type:\'Button\',formName:\'submit\'" class="hj001_continue_btn" tabindex="24">继续浏览</a>' +
-                '       <p class="hj001_email_txt">已发送激活邮件，<a target="_blank" href="http://www.hujiang.com" title="进入邮箱激活" class="hj001_go_email">进入邮箱激活</a></p>' +
-                '   </div>' +
-                '   <!-- 手机注册成功-->' +
-                '   <div class="hj001_dialog" ui="type:\'HJ_Reg_mobile_success\',formName:\'hj_reg_mobile_success\'" style="display:none;">' +
-                '       <div class="hj001_success">' +
-                '           <i class="hj001_icon_ok"></i>' +
-                '           <span class="hj001_span">恭喜您注册成功！</span>' +
-                '       </div>' +
-                '       <p class="hj001_txt">通过学习，成就更好的自己！</br>畅学沪江网，和千万沪友一起进步！</p>' +
-                '       <p class="hj001_auto_close">' +
-                '           <em class="hj001_em"><span class="hj001_left_time">3</span>秒</em>后弹窗自动关闭，</br>如果没有关闭请点击右上角关闭按钮。' +
-                '       </p>' +
-                '   </div>' +
-                '   <!---->' +
-                '</div>';
-            return tpl;
-        },
-
-
-
+    hui.BirthdayDropdown.prototype = {
         /**
-         * @name 绘制对话框
+         * @name 渲染控件
          * @public
          */
-        render: function (options) {
-            hui.HJ_QuickLogin.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain(),
-                mobile;
-            hui.addClass(main, 'hj001_quicklogin');
-            if (me.className) {
-                hui.addClass(main, me.className);
-            }
-            me.setInnerHTML(main, hui.format(me.getTpl(), {
-                cur_location: window.location.href
-            }));
-            if (window.hjquicklogin && window.hjquicklogin.prefer === 'email') {
-                mobile = hui.c('hj001_title_item_mobile')[0];
-                mobile.parentNode.appendChild(mobile);
-                mobile = hui.c('hj001_title_item_mobile')[1];
-                mobile.parentNode.appendChild(mobile);
-            }
-            // 渲染对话框
-            hui.Control.init(main, (hui.Action ? hui.Action.get() : {}).model, me);
-            //me.showDialog('hj_reg_mobile');
-        },
-        showDialog: function (module_name, inner) {
-            var me = this,
-                reg_mobile = me.getByFormName('hj_reg_mobile'),
-                reg_email = me.getByFormName('hj_reg_email'),
-                mobile_success = me.getByFormName('hj_reg_mobile_success'),
-                email_success = me.getByFormName('hj_reg_email_success'),
-                login = me.getByFormName('hj_reg_login'),
-                onekey = me.getByFormName('hj_reg_onekey'),
-                onekey_next = me.getByFormName('hj_reg_onekey_next'),
-                module = me.getByFormName(module_name);
-
-            reg_mobile && reg_mobile.hide();
-            reg_email && reg_email.hide();
-            mobile_success && mobile_success.hide();
-            email_success && email_success.hide();
-            login && login.hide();
-            onekey && onekey.hide();
-            onekey_next && onekey_next.hide();
-            hui.Mask && hui.Mask.hide();
-
-            if (module) {
-                hui.Mask && hui.Mask.show();
-                me.show();
-                module.hideError();
-                module.show();
-                me.onresizeCallback();
-                hui.on(window, 'resize', me.onresize);
-                //hui.on(window, 'scroll', me.onresize);
-                hui.on(window, 'keyup', me.onesc);
-                hui.addClass(document.documentElement, 'hj001_quicklogin_html');
-
-                if (module_name == 'hj_reg_mobile_success') {
-                    // 手机注册成功页 
-                    if (me.monitorList['hj_reg_mobile_success']) {
-                        me.monitorList['hj_reg_mobile_success']();
-                    }
-                    module.startTimer();
-                } else if (module_name == 'hj_reg_email_success') {
-                    // 邮箱注册成功页 
-                    if (me.monitorList['hj_reg_email_success']) {
-                        me.monitorList['hj_reg_email_success']();
-                    }
-                    module.updateEmailServer();
-                    hui.c('hj001_close_btn')[0].onclick = function () {
-                        window.location.reload && window.location.reload();
-                    };
-                } else if (module_name == 'hj_reg_mobile') {
-                    // 在手机注册页的邮箱注册点击 
-                    if (inner !== 'inner') {
-                        // 点击页面上的注册 
-                        if (me.monitorList['hj_reg']) {
-                            me.monitorList['hj_reg']();
-                        }
-                    } else {
-                        if (me.monitorList['hj_reg_email_mobile']) {
-                            me.monitorList['hj_reg_email_mobile']();
-                        }
-                    }
-                    module.getByFormName('mobile').mainFocus();
-                } else if (module_name == 'hj_reg_email') {
-                    // 在邮箱注册页的手机注册点击 
-                    if (inner !== 'inner') {
-                        // 点击页面上的注册 
-                        if (me.monitorList['hj_reg']) {
-                            me.monitorList['hj_reg']();
-                        }
-                    } else {
-                        if (me.monitorList['hj_reg_mobile_email']) {
-                            me.monitorList['hj_reg_mobile_email']();
-                        }
-                    }
-                    module.getByFormName('email').mainFocus();
-                } else if (module_name == 'hj_reg_login') {
-                    // 登录沪江页展示 
-                    if (me.monitorList['hj_reg_login']) {
-                        me.monitorList['hj_reg_login']();
-                    }
-                    module.getByFormName('account').mainFocus();
-                } else if (module_name == 'hj_reg_onekey') {
-                    // 登录沪江页展示 
-                    if (me.monitorList['hj_reg_login']) {
-                        me.monitorList['hj_reg_login']();
-                    }
-                    module.getByFormName('mobile').mainFocus();
-                } else if (module_name == 'hj_reg_onekey_next') {
-                    // 登录沪江页展示 
-                    if (me.monitorList['hj_reg_login']) {
-                        me.monitorList['hj_reg_login']();
-                    }
-                    module.getByFormName('username').mainFocus();
-                }
-            } else {
-                // 关闭按钮事件
-                if (me.monitorList['hj_reg_close']) {
-                    me.monitorList['hj_reg_close']();
-                }
-                // 解除disabled状态
-                me.getByFormName('hj_reg_mobile').checkAgree();
-                me.getByFormName('hj_reg_email').checkAgree();
-                me.getByFormName('hj_reg_login').getByFormName('submit').setDisabled(false);
-
-                me.hide();
-                hui.off(window, 'resize', me.onresize);
-                //hui.off(window, 'scroll', me.onresize);
-                hui.off(window, 'keyup', me.onesc);
-                hui.removeClass(document.documentElement, 'hj001_quicklogin_html');
-
-            }
-        },
-        getSubName: function () {
-            var str = window.location.host;
-            var subName = this.getPassName() + (str.replace('hjclass.com', '') + 'hjclass.com' === str ? '.hjclass.com/quick' : '.hujiang.com/quick');
-            return subName;
-        },
-        getPassName: function () {
-            var subName = 'http://pass';
-            return subName;
-        },
-        getQuickSubName: function () {
-            return '/quick';
-        },
-        onregiste: function (me) {
-            var parent = this,
-                hj_quicklogin = hui.Control.getByFormName('hj_quicklogin');
-            /*window.Requester.JSONP(parent.getSubName() + '/token/', {
-            data: {
-                appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                act: 'gettoken'
-            },
-            onsuccess: function (result) {
-                if (result.code === 0) {*/
-            // Token
-            var paramMap = me.getParamMap();
-            if (me.getByFormName('submit').isDisabled()) {
-                return;
-            }
-            //paramMap.appid = '9c0b989a7d2d8c5a952475c0f61e792f';
-            //paramMap.token = result.data;
-            paramMap.act = 'register';
-            //paramMap.returnurl = window.location.href;
-            paramMap.template = hj_quicklogin && hj_quicklogin.template ? hj_quicklogin.template : 'default';
-            paramMap.returnurl = hj_quicklogin && hj_quicklogin.returnurl ? hj_quicklogin.returnurl : window.location.href.split('#')[0];
-            paramMap.password = hui.MD5.encode(paramMap.password);
-            if (hj_quicklogin && hj_quicklogin.source) {
-                paramMap.source = hj_quicklogin.source;
-            }
-
-            me.getByFormName('submit').setDisabled().setContent('注  册  中 . . .');
-            window.Requester.JSONP(parent.getSubName() + '/account/', {
-                data: paramMap,
-                onsuccess: function (result) {
-                    if (result.code === 0) {
-                        // Token
-                        //alert(result.data);
-                        hui.setCookie('hj001_username', result.data.user.username);
-                        //hui.setCookie('hj001_uid', result['uid']);
-                        me.parentControl.updateSSO.callback = function () {
-                            me.parentControl.onRegisteSuccess(me, result);
-                        };
-                        me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken));
-                    } else {
-                        var code = result.code;
-                        var field = {};
-                        if (~'1100,1101,9004'.indexOf(code)) {
-                            field.mobile = result.message;
-                        } else if (~'1102,1103,1104,3003,3004,3005,3006'.indexOf(code)) {
-                            field.validationcode = result.message;
-                        } else if (~'1130,1131'.indexOf(code)) {
-                            field.email = result.message;
-                        } else if (~'1214,1221,1222'.indexOf(code)) {
-                            field.username = result.message;
-                        } else if (~'1223,1224'.indexOf(code)) {
-                            field.password = result.message;
-                        }
-
-                        me.showErrorByTree(field);
-                        me.getByFormName('submit').setDisabled(false).setContent('注  册');
-                    }
-
-                }
-            });
-            /*}
-            }
-        });*/
-        },
-        checkMobile: function (me) {
-            var mobile = me.getByFormName('mobile'),
-                sendsms = me.getByFormName('sendsms'),
-                value = mobile.getValue();
-            if (value && mobile.validate('not_show')) {
-                sendsms.setDisabled(false);
-                me.parentControl.checkMobileExist(me);
-            } else {
-                sendsms.setDisabled(true);
-            }
-        },
-
-        checkMobileExist: function (me) {
-            var parent = this,
-                mobile = me.getByFormName('mobile');
-            if (mobile) {
-                mobile.showWaiting();
-                /*window.Requester.JSONP(parent.getSubName() + '/token/', {
-                data: {
-                    appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                    act: 'gettoken'
-                },
-                onsuccess: function (result) {
-                    if (result.code === 0) {*/
-                // Token
-                var value = mobile.getValue();
-                mobile.isExist = mobile.existValue == value ? mobile.existValue : '';
-                mobile.existValue = value;
-                window.Requester.JSONP(parent.getSubName() + '/account/', {
-                    data: {
-                        //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                        //token: result.data,
-                        act: 'check_mobile',
-                        mobile: mobile.getValue(),
-                        reversal: true
-                    },
-                    onsuccess: function (result) {
-                        if (result && result.code === 0 && result.data === true) {
-                            mobile.showError(4, 'by_code');
-                            mobile.isExist = 'exist';
-                            me.getByFormName('sendsms').setDisabled();
-                        } else if (result && result.code === 0 && result.data === false) {
-                            mobile.showOK();
-                            mobile.existValue = '';
-                            me.getByFormName('sendsms').setDisabled(false);
-                        } else {
-                            mobile.showError(result.message);
-                            me.getByFormName('sendsms').setDisabled();
-                        }
-                    }
-                });
-                /*}
-                }
-            });*/
-            }
-        },
-        checkEmail: function (me) {
-            var parent = this,
-                email = me.getByFormName('email'),
-                value = email.getValue();
-            if (value && email.validate()) {
-                parent.checkEmailExist(me);
-            }
-        },
-        checkEmailExist: function (me) {
-            var parent = this,
-                email = me.getByFormName('email');
-            if (email) {
-                email.showWaiting();
-                /*window.Requester.JSONP(parent.getSubName() + '/token/', {
-                data: {
-                    appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                    act: 'gettoken'
-                },
-                onsuccess: function (result) {
-                    if (result.code === 0) {*/
-                // Token
-                var value = email.getValue();
-                email.isExist = email.existValue == value ? email.existValue : '';
-                email.existValue = value;
-                window.Requester.JSONP(parent.getSubName() + '/account/', {
-                    data: {
-                        //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                        //token: result.data,
-                        act: 'check_email',
-                        email: email.getValue()
-                    },
-                    onsuccess: function (result) {
-                        if (result && result.code === 0 && result.data === false) {
-                            email.isExist = '';
-                            email.showOK();
-                        } else if (result && result.code === 0 && result.data === true) {
-                            email.isExist = 'exist';
-                            email.showError(4, 'by_code');
-                        } else {
-                            email.showError(result.message);
-                        }
-                    }
-                });
-                /*}
-                }
-            });*/
-            }
-        },
-        checkUsername: function (me) {
-            var parent = this,
-                username = me.getByFormName('username'),
-                value = username.getValue();
-            if (value && username.validate()) {
-                parent.checkUsernameExist(me);
-            }
-        },
-        checkUsernameExist: function (me) {
-            var parent = this,
-                username = me.getByFormName('username');
-            if (username) {
-                username.showWaiting();
-                /*window.Requester.JSONP(parent.getSubName() + '/token/', {
-                data: {
-                    appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                    act: 'gettoken'
-                },
-                onsuccess: function (result) {
-                    if (result.code === 0) {*/
-                // Token
-                var value = username.getValue();
-                username.isExist = username.existValue == value ? username.existValue : '';
-                username.existValue = value;
-                window.Requester.JSONP(parent.getSubName() + '/account/', {
-                    data: {
-                        //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                        //token: result.data,
-                        act: 'check_username',
-                        username: username.getValue()
-                    },
-                    onsuccess: function (result) {
-                        if (result && result.code === 0 && result.data === false) {
-                            username.isExist = '';
-                            username.showOK();
-                        } else if (result && result.code === 0 && result.data === true) {
-                            username.isExist = 'exist';
-                            username.showError(4, 'by_code');
-                        } else {
-                            username.showError(result.message);
-                        }
-
-                    }
-                });
-                /*}
-                }
-            });*/
-            }
-        },
-        checkPassword: function (me) {
-            var password = me.getByFormName('password'),
-                value = password.getValue(),
-                main = me.getMain(),
-                complex = hui.c('hj001_pwd_complex_warp', main)[0],
-                level;
-            me.checkPasswordStrong = me.checkPasswordStrong || hui.Validator.getRule('password').checkStrong;
-            level = me.checkPasswordStrong(value);
-            if (level === 0) level = 1;
-            hui.removeClass(complex, 'hj001_complex_-1 hj001_complex_0 hj001_complex_1 hj001_complex_2 hj001_complex_3');
-            hui.addClass(complex, 'hj001_complex_' + level);
-            if (!value) {
-                password.hideError();
-                return;
-            }
-            password.validate();
-
-        },
-        getEmailList: function () {
-            var emailList = {
-                '@qq.com': 'http://mail.qq.com',
-                '@163.com': 'http://mail.163.com',
-                '@126.com': 'http://mail.126.com',
-                '@sina.com': 'http://mail.sina.com',
-                '@hotmail.com': 'http://mail.hotmail.com',
-                '@gmail.com': 'http://mail.google.com'
-            };
-            return emailList;
-        },
-        onRegisteSuccess: function (me, result) {
-            me.setValueByTree({
-                username: '',
-                password: '',
-                email: '',
-                mobile: '',
-                validationcode: ''
-            });
-
-            if (me.getFormName() == 'hj_reg_mobile') {
-                me.parentControl.showDialog('hj_reg_mobile_success');
-            } else {
-                me.parentControl.showDialog('hj_reg_email_success');
-            }
-        },
-        onRegisteSuccessMobile: function () {},
-        onLoginSuccess: function () {},
-        updateSSO: function (ssotoken, remeberdays) {
-            var me = this;
-            if (me.updateSSOTimer) {
-                window.clearTimeout(me.updateSSOTimer);
-            }
-            me.updateSSOTimer = window.setTimeout(function () {
-                me.ssonum = 5;
-                me.updateSSOCallback();
-            }, 10000);
-            window.Requester.JSONP(me.getPassName() + '.hujiang.com' + me.getQuickSubName() + '/synclogin.aspx?token=' + ssotoken + (remeberdays ? '&remeberdays=' + remeberdays : ''), {
-                onsuccess: me.updateSSOCallback
-            });
-            window.Requester.JSONP(me.getPassName() + '.yeshj.com' + me.getQuickSubName() + '/synclogin.aspx?token=' + ssotoken + (remeberdays ? '&remeberdays=' + remeberdays : ''), {
-                onsuccess: me.updateSSOCallback
-            });
-            window.Requester.JSONP(me.getPassName() + '.cctalk.com' + me.getQuickSubName() + '/synclogin.aspx?token=' + ssotoken + (remeberdays ? '&remeberdays=' + remeberdays : ''), {
-                onsuccess: me.updateSSOCallback
-            });
-            window.Requester.JSONP(me.getPassName() + '.hjenglish.com' + me.getQuickSubName() + '/synclogin.aspx?token=' + ssotoken + (remeberdays ? '&remeberdays=' + remeberdays : ''), {
-                onsuccess: me.updateSSOCallback
-            });
-            window.Requester.JSONP(me.getPassName() + '.hjclass.com' + me.getQuickSubName() + '/synclogin.aspx?token=' + ssotoken + (remeberdays ? '&remeberdays=' + remeberdays : ''), {
-                onsuccess: me.updateSSOCallback
-            });
-        },
-        updateSSOTimer: null,
-        updateSSOCallback: function () {
-            var hj_quicklogin = hui.Control.getByFormName('hj_quicklogin');
-            if (hj_quicklogin.ssonum > 4) {
-                if (hj_quicklogin.updateSSOTimer) {
-                    hj_quicklogin.updateSSOTimer = null;
-                    window.clearTimeout(hj_quicklogin.updateSSOTimer);
-                }
-                hj_quicklogin.updateSSO.callback && hj_quicklogin.updateSSO.callback();
-            } else {
-                hj_quicklogin.ssonum = hj_quicklogin.ssonum ? hj_quicklogin.ssonum : 1;
-                hj_quicklogin.ssonum += 1;
-            }
-        },
-        onresize: function () {
-            var hj_quicklogin = hui.Control.getByFormName('hj_quicklogin');
-            if (hj_quicklogin.onresizeTimer) {
-                window.clearTimeout(hj_quicklogin.onresizeTimer);
-            }
-            hj_quicklogin.onresizeTimer = window.setTimeout(hj_quicklogin.onresizeCallback, 30);
-        },
-        // IE7下onresize容易死循环!!
-        onresizeCallback: function () {
-            var hj_quicklogin = hui.Control.getByFormName('hj_quicklogin');
-            var main = hj_quicklogin.getMain();
-            hj_quicklogin.onresizeTimer = null;
-
-            var top = Math.max(0, (document.documentElement.clientHeight - main.clientHeight) * (hj_quicklogin.top || 0.3));
-            var left = Math.max(0, (document.documentElement.clientWidth - main.clientWidth) * (hj_quicklogin.left || 0.5));
-            // IE6
-            if (window.ActiveXObject && !window.XMLHttpRequest) {
-                var hj001_quicklogin = hui.c('hj001_quicklogin')[0];
-                hj001_quicklogin.style.setExpression('top', 'eval(document.documentElement.scrollTop  + Math.max(0, (document.documentElement.clientHeight - 500)*0.4))');
-                hj001_quicklogin.style.setExpression('left', 'eval(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2)');
-                /*if (!hui.util.hasCssString('hj001_quicklogin_fixed_7181549444794655')) {
-                    hui.util.importCssString('.hj001_quicklogin {_top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px");_left: expression(document.documentElement.scrollLeft + Math.max(0, (document.documentElement.clientWidth - 427))/2 + "px")}}', 'hj001_quicklogin_fixed_7181549444794655');
-                }*/
-            } else {
-                hui.util.importCssString('.hj001_quicklogin.hj001_login_box {top:' + top + 'px;left:' + left + 'px; margin-left:0px;}', 'hj001_quicklogin_fixed_7181549444794655');
-            }
-
-
-            hui.Mask.repaintMask();
-        },
-        onscroll: function (e) {
-            e.cancelBubble = true;
-            e.stopPropagation && e.stopPropagation();
-            if (e.preventDefault) {
-                e.preventDefault();
-            } else {
-                window.event.returnValue = false;
-            }
-            return false;
-        },
-        onesc: function (e) {
-            e = e || hui.window.event;
-            var keyCode = e.keyCode || e.which;
-            if (keyCode == 27) {
-                hui.Control.getByFormName('hj_quicklogin').showDialog('');
-            }
-        }
-
-    };
-    // 继承hui.Control
-    hui.inherits(hui.HJ_QuickLogin, hui.Control);
-
-
-    hui.HJ_Reg_mobile = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_mobile.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_mobile';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_mobile.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_mobile.superClass.prototype.render.call(this);
-            var me = this;
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            var me = this;
-
-            var mobile = me.getByFormName('mobile'),
-                username = me.getByFormName('username'),
-                password = me.getByFormName('password'),
-                agree = me.getByFormName('agree'),
-                submit = me.getByFormName('submit'),
-                sendsms = me.getByFormName('sendsms');
-
-            password.onpaste =
-                password.onkeyup = function (e) {
-                    me.parentControl.checkPassword(me);
-            };
-            username.onpaste =
-                username.onblur = function (e) {
-                    me.parentControl.checkUsername(me);
-            };
-
-            //mobile.onkeydown =
-            mobile.onpaste =
-                mobile.onblur =
-                mobile.onkeyup = function (e) {
-                    me.parentControl.checkMobile(me);
-            };
-
-
-
-            sendsms.onclick = hui.fn(me.sendSms, me);
-            agree.onclick = hui.fn(me.checkAgree, me);
-            submit.onclick = username.onenter = password.onenter = hui.fn(me.onsubmit, me);
-
-            if (mobile.getValue()) {
-                mobile.onblur();
-            }
-            if (username.getValue()) {
-                username.validate();
-            }
-            me.checkAgree();
-        },
-        checkAgree: function () {
-            var me = this,
-                agree = me.getByFormName('agree'),
-                submit = me.getByFormName('submit');
-            submit.setDisabled(!agree.getChecked());
-        },
-        /**
-         * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
-         */
-        onsubmit: function () {
-            var me = this;
-
-            // 手机号注册按钮事件 
-            if (me.parentControl.monitorList['hj_reg_mobile_submit']) {
-                me.parentControl.monitorList['hj_reg_mobile_submit']();
-            }
-
-            if (me.validate()) {
-                //paramMap.password = hui.MD5.encode(paramMap.password);
-
-                me.parentControl.onregiste(me);
-
-            }
-        },
-
-        sendSms: function () {
-            var me = this;
-            // 获取手机验证码按钮事件 
-            if (me.parentControl.monitorList['hj_reg_mobile_sendsms']) {
-                me.parentControl.monitorList['hj_reg_mobile_sendsms']();
-            }
-            /*window.Requester.JSONP(me.parentControl.getSubName() + '/token/', {
-            data: {
-                appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                act: 'gettoken'
-            },
-            onsuccess: function (result) {
-                if (result.code === 0) {*/
-            var validationcode = me.getByFormName('validationcode');
-            // Token
-            window.Requester.JSONP(me.parentControl.getSubName() + '/account/', {
-                data: {
-                    //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                    //token: result.data,
-                    act: 'send_validation_code',
-                    mobile: me.getByFormName('mobile').getValue()
-                },
-                onsuccess: function (result) {
-                    if (result.code !== 0) {
-                        me.getByFormName('mobile').showError(result.message);
-                    } else if (result.data && result.data.ticket) {
-                        window.Requester.JSONP(me.parentControl.getSubName() + '/account/', {
-                            data: {
-                                //appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                                //token: result.data,
-                                act: 'send_validation_code',
-                                mobile: me.getByFormName('mobile').getValue(),
-                                ticket: result.data.ticket
-                            },
-                            onsuccess: function (result) {
-                                if (result.code !== 0) {
-                                    me.getByFormName('mobile').showError(result.message);
-                                }
-                                validationcode.mainFocus();
-                            }
-                        });
-                    }
-                }
-            });
-
-            validationcode.mainFocus();
-            /*}
-            }
-        });*/
-
-            me.startSendSmsTimer();
-
-        },
-        sendSmsCallback: function () {
-            //var me = this;
-        },
-        startSendSmsTimer: function () {
-            var me = this,
-                sendsms = me.getByFormName('sendsms');
-            sendsms.leftSeconds = sendsms.leftSeconds === undefined ? 90 : sendsms.leftSeconds;
-            if (sendsms.leftSeconds < 2) {
-                sendsms.leftSeconds = 90;
-                sendsms.setDisabled(false);
-                sendsms.setContent('重新发送');
-            } else {
-                sendsms.leftSeconds--;
-                sendsms.setDisabled(true);
-                sendsms.setContent('重新发送(' + sendsms.leftSeconds + ')');
-                window.setTimeout(function () {
-                    me.startSendSmsTimer();
-                }, 1000);
-            }
-        }
-    };
-
-    // hui.HJ_Reg_mobile 继承了 hui.Control 
-    hui.inherits(hui.HJ_Reg_mobile, hui.Control);
-
-
-    hui.HJ_Reg_email = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_email.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_email';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_email.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_email.superClass.prototype.render.call(this);
-            var me = this;
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
+        render: function () {
+            hui.BirthdayDropdown.superClass.prototype.render.call(this);
             var me = this,
                 main = me.getMain();
-
-            var email = me.getByFormName('email'),
-                username = me.getByFormName('username'),
-                password = me.getByFormName('password'),
-                agree = me.getByFormName('agree'),
-                submit = me.getByFormName('submit');
-
-            password.onpaste =
-                password.onkeyup = function (e) {
-                    me.parentControl.checkPassword(me);
-            };
-            username.onpaste =
-                username.onblur = function (e) {
-                    me.parentControl.checkUsername(me);
-            };
-
-            submit.onclick = username.onenter = password.onenter = hui.fn(me.onsubmit, me);
-            agree.onclick = hui.fn(me.checkAgree, me);
-
-            me.hideEmailListHandller = me.hideEmailListHandller || function () {
-                me.hideEmailList();
-            };
-            email.onfocus = hui.fn(me.showEmailList, me);
-            email.onblur = me.hideEmailListHandller;
-            email.onkeyup = hui.fn(me.updateEmailList, me);
-
-            email.choose = function (obj) { //alert('choose');
-                var str = obj.innerHTML;
-                email.setValue(str);
-                //email.mainFocus();
-                var email_list = hui.c('hj001_email_list', main)[0];
-                email_list.style.display = 'none';
-
-                if (email.validate()) {
-                    username.mainFocus();
-                }
-            };
-            var email_list = hui.c('hj001_email_list', main)[0];
-            email_list.onmouseover = function () {
-                email.onblur = new Function();
-            };
-            email_list.onmouseout = function () {
-                email.onblur = me.hideEmailListHandller;
-            };
-
-
-            me.checkAgree();
+            hui.Control.init(main);
         },
-        checkAgree: function () {
+        initBehavior: function () {
             var me = this,
-                agree = me.getByFormName('agree'),
-                submit = me.getByFormName('submit');
-            submit.setDisabled(!agree.getChecked());
+                yy = me.getByFormName('yy'),
+                mm = me.getByFormName('mm');
+            yy.onchange = hui.fn(me.updateMonth, me);
+            mm.onchange = hui.fn(me.updateDay, me);
         },
-        showEmailList: function (e) {
+        updateMonth: function () {
             var me = this,
-                email = me.getByFormName('email'),
-                value = email.getValue().replace(/\s/ig, '');
-            //email.setValue(value);
-            if (value) {
-                me.updateEmailList(e);
+                yy = me.getByFormName('yy'),
+                dd = me.getByFormName('dd'),
+                mm = me.getByFormName('mm'),
+                y = yy.getValue(),
+                now = !me.maxDate || me.maxDate === 'now' ? new Date() : hui.parseDate(me.maxDate);
+            if (me.maxDate && y >= now.getFullYear()) {
+                mm.optionEnd = now.getMonth() + 1;
+                mm.setOptions();
             }
-        },
-        hideEmailListHandller: null,
-        hideEmailList: function () {
-            var me = this,
-                email = me.getByFormName('email');
-            email.email_list = email.email_list || hui.c('hj001_email_list', me.getMain())[0];
-            email.email_list.style.display = 'none';
 
-            if (email.getValue() && email.validate()) {
-                me.parentControl.checkEmail(me);
+            if (!mm.getValue()) {
+                mm.setValue(1);
             }
+            if (!dd.getValue()) {
+                dd.setValue(1);
+            }
+            me.updateDay();
         },
-        updateEmailList: function (e) {
+        updateDay: function () {
             var me = this,
-                main = me.getMain(),
-                email = me.getByFormName('email'),
-                value = email.getValue().replace(/\s/ig, ''),
-                cur,
-                list,
-                item;
-            email.email_list = email.email_list || hui.c('hj001_email_list', main)[0];
-            cur = hui.c('hj001_row hj001_row_over', main)[0];
-            hui.removeClass(cur, 'hj001_row_over');
-            list = hui.c('hj001_row', main);
-
-            e = e || window.event;
-            var keyCode = e.keyCode || e.which;
-            if (keyCode == 13) { //enter
-                cur && email.choose(cur);
-            } else if (keyCode == 38) { //up arrow
-                if (!cur) {
-                    item = hui.util.findSiblingByClassName(list[0], 'hj001_row', 'last');
-                } else {
-                    item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'pre');
-                    if (item == cur) {
-                        item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'last');
+                dd = me.getByFormName('dd'),
+                mm = me.getByFormName('mm'),
+                yy = me.getByFormName('yy'),
+                y = yy.getValue() || 2000,
+                m = Number(mm.getValue()),
+                now = !me.maxDate || me.maxDate === 'now' ? new Date() : hui.parseDate(me.maxDate);
+            if (m) {
+                if (m === 2) {
+                    if ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) {
+                        dd.optionEnd = 29;
+                    }
+                    else {
+                        dd.optionEnd = 28;
                     }
                 }
-                item && hui.addClass(item, 'hj001_row_over');
-            } else if (keyCode == 40) { //down arrow
-                if (!cur) {
-                    item = hui.util.findSiblingByClassName(list[0], 'hj001_row', 'first');
-                } else {
-                    item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'next');
-                    if (item == cur) {
-                        item = hui.util.findSiblingByClassName(cur, 'hj001_row', 'first');
+                else {
+                    if (m === 4 || m === 6 || m === 9 || m === 11) {
+                        dd.optionEnd = 30;
+                    }
+                    else {
+                        dd.optionEnd = 31;
                     }
                 }
-                item && hui.addClass(item, 'hj001_row_over');
-            } else {
-                //email.setValue(value);
-                if (value) {
-                    email.tpl_suggestion = email.tpl_suggestion || email.email_list.innerHTML;
-                    email.email_list.innerHTML = me.getSuggestionEmailList(email.getValue());
-
-                    email.email_list = email.email_list || hui.c('hj001_email_list', me.getMain())[0];
-                    email.email_list.style.display = 'block';
+                if (me.maxDate && yy.getValue() >= now.getFullYear() && mm.getValue() >= now.getMonth() + 1) {
+                    dd.optionEnd = now.getDate();
                 }
-            }
+                if (dd.getValue() > dd.optionEnd) {
+                    dd.setValue(dd.optionEnd);
+                }
 
+                dd.setOptions();
+            }
         },
-        getSuggestionEmailList: function (email) {
+        getValue: function () {
             var me = this,
-                tpl = '<div class="hj001_row" index="#{index}" onmouseover="hui.addClass(this, \'hj001_row_over\')" onmouseout="hui.removeClass(this, \'hj001_row_over\')" onclick="hui.Control.getByFormName(\'email\',\'#{parent}\').choose(this)">#{email}</div>',
-                emailList = me.parentControl.getEmailList(),
-                list = email.split('@'),
-                pre = list[0],
-                src = String(list[1] || '@').toLowerCase(),
-                matchList = [],
-                html = '';
-            for (var i in emailList) {
-                if (emailList.hasOwnProperty(i) && ~i.indexOf(src)) {
-                    matchList.push(i);
-                }
-            }
-            for (var i = 0, len = matchList.length; i < len; i++) {
-                html += hui.format(tpl, {
-                    index: i,
-                    email: pre + matchList[i],
-                    parent: me.getId()
-                });
-            }
-            return html;
+                dd = me.getByFormName('dd'),
+                mm = me.getByFormName('mm'),
+                yy = me.getByFormName('yy'),
+                d = dd.getValue(),
+                m = mm.getValue(),
+                y = yy.getValue();
+            return y && m && d ? y + '-' + m + '-' + d : '';
         },
-        /**
-         * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
-         */
-        onsubmit: function () {
-            var me = this;
-            // 邮箱注册按钮事件
-            if (me.parentControl.monitorList['hj_reg_email_submit']) {
-                me.parentControl.monitorList['hj_reg_email_submit']();
-            }
-            if (me.validate()) {
-                //paramMap.password = hui.MD5.encode(paramMap.password);
-                hui.setCookie('hj001_email', me.getParamMap().email);
-
-                me.parentControl.onregiste(me);
-
-            }
-        }
-    };
-
-    /*通过hui.Control派生hui.Button*/
-    // hui.Control.derive(hui.HJ_Reg_email);
-    /* hui.HJ_Reg_email 继承了 hui.Control */
-    hui.inherits(hui.HJ_Reg_email, hui.Control);
-
-
-
-    hui.HJ_Reg_login = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_login.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_login';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_login.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_login.superClass.prototype.render.call(this);
-            var me = this;
-            //var captcha = hui.g('hj001_captcha_img', me.getMain());
-            //captcha.src = captcha.getAttribute('src1');
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            var me = this;
-
-            var username = me.getByFormName('account'),
-                password = me.getByFormName('password'),
-                code = me.getByFormName('code'),
-                submit = me.getByFormName('submit');
-            var u = hui.getCookie('hj001_username');
-            if (u) {
-                username.setValue(u);
-            }
-
-            username.onenter = password.onenter = code.onenter = submit.onclick = hui.fn(me.onLoginSubmit, me);
-
-            /*var other_login = hui.g('other_login', me.getMain());
-            me.setInnerHTML(other_login, hui.format(other_login.innerHTML, {
-                cur_location: window.location.href
-            }));*/
-
-            me.showCaptcha(hui.getCookie('showcaptcha') == 'true');
-        },
-        /**
-         * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
-         */
-        onLoginSubmit: function () {
-            var me = this;
-            // 登录按钮事件 
-            if (me.parentControl.monitorList['hj_reg_login_submit']) {
-                me.parentControl.monitorList['hj_reg_login_submit']();
-            }
-
-            if (me.validate()) {
-                var parent = me.parentControl,
-                    paramMap = me.getParamMap();
-                if (me.getByFormName('submit').isDisabled()) return;
-                /*window.Requester.JSONP(parent.getSubName() + '/token/', {
-                data: {
-                    appid: '9c0b989a7d2d8c5a952475c0f61e792f',
-                    act: 'gettoken'
-                },
-                onsuccess: function (result) {
-                    if (result.code === 0) {*/
-                // Token
-                //paramMap.appid = '9c0b989a7d2d8c5a952475c0f61e792f';
-                //paramMap.token = result.data;
-                paramMap.act = 'loginverify';
-                paramMap.template = parent ? parent.template : 'default';
-                paramMap.returnurl = parent ? parent.returnurl : window.location.href;
-                paramMap.password = hui.MD5.encode(paramMap.password);
-                if (parent && parent.source) {
-                    paramMap.source = parent.source;
-                }
-                if (me.getByFormName('hj001_rememberlogin').getChecked()) {
-                    hui.setCookie('hj001_rememberlogin', 'true', 30 * 60 * 1000);
-                } else {
-                    hui.removeCookie('hj001_rememberlogin');
-                }
-
-                if (hui.getCookie('showcaptcha')) {
-                    paramMap.captchatoken = hui.g('hj001_captcha_img').getAttribute('token');
-                }
-
-                me.getByFormName('submit').setDisabled().setContent('登  录  中 . . .');
-                window.Requester.JSONP(parent.getSubName() + '/account/', {
-                    data: paramMap,
-                    onsuccess: function (result) {
-                        var code = result.code;
-                        if (result && String(code) == '0') {
-                            hui.setCookie('hj001_username', result.data.username);
-                            hui.Control.getByFormName('hj_quicklogin').showDialog('');
-                            hui.removeCookie('showcaptcha');
-                            //alert('login success');
-                            me.hideError();
-                            me.parentControl.updateSSO.callback = function () {
-                                me.parentControl.onLoginSuccess(result);
-                            };
-                            me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), hui.getCookie('hj001_rememberlogin') ? 14 : null);
-                        } else {
-                            var field = {};
-                            if (~'1106'.indexOf(code)) {
-                                field.code = result.message;
-                            } else {
-                                field.account = result.message;
-                            }
-                            me.hideError();
-                            me.showErrorByTree(field);
-
-                            me.getByFormName('submit').setDisabled(false).setContent('登  录');
-                            hui.setCookie('showcaptcha', 'true', 30 * 60 * 1000);
-
-                            if (result && result.data && result.data.showcaptcha) {
-                                var code = hui.Control.getByFormName('hj_quicklogin').getByFormName('hj_reg_login').getByFormName('code');
-                                code.setValue('');
-                                code.mainFocus();
-                            }
-
-                            me.showCaptcha(result && result.data && result.data.showcaptcha);
-                        }
-
-                    }
-                });
-                /*}
-                }
-            });*/
-
-            }
-        },
-        showCaptcha: function (sign) {
-            var hj001_captcha_code = hui.g('hj001_captcha_code'),
-                hj001_captcha_img = hui.g('hj001_captcha_img');
-            if (sign) {
-                window.Requester.JSONP('http://captcha.yeshj.com/api.php', {
-                    data: {},
-                    onsuccess: function (result) {
-                        hj001_captcha_code.style.display = 'block';
-
-                        hj001_captcha_img.setAttribute('src_bak', result.img);
-                        hj001_captcha_img.setAttribute('token', result.token);
-                        hj001_captcha_img.src = result.img + '&' + Math.random();
-
-                        var code = hui.Control.getByFormName('hj_quicklogin').getByFormName('hj_reg_login').getByFormName('code');
-                        code.setValue('');
-                        code.mainFocus();
-                    }
-                });
-
-                hui.Control.getByFormName('hj_quicklogin').getByFormName('hj_reg_login').getByFormName('code').mainFocus();
-            } else {
-                hj001_captcha_code.style.display = 'none';
-            }
-        }
-    };
-
-    /*通过hui.Control派生hui.Button*/
-    // hui.Control.derive(hui.HJ_Reg_email);
-    /* hui.HJ_Reg_login 继承了 hui.Control */
-    hui.inherits(hui.HJ_Reg_login, hui.Control);
-
-    hui.HJ_Reg_onekey = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_mobile.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_onekey';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_onekey.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_onekey.superClass.prototype.render.call(this);
-            var me = this;
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            var me = this;
-
-            var mobile = me.getByFormName('mobile'),
-                submit = me.getByFormName('submit'),
-                sendsms = me.getByFormName('sendsms'),
-                validationcode = me.getByFormName('validationcode');
-
-            //mobile.onkeydown =
-            mobile.onpaste =
-                mobile.onblur =
-                mobile.onkeyup = hui.fn(me.checkMobile, me);
-
-            sendsms.onclick = hui.fn(me.sendSms, me);
-            validationcode.onenter = submit.onclick = hui.fn(me.onsubmit, me);
-
-            if (mobile.getValue()) {
-                mobile.onblur();
-            }
-        },
-        checkMobile: function () {
+        setValue: function (v) {
             var me = this,
-                mobile = me.getByFormName('mobile'),
-                sendsms = me.getByFormName('sendsms'),
-                value = mobile.getValue();
-            if (value && mobile.validate('not_show')) {
-                sendsms.setDisabled(false);
-            } else {
-                sendsms.setDisabled(true);
-            }
-        },
-        /**
-         * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
-         */
-        onsubmit: function () {
-            var me = this;
-
-            // 手机号注册按钮事件 
-            if (me.parentControl.monitorList['hj_reg_mobile_submit']) {
-                me.parentControl.monitorList['hj_reg_mobile_submit']();
-            }
-
-            if (me.validate()) {
-                var data = me.getParamMap();
-                me.getByFormName('submit').setDisabled().setContent('登  录  中 . . .');
-                window.Requester.JSONP(me.parentControl.getPassName() + '.hujiang.com/quick/account/?act=quick_login', {
-                    data: data,
-                    onsuccess: function (result) {
-                        if (result && result.code !== 0) {
-                            var field = {};
-                            if (result.code === 1010) {
-                                field.mobile = '手机号不正确';
-                            } else if (result.code === 1011) {
-                                field.validationcode = '验证码不能为空';
-                            } else if (result.code === 1012) {
-                                field.validationcode = '验证码不正确或已超时';
-                            } else if (result.code === 1013) {
-                                field.validationcode = '验证码输入错误次数过多，请重新获取';
-                            } else if (result.code === 1014) {
-                                field.validationcode = '未知错误';
-                            }
-                            me.showErrorByTree(field);
-                            me.getByFormName('submit').setDisabled(false).setContent('登  录');
-                        } else if (result && result.data) {
-                            if (result.data.require_modify) {
-                                me.requireModify();
-                            } else {
-                                me.parentControl.onLoginSuccess(result);
-                            }
-                            me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), null);
-                        }
-                    }
-                });
-            }
-        },
-        requireModify: function () {
-            var me = this;
-            me.parentControl.updateSSO.callback = function () {
-                me.getByFormName('submit').setDisabled(false).setContent('登  录');
-                hui.Control.getByFormName('hj_quicklogin').showDialog('hj_reg_onekey_next');
-            };
-        },
-        sendSms: function () {
-            var me = this,
-                mobile = me.getByFormName('mobile');
-            if (mobile.validate()) {
-                window.Requester.JSONP(me.parentControl.getPassName() + '.hujiang.com/quick/account/?act=send_login_validcode&mobile=' + mobile.getValue(), {
-                    data: {},
-                    onsuccess: function (result) {
-                        if (result && result.code !== 0) {
-                            var field = {};
-                            if (result.code === 1000) {
-                                field.validationcode = '90秒内只能获取一次';
-                            } else if (result.code === 1001) {
-                                field.mobile = '已达到一天获取验证码的上限';
-                            } else if (result.code === 1002) {
-                                field.mobile = '不正确的手机号';
-                            } else {
-                                field.validationcode = '验证码错误';
-                            }
-                            me.showErrorByTree(field);
-                        } else if (result && result.data && result.data.ticket) {
-                            window.Requester.JSONP(me.parentControl.getPassName() + '.hujiang.com/quick/account/?act=send_login_validcode&mobile=' + mobile.getValue(), {
-                                data: {
-                                    ticket: result.data.ticket
-                                },
-                                onsuccess: function (result) {
-                                    if (result && result.code !== 0) {
-                                        var field = {};
-                                        if (result.code === 1000) {
-                                            field.mobile = '60秒内只能获取一次';
-                                        } else if (result.code === 1001) {
-                                            field.mobile = '已达到一天获取验证码的上限';
-                                        } else if (result.code === 1002) {
-                                            field.mobile = '不正确的手机号';
-                                        } else {
-                                            field.validationcode = '验证码错误';
-                                        }
-                                        me.showErrorByTree(field);
-                                    }
-                                }
-                            });
-
-                        }
-                    }
-                });
-
-                me.getByFormName('validationcode').mainFocus();
-
-                me.startSendSmsTimer();
-            }
-        },
-        startSendSmsTimer: function () {
-            var me = this,
-                sendsms = me.getByFormName('sendsms');
-            sendsms.leftSeconds = sendsms.leftSeconds === undefined ? 90 : sendsms.leftSeconds;
-            if (sendsms.leftSeconds < 2) {
-                sendsms.leftSeconds = 90;
-                sendsms.setDisabled(false);
-                sendsms.setContent('重新发送');
-            } else {
-                sendsms.leftSeconds--;
-                sendsms.setDisabled(true);
-                sendsms.setContent('重新发送(' + sendsms.leftSeconds + ')');
-                window.setTimeout(function () {
-                    me.startSendSmsTimer();
-                }, 1000);
-            }
+                dd = me.getByFormName('dd'),
+                mm = me.getByFormName('mm'),
+                yy = me.getByFormName('yy'),
+                date = hui.util.parseDate(v);
+            yy.setValue(date.getFullYear());
+            mm.setValue(date.getMonth() + 1);
+            dd.setValue(date.getDate());
         }
     };
 
-    hui.inherits(hui.HJ_Reg_onekey, hui.Control);
-    // hui.HJ_Reg_onekey 继承了 hui.Control 
-
-    hui.HJ_Reg_onekey_next = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_onekey_next.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_onekey_next';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_onekey_next.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_onekey_next.superClass.prototype.render.call(this);
-            //var me = this;
-            // 渲染对话框
-            //hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            var me = this,
-                main = me.getMain();
-
-            var email = me.getByFormName('email'),
-                username = me.getByFormName('username'),
-                password = me.getByFormName('password'),
-                submit = me.getByFormName('submit');
-
-            password.onpaste =
-                password.onkeyup = function (e) {
-                    me.parentControl.checkPassword(me);
-            };
-            username.onpaste =
-                username.onblur = function (e) {
-                    me.parentControl.checkUsername(me);
-            };
-
-            submit.onclick = username.onenter = password.onenter = email.onenter = hui.fn(me.onsubmit, me);
-
-            me.hideEmailListHandller = me.hideEmailListHandller || function () {
-                me.hideEmailList();
-            };
-            email.onfocus = hui.fn(me.showEmailList, me);
-            email.onblur = me.hideEmailListHandller;
-            email.onkeyup = hui.fn(me.updateEmailList, me);
-
-            email.choose = function (obj) { //alert('choose');
-                var str = obj.innerHTML;
-                email.setValue(str);
-                //email.mainFocus();
-                var email_list = hui.c('hj001_email_list', main)[0];
-                email_list.style.display = 'none';
-
-                if (email.validate()) {
-                    username.mainFocus();
-                }
-            };
-            var email_list = hui.c('hj001_email_list', main)[0];
-            email_list.onmouseover = function () {
-                email.onblur = new Function();
-            };
-            email_list.onmouseout = function () {
-                email.onblur = me.hideEmailListHandller;
-            };
-        },
-        /**
-         * @name 初始化列表行为
-         * @param {Object} controlMap 当前主内容区域绘制的控件集合.
-         */
-        onsubmit: function () {
-            var me = this;
-
-            // 手机号注册按钮事件 
-            if (me.parentControl.monitorList['hj_reg_mobile_submit']) {
-                me.parentControl.monitorList['hj_reg_mobile_submit']();
-            }
-
-            if (me.validate()) {
-                var data = me.getParamMap();
-                data.password = hui.MD5.encode(data.password);
-                // &username=<username>&password=<md5password>&email=<email>
-                me.getByFormName('submit').setDisabled();
-                window.Requester.JSONP(me.parentControl.getPassName() + '.hujiang.com/quick/account/?act=modify_userinfo', {
-                    data: data,
-                    onsuccess: function (result) {
-                        if (result && result.code !== 0) {
-                            var field = {};
-                            if (result.code === 3000) {
-                                field.username = '用户名为空';
-                            } else if (result.code === 3001) {
-                                field.username = '用户名已存在或不能使用';
-                            } else if (result.code === 3002) {
-                                field.email = '电子邮件地址不正确';
-                            } else if (result.code === 3003) {
-                                field.email = '电子邮件地址已存在';
-                            } else if (result.code === 3004) {
-                                field.password = '密码不符合要求';
-                            } else {
-                                field.username = '系统错误';
-                            }
-                            me.showErrorByTree(field);
-                            me.getByFormName('submit').setDisabled(false);
-                        } else if (result) {
-                            if (result.data && result.data.ssotoken) {
-                                me.parentControl.updateSSO.callback = function () {
-                                    me.parentControl.onLoginSuccess(result);
-                                };
-                                me.parentControl.updateSSO(encodeURIComponent(result.data.ssotoken), null);
-                            } else {
-                                me.parentControl.onLoginSuccess(result);
-                            }
-                        }
-
-                    }
-                });
-
-            }
-        }
-    };
-
-    hui.inherits(hui.HJ_Reg_onekey_next, hui.HJ_Reg_email);
-    // hui.HJ_Reg_onekey_next 继承了 hui.Control 
-
-    hui.HJ_Reg_mobile_success = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_mobile_success.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_mobile_success';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_mobile_success.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_mobile_success.superClass.prototype.render.call(this);
-            var me = this;
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            // var me = this;
-
-            // var username = me.getByFormName('username'),
-            //     password = me.getByFormName('password'),
-            //     submit = me.getByFormName('submit');
-        },
-        startTimer: function () {
-            var me = this;
-            me.leftSecond = 4;
-            me.countDown();
-        },
-        countDown: function () {
-            var me = this;
-            me.leftSecond--;
-            if (me.leftSecond < 1) {
-                hui.Control.getByFormName('hj_quicklogin').showDialog('');
-                hui.Control.getByFormName('hj_quicklogin').onRegisteSuccessMobile();
-            } else {
-                var left_time = hui.c('hj001_left_time', me.getMain())[0];
-                me.setInnerHTML(left_time, me.leftSecond);
-                me.timer = window.setTimeout(function () {
-                    me.countDown();
-                }, 1000);
-            }
-        }
-    };
-
-    hui.inherits(hui.HJ_Reg_mobile_success, hui.Control);
-    // hui.HJ_Reg_mobile_success 继承了 hui.Control 
-
-    hui.HJ_Reg_email_success = function (options, pending) {
-        this.isFormItem = false;
-        hui.HJ_Reg_email_success.superClass.call(this, options, 'pending');
-        this.type = 'hj_reg_email_success';
-        this.controlMap = {};
-        // 进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.HJ_Reg_email_success.prototype = {
-        render: function (options) {
-            hui.HJ_Reg_email_success.superClass.prototype.render.call(this);
-            var me = this;
-            // 渲染对话框
-            hui.Control.init(me.getMain(), (hui.Action ? hui.Action.get() : {}).model, me);
-        },
-        initBehavior: function (controlMap) {
-            var me = this;
-
-            var submit = me.getByFormName('submit');
-            submit.onclick = hui.fn(me.onsubmit, me);
-            hui.c('hj001_go_email', me.getMain())[0].onclick = hui.fn(me.onEmailActive, me);
-            me.updateEmailServer();
-        },
-        onsubmit: function () {
-            var me = this;
-            // 继续浏览按钮事件
-            if (me.parentControl.monitorList['hj_reg_email_continue']) {
-                me.parentControl.monitorList['hj_reg_email_continue']();
-            }
-
-            window.location.reload && window.location.reload();
-        },
-        onEmailActive: function () {
-            var me = this;
-            // 邮箱激活按钮事件
-            if (me.parentControl.monitorList['hj_reg_email_success_active']) {
-                me.parentControl.monitorList['hj_reg_email_success_active']();
-            }
-        },
-        updateEmailServer: function () {
-            var me = this;
-            var href,
-                server = (hui.getCookie('hj001_email') + '@@').split('@')[1],
-                emailList = me.parentControl.getEmailList();
-            if (!!server) {
-                href = emailList['@' + server] || 'http://www.' + server;
-                hui.c('hj001_go_email', me.getMain())[0].href = href;
-            }
-        }
-
-    };
-
-    hui.inherits(hui.HJ_Reg_email_success, hui.Control);
-    // hui.HJ_Reg_email_success 继承了 hui.Control
-
+    /* hui.BirthdayDropdown 继承了 hui.Control */
+    hui.inherits(hui.BirthdayDropdown, hui.Control);
 });
 
-// 注：本文件内的模块加载解析完后恢复define.autoload = true;
-//hui.define.autoload = true;
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
 
-hui.util.importCssString(
-    '.hj001_mask{background:#000;opacity:0.2;filter:alpha(opacity=20);width:100%;height:100%;position:absolute;top:0;left:0;z-index:50000}' +
-    '.hj001_mask.hide{display: none;}' +
-    '.hj001_quicklogin {z-index: 9000000;position: fixed; _position: absolute; aatop: 50px; aaleft: 50%; aamargin-left: -214px; _top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px")}' +
-    '.hj001_quicklogin_html {background-image: url("about:blank");background-attachment: fixed;}' +
-    '.hj001_quicklogin.hj001_login_box {}' +
-    '.hj001_login_box {font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial"; text-align: left; width: 427px; background-color: rgba(0,0,0,0.3); background-color: #c6c6c6\\0;*background-color: #c6c6c6; border-radius: 5px;  }' +
-    '.hj001_login_box a {font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";text-decoration: none; color: #666666; border: 0px;}' +
-    '.hj001_login_box img {border:0px;}' +
-    '.hj001_login_box a:hover {text-decoration: none; color: #ff6600}' +
-    '.hj001_login_box hr.hj001_clearfix {font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; clear: both; border: 0px; padding: 0px; margin: -1px 0px 0px 0px; list-style: none; border-style: none; background: none; visibility: hidden;}' +
-    '.hj001_login_box .hj001_login_container{background-color:#fff;margin:5px;padding:15px 17px 35px 45px;}' +
-    '.hj001_login_box .hj001_close_btn {background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;right: -11px;top: -11px;width: 22px;}' +
-    '.hj001_login_box .hj001_close_btn:hover {background-color: #f62626;color: #fff; }' +
-    '.hj001_login_box .hj001_title_login{display:inline-block;height:30px;vertical-align:middle;line-height:25px;text-align:right;}' +
-    '.hj001_login_box .hj001_title_login_txt{font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 16px; line-height: 1.2em; padding-top: 2px; float: left;}' +
-    '.hj001_login_box .hj001_icon_gt{display:inline-block;font-family:Verdana;font-size: 16px;width:6px;height:30px;vertical-align:middle;margin-left:2px;}' +
-    '.hj001_login_box .hj001_icon_right {width: 20px; height: 20px; display: inline-block; background-image: url("/static/img/icon.png");background-position:0px -100px;}' +
-    '.hj001_login_box .hj001_icon_error {width: 20px; height: 20px; display: inline-block; background-image: url("/static/img/icon.png");background-position:-50px -100px;}' +
-    '.hj001_login_box .hj001_icon_ok {display: inline-block; width: 33px; height: 33px; background-image: url("/static/img/icon.png");background-position:-100px -100px; vertical-align: middle; margin-top: -12px; margin-right: 10px;}' +
-    '.hj001_login_box .hj001_title{height:41px;border-bottom:1px solid #e5e5e5;margin-top:24px;width:316px;position:relative;z-index:2;}' +
-    '.hj001_login_box .hj001_title .hj001_title_login{position:absolute;right:2px;bottom:0;color:#075db3;text-decoration:none;font-size:16px;display:block;height:36px;line-height:26px;}' +
-    '.hj001_login_box .hj001_title .hj001_title_login:hover{color:#ff6600;text-decoration:none;}' +
-    '.hj001_login_box .hj001_title .hj001_title_item{font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size:19px;text-align:center;float:left;height: 19px;line-height: 19px;padding-top:11px;padding-bottom:12px;padding-left:20px;padding-right:20px;}' +
-    '.hj001_login_box .hj001_title .hj001_title_item a{font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";color:#9c9c9c; font-size: 19px;}' +
-    '.hj001_login_box .hj001_title .hj001_title_item_selected{border:1px solid #e5e5e5;border-bottom-color:white;background-color:white;padding-top:10px;padding-bottom:12px;border-radius:2px;}' +
-    '.hj001_login_box .hj001_login_warp{padding-top:30px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_item { position: relative; z-index: 2;height: 67px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_item .validate {width:99%;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_pwd_warp {padding-bottom: 0px; position: relative; z-index: 2; min-height:67px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_ipt {width: 290px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_ipt_short {width: 123px; float: left;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_ipt, .hj001_login_box .hj001_login_warp .hj001_ipt_short {height: 20px; border: 1px solid #e5e5e5; padding: 10px 13px; line-height: 1.2em; font-size: 14px; color: #666666; border-radius: 2px; background-color: transparent;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_ipt:focus, .hj001_login_box .hj001_login_warp .hj001_ipt_short:focus {border: 1px solid #4D90FE;outline:none;box-shadow:0 0 2px #4D90FE;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_error_txt, .hj001_login_box .hj001_login_warp .hj001_pwd_error_txt {line-height: 20px; height: 20px; font-size: 12px; color: #f62626; display: block; position: absolute; z-index: 3; overflow: hidden;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_error_txt {left: 5px; bottom: 2px;}' +
-    '.hj001_login_box .hj001_pwd_complex_warp .hj001_pwd_error_txt {top: 0px; left: 200px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_icon_right, .hj001_login_box .hj001_login_warp .hj001_icon_error {position: absolute; right: 2px; top: 11px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_agreement {height: 34px; padding-bottom: 12px;clear:left;}' +
-    '.hj001_login_box .hj001_agreement .hj001_icon_agree, .hj001_login_box .hj001_agreement .hj001_icon_agree_cur {margin: 9px 10px 0 0; float: left;}' +
-    '.hj001_login_box .hj001_agreement .hj001_agree {color: #666666; font-size: 14px; line-height: 34px; float: left;}' +
-    '.hj001_login_box .hj001_agreement .hj001_agree a {color: #666666; text-decoration: none;}' +
-    '.hj001_login_box .hj001_another {line-height: 34px; height: 34px; color: #075db3; font-size: 14px; text-decoration: none; display: none; margin-bottom: 30px;}' +
-    '.hj001_login_box .hj001_another:hover { color: #ff6600; text-decoration: none;}' +
-    '.hj001_login_box .hj001_pwd_complex_warp {height: 20px; width: 200px; margin-top: 3px; line-height: 25px; position: relative; z-index: 2; float: left; font-size:1px;}' +
-    '.hj001_login_box .hj001_pwd_complex_warp .hj001_pwd_complex_txt {position: absolute; left: 175px; top: 0px; line-height: 20px; height: 20px; color: #ffffff; font-size: 12px; overflow: hidden; display: none;}' +
-    '.hj001_login_box .hj001_pwd_complex_warp .hj001_pwd_complex_bg, .hj001_login_box .hj001_pwd_complex_warp .hj001_pwd_complex {height: 6px; display: none; position: absolute; left: 0; top: 7px;}' +
-    '.hj001_login_box .hj001_pwd_complex_warp .hj001_pwd_complex_bg {display: inline; width: 150px; background-color: #e4e4e4;}' +
-    '.hj001_login_box .hj001_complex_-1 {display: none;}' +
-    '.hj001_login_box .hj001_complex_-1 .hj001_pwd_complex, .hj001_login_box .hj001_complex_-1 .hj001_pwd_complex_bg {display: none;}' +
-    '.hj001_login_box .hj001_complex_1 .hj001_pwd_complex {display: inline; width: 50px; background-color: #f62626;}' +
-    '.hj001_login_box .hj001_complex_2 .hj001_pwd_complex {display: inline; width: 100px; background-color: #ffc000;}' +
-    '.hj001_login_box .hj001_complex_3 .hj001_pwd_complex {display: inline; width: 150px; background-color: #5cbb00;}' +
-    '.hj001_login_box .hj001_complex_1 .hj001_grade01 {display: inline; color: #f62626;}' +
-    '.hj001_login_box .hj001_complex_2 .hj001_grade02 {display: inline; color: #ffc000;}' +
-    '.hj001_login_box .hj001_complex_3 .hj001_grade03 {display: inline; color: #5cbb00;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_email_list {width: 316px; position: absolute; top: 43px; left: 0px; background-color: #ffffff; z-index: 1; display: none;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_email_list .hj001_row {border: 1px solid #e5e5e5; border-top: 0px;color: #666666;display: block;font-size: 14px;height: 37px;line-height: 37px;overflow: hidden;text-indent: 15px;text-overflow: ellipsis;white-space: nowrap;width: 100%;background-color:white;cursor:pointer;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_email_list .hj001_row_over {background-color: #f1f1f1;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_email_list .hj001_first {color: #999999; background-color: #eefaff; line-height: 37px; height: 37px; text-indent: 15px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_forget_pwd {font-size: 14px; float: right; line-height: 34px; margin-right: 30px;}' +
-    '.hj001_login_box .hj001_other_login {padding-top: 25px;}' +
-    '.hj001_login_box .hj001_other_login .hj001_txt {float: left; color: #666666; font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 14px; line-height: 23px;}' +
-    '.hj001_login_box .hj001_other_login .hj001_login_link {float: left; width: 23px; height: 23px; margin-right: 12px;}' +
-    '.hj001_login_box .hj001_icon_baidu          {background-image: url("/static/img/icon.png");background-position:0px -50px;}' +
-    '.hj001_login_box .hj001_icon_baidu:hover    {background-image: url("/static/img/icon.png");background-position:0px 0px;}' +
-    '.hj001_login_box .hj001_icon_douban         {background-image: url("/static/img/icon.png");background-position:-50px -50px;}' +
-    '.hj001_login_box .hj001_icon_douban:hover   {background-image: url("/static/img/icon.png");background-position:-50px 0px;}' +
-    '.hj001_login_box .hj001_icon_qq             {background-image: url("/static/img/icon.png");background-position:-100px -50px;}' +
-    '.hj001_login_box .hj001_icon_qq:hover       {background-image: url("/static/img/icon.png");background-position:-100px 0px;}' +
-    '.hj001_login_box .hj001_icon_renren         {background-image: url("/static/img/icon.png");background-position:-150px -50px;}' +
-    '.hj001_login_box .hj001_icon_renren:hover   {background-image: url("/static/img/icon.png");background-position:-150px 0px;}' +
-    '.hj001_login_box .hj001_icon_weibo          {background-image: url("/static/img/icon.png");background-position:-200px -50px;}' +
-    '.hj001_login_box .hj001_icon_weibo:hover    {background-image: url("/static/img/icon.png");background-position:-200px 0px;}' +
-    '.hj001_login_box .hj001_icon_zhifu          {background-image: url("/static/img/icon.png");background-position:-250px -50px;}' +
-    '.hj001_login_box .hj001_icon_zhifu:hover    {background-image: url("/static/img/icon.png");background-position:-250px 0px;}' +
-    '.hj001_login_box .hj001_success {height: 33px; overflow: hidden; /* text-align: left; */ padding: 79px 0 35px 0px;}' +
-    '.hj001_login_box .hj001_success .hj001_span {line-height: 33px; font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial"; font-size: 32px; height: 33px; color: #68c04a; text-align: center; display: inline-block;}' +
-    '.hj001_login_box .hj001_view_btn {margin-top: 45px;}' +
-    '.hj001_login_box .hj001_txt, .hj001_login_box .hj001_email_txt {line-height: 24px;font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial"; font-size: 14px; color: #666666; text-align: center;}' +
-    '.hj001_login_box .hj001_go_email {color: #075db3; font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial"; font-size: 14px; padding: 0 5px; text-decoration: none;}' +
-    '.hj001_login_box .hj001_go_email:hover {color: #ff6600;}' +
-    '.hj001_login_box .hj001_txt {padding-bottom: 15px;padding-right: 1px;}' +
-    '.hj001_login_box .hj001_email_txt {padding: 15px 0px 70px 0px;}' +
-    '.hj001_login_box .hj001_auto_close {font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 16px; color: #666666; text-align: center; line-height: 30px; padding: 40px 0 90px; border-top: 1px dashed #999999; /* margin-right: 30px; */}' +
-    '.hj001_login_box .hj001_auto_close .hj001_time {}' +
-    '.hj001_login_box .hj001_auto_close em {font-style: normal;font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial"; font-size: 28px; color: #f62626; padding-right: 5px;}' +
-    '.hj001_login_box .hj001_auto_close .hj001_left_time {font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 28px; }' +
-    '.hj001_login_box .hj001_login_warp .hj001_placeholder {display: inline-block; height: 30px; line-height: 30px; font-size: 14px; color: #b5b5b5; position: absolute; z-index: -1; left: 15px; top: 5px;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_agreement .hj001_check_box {display: none;}' +
-    '.hj001_login_box .hj001_login_warp .hj001_agreement .hj001_check {float: left;}' +
-    '.hj001_login_box .hui_checkbox .hui_checkbox_label a {font-size:14px;}' +
-    '.hj001_login_box .hui_checkbox .hui_checkbox_icon {font-family: Simsun; margin: 7px 10px 0 0; float: left;    border: 1px solid #d9d9d9;color: #1ba8eb;text-indent: -100px;font-size: 15px;font-style: normal;line-height: 1.2em; width: 18px;height:18px; padding-bottom: 1px;cursor:pointer;overflow:hidden;}' +
-    '.hj001_login_box .hui_checkbox .hui_checkbox_label {color: #666666; font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 14px; line-height: 34px; float: left; padding-left: 0px; cursor: pointer;}' +
-    '.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility: visible;text-indent: 4px;}' +
-    '.hj001_login_box .hui_textinput {font-family: Arial;background-image: url("/static/img/icon.png");background-position:1000px 1000px;background-repeat:no-repeat;*margin-left: -5px;}' +
-    '.hj001_login_box .hui_textinput_placeholder {display: inline-block; height: 30px; line-height: 30px; font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size: 14px; color: #b5b5b5; position: absolute; z-index: -1; left: 15px; top: 5px; *top: 7px;}' +
-    '.hj001_login_box .hui_textinput_eye {display: inline-block; height: 30px; line-height: 30px; font-size: 14px; color: #b5b5b5; position: absolute; z-index: -1; left: 15px; top: 5px;}' +
-    '.hj001_login_box .hui_textinput_eye {width: 25px; height: 13px; display: inline-block; top: 5px; right: 45px; position: absolute; z-index: 2; text-indent: -100px; overflow: hidden; padding: 10px; background-color:white; background-repeat: no-repeat;  cursor: pointer; left: auto; bottom: auto;}' +
-    '.hj001_login_box .hui_textinput_eye       {background-image: url("/static/img/icon.png");background-position:-290px -40px;}' +
-    '.hj001_login_box .hui_textinput_eye:hover {background-image: url("/static/img/icon.png");background-position:-290px 10px;}' +
-    '.hj001_login_box .validate_waiting .validate_icon {position: absolute; right: 2px; top: 11px; background-image: url("/quick/img/loading.gif"); display: inline-block; height: 20px; width: 20px;}' +
-    '.hj001_login_box .validate_waiting .validate_text {display: none;}' +
-    '.hj001_login_box .validate_ok .validate_icon {position: absolute; right: 2px; top: 11px; background-image: url("/static/img/icon.png");background-position:0px -100px; display: inline-block; height: 20px; width: 20px;}' +
-    '.hj001_login_box .validate_ok .validate_text {bottom: 2px; left: 5px; color: #F62626; display: none; font-size: 12px; height: 20px; line-height: 20px; overflow: hidden; position: absolute;}' +
-    '.hj001_login_box .hj001_panel_login .validate_ok .validate_icon {display: none;}' +
-    '.hj001_login_box .validate_error .validate_icon {position: absolute; right: 2px; top: 11px; background-image: url("/static/img/icon.png");background-position:-50px -100px; display: inline-block; height: 20px; width: 20px;}' +
-    '.hj001_login_box .validate_error .validate_text {color: #F62626; display: block; font-size: 12px; height: 20px; line-height: 20px; overflow: hidden; float:left;}' +
-    '.hj001_login_box .hj001_pwd_warp .validate_text {display: none; margin-top: 3px;}' +
-    '.hj001_login_box .hj001_pwd_warp.validate_error .validate_text {display: block; left: 200px; top: 50px;}' +
-    '.hj001_login_box .hj001_login_btn    {width: 319px; height: 40px; line-height: 40px; text-align: center; color: #ffffff; display: block;  font-size: 20px; margin-bottom: 2px;}' +
-    '.hj001_login_box .hj001_send_btn     {width: 152px; height: 40px; line-height: 40px; text-align: center; color: #ffffff; display: block;  font-size: 14px; margin-bottom: 2px; float: left; margin-left: 13px; cursor: pointer;}' +
-    '.hj001_login_box .hj001_send_btn .hui_btn_label {font-size: 14px;}' +
-    '.hj001_login_box .hj001_continue_btn {width: 162px; height: 40px; line-height: 40px; text-align: center; color: #ffffff; display: block;  font-size: 20px; margin-bottom: 2px; margin-left: auto; margin-right: auto; cursor: pointer;}' +
-    '.hj001_login_box .hui_btn {cursor: pointer; background-color: #55b9ee; color: #fff; border-radius: 5px;}' +
-    '.hj001_login_box .hui_btn:hover {background-color: #6dc9fa; color: #fff; text-decoration: none;}' +
-    '.hj001_login_box .hui_btn_label {font-family: "Helvetica","Microsoft Yahei","Arial";*font-family: "Microsoft Yahei","Arial";font-size:20px;}' +
-    '.hj001_login_box .hui_btn_disabled {cursor: default; border-radius: 5px; background-color: #c1c1c1; color: #fff;}' +
-    '.hj001_login_box .hui_btn_disabled:hover {cursor: default; border-radius: 5px; background-color: #c1c1c1; color: #fff;}' +
-    '.hj001_login_box .hui_hj_reg_mobile_success {text-align: center;padding-right:30px;}' +
-    '.hj001_login_box .hj001_onekey_next_tip {color: #666;font-size: 14px;padding: 30px 0px 15px 45px;}' +
-    '.hj001_login_box .hj001_onekey_next_tip2 {font-size: 16px;color: #666;padding-left: 42px;padding-top: 8px;padding-bottom: 34px;display:none;}' +
-    '.hj001_login_box .hui_hj_reg_onekey_next .hj001_success {padding: 37px 0px 10px 16px;}' +
-    '.hj001_login_box .hui_hj_reg_onekey_next .hj001_login_btn {margin-top: 10px;}' +
-    '.hj001_login_box .hui_hj_reg_email_success {text-align: center;padding-right:30px;}');
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
 
+    hui.CitylistDropdown = function (options, pending) {
+        hui.CitylistDropdown.superClass.call(this, options, 'pending');
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'citylistdropdown';
 
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
 
-//window.hjquicklogin.doLogin();
-//window.hjquicklogin.doRegiste();
+    hui.CitylistDropdown.prototype = {
+        getProvincelist: function () {
+            var list = new Array(
+                new Array(110000, '北京市'),
+                new Array(310000, '上海市'),
+                new Array(120000, '天津市'),
+                new Array(500000, '重庆市'),
+                new Array(440000, '广东省'),
+                new Array(320000, '江苏省'),
+                new Array(330000, '浙江省'),
+                new Array(340000, '安徽省'),
+                new Array(370000, '山东省'),
+                new Array(350000, '福建省'),
+                new Array(430000, '湖南省'),
+                new Array(420000, '湖北省'),
+                new Array(510000, '四川省'),
+                new Array(610000, '陕西省'),
+                new Array(130000, '河北省'),
+                new Array(410000, '河南省'),
+                new Array(360000, '江西省'),
+                new Array(140000, '山西省'),
+                new Array(150000, '内蒙古'),
+                new Array(210000, '辽宁省'),
+                new Array(220000, '吉林省'),
+                new Array(230000, '黑龙江省'),
+                new Array(450000, '广西'),
+                new Array(460000, '海南省'),
+                new Array(520000, '贵州省'),
+                new Array(530000, '云南省'),
+                new Array(540000, '西藏'),
+                new Array(620000, '甘肃省'),
+                new Array(640000, '宁夏'),
+                new Array(630000, '青海省'),
+                new Array(650000, '新疆'),
+                new Array(710000, '台湾省'),
+                new Array(810000, '香港'),
+                new Array(820000, '澳门'),
+                new Array(830000, '海外')
+            );
+            var result = [],
+                c;
+            for (var i = 0, len = list.length; i < len; i++) {
+                c = list[i];
+                result.push({
+                    value: c[0],
+                    text: c[1]
+                });
+            }
+            return result;
+
+        },
+        getCitylist: function (value) {
+            var list = new Array(
+                new Array(110100, '北京'),
+                new Array(120100, '天津'),
+                new Array(130101, '石家庄'),
+                new Array(130201, '唐山'),
+                new Array(130301, '秦皇岛'),
+                new Array(130701, '张家口'),
+                new Array(130801, '承德'),
+                new Array(131001, '廊坊'),
+                new Array(130401, '邯郸'),
+                new Array(130501, '邢台'),
+                new Array(130601, '保定'),
+                new Array(130901, '沧州'),
+                new Array(133001, '衡水'),
+                new Array(140101, '太原'),
+                new Array(140201, '大同'),
+                new Array(140301, '阳泉'),
+                new Array(140501, '晋城'),
+                new Array(140601, '朔州'),
+                new Array(142201, '忻州'),
+                new Array(142331, '离石'),
+                new Array(142401, '榆次'),
+                new Array(142601, '临汾'),
+                new Array(142701, '运城'),
+                new Array(140401, '长治'),
+                new Array(150101, '呼和浩特'),
+                new Array(150201, '包头'),
+                new Array(150301, '乌海'),
+                new Array(152601, '集宁'),
+                new Array(152701, '东胜'),
+                new Array(152801, '临河'),
+                new Array(152921, '阿拉善左旗'),
+                new Array(150401, '赤峰'),
+                new Array(152301, '通辽'),
+                new Array(152502, '锡林浩特'),
+                new Array(152101, '海拉尔'),
+                new Array(152201, '乌兰浩特'),
+                new Array(210101, '沈阳'),
+                new Array(210201, '大连'),
+                new Array(210301, '鞍山'),
+                new Array(210401, '抚顺'),
+                new Array(210501, '本溪'),
+                new Array(210701, '锦州'),
+                new Array(210801, '营口'),
+                new Array(210901, '阜新'),
+                new Array(211101, '盘锦'),
+                new Array(211201, '铁岭'),
+                new Array(211301, '朝阳'),
+                new Array(211401, '锦西'),
+                new Array(210601, '丹东'),
+                new Array(220101, '长春'),
+                new Array(220201, '吉林'),
+                new Array(220301, '四平'),
+                new Array(220401, '辽源'),
+                new Array(220601, '浑江'),
+                new Array(222301, '白城'),
+                new Array(222401, '延吉'),
+                new Array(220501, '通化'),
+                new Array(230101, '哈尔滨'),
+                new Array(230301, '鸡西'),
+                new Array(230401, '鹤岗'),
+                new Array(230501, '双鸭山'),
+                new Array(230701, '伊春'),
+                new Array(230801, '佳木斯'),
+                new Array(230901, '七台河'),
+                new Array(231001, '牡丹江'),
+                new Array(232301, '绥化'),
+                new Array(230201, '齐齐哈尔'),
+                new Array(230601, '大庆'),
+                new Array(232601, '黑河'),
+                new Array(232700, '加格达奇'),
+                new Array(310100, '上海'),
+                new Array(320101, '南京'),
+                new Array(320201, '无锡'),
+                new Array(320301, '徐州'),
+                new Array(320401, '常州'),
+                new Array(320501, '苏州'),
+                new Array(320600, '南通'),
+                new Array(320701, '连云港'),
+                new Array(320801, '淮阴'),
+                new Array(320901, '盐城'),
+                new Array(321001, '扬州'),
+                new Array(321101, '镇江'),
+                new Array(321201, '昆山'),
+                new Array(321301, '常熟'),
+                new Array(321401, '张家港'),
+                new Array(321501, '太仓'),
+                new Array(321601, '江阴'),
+                new Array(321701, '宜兴'),
+                new Array(321801, '泰州'),
+                new Array(330101, '杭州'),
+                new Array(330201, '宁波'),
+                new Array(330301, '温州'),
+                new Array(330401, '嘉兴'),
+                new Array(330501, '湖州'),
+                new Array(330601, '绍兴'),
+                new Array(330701, '金华'),
+                new Array(330801, '衢州'),
+                new Array(330901, '舟山'),
+                new Array(332501, '丽水'),
+                new Array(332602, '临海'),
+                new Array(332702, '义乌'),
+                new Array(332802, '萧山'),
+                new Array(332901, '慈溪'),
+                new Array(332603, '台州'),
+                new Array(340101, '合肥'),
+                new Array(340201, '芜湖'),
+                new Array(340301, '蚌埠'),
+                new Array(340401, '淮南'),
+                new Array(340501, '马鞍山'),
+                new Array(340601, '淮北'),
+                new Array(340701, '铜陵'),
+                new Array(340801, '安庆'),
+                new Array(341001, '黄山'),
+                new Array(342101, '阜阳'),
+                new Array(342201, '宿州'),
+                new Array(342301, '滁州'),
+                new Array(342401, '六安'),
+                new Array(342501, '宣州'),
+                new Array(342601, '巢湖'),
+                new Array(342901, '贵池'),
+                new Array(350101, '福州'),
+                new Array(350201, '厦门'),
+                new Array(350301, '莆田'),
+                new Array(350401, '三明'),
+                new Array(350501, '泉州'),
+                new Array(350601, '漳州'),
+                new Array(352101, '南平'),
+                new Array(352201, '宁德'),
+                new Array(352601, '龙岩'),
+                new Array(360101, '南昌'),
+                new Array(360201, '景德镇'),
+                new Array(362101, '赣州'),
+                new Array(360301, '萍乡'),
+                new Array(360401, '九江'),
+                new Array(360501, '新余'),
+                new Array(360601, '鹰潭'),
+                new Array(362201, '宜春'),
+                new Array(362301, '上饶'),
+                new Array(362401, '吉安'),
+                new Array(362502, '临川'),
+                new Array(370101, '济南'),
+                new Array(370201, '青岛'),
+                new Array(370301, '淄博'),
+                new Array(370401, '枣庄'),
+                new Array(370501, '东营'),
+                new Array(370601, '烟台'),
+                new Array(370701, '潍坊'),
+                new Array(370801, '济宁'),
+                new Array(370901, '泰安'),
+                new Array(371001, '威海'),
+                new Array(371100, '日照'),
+                new Array(371200, '莱芜市'),
+                new Array(372301, '滨州'),
+                new Array(372401, '德州'),
+                new Array(372501, '聊城'),
+                new Array(372801, '临沂'),
+                new Array(372901, '菏泽'),
+                new Array(410101, '郑州'),
+                new Array(410201, '开封'),
+                new Array(410301, '洛阳'),
+                new Array(410401, '平顶山'),
+                new Array(410501, '安阳'),
+                new Array(410601, '鹤壁'),
+                new Array(410701, '新乡'),
+                new Array(410801, '焦作'),
+                new Array(410901, '濮阳'),
+                new Array(411001, '许昌'),
+                new Array(411101, '漯河'),
+                new Array(411201, '三门峡'),
+                new Array(412301, '商丘'),
+                new Array(412701, '周口'),
+                new Array(412801, '驻马店'),
+                new Array(412901, '南阳'),
+                new Array(413001, '信阳'),
+                new Array(420101, '武汉'),
+                new Array(420201, '黄石'),
+                new Array(420301, '十堰'),
+                new Array(420400, '荆州'),
+                new Array(420501, '宜昌'),
+                new Array(420601, '襄阳'),
+                new Array(420701, '鄂州'),
+                new Array(420801, '荆门'),
+                new Array(422103, '黄冈'),
+                new Array(422201, '孝感'),
+                new Array(422301, '咸宁'),
+                new Array(433000, '仙桃'),
+                new Array(433100, '潜江'),
+                new Array(431700, '天门'),
+                new Array(421300, '随州'),
+                new Array(422801, '恩施'),
+                new Array(430101, '长沙'),
+                new Array(430401, '衡阳'),
+                new Array(430501, '邵阳'),
+                new Array(432801, '郴州'),
+                new Array(432901, '永州'),
+                new Array(430801, '大庸'),
+                new Array(433001, '怀化'),
+                new Array(433101, '吉首'),
+                new Array(430201, '株洲'),
+                new Array(430301, '湘潭'),
+                new Array(430601, '岳阳'),
+                new Array(430701, '常德'),
+                new Array(432301, '益阳'),
+                new Array(432501, '娄底'),
+                new Array(440101, '广州'),
+                new Array(440301, '深圳'),
+                new Array(441501, '汕尾'),
+                new Array(441301, '惠州'),
+                new Array(441601, '河源'),
+                new Array(440601, '佛山'),
+                new Array(441801, '清远'),
+                new Array(441901, '东莞'),
+                new Array(440401, '珠海'),
+                new Array(440701, '江门'),
+                new Array(441201, '肇庆'),
+                new Array(442001, '中山'),
+                new Array(440801, '湛江'),
+                new Array(440901, '茂名'),
+                new Array(440201, '韶关'),
+                new Array(440501, '汕头'),
+                new Array(441401, '梅州'),
+                new Array(441701, '阳江'),
+                new Array(441901, '潮州'),
+                new Array(445200, '揭阳'),
+                new Array(450101, '南宁'),
+                new Array(450401, '梧州'),
+                new Array(452501, '玉林'),
+                new Array(450301, '桂林'),
+                new Array(452601, '百色'),
+                new Array(452701, '河池'),
+                new Array(452802, '钦州'),
+                new Array(450201, '柳州'),
+                new Array(450501, '北海'),
+                new Array(460100, '海口'),
+                new Array(460200, '三亚'),
+                new Array(510101, '成都'),
+                new Array(513321, '康定'),
+                new Array(513101, '雅安'),
+                new Array(513229, '马尔康'),
+                new Array(510301, '自贡'),
+                new Array(500100, '重庆'),
+                new Array(512901, '南充'),
+                new Array(510501, '泸州'),
+                new Array(510601, '德阳'),
+                new Array(510701, '绵阳'),
+                new Array(510901, '遂宁'),
+                new Array(511001, '内江'),
+                new Array(511101, '乐山'),
+                new Array(512501, '宜宾'),
+                new Array(510801, '广元'),
+                new Array(513021, '达县'),
+                new Array(513401, '西昌'),
+                new Array(510401, '攀枝花'),
+                //new Array(500239,'黔江土家族苗族自治县'),
+                new Array(520101, '贵阳'),
+                new Array(520200, '六盘水'),
+                new Array(522201, '铜仁'),
+                new Array(522501, '安顺'),
+                new Array(522601, '凯里'),
+                new Array(522701, '都匀'),
+                new Array(522301, '兴义'),
+                new Array(522421, '毕节'),
+                new Array(522101, '遵义'),
+                new Array(530101, '昆明'),
+                new Array(530201, '东川'),
+                new Array(532201, '曲靖'),
+                new Array(532301, '楚雄'),
+                new Array(532401, '玉溪'),
+                new Array(532501, '个旧'),
+                new Array(532621, '文山'),
+                new Array(532721, '思茅'),
+                new Array(532101, '昭通'),
+                new Array(532821, '景洪'),
+                new Array(532901, '大理'),
+                new Array(533001, '保山'),
+                new Array(533121, '潞西'),
+                new Array(533221, '丽江纳西族自治县'),
+                new Array(533321, '泸水'),
+                new Array(533421, '中甸'),
+                new Array(533521, '临沧'),
+                new Array(540101, '拉萨'),
+                new Array(542121, '昌都'),
+                new Array(542221, '乃东'),
+                new Array(542301, '日喀则'),
+                new Array(542421, '那曲'),
+                new Array(542523, '噶尔'),
+                new Array(542621, '林芝'),
+                new Array(610101, '西安'),
+                new Array(610201, '铜川'),
+                new Array(610301, '宝鸡'),
+                new Array(610401, '咸阳'),
+                new Array(612101, '渭南'),
+                new Array(612301, '汉中'),
+                new Array(612401, '安康'),
+                new Array(612501, '商州'),
+                new Array(612601, '延安'),
+                new Array(612701, '榆林'),
+                new Array(620101, '兰州'),
+                new Array(620401, '白银'),
+                new Array(620301, '金昌'),
+                new Array(620501, '天水'),
+                new Array(622201, '张掖'),
+                new Array(622301, '武威'),
+                new Array(622421, '定西'),
+                new Array(622624, '成县'),
+                new Array(622701, '平凉'),
+                new Array(622801, '西峰'),
+                new Array(622901, '临夏'),
+                new Array(623027, '夏河'),
+                new Array(620201, '嘉峪关'),
+                new Array(622102, '酒泉'),
+                new Array(630100, '西宁'),
+                new Array(632121, '平安'),
+                new Array(632221, '门源回族自治县'),
+                new Array(632321, '同仁'),
+                new Array(632521, '共和'),
+                new Array(632621, '玛沁'),
+                new Array(632721, '玉树'),
+                new Array(632802, '德令哈'),
+                new Array(640101, '银川'),
+                new Array(640201, '石嘴山'),
+                new Array(642101, '吴忠'),
+                new Array(642221, '固原'),
+                new Array(650101, '乌鲁木齐'),
+                new Array(650201, '克拉玛依'),
+                new Array(652101, '吐鲁番'),
+                new Array(652201, '哈密'),
+                new Array(652301, '昌吉'),
+                new Array(652701, '博乐'),
+                new Array(652801, '库尔勒'),
+                new Array(652901, '阿克苏'),
+                new Array(653001, '阿图什'),
+                new Array(653101, '喀什'),
+                new Array(654101, '伊宁'),
+                new Array(710001, '台北'),
+                new Array(710002, '基隆'),
+                new Array(710020, '台南'),
+                new Array(710019, '高雄'),
+                new Array(710008, '台中'),
+                new Array(211001, '辽阳'),
+                new Array(653201, '和田'),
+                new Array(542200, '泽当镇'),
+                new Array(542600, '八一镇'),
+                new Array(820001, '澳门'),
+                new Array(830001, '美国'),
+                new Array(830002, '加拿大'),
+                new Array(830003, '日本'),
+                new Array(830004, '韩国'),
+                new Array(830005, '新加坡'),
+                new Array(830006, '澳大利亚'),
+                new Array(830007, '新西兰'),
+                new Array(830008, '英国'),
+                new Array(830009, '法国'),
+                new Array(830010, '德国'),
+                new Array(830011, '意大利'),
+                new Array(830012, '俄罗斯'),
+                new Array(830013, '印尼'),
+                new Array(830014, '马来西亚'),
+                new Array(830015, '其他'),
+                new Array(810001, '香港')
+            );
+            if (Number(value) !== Number(value)) {
+                var plist = this.getProvincelist();
+                for (var i = 0, len = plist.length; i < len; i++) {
+                    if (plist[i].text === value) {
+                        value = plist[i].value;
+                        break;
+                    }
+                }
+            }
+            if (Number(value) !== Number(value)) {
+                var plist = this.getProvincelist();
+                for (var i = 0, len = plist.length; i < len; i++) {
+                    if (plist[i].text.indexOf(value) !== -1) {
+                        value = plist[i].value;
+                        break;
+                    }
+                }
+            }
+
+            var result = [],
+                c;
+            value = !value || Number(value) !== Number(value) ? 0 : Number(value);
+            for (var i = 0, len = list.length; i < len; i++) {
+                c = list[i];
+                if (value && (c[0] > value && c[0] < value + 10000)) {
+                    result.push({
+                        value: c[0],
+                        text: c[1]
+                    });
+                }
+            }
+            return result;
+        },
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.CitylistDropdown.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+
+            var html = '<div ui="type:\'Dropdown\',formName:\'child_province\',placeholder:\'- 请选择 -\',options:[],size:{width:131}"></div>' +
+                '<div ui="type:\'Dropdown\',formName:\'child_city\',placeholder:\'- 请选择 -\',options:[],size:{width:140}"></div>';
+            me.setInnerHTML(me, html);
+            hui.Control.init(main);
+
+            var me = this,
+                province = me.getByFormName('child_province');
+            province.setOptions(me.getProvincelist());
+
+            me.updateCity();
+            if (me.value) {
+                me.setValue(me.value);
+            }
+        },
+        initBehavior: function () {
+            var me = this,
+                province = me.getByFormName('child_province');
+            province.onchange = hui.fn(me.updateCity, me);
+        },
+        updateCity: function () {
+            var me = this,
+                province = me.getByFormName('child_province'),
+                city = me.getByFormName('child_city'),
+                list,
+                value;
+            value = province.getValue();
+            list = me.getCitylist(value);
+            city.setOptions(list);
+            city.setValue(list[0]);
+            if (list.length <= 1) {
+                province.setSize({
+                    width: 280
+                });
+                city.hide();
+            }
+            else {
+                province.setSize({
+                    width: 131
+                });
+                city.show();
+            }
+        },
+        getValue: function () {
+            var me = this,
+                value = me.getParamMap();
+            return value.child_city;
+        },
+        setValue: function (value) {
+            var me = this,
+                province = me.getByFormName('child_province'),
+                city = me.getByFormName('child_city'),
+                list,
+                c,
+                exist = false;
+            if (value) {
+                // isNaN
+                c = value.child_province;
+                if (Number(c) !== Number(c)) {
+                    list = me.getProvincelist();
+                    for (var i = 0, len = list.length; i < len; i++) {
+                        if (list[i].text === c) {
+                            c = list[i].text;
+                            exist = true;
+                            break;
+                        }
+                    }
+                    for (var i = 0, len = list.length; i < len && !exist; i++) {
+                        if (list[i].text.indexOf(c) !== -1) {
+                            c = list[i].text;
+                            break;
+                        }
+                    }
+                }
+
+                province.setValue({
+                    text: c
+                });
+                me.updateCity();
+                city.setValue({
+                    text: value.child_city
+                });
+            }
+        }
+    };
+
+    /* hui.CitylistDropdown 继承了 hui.Control */
+    hui.inherits(hui.CitylistDropdown, hui.Control);
+});
+
+hui.util.importCssString('html {}');
