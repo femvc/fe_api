@@ -16,7 +16,7 @@ var Util = {
      * @params: count: 读取多少元素
      * @return: 返回该页的所有元素。
      */
-    packer: function(items, page, count, next){
+    packer: function (items, page, count, next) {
         page = Number(page);
         count = Number(count);
         if (count == 0) {
@@ -26,14 +26,14 @@ var Util = {
             return (next ? next(result) : result);
         }
         var result = {
-            has_more: count*page < items.length? true : false,
+            has_more: count * page < items.length ? true : false,
             num_items: items.length,
             items: []
         };
-        var from = (page-1)*count;
+        var from = (page - 1) * count;
         from = from < 0 ? 0 : from;
         var to = from + count;
-        for(var i = from; i < to && i < items.length; i++){
+        for (var i = from; i < to && i < items.length; i++) {
             result['items'].push(items[i]);
         }
 
@@ -47,20 +47,19 @@ var Util = {
      * @params: obj: 待处理的js对象
      * @return: 返回处理过的js对象。
      */
-    switchObjValueToString: function (obj){
+    switchObjValueToString: function (obj) {
         if (obj instanceof Object) {
             for (var key in obj) {
                 obj[key] = Util.switchObjValueToString(obj[key]);
             }
             return obj;
-        }
-        else {
+        } else {
             return String(obj);
         }
     },
     getDatetime: function () {
         var dt = new Date();
-        return (dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate()+' '+dt.getHours()+':'+dt.getMinutes()+':'+dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g,'$10$2');
+        return (dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2');
     },
     /**
      * @name: sort
@@ -74,51 +73,56 @@ var Util = {
             array.sort();
             return array;
         }
-        function compara (a, b) {
+
+        function compara(a, b) {
             if (!a[key] || !b[key]) {
                 return -1;
             }
 
             if (a[key] < b[key]) {
                 return -1 * sortBy;
-            }
-            else if (a[key] == b[key]) {
+            } else if (a[key] == b[key]) {
                 return 0 * sortBy;
-            }
-            else if (a[key] > b[key]) {
+            } else if (a[key] > b[key]) {
                 return 1 * sortBy;
             }
         };
         array.sort(compara);
         return array;
     },
-    sortBy: function(list, field, order) { 
+    sortBy: function (list, field, order) {
         if (list && list.sort && list.length) {
             order = String(order).toLowerCase();
-            list.sort(function(a,b) { 
-                var m, n; 
-                m = String(a[field]).toLowerCase(); 
-                n = String(b[field]).toLowerCase(); 
-                 
-                if (String(parseInt('0'+m, 10)) == m && String(parseInt('0'+n, 10)) == n){ 
-                    m = parseInt(m, 10); 
-                    n = parseInt(n, 10); 
+            list.sort(function (a, b) {
+                var m, n;
+                m = String(a[field]).toLowerCase();
+                n = String(b[field]).toLowerCase();
+
+                if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
+                    m = parseInt(m, 10);
+                    n = parseInt(n, 10);
+                } else {
+                    if (m > n) {
+                        m = 1;
+                        n = -m;
+                    } else if (m < n) {
+                        m = -1;
+                        n = -m;
+                    } else {
+                        m = 1;
+                        n = m;
+                    }
                 }
-                else { 
-                    if (m > n) { m = 1; n = -m;} 
-                    else if (m < n ) { m = -1; n = -m; } 
-                    else {m = 1; n = m;} 
-                } 
-                return (order == 'desc' ?  n - m : m - n ); 
+                return (order == 'desc' ? n - m : m - n);
             })
-        } 
-        return list; 
+        }
+        return list;
     },
     parseURLParams: function (paramsString) {
         var params = [];
         var paramObj = {};
         params = paramsString.split('&');
-        for (var i = 0, length = params.length; i < length; i++ ) {
+        for (var i = 0, length = params.length; i < length; i++) {
             var searchIndex = params[i].indexOf('=');
             if (searchIndex == -1) {
                 continue;
@@ -134,13 +138,13 @@ var Util = {
      * @desc: 对一个str中的所有中文编码成unicode形式的字符串。
      * @return: 返回处理后的字符串。
      */
-    unicodeOnlyChs: function(str){
+    unicodeOnlyChs: function (str) {
         if (!str instanceof String) {
             return str;
         }
-        return str.replace(/([^\u0000-\u00FF])/g, function($0){
+        return str.replace(/([^\u0000-\u00FF])/g, function ($0) {
             var tmp = escape($0);
-            return tmp.replace(/(%u)(\w{4})/gi,"\\u$2");
+            return tmp.replace(/(%u)(\w{4})/gi, "\\u$2");
         });
     },
     /**
@@ -157,7 +161,9 @@ var Util = {
                     params_str += key + '=' + params[key] + '&';
                 }
                 var options = {
-                    'headers': {'content-type' : 'application/x-www-form-urlencoded'},
+                    'headers': {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    },
                     'url': url,
                     'body': params_str
                 };
@@ -171,24 +177,59 @@ var Util = {
                 return next(null, JSON.parse(body));
             }
         );
-	},
-	regEscape: function (raw) {
-		return raw.replace(/([\/()[\]?{}|*+-.$^])/g, "\\$1")
-	},
-	md5withSalt: function (rawPwd, salt) {
-		//return rawPwd + '{'+ salt+'}';
-		// todo: add salt, and md5 again!
-		return rawPwd;
-	},
-	likeWith: function (cond) {
-		return new RegExp("^.*" + Util.regEscape(cond) + ".*$");
+    },
+    regEscape: function (raw) {
+        return raw.replace(/([\/()[\]?{}|*+-.$^])/g, "\\$1")
+    },
+    md5withSalt: function (rawPwd, salt) {
+        //return rawPwd + '{'+ salt+'}';
+        // todo: add salt, and md5 again!
+        return rawPwd;
+    },
+    likeWith: function (cond) {
+        return new RegExp("^.*" + Util.regEscape(cond) + ".*$");
+    },
+    formatDate: function (date, fmt) {
+        if (!date) date = new Date();
+        fmt = fmt || 'yyyy-MM-dd HH:mm';
+        var o = {
+            'M+': date.getMonth() + 1, //月份      
+            'd+': date.getDate(), //日      
+            'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, //小时      
+            'H+': date.getHours(), //小时      
+            'm+': date.getMinutes(), //分      
+            's+': date.getSeconds(), //秒      
+            'q+': Math.floor((date.getMonth() + 3) / 3), //季度      
+            'S': date.getMilliseconds() //毫秒      
+        };
+        var week = {
+            '0': '/u65e5',
+            '1': '/u4e00',
+            '2': '/u4e8c',
+            '3': '/u4e09',
+            '4': '/u56db',
+            '5': '/u4e94',
+            '6': '/u516d'
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '/u661f/u671f' : '/u5468') : '') + week[date.getDay() + '']);
+        }
+        for (var k in o) {
+            if (o.hasOwnProperty(k) && new RegExp('(' + k + ')').test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+            }
+        }
+        return fmt;
     }
 }
 
 
 
 exports.packer = Util.packer;
-exports.switchObjValueToString= Util.switchObjValueToString;
+exports.switchObjValueToString = Util.switchObjValueToString;
 exports.getDatetime = Util.getDatetime;
 exports.sort = Util.sort;
 exports.sortBy = Util.sortBy;
@@ -198,3 +239,4 @@ exports.httpPOST = Util.httpPOST;
 exports.regEscape = Util.regEscape;
 exports.md5withSalt = Util.md5withSalt;
 exports.likeWith = Util.likeWith;
+exports.formatDate = Util.formatDate;

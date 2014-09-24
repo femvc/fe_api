@@ -1,5 +1,6 @@
 ﻿'use strict';
 var articleModel = require('../models/article').createNew();
+var Util = require('../helpers/common');
 
 exports.saveArticle = function (req, res, next) {
     var id = req.paramlist.atcid,
@@ -23,12 +24,13 @@ exports.saveArticle = function (req, res, next) {
         response.ok(req, res, doc);
     }
     //date = hui.formatDate(new Date(), "yyyy-MM-dd");
-    date = new Date();
+    date = Util.formatDate(new Date(), "yyyy-MM-dd hh:mm");
     if (id) {
         article.update_time = date;
         articleModel.updateById(id, article, callback);
-    } else {
-        article.create_time = date;
+    }
+    else {
+        article.update_time = date;
         articleModel.insert(article, callback);
     }
 }

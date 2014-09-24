@@ -234,7 +234,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         rowCheckboxClick: function (index) {
             if (this.selectMode != 'line') {
                 this.selectMulti(index);
-            } else {
+            }
+            else {
                 this.preSelectIndex = index;
             }
         },
@@ -276,7 +277,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                         allChecked = false;
 
                         updateAll && hui.Control.removeClass(row, selectedClass); // add speed
-                    } else {
+                    }
+                    else {
                         selected.push(currentIndex);
                         updateAll && hui.Control.addClass(row, selectedClass);
                     }
@@ -291,7 +293,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 input = hui.g(cbIdPrefix + index);
                 if (input.checked) {
                     hui.Control.addClass(row, selectedClass);
-                } else {
+                }
+                else {
                     hui.Control.removeClass(row, selectedClass);
                 }
             }
@@ -345,7 +348,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                     if (checked) {
                         selected.push(index);
                         hui.Control.addClass(this.getRow(index), selectedClass);
-                    } else {
+                    }
+                    else {
                         hui.Control.removeClass(this.getRow(index), selectedClass);
                     }
 
@@ -404,7 +408,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
             // 拼装html
             html.push('<div class="' + me.getClass('row') + '">');
-            html.push(hui.Control.format(me.getTplTablePrefix(), me._width - 2, me.id));
+            html.push(hui.Control.format(me.getTplTablePrefix(), me._width - 2, me.id, (me.cellpadding || 0), (me.cellspacing || 0)));
             html.push('<tr>');
             for (i = 0; i < len; i++) {
                 field = fields[i];
@@ -428,7 +432,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 if ('function' == typeof title) {
                     contentHtml = title.call(me);
                     sortIconHtml = '';
-                } else {
+                }
+                else {
                     contentHtml = title || '';
                 }
                 contentHtml = hui.Control.format(contentTpl,
@@ -549,7 +554,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
 
                 if (orderBy == field) {
                     order = (!order || order == 'asc') ? 'desc' : 'asc';
-                } else {
+                }
+                else {
                     order = 'desc';
                 }
 

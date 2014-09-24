@@ -29,3 +29,120 @@
 .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
 .hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
 .hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+
+.page {
+    font-family: microsoft yahei;
+    font-size: 14px;
+    padding-left: 15px;
+    padding-top: 5px;
+}
+.page a {
+    color: #048127;
+    text-decoration: none;
+}
+.page a:hover {
+    color: #ff6500;
+    text-decoration: underline;
+}
+
+.page .form_title {
+    font-size: 16px;
+ }
+
+.page .row_head {
+    padding-bottom: 10px;
+    height: 31px;
+    padding-top: 10px;
+}
+.page .subject_add .row_title {
+    float: left;
+    width: 55px;
+    padding-top: 10px;
+}
+.page .subject_add .hui_textinput {
+    float: left;
+
+    border: 1px solid #cccccc;
+}
+
+.page .subject_list { }
+.page .subject_list .form_title { }
+.page .subject_list .hui_table { }
+.page .subject_list .hui_table table {
+    /* background-color: #ccc; */
+}
+.page .subject_list .hui_table td{
+    background-color: white;
+ 
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+.page .subject_list .hui_table th{
+    background-color: white;
+ 
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+.page .subject_list .hui_table_head { }
+.page .subject_list .hui_table_head .hui_table_row { }
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thsel { }
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr { }
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thtext { }
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thsort { }
+.page .subject_list .hui_table_body { }
+.page .subject_list .hui_table_body .hui_table_row { }
+.page .subject_list .hui_table_body .hui_table_row .hui_table_tdsel { }
+.page .subject_list .hui_table_body .hui_table_row .hui_table_tdcntr { }
+.page .subject_add {
+ }
+.page .subject_add .form_title {
+    padding: 0px;
+ 
+    margin: 40px 0px 15px;
+}
+.page .subject_add .tr_row {
+    clear: both;
+ 
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    width: 500px;
+    padding: 10px 0px;
+    overflow: hidden;
+    margin-top: -1px;
+}
+.page .subject_add .tr_row .td_index {
+    float: left;
+    padding: 5px 10px 0px;
+    font-size: 25px;
+}
+.page .subject_add .tr_row .td_action {
+    float: left;
+    padding: 10px;
+}
+.page .subject_add .tr_row .hui_textinput {
+    float: left;
+ 
+}
+.page .subject_add .tr_row .row_title {
+    display: inline-block;
+ 
+    float: left;
+    padding-top: 10px;
+    /* padding-left: 10px; */
+    width: 65px;
+}
+.page .subject_add .tr_row .hui_textinput {
+    
+}
+.page .hui_btn {
+    float: left;
+ 
+    margin: 10px 0px 0px 10px;
+}
+.page .hui_btn_label { }
+.page .subject_add .tr_row .hui_checkbox {
+    margin-top: 11px;
+ }
+.page .subject_add .tr_row .hui_checkbox_icon { }
+.page .subject_add .tr_row .hui_checkbox_icon .hui_checkbox_input { }
+.page .subject_add .tr_row .hui_checkbox_label { }

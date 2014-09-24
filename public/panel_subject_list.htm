@@ -76,9 +76,9 @@ window.onload = function(){
                     },
                     {
                         width: 296,
-                        title: 'create_time',
-                        field: 'create_time',
-                        content: function(item) {return item['create_time'];}
+                        title: 'update_time',
+                        field: 'update_time',
+                        content: function(item) {return item['update_time'];}
                     },
                     {
                         width: 296,
@@ -105,10 +105,16 @@ window.onload = function(){
         Requester.get('/ue_api/internal/get_article', {
             data: {atcid: paramlist.atcid},
             onsuccess: function (result) {
-                alert(result[1]);
+                
+                var content = form.getByFormName('content').getMain();
                 var data = result[1];
                 //data.content = JSON.parse(data.content);
-                
+                data.atcid = data._id;
+                form.removeAllOption();
+                for (var i in data.content) {
+                    form.addOption();
+                }
+
                 form.setValueByTree(data);
             }
         });
@@ -121,10 +127,10 @@ window.onload = function(){
         var index = (content.index || hui.t('textarea', content).length) + 1;
         content.index = index;
         var tpl = 
-            '<div id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">#{index}' +
+            '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
             '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
             '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"></textarea>' +
-            '    <a href="javascript:" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
+            '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
         hui.util.appendHTML(content, hui.format(tpl, {index: index}));
         hui.Control.create(hui.g('content'+index));
@@ -133,6 +139,18 @@ window.onload = function(){
         var content = form.getByFormName('content');
         content.getByFormName(index).dispose();
 
+    };
+    form.removeAllOption = function () {
+        var content = form.getByFormName('content'),
+            option,
+            main = content.getMain();
+        for (var i = main.index; i >= 0; i--) {
+            option = content.getByFormName(i);
+            if (option) {
+                option.dispose();
+            }
+        };
+        main.index = 0;
     };
     
     var submit = form.getByFormName('submit');
@@ -143,7 +161,7 @@ window.onload = function(){
         Requester.get('/ue_api/internal/save_article', {
             data: data,
             onsuccess: function (err, result) {
-                alert(result);
+                window.location.reload();
             }
         });
     };
@@ -160,23 +178,27 @@ window.onload = function(){
 
 </head>
 
-<body style="">
+<body class="page" style="">
 <!--target:test-->
-<div id="subject_list">
-    <h3 id="title">题目列表</h3>
-    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:600}"></div>
+<div id="subject_list" class="subject_list">
+    <h3 class="form_title">题目列表 </h3>
+    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
 </div>
 
-<div id="subject_add">
+<div id="subject_add" class="subject_add">
 <!--target:test-->
-<h3 id="title">增加题目</h3>
+<h3 class="form_title"><span id="title"> 增加题目</span> <a href="panel_subject_list.htm">add</a></h3>
     <div ui="type:'Panel',formName:'form'">
-        <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
-        题目：<textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'"></textarea>
-        <button ui="type:'Button',formName:'submit'">Save</button>
-        <br/><br/>
+        <div class="tr_row">
+            <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+            <span class="row_title">题目：</span>
+            <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'"></textarea>
+            <button ui="type:'Button',formName:'submit'">Save</button>
+        </div>
         <div ui="type:'Panel',formName:'content',isFormItem: true">
-            选项：<a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+            <div class="row_head">
+                <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+            </div>
         </div>
     </div>
 </div>
