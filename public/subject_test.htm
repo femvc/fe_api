@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ebbinghaus Intelligent Remember [v1.0]</title>
+<script type="text/javascript" src="js/hui.js"></script>
+<script type="text/javascript" src="js/table.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<style>
+.hui_checkbox{float:left;}
+.hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
+.hui_radioinput .hui_radioinput_input{display:none;}
+.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
+.hui_radioinput .hui_radioinput_text{float:left;}
+.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
+.hui_radioinputgroup{overflow:hidden;float:left;}
+.hui_checkbox .hui_checkbox_label{}
+.hui_checkbox .hui_checkbox_label a{font-size:14px;}
+.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
+.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
+.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
+.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
+
+</style>
+<script type="text/javascript">
+'use strict';
+var form;
+
+window.listTable = [
+    {
+        width: 296,
+        title: 'n1',
+        sortable: true,
+        field: 'name',
+        content: function(item) {return item['name'];}
+    },
+    {
+        width: 296,
+        title: 'n2',
+        field: 'name',
+        content: function(item) {return item['name'];}
+    },
+    {
+        width: 296,
+        title: 'n3',
+        field: '_id',
+        content: function(item) {return item['_id'];}
+    }
+];
+window.listData = [
+    {'name':'aaaa'},
+    {'name':'bbbb'}
+];
+
+var form;
+
+window.onload = function(){
+    // subject_list
+    Requester.get('/ue_api/internal/get_articles', {
+        onsuccess: function (result) {
+            var data = result[1];
+            if (data) {
+                
+                window.listTable = [
+                    {
+                        width: 296,
+                        title: '题目',
+                        sortable: true,
+                        field: 'title',
+                        content: function(item) {return item['title'];}
+                    },
+                    {
+                        width: 296,
+                        title: 'option',
+                        field: 'title',
+                        content: function(item) {
+                            var html = '',
+                                tpl = '<li class="#{correct}"><div class="txt">#{index} #{content} </div></li>';
+                            for (var i in item['content']) {
+                                item['content'][i].index = i;
+                                html += hui.format(tpl, item['content'][i])
+                            }
+                            return '<ul class="option_list">' + html + '</ul>';
+                        }
+                    },
+                    {
+                        width: 296,
+                        title: 'update_time',
+                        field: 'update_time',
+                        content: function(item) {return item['update_time'];}
+                    },
+                    {
+                        width: 296,
+                        title: 'action',
+                        field: '_id',
+                        content: function(item) {return '<a href="?atcid=' + item['_id'] + '">edit</a>';}
+                    }
+                ];
+
+                window.listData = data.items;
+
+                hui.Control.init(hui.g('subject_list'));
+                
+            };
+            
+        }
+    });
+    
+    // subject_add
+    hui.Control.init(hui.g('subject_add'));
+    var paramlist = hui.Master.parseLocator().query;
+    if (paramlist.atcid) {
+        hui.g('title').innerHTML = '修改题目';
+        Requester.get('/ue_api/internal/get_article', {
+            data: {atcid: paramlist.atcid},
+            onsuccess: function (result) {
+                
+                var content = form.getByFormName('content').getMain();
+                var data = result[1];
+                //data.content = JSON.parse(data.content);
+                data.atcid = data._id;
+                form.removeAllOption();
+                for (var i in data.content) {
+                    form.addOption();
+                }
+
+                form.setValueByTree(data);
+            }
+        });
+    }
+    
+    
+    form = hui.Control.getByFormName('form');
+    form.addOption = function () {
+        var content = form.getByFormName('content').getMain();
+        var index = (content.index || hui.t('textarea', content).length) + 1;
+        content.index = index;
+        var tpl = 
+            '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"tabindex="#{index}"></textarea>' +
+            '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
+            '</div>';
+        hui.util.appendHTML(content, hui.format(tpl, {index: index}));
+        hui.Control.create(hui.g('content'+index));
+    };
+    form.removeOption = function (index) {
+        var content = form.getByFormName('content');
+        content.getByFormName(index).dispose();
+
+    };
+    form.removeAllOption = function () {
+        var content = form.getByFormName('content'),
+            option,
+            main = content.getMain();
+        for (var i = main.index; i >= 0; i--) {
+            option = content.getByFormName(i);
+            if (option) {
+                option.dispose();
+            }
+        };
+        main.index = 0;
+    };
+    
+    var submit = form.getByFormName('submit');
+    submit.onclick = function () {
+        var data = hui.Control.getByFormName('form').getParamMap();
+        data.content = JSON.stringify(data.content);
+        console.log(data);
+        Requester.get('/ue_api/internal/save_article', {
+            data: data,
+            onsuccess: function (err, result) {
+                window.location.reload();
+            }
+        });
+    };
+    var add = form.getByFormName('add');
+    add.onclick = form.addOption;
+    
+    form.addOption();
+    form.addOption();
+    form.addOption();
+    form.addOption();
+};
+//-->
+</script>
+
+</head>
+
+<body class="page" style="">
+<!--target:test-->
+<div id="subject_list" class="subject_list">
+    <h3 class="form_title">题目列表 </h3>
+    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
+</div>
+
+<div id="subject_add" class="subject_add">
+<!--target:test-->
+<h3 class="form_title"><span id="title"> 增加题目</span> <a href="panel_subject_list.htm">add</a></h3>
+    <div ui="type:'Panel',formName:'form'">
+        <div class="tr_row">
+            <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+            <span class="row_title">题目：</span>
+            <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
+            <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
+        </div>
+        <div ui="type:'Panel',formName:'content',isFormItem: true">
+            <div class="row_head">
+                <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

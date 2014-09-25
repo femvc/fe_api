@@ -76,6 +76,20 @@ window.onload = function(){
                     },
                     {
                         width: 296,
+                        title: 'option',
+                        field: 'title',
+                        content: function(item) {
+                            var html = '',
+                                tpl = '<li class="#{correct}"><div class="txt">#{index} #{content} </div></li>';
+                            for (var i in item['content']) {
+                                item['content'][i].index = i;
+                                html += hui.format(tpl, item['content'][i])
+                            }
+                            return '<ul class="option_list">' + html + '</ul>';
+                        }
+                    },
+                    {
+                        width: 296,
                         title: 'update_time',
                         field: 'update_time',
                         content: function(item) {return item['update_time'];}
@@ -112,28 +126,28 @@ window.onload = function(){
                 data.atcid = data._id;
                 form.removeAllOption();
                 for (var i in data.content) {
-                    form.addOption();
+                    data.content[i].index = i;
+                    form.addOption(data.content[i]);
                 }
 
-                form.setValueByTree(data);
+                //form.setValueByTree(data);
             }
         });
     }
     
     
     form = hui.Control.getByFormName('form');
-    form.addOption = function () {
+    form.addOption = function (obj) {
         var content = form.getByFormName('content').getMain();
-        var index = (content.index || hui.t('textarea', content).length) + 1;
-        content.index = index;
+        obj = obj || {index: hui.t('textarea', content).length + 1};
         var tpl = 
             '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
-            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"></textarea>' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"tabindex="#{index}">#{content}</textarea>' +
             '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
-        hui.util.appendHTML(content, hui.format(tpl, {index: index}));
-        hui.Control.create(hui.g('content'+index));
+        hui.util.appendHTML(content, hui.format(tpl, obj));
+        hui.Control.create(hui.g('content'+obj.index));
     };
     form.removeOption = function (index) {
         var content = form.getByFormName('content');
@@ -168,10 +182,15 @@ window.onload = function(){
     var add = form.getByFormName('add');
     add.onclick = form.addOption;
     
-    form.addOption();
-    form.addOption();
-    form.addOption();
-    form.addOption();
+    var subject_add = form.getByFormName('subject_add');
+    subject_add.onclick = function () {
+        form.removeAllOption();
+        form.addOption();
+        form.addOption();
+        form.addOption();
+        form.addOption();
+    };
+
 };
 //-->
 </script>
@@ -187,13 +206,13 @@ window.onload = function(){
 
 <div id="subject_add" class="subject_add">
 <!--target:test-->
-<h3 class="form_title"><span id="title"> 增加题目</span> <a href="panel_subject_list.htm">add</a></h3>
-    <div ui="type:'Panel',formName:'form'">
+<h3 class="form_title"><span id="title"> 增加题目</span> </h3>
+    <div ui="type:'Panel',formName:'form'"><a href="javascript:"  ui="type:'Button',formName:'subject_add'">add</a>
         <div class="tr_row">
             <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
             <span class="row_title">题目：</span>
-            <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'"></textarea>
-            <button ui="type:'Button',formName:'submit'">Save</button>
+            <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
+            <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
         </div>
         <div ui="type:'Panel',formName:'content',isFormItem: true">
             <div class="row_head">

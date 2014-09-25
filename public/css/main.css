@@ -1,35 +1,134 @@
-.hui_table{}
-.hui_table_head{}
-.hui_table_head .hui_table_row{}
-.hui_table_head .hui_table_row .hui_table_thsel{}
-.hui_table_head .hui_table_row .hui_table_thcntr{text-align:left;}
-.hui_table_head .hui_table_row .hui_table_thtext{float:left;}
-.hui_table_head .hui_table_row .hui_table_thsort{height:0;width:0;border:10px solid #9c9c9c;border-color:transparent;border-width:10px 5px;float:right;margin-top:-5px;margin-bottom:-10px;margin-right:5px;}
-.hui_table_head .hui_table_thasc  .hui_table_thsort{border-bottom-color:#9c9c9c;margin-top:-5px;display: inline;}
-.hui_table_head .hui_table_thdesc .hui_table_thsort{border-top-color:#9c9c9c;margin-top:5px;display: inline;}
-.hui_table_body{}
-.hui_table_body .hui_table_row{}
-.hui_table_body .hui_table_row .hui_table_tdsel{}
-.hui_table_body .hui_table_row .hui_table_tdcntr{display:inline-block;}
-
-
-
-.hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
-.hui_radioinput .hui_radioinput_input{display:none;}
-.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
-.hui_radioinput .hui_radioinput_text{float:left;}
-.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
-.hui_radioinputgroup{overflow:hidden;float:left;}
-.hui_checkbox{float:left;}
-.hui_checkbox .hui_checkbox_label{}
-.hui_checkbox .hui_checkbox_label a{font-size:14px;}
-.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
-.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
-.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
-.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
-
+.hui_table {
+}
+.hui_table_head {
+}
+.hui_table_head .hui_table_row {
+}
+.hui_table_head .hui_table_row .hui_table_thsel {
+}
+.hui_table_head .hui_table_row .hui_table_thcntr {
+    text-align: left;
+}
+.hui_table_head .hui_table_row .hui_table_thtext {
+    float: left;
+}
+.hui_table_head .hui_table_row .hui_table_thsort {
+    height: 0;
+    width: 0;
+    border: 10px solid #9c9c9c;
+    border-color: transparent;
+    border-width: 10px 5px;
+    float: right;
+    margin-top: -5px;
+    margin-bottom: -10px;
+    margin-right: 5px;
+}
+.hui_table_head .hui_table_thasc  .hui_table_thsort {
+    border-bottom-color: #9c9c9c;
+    margin-top: -5px;
+    display: inline;
+}
+.hui_table_head .hui_table_thdesc .hui_table_thsort {
+    border-top-color: #9c9c9c;
+    margin-top: 5px;
+    display: inline;
+}
+.hui_table_body {
+}
+.hui_table_body .hui_table_row {
+}
+.hui_table_body .hui_table_row .hui_table_tdsel {
+}
+.hui_table_body .hui_table_row .hui_table_tdcntr {
+    display: inline-block;
+}
+.hui_radioinput {
+    float: left;
+    padding-right: 23px;
+    cursor: pointer;
+}
+.hui_radioinput .hui_radioinput_input {
+    display: none;
+}
+.hui_radioinput .hui_radioinput_icon {
+    background-image: url(/static/img/hui_radioinput.png);
+    background-repeat: no-repeat;
+    background-position: 0px -50px;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    *zoom: 1;
+    float: left;
+    margin-right: 6px;
+}
+.hui_radioinput .hui_radioinput_text {
+    float: left;
+}
+.hui_radioinput_checked .hui_radioinput_icon {
+    background-image: url(/static/img/hui_radioinput.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    float: left;
+    margin-right: 6px;
+}
+.hui_radioinputgroup {
+    overflow: hidden;
+    float: left;
+}
+.hui_checkbox {
+    float: left;
+}
+.hui_checkbox .hui_checkbox_label {
+}
+.hui_checkbox .hui_checkbox_label a {
+    font-size: 14px;
+}
+.hui_checkbox .hui_checkbox_icon {
+    font-family: simsun;
+    margin: 1px 10px 0 0;
+    float: left;
+    border: 1px solid #d9d9d9;
+    color: #1ba8eb;
+    text-indent: -20px;
+    font-size: 15px;
+    font-style: normal;
+    line-height: 1.1em;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.hui_checkbox .hui_checkbox_label {
+    color: #666666;
+    font-size: 14px;
+    line-height: 20px;
+    float: left;
+    padding-left: 0px;
+    cursor: pointer;
+}
+.hui_checkbox .hui_checkbox_icon {
+    visibility: visible;
+    color: #68bf4a;
+    text-indent: -100px;
+}
+.hui_checkbox_checked .hui_checkbox_icon {
+    visibility: visible;
+    color: #68bf4a;
+    text-indent: 4px;
+}
+.hj001_login_box .hui_checkbox .hui_checkbox_icon {
+    visibility: visible;
+    color: #68bf4a;
+    text-indent: -100px;
+}
+.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon {
+    visibility: visible;
+    color: #68bf4a;
+    text-indent: 4px;
+}
 .page {
     font-family: microsoft yahei;
     font-size: 14px;
@@ -37,18 +136,16 @@
     padding-top: 5px;
 }
 .page a {
-    color: #048127;
+    color: green;
     text-decoration: none;
 }
 .page a:hover {
     color: #ff6500;
     text-decoration: underline;
 }
-
 .page .form_title {
     font-size: 16px;
- }
-
+}
 .page .row_head {
     padding-bottom: 10px;
     height: 31px;
@@ -61,48 +158,76 @@
 }
 .page .subject_add .hui_textinput {
     float: left;
-
     border: 1px solid #cccccc;
 }
-
-.page .subject_list { }
-.page .subject_list .form_title { }
-.page .subject_list .hui_table { }
+.page .subject_list {
+}
+.page .subject_list .form_title {
+}
+.page .subject_list .hui_table {
+}
 .page .subject_list .hui_table table {
-    /* background-color: #ccc; */
+    /* background-color: #ccc;
+    */
 }
-.page .subject_list .hui_table td{
+.page .subject_list .hui_table td {
     background-color: white;
- 
     border-bottom: 1px solid #ccc;
     padding: 10px;
 }
-.page .subject_list .hui_table th{
+.page .subject_list .hui_table th {
     background-color: white;
- 
     border-bottom: 1px solid #ccc;
     padding: 10px;
 }
-.page .subject_list .hui_table_head { }
-.page .subject_list .hui_table_head .hui_table_row { }
-.page .subject_list .hui_table_head .hui_table_row .hui_table_thsel { }
-.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr { }
-.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thtext { }
-.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thsort { }
-.page .subject_list .hui_table_body { }
-.page .subject_list .hui_table_body .hui_table_row { }
-.page .subject_list .hui_table_body .hui_table_row .hui_table_tdsel { }
-.page .subject_list .hui_table_body .hui_table_row .hui_table_tdcntr { }
+.page .subject_list .hui_table_head {
+}
+.page .subject_list .hui_table_head .hui_table_row {
+}
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thsel {
+}
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr {
+}
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thtext {
+}
+.page .subject_list .hui_table_head .hui_table_row .hui_table_thcntr .hui_table_thsort {
+}
+.page .subject_list .hui_table_body {
+}
+.page .subject_list .hui_table_body .hui_table_row {
+}
+.page .subject_list .hui_table_body .hui_table_row .hui_table_tdsel {
+}
+.page .subject_list .hui_table_body .hui_table_row .hui_table_tdcntr {
+}
+.page .subject_list .option_list {
+    padding: 0px 0px 0px 20px;
+    
+    list-style-type: circle;
+    font-size: 20px;
+    line-height: 16px;
+    margin: 0px;
+}
+.page .subject_list .option_list .yes {
+    
+    list-style-type: square;
+    color: red;
+}
+.page .subject_list .option_list .txt {
+    
+    font-size: 14px;
+    /* float: left; */
+    line-height: 18px;
+    color: #333;
+}
 .page .subject_add {
- }
+}
 .page .subject_add .form_title {
     padding: 0px;
- 
     margin: 40px 0px 15px;
 }
 .page .subject_add .tr_row {
     clear: both;
- 
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     width: 500px;
@@ -121,28 +246,29 @@
 }
 .page .subject_add .tr_row .hui_textinput {
     float: left;
- 
 }
 .page .subject_add .tr_row .row_title {
     display: inline-block;
- 
     float: left;
     padding-top: 10px;
-    /* padding-left: 10px; */
+    /* padding-left: 10px;
+    */
     width: 65px;
 }
 .page .subject_add .tr_row .hui_textinput {
-    
 }
 .page .hui_btn {
     float: left;
- 
     margin: 10px 0px 0px 10px;
 }
-.page .hui_btn_label { }
+.page .hui_btn_label {
+}
 .page .subject_add .tr_row .hui_checkbox {
     margin-top: 11px;
- }
-.page .subject_add .tr_row .hui_checkbox_icon { }
-.page .subject_add .tr_row .hui_checkbox_icon .hui_checkbox_input { }
-.page .subject_add .tr_row .hui_checkbox_label { }
+}
+.page .subject_add .tr_row .hui_checkbox_icon {
+}
+.page .subject_add .tr_row .hui_checkbox_icon .hui_checkbox_input {
+}
+.page .subject_add .tr_row .hui_checkbox_label {
+}
