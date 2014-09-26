@@ -61,7 +61,7 @@ var form;
 
 window.onload = function(){
     // subject_list
-    Requester.get('/ue_api/internal/get_articles', {
+    Requester.get('/ue_api/internal/get_articles?answer=yes', {
         onsuccess: function (result) {
             var data = result[1];
             if (data) {
@@ -116,7 +116,7 @@ window.onload = function(){
     var paramlist = hui.Master.parseLocator().query;
     if (paramlist.atcid) {
         hui.g('title').innerHTML = '修改题目';
-        Requester.get('/ue_api/internal/get_article', {
+        Requester.get('/ue_api/internal/get_article?answer=yes', {
             data: {atcid: paramlist.atcid},
             onsuccess: function (result) {
                 
@@ -138,8 +138,20 @@ window.onload = function(){
     
     form = hui.Control.getByFormName('form');
     form.addOption = function (obj) {
-        var content = form.getByFormName('content').getMain();
-        obj = obj || {index: hui.t('textarea', content).length + 1};
+        var content = form.getByFormName('content').getMain(),
+            list,
+            index;
+        obj = obj || {};
+        if (!obj.index) {
+            var list = hui.c('td_index');
+            obj.index = 1;
+            for (var i=0,len=list.length; i<len; i++) {
+                index = parseInt(list[i].innerHTML);
+                if (index >= obj.index) {
+                    obj.index = index + 1;
+                }
+            }
+        }
         var tpl = 
             '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
             '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
@@ -158,12 +170,14 @@ window.onload = function(){
         var content = form.getByFormName('content'),
             option,
             main = content.getMain();
-        for (var i = main.index; i >= 0; i--) {
+        var list = hui.c('td_index');
+        for (var i=0,len=list.length; i<len; i++) {
+            index = parseInt(list[i].innerHTML);
             option = content.getByFormName(i);
             if (option) {
                 option.dispose();
             }
-        };
+        }
         main.index = 0;
     };
     
@@ -199,28 +213,35 @@ window.onload = function(){
 
 <body class="page" style="">
 <!--target:test-->
-<div id="subject_list" class="subject_list">
-    <h3 class="form_title">题目列表 </h3>
-    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
-</div>
-
 <div id="subject_add" class="subject_add">
 <!--target:test-->
-<h3 class="form_title"><span id="title"> 增加题目</span> </h3>
-    <div ui="type:'Panel',formName:'form'"><a href="javascript:"  ui="type:'Button',formName:'subject_add'">add</a>
+
+    <div ui="type:'Panel',formName:'form'">
+        <h3 class="form_title">
+            <span id="title"> 增加题目</span> 
+            <a href="javascript:"  ui="type:'Button',formName:'subject_add'">add</a>
+        </h3>
+
         <div class="tr_row">
             <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
             <span class="row_title">题目：</span>
             <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
             <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
         </div>
+        <div class="row_head">
+            <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+        </div>
         <div ui="type:'Panel',formName:'content',isFormItem: true">
-            <div class="row_head">
-                <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
-            </div>
         </div>
     </div>
 </div>
+
+<div id="subject_list" class="subject_list">
+    <h3 class="form_title">题目列表 </h3>
+    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
+</div>
+
+
 </body>
 
 </html>

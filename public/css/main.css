@@ -152,7 +152,7 @@
     padding-top: 10px;
 }
 .page .subject_add .row_title {
-    float: left;
+    /* float: left; */
     width: 55px;
     padding-top: 10px;
 }
@@ -161,8 +161,11 @@
     border: 1px solid #cccccc;
 }
 .page .subject_list {
+    float: left;
+    width: 600px;
 }
 .page .subject_list .form_title {
+    margin: 17px 0px;
 }
 .page .subject_list .hui_table {
 }
@@ -181,6 +184,7 @@
     padding: 10px;
 }
 .page .subject_list .hui_table_head {
+    border-top: 1px solid #ccc;
 }
 .page .subject_list .hui_table_head .hui_table_row {
 }
@@ -221,10 +225,12 @@
     color: #333;
 }
 .page .subject_add {
+    width: 530px;
+    float: left;
 }
 .page .subject_add .form_title {
     padding: 0px;
-    margin: 40px 0px 15px;
+    margin: 20px 0px 15px;
 }
 .page .subject_add .tr_row {
     clear: both;
@@ -258,7 +264,7 @@
 .page .subject_add .tr_row .hui_textinput {
 }
 .page .hui_btn {
-    float: left;
+    /* float: left; */
     margin: 10px 0px 0px 10px;
 }
 .page .hui_btn_label {

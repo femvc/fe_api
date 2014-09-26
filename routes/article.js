@@ -44,6 +44,12 @@ exports.getArticle = function (req, res, next) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+        if (req.paramlist.answer != 'yes' && doc && doc.content) {
+            var list = doc.content;
+            for (var i in list) {
+                delete list[i].correct;
+            }
+        }
         response.ok(req, res, doc);
     });
 }
@@ -82,6 +88,16 @@ exports.getArticles = function (req, res, next) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+
+        if (req.paramlist.answer != 'yes') {
+            for (var j in doc) {
+                var list = doc[j].content;
+                for (var i in list) {
+                    delete list[i].correct;
+                }
+            }
+        }
+
         response.ok(req, res, {
             items: doc
         });
