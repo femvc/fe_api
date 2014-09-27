@@ -78,8 +78,9 @@
     overflow: hidden;
     float: left;
 }
-.hui_checkbox {
+.page .hui_checkbox {
     float: left;
+    margin: 11px 0px 0px 0px;
 }
 .hui_checkbox .hui_checkbox_label {
 }
@@ -230,13 +231,17 @@
 }
 .page .subject_add .form_title {
     padding: 0px;
-    margin: 20px 0px 15px;
+    /* margin: 20px 0px 15px; */
+    margin: 0px;
+    padding: 24px;
+    text-align: center;
+    font-size: 22px;
 }
 .page .subject_add .tr_row {
     clear: both;
-    border-top: 1px solid #ccc;
+    /* border-top: 1px solid #ccc; */
     border-bottom: 1px solid #ccc;
-    width: 500px;
+    /* width: 500px; */
     padding: 10px 0px;
     overflow: hidden;
     margin-top: -1px;
@@ -265,7 +270,7 @@
 }
 .page .hui_btn {
     /* float: left; */
-    margin: 10px 0px 0px 10px;
+    /* margin: 10px 0px 0px 10px; */
 }
 .page .hui_btn_label {
 }
@@ -278,3 +283,169 @@
 }
 .page .subject_add .tr_row .hui_checkbox_label {
 }
+
+.page .hui_boxpanel_close {color:white; }
+.page .hui_boxpanel_close:hover {color: #f5dcdc; text-decoration: none;}
+
+.page .subject_box {
+    /* padding: 0px 20px; */
+    background-color: #f7f8f8;
+    /* background-image: url(../img/box.png); */
+    background-repeat: no-repeat;
+    /* height: 600px; */
+    width: 920px;
+}
+
+.subject_test .hui_boxpanel { }
+.subject_test .subject_box { }
+.subject_test .hui_boxpanel_close { }
+.subject_test .subject_box .form_title {
+    background-color: #5885c0;
+ 
+    color: white;
+    line-height: 1.2em;
+    font-size: 24px;
+    font-weight: normal;
+    text-align: center;
+    padding: 22px 0px 29px 0px;
+    margin: 0px;
+}
+.subject_test .subject_box .form_title .sub {
+    font-weight: normal;
+ 
+    font-size: 14px;
+    line-height: 1.2em;
+    position: absolute;
+    z-index: 1;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.subject_test .subject_box .form_content {
+    padding: 37px 45px 50px 50px;
+}
+.subject_test .subject_box .form_content .subject_title {
+    font-size: 25px;
+    color: #333333;
+    line-height: 1.2em;
+    font-size: 20px;
+    /* padding-bottom: 34px; */
+    padding-left: 2px;
+}
+.subject_test .subject_box .form_content .subject_option {
+    font-size: 25px;
+    color: #333333;
+    line-height: 1.2em;
+    font-size: 20px;
+    padding-top: 34px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    margin: 0px 0px 0px 0px;
+    list-style-type: none;
+    min-height: 340px;
+}
+.subject_test .subject_box .subject_action {
+    height: 110px;
+    
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+.subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none;}
+.subject_test .subject_box .subject_action .subject_nxt{
+    float: left;
+    
+    border-radius: 20px;
+    font-size: 19px;
+    line-height: 1.2em;
+    padding: 10px 40px;
+    border-width: 0px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background-color: #b99f66;
+    color: white;
+    cursor: pointer;
+}
+.subject_test .subject_box .subject_action .subject_nxt:hover{
+    background-color: #BDA97E;
+    /* color: #666; */
+    border: 1px solid rgb(167, 154, 104);
+    padding: 9px 39px;
+}
+.subject_test .subject_box .subject_action .hui_btn_disabled,
+.subject_test .subject_box .subject_action .hui_btn_disabled:hover {background-color: #999;border-color: #999;color: #ccc;}
+.subject_test .subject_box .subject_action .subject_pre{
+    float: left;
+    padding-left: 20px;
+    padding-right: 5px;
+    color: #fff;
+    line-height: 1.2em;
+    font-size: 18px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    padding-top: 21px;
+    margin-left: 0px;
+    
+}
+.subject_test .subject_box .subject_action .subject_end{
+    float: right;
+    
+    background-image: url(../img/icon_exit.png);
+    background-repeat: no-repeat;
+    background-position: 0px 9px;
+    padding-left: 27px;
+    color: #fff;
+    line-height: 1.2em;
+    font-size: 16px;
+    padding-bottom: 5px;
+    margin-top: 21px;
+    padding-top: 10px;
+    margin-right: 40px;
+}
+.subject_test .subject_box .subject_skip {margin-top: 15px; display: inline-block;}
+.subject_test .subject_box { }
+.subject_test .subject_box { }
+.subject_test .subject_box .hui_panel { }
+.subject_test .subject_box .tr_row {
+    color: #939393;
+ 
+    line-height: 2em;
+    font-size: 25px;
+    padding: 15px 0px 10px 34px;
+    /* margin-left: 32px; */
+    list-style-position: inside;
+    border-bottom: 1px solid #ddd;
+    /* background-color: #eaeef1; */
+}
+.subject_test .subject_box .tr_row .td_index {
+    display: none;
+ }
+.subject_test .subject_box .hui_checkbox {
+    /* display: none; */
+ }
+.subject_test .subject_box .hui_checkbox_icon {
+    background-color: white;
+ 
+    color: #16b4f9;
+}
+.subject_test .subject_box .hui_checkbox_icon .hui_checkbox_input { }
+.subject_test .subject_box .hui_checkbox_label { }
+.subject_test .subject_box .tr_row .hui_label {
+    color: #363636;
+ 
+    font-size: 19px;
+    line-height: 1.2em;
+    padding-left: 15px;
+    vertical-align: top;
+    padding-top: 9px;
+    display: inline-block;
+    *display: block;
+}
+.subject_test .hui_textinput { }
+.subject_test .hui_btn {
+    font-family: microsoft yahei;
+ }
+.subject_test .subject_box .tr_row .subject_nxt { }
+.subject_test .hui_btn_label { }
+.subject_test .subject_box .tr_row .subject_pre { }
+.subject_test .subject_box .tr_row .subject_end { }
+

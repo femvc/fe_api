@@ -31,123 +31,69 @@
 'use strict';
 var form;
 
-window.listTable = [
-    {
-        width: 296,
-        title: 'n1',
-        sortable: true,
-        field: 'name',
-        content: function(item) {return item['name'];}
-    },
-    {
-        width: 296,
-        title: 'n2',
-        field: 'name',
-        content: function(item) {return item['name'];}
-    },
-    {
-        width: 296,
-        title: 'n3',
-        field: '_id',
-        content: function(item) {return item['_id'];}
-    }
-];
-window.listData = [
-    {'name':'aaaa'},
-    {'name':'bbbb'}
-];
-
-var form;
+function showTestResult() {
+    form.hide();
+    alert();
+    hui.g('subject_index').innerHTML = '1';
+    
+    
+}
 
 window.onload = function(){
-    // subject_list
-    Requester.get('/ue_api/internal/get_articles', {
-        onsuccess: function (result) {
-            var data = result[1];
-            if (data) {
-                
-                window.listTable = [
-                    {
-                        width: 296,
-                        title: '题目',
-                        sortable: true,
-                        field: 'title',
-                        content: function(item) {return item['title'];}
-                    },
-                    {
-                        width: 296,
-                        title: 'option',
-                        field: 'title',
-                        content: function(item) {
-                            var html = '',
-                                tpl = '<li class="#{correct}"><div class="txt">#{index} #{content} </div></li>';
-                            for (var i in item['content']) {
-                                item['content'][i].index = i;
-                                html += hui.format(tpl, item['content'][i])
-                            }
-                            return '<ul class="option_list">' + html + '</ul>';
-                        }
-                    },
-                    {
-                        width: 296,
-                        title: 'update_time',
-                        field: 'update_time',
-                        content: function(item) {return item['update_time'];}
-                    },
-                    {
-                        width: 296,
-                        title: 'action',
-                        field: '_id',
-                        content: function(item) {return '<a href="?atcid=' + item['_id'] + '">edit</a>';}
-                    }
-                ];
-
-                window.listData = data.items;
-
-                hui.Control.init(hui.g('subject_list'));
-                
-            };
-            
-        }
-    });
-    
     // subject_add
     hui.Control.init(hui.g('subject_add'));
-    var paramlist = hui.Master.parseLocator().query;
-    if (paramlist.atcid) {
-        hui.g('title').innerHTML = '修改题目';
-        Requester.get('/ue_api/internal/get_article', {
-            data: {atcid: paramlist.atcid},
+    form = hui.Control.getByFormName('form');
+    form.initSubject = function(){
+        Requester.get('/ue_api/internal/get_next_article', {
             onsuccess: function (result) {
-                
-                var content = form.getByFormName('content').getMain();
-                var data = result[1];
-                //data.content = JSON.parse(data.content);
-                data.atcid = data._id;
-                form.removeAllOption();
-                for (var i in data.content) {
-                    form.addOption();
-                }
+                if (result && !result[0] && result[1]) {
+                    var data = result[1];
+                    data.atcid = data._id;
+                    data.index2 = data.index1 = data.index;
+                    if (data.test_sn) {
+                        hui.util.setCookie('test_sn', data.test_sn);
+                    }
+                    
+                    form.setValueByTree(data);
 
-                form.setValueByTree(data);
+                    form.getByFormName('content').disposeChild();
+                    //var content = form.getByFormName('content').getMain();
+                    for (var i in data.content) {
+                        data.content[i].index = i;
+                        form.addOption(data.content[i]);
+                    }
+                }
+                else {
+                    showTestResult();
+                }
             }
         });
-    }
-    
-    
-    form = hui.Control.getByFormName('form');
-    form.addOption = function () {
-        var content = form.getByFormName('content').getMain();
-        var index = (content.index || hui.t('textarea', content).length) + 1;
-        content.index = index;
+
+    };
+
+    form.addOption = function (obj) {
+        var content = form.getByFormName('content').getMain(),
+            list,
+            index;
+        obj = obj || {};
+        if (!obj.index) {
+            var list = hui.c('td_index');
+            obj.index = 1;
+            for (var i=0,len=list.length; i<len; i++) {
+                index = parseInt(list[i].innerHTML);
+                if (index >= obj.index) {
+                    obj.index = index + 1;
+                }
+            }
+        }
         var tpl = 
-            '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\'"></div>' +
-            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"tabindex="#{index}"></textarea>' +
-            '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
-            '</div>';
-        hui.util.appendHTML(content, hui.format(tpl, {index: index}));
-        hui.Control.create(hui.g('content'+index));
+            '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
+            '    <div ui="type:\'Label\',id:\'content#{index}\'">#{content}</div>' +
+            '    <span class="td_index">#{index}</span>' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '</li>';
+        hui.util.appendHTML(content, hui.format(tpl, obj));
+        hui.Control.create(hui.g('content'+obj.index));
     };
     form.removeOption = function (index) {
         var content = form.getByFormName('content');
@@ -158,34 +104,69 @@ window.onload = function(){
         var content = form.getByFormName('content'),
             option,
             main = content.getMain();
-        for (var i = main.index; i >= 0; i--) {
+        var list = hui.c('td_index');
+        for (var i=0,len=list.length; i<len; i++) {
+            index = parseInt(list[i].innerHTML);
             option = content.getByFormName(i);
             if (option) {
                 option.dispose();
             }
-        };
+        }
         main.index = 0;
     };
     
-    var submit = form.getByFormName('submit');
+
+    var submit = form.getByFormName('subject_nxt');
     submit.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = JSON.stringify(data.content);
-        console.log(data);
-        Requester.get('/ue_api/internal/save_article', {
+        data.test_sn = hui.util.getCookie('test_sn');
+        
+        if (data.content.indexOf('yes') !== -1) {
+
+            Requester.get('/ue_api/internal/save_next_article', {
+                data: data,
+                onsuccess: function (err, result) {
+                    form.initSubject();
+                }
+            });
+        }
+        else if (window.confirm('友情提示：您尚未选择任何答案，确定跳过该题目吗')) {
+            subject_skip.onclick();
+        }
+    };
+
+    var subject_pre = form.getByFormName('subject_pre');
+    subject_pre.onclick = function () {
+        var data = {};
+        data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
+        Requester.get('/ue_api/internal/save_next_article', {
             data: data,
             onsuccess: function (err, result) {
-                window.location.reload();
+                // form.getByFormName('subject_nxt').setDisabled(false);
+                form.initSubject();
             }
         });
     };
-    var add = form.getByFormName('add');
-    add.onclick = form.addOption;
+
+    var subject_skip = form.getByFormName('subject_skip');
+    subject_skip.onclick = function () {
+        var data = {};
+        data.index = parseInt(hui.g('subject_index').innerHTML, 10) + 1;
+        Requester.get('/ue_api/internal/save_next_article', {
+            data: data,
+            onsuccess: function (err, result) {
+                // form.getByFormName('subject_nxt').setDisabled(false);
+                form.initSubject();
+            }
+        });
+    };
+
     
-    form.addOption();
-    form.addOption();
-    form.addOption();
-    form.addOption();
+
+    form.initSubject();
+    form.show();
+
 };
 //-->
 </script>
@@ -194,28 +175,31 @@ window.onload = function(){
 
 <body class="page" style="">
 <!--target:test-->
-<div id="subject_list" class="subject_list">
-    <h3 class="form_title">题目列表 </h3>
-    <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
-</div>
-
-<div id="subject_add" class="subject_add">
+<div id="subject_add" class="subject_test">
 <!--target:test-->
-<h3 class="form_title"><span id="title"> 增加题目</span> <a href="panel_subject_list.htm">add</a></h3>
-    <div ui="type:'Panel',formName:'form'">
-        <div class="tr_row">
+
+    <div class="subject_box" ui="type:'BoxPanel',formName:'form'">
+        <div class="subject_action">
             <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
-            <span class="row_title">题目：</span>
-            <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
-            <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
+            <input type="hidden" ui="type:'TextInput',formName:'index'" />
+            <a href="javascript:" class="subject_end" ui="type:'Button',formName:'subject_end'">结束测试</a>
+            <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
+            <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" tabindex="100">提 交</button>
         </div>
-        <div ui="type:'Panel',formName:'content',isFormItem: true">
-            <div class="row_head">
-                <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
-            </div>
+        <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
+        <div class="form_content">
+            <div class="subject_title"><span ui="type:'Label',formName:'index2'">1</span>、<span ui="type:'Label',formName:'title'"></sapn></div>
+            <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
+            </ol>
+            <div style="text-align: right;"><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
         </div>
+
     </div>
 </div>
+
+
+
+
 </body>
 
 </html>

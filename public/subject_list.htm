@@ -120,23 +120,23 @@ window.onload = function(){
             data: {atcid: paramlist.atcid},
             onsuccess: function (result) {
                 
-                var content = form.getByFormName('content').getMain();
                 var data = result[1];
                 //data.content = JSON.parse(data.content);
                 data.atcid = data._id;
-                form.removeAllOption();
+                
+                form.setValueByTree(data);
+                form.getByFormName('content').disposeChild();
+                
                 for (var i in data.content) {
                     data.content[i].index = i;
                     form.addOption(data.content[i]);
                 }
-
-                //form.setValueByTree(data);
             }
         });
     }
     
-    
     form = hui.Control.getByFormName('form');
+
     form.addOption = function (obj) {
         var content = form.getByFormName('content').getMain(),
             list,
@@ -164,21 +164,6 @@ window.onload = function(){
     form.removeOption = function (index) {
         var content = form.getByFormName('content');
         content.getByFormName(index).dispose();
-
-    };
-    form.removeAllOption = function () {
-        var content = form.getByFormName('content'),
-            option,
-            main = content.getMain();
-        var list = hui.c('td_index');
-        for (var i=0,len=list.length; i<len; i++) {
-            index = parseInt(list[i].innerHTML);
-            option = content.getByFormName(i);
-            if (option) {
-                option.dispose();
-            }
-        }
-        main.index = 0;
     };
     
     var submit = form.getByFormName('submit');
@@ -198,12 +183,13 @@ window.onload = function(){
     
     var subject_add = form.getByFormName('subject_add');
     subject_add.onclick = function () {
-        form.removeAllOption();
+        form.getByFormName('content').disposeChild();
         form.addOption();
         form.addOption();
         form.addOption();
         form.addOption();
     };
+    subject_add.onclick();
 
 };
 //-->

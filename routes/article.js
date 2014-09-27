@@ -1,5 +1,6 @@
 ﻿'use strict';
 var articleModel = require('../models/article').createNew();
+var quizModel = require('../models/quiz').createNew();
 var Util = require('../helpers/common');
 
 exports.saveArticle = function (req, res, next) {
@@ -102,4 +103,106 @@ exports.getArticles = function (req, res, next) {
             items: doc
         });
     });
+}
+
+exports.getNextArticle = function (req, res, next) {
+    req.sessionStore.user = req.sessionStore.user || {};
+    req.sessionStore.anonymous = req.sessionStore.anonymous || {};
+    req.sessionStore.subject = req.sessionStore.subject || {};
+
+    var uid = req.sessionStore.user[req.sessionID] || req.sessionStore.anonymous[req.sessionID];
+    req.sessionStore.subject[uid] = req.sessionStore.subject[uid] ? req.sessionStore.subject[uid] : 1;
+
+    var params = req.paramlist,
+        current = params.current || 1,
+        count = params.count || 100,
+        sort = {
+            "update_time": -1,
+            "create_time": -1
+        },
+        filter = {};
+
+    articleModel.getItems(filter, sort, current, count, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+
+        if (req.paramlist.answer != 'yes') {
+            for (var j in doc) {
+                var list = doc[j].content;
+                for (var i in list) {
+                    delete list[i].correct;
+                }
+            }
+        }
+
+        var data = doc[req.sessionStore.subject[uid] - 1];
+        if (!data) {
+            req.sessionStore.subject[uid] = 1;
+            response.err(req, res, 'INDEX_OUT_RANGE');
+        }
+        else {
+            data.index = req.sessionStore.subject[uid];
+            data.sessionID = req.sessionID;
+            data.sum = doc.length < 100 ? doc.length : 100;
+            if (data.index === 1) {
+                data.test_sn = uid + Util.formatDate(new Date(), 'yyyyMMddhhmm') + String(Math.random()).replace('0.', '');
+            }
+
+            response.ok(req, res, data);
+        }
+    });
+
+}
+
+exports.saveNextArticle = function (req, res, next) {
+    req.sessionStore.user = req.sessionStore.user || {};
+    req.sessionStore.anonymous = req.sessionStore.anonymous || {};
+    req.sessionStore.subject = req.sessionStore.subject || {};
+
+    var uid = req.sessionStore.user[req.sessionID] || req.sessionStore.anonymous[req.sessionID];
+    req.sessionStore.subject[uid] = req.sessionStore.subject[uid] ? parseInt(req.sessionStore.subject[uid], 10) + 1 : 1;
+
+    var index = parseInt(req.paramlist.reset_index, 10);
+    index = index !== index || index < 1 ? 1 : index;
+    req.sessionStore.subject[uid] = req.paramlist.reset_index !== undefined ? index : req.sessionStore.subject[uid];
+
+    var id = req.paramlist.atcid,
+        article = {},
+        callback, date;
+
+    if (!id || !req.paramlist.test_sn || req.paramlist.test_sn.indexOf(uid) !== 0) {
+        return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
+    }
+
+    callback = function (err, doc) {
+        if (err) {
+            response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+
+        doc[0].index = req.sessionStore.subject[uid];
+        doc[0].sessionID = req.sessionID;
+        console.log(doc);
+
+        response.ok(req, res, JSON.parse(JSON.stringify(doc)));
+    }
+
+    try {
+        article.content = req.paramlist.content ? JSON.parse(req.paramlist.content) : '';
+    }
+    catch (e) {}
+    //date = hui.formatDate(new Date(), "yyyy-MM-dd");
+    date = Util.formatDate(new Date(), "yyyy-MM-dd hh:mm");
+    article.update_time = date;
+    article.uid = uid;
+    article.atcid = id;
+    article.test_sn = req.paramlist.test_sn;
+    article.index = req.paramlist.index;
+
+    if (!req.paramlist.reset_index) {
+        quizModel.insert(article, callback);
+    }
+    else {
+        callback(null, [{}]);
+    }
 }

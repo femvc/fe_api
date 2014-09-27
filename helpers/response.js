@@ -29,33 +29,33 @@ var err_map = {
     USER_LOGIN_FAIL: '用户不存在或密码错误',
     MISSING_PARAMETERS: '参数缺失',
     USER_ALREADY_EXIST: '用户已存在',
-    USER_ROOM_IS_EMPTY: '该room里没有人'
+    USER_ROOM_IS_EMPTY: '该room里没有人',
+    INDEX_OUT_RANGE: '索引值超出范围'
 };
 
-exports.err = function(req, res, errcode, extra_msg) {
-    var output = [
-        {
+exports.err = function (req, res, errcode, extra_msg) {
+    var output = [{
             mobile: err_map[errcode],
             extra: extra_msg
         },
         errcode
     ];
     res.send(output);
-//    // 内部错误日志记录
-//    if (errcode.substr(0, 9) == 'INTERNAL_') {
-//        var request = {
-//            url: req.url,
-//            params: req.paramlist,
-//            method: req.method
-//        };
-//        request = helper_util.unicodeOnlyChs(JSON.stringify(request));
-//        helper_log.logError('pick_api_call', errcode + '\t' + request, function(){});
-//    }
-//    //接口访问并发统计
-//    helper_stat.statCount('pick_api.apiCall', 1, function(){});
+    //    // 内部错误日志记录
+    //    if (errcode.substr(0, 9) == 'INTERNAL_') {
+    //        var request = {
+    //            url: req.url,
+    //            params: req.paramlist,
+    //            method: req.method
+    //        };
+    //        request = helper_util.unicodeOnlyChs(JSON.stringify(request));
+    //        helper_log.logError('pick_api_call', errcode + '\t' + request, function(){});
+    //    }
+    //    //接口访问并发统计
+    //    helper_stat.statCount('pick_api.apiCall', 1, function(){});
 };
 
-exports.ok = function(req, res, result, next) {
+exports.ok = function (req, res, result, next) {
     result = result || '';
     var elapsedTime = -1;
     if (req._time) {
@@ -64,31 +64,31 @@ exports.ok = function(req, res, result, next) {
     var output = [null, result];
     res.send(output);
 
-//    //接口访问并发统计
-//    helper_stat.statCount('pick_api.apiCall', 1, function(){});
-//    //接口访问响应时间统计
-//    if (elapsedTime > -1) {
-//        helper_stat.statTime('pick_api.apiCall', elapsedTime, function(){});
-//    }
-//    var request = {
-//        url: req.url,
-//        params: req.paramlist,
-//        method: req.method
-//    };
-//    request = helper_util.unicodeOnlyChs(JSON.stringify(request));
-//    //用户活跃统计
-//    var uid = req.paramlist.mid || req.paramlist.uid || 'anonymous';
-//    helper_log.logStat('user_activity', uid + '\t' + request, function(){});
-//    //地点册被访问量统计
-//    if (req.paramlist.vlid) {
-//        helper_log.logStat('venuelist_hotspot', req.paramlist.vlid + '\t' + request, function(){});
-//    }
-//    //地点被访问量统计
-//    if (req.paramlist.guid) {
-//        helper_log.logStat('venue_hotspot', req.paramlist.guid + '\t' + request, function(){});
-//    }
-//    //攻略被访问量统计
-//    if (req.paramlist.tid) {
-//        helper_log.logStat('tip_hotspot', req.paramlist.tid + '\t' + request, function(){});
-//    }
+    //    //接口访问并发统计
+    //    helper_stat.statCount('pick_api.apiCall', 1, function(){});
+    //    //接口访问响应时间统计
+    //    if (elapsedTime > -1) {
+    //        helper_stat.statTime('pick_api.apiCall', elapsedTime, function(){});
+    //    }
+    //    var request = {
+    //        url: req.url,
+    //        params: req.paramlist,
+    //        method: req.method
+    //    };
+    //    request = helper_util.unicodeOnlyChs(JSON.stringify(request));
+    //    //用户活跃统计
+    //    var uid = req.paramlist.mid || req.paramlist.uid || 'anonymous';
+    //    helper_log.logStat('user_activity', uid + '\t' + request, function(){});
+    //    //地点册被访问量统计
+    //    if (req.paramlist.vlid) {
+    //        helper_log.logStat('venuelist_hotspot', req.paramlist.vlid + '\t' + request, function(){});
+    //    }
+    //    //地点被访问量统计
+    //    if (req.paramlist.guid) {
+    //        helper_log.logStat('venue_hotspot', req.paramlist.guid + '\t' + request, function(){});
+    //    }
+    //    //攻略被访问量统计
+    //    if (req.paramlist.tid) {
+    //        helper_log.logStat('tip_hotspot', req.paramlist.tid + '\t' + request, function(){});
+    //    }
 };
