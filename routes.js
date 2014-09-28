@@ -37,6 +37,8 @@ app.all('/ue_api/internal/save_article', account.auth, article.saveArticle);
 app.get('/ue_api/internal/remove_article', account.auth, article.removeArticle);
 app.all('/ue_api/internal/get_next_article', account.auth, article.getNextArticle);
 app.all('/ue_api/internal/save_next_article', account.auth, article.saveNextArticle);
+app.all('/ue_api/internal/get_test_result', account.auth, article.getTestResult);
+
 // Account
 app.get('/account/foo', account.foo);
 app.get('/account/register', account.register);

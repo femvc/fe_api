@@ -64,13 +64,14 @@ exports.register = function (req, res, next) {
 exports.auth = function (req, res, next) {
     console.log('============' + req.sessionID + '===============');
     req.sessionStore.user = req.sessionStore.user || {};
-    req.sessionStore.anonymous = req.sessionStore.anonymous || {};
-    if (req.sessionStore.user[req.sessionID] || req.sessionStore.anonymous[req.sessionID]) {
+    req.sessionStore.subject = req.sessionStore.subject || {};
+
+    if (req.sessionStore.user[req.sessionID]) {
         next();
     }
     else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
-        req.sessionStore.anonymous[req.sessionID] = req.sessionID;
+        req.sessionStore.user[req.sessionID] = req.sessionID;
         next();
     }
 };

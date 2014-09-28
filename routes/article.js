@@ -105,12 +105,29 @@ exports.getArticles = function (req, res, next) {
     });
 }
 
-exports.getNextArticle = function (req, res, next) {
-    req.sessionStore.user = req.sessionStore.user || {};
-    req.sessionStore.anonymous = req.sessionStore.anonymous || {};
-    req.sessionStore.subject = req.sessionStore.subject || {};
+function createArticleList(uid, next) {
+    var list = [],
+        result = [],
+        current = 1,
+        count = 1000,
+        sort = {
+            "update_time": -1,
+            "create_time": -1
+        },
+        filter = {};
 
-    var uid = req.sessionStore.user[req.sessionID] || req.sessionStore.anonymous[req.sessionID];
+    articleModel.getItems(filter, sort, current, count, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+
+
+    });
+
+}
+
+exports.getNextArticle = function (req, res, next) {
+    var uid = req.sessionStore.user[req.sessionID];
     req.sessionStore.subject[uid] = req.sessionStore.subject[uid] ? req.sessionStore.subject[uid] : 1;
 
     var params = req.paramlist,
@@ -121,6 +138,10 @@ exports.getNextArticle = function (req, res, next) {
             "create_time": -1
         },
         filter = {};
+
+
+    //{_id: {$in: [20,22,24,26]}}
+
 
     articleModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
@@ -156,11 +177,7 @@ exports.getNextArticle = function (req, res, next) {
 }
 
 exports.saveNextArticle = function (req, res, next) {
-    req.sessionStore.user = req.sessionStore.user || {};
-    req.sessionStore.anonymous = req.sessionStore.anonymous || {};
-    req.sessionStore.subject = req.sessionStore.subject || {};
-
-    var uid = req.sessionStore.user[req.sessionID] || req.sessionStore.anonymous[req.sessionID];
+    var uid = req.sessionStore.user[req.sessionID];
     req.sessionStore.subject[uid] = req.sessionStore.subject[uid] ? parseInt(req.sessionStore.subject[uid], 10) + 1 : 1;
 
     var index = parseInt(req.paramlist.reset_index, 10);
@@ -205,4 +222,37 @@ exports.saveNextArticle = function (req, res, next) {
     else {
         callback(null, [{}]);
     }
+}
+
+exports.getTestResult = function (req, res, next) {
+
+    console.log(common);
+    var params = req.paramlist,
+        current = params.current || 1,
+        count = params.count || 100,
+        sort = {
+            "update_time": -1,
+            "create_time": -1
+        },
+        filter = {};
+
+    if (params.title)
+        filter.title = common.likeWith(params.title);
+    if (params.author)
+        filter.author = params.author;
+
+    articleModel.getItems(filter, sort, current, count, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        var subject = doc;
+        quizModel.getItems(filter, sort, current, count, function (err, doc) {
+            if (err) {
+                response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+            }
+
+
+            response.ok(req, res, [subject, doc]);
+        });
+    });
 }
