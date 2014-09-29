@@ -61,7 +61,7 @@ var form;
 
 window.onload = function(){
     // subject_list
-    Requester.get('/ue_api/internal/get_articles?answer=yes', {
+    Requester.get('/ue_api/internal/get_questions?answer=yes', {
         onsuccess: function (result) {
             var data = result[1];
             if (data) {
@@ -116,7 +116,7 @@ window.onload = function(){
     var paramlist = hui.Master.parseLocator().query;
     if (paramlist.atcid) {
         hui.g('title').innerHTML = '修改题目';
-        Requester.get('/ue_api/internal/get_article?answer=yes', {
+        Requester.get('/ue_api/internal/get_question?answer=yes', {
             data: {atcid: paramlist.atcid},
             onsuccess: function (result) {
                 
@@ -171,7 +171,7 @@ window.onload = function(){
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = JSON.stringify(data.content);
         console.log(data);
-        Requester.get('/ue_api/internal/save_article', {
+        Requester.get('/ue_api/internal/save_question', {
             data: data,
             onsuccess: function (err, result) {
                 window.location.reload();

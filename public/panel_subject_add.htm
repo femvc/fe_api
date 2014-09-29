@@ -18,7 +18,7 @@ window.onload = function(){
     var paramlist = hui.Master.parseLocator().query;
     if (paramlist.atcid) {
         hui.g('title').innerHTML = '修改题目';
-        Requester.get('/ue_api/internal/get_article', {
+        Requester.get('/ue_api/internal/get_question', {
             data: {atcid: paramlist.atcid},
             onsuccess: function (result) {
                 alert(result[1]);
@@ -56,7 +56,7 @@ window.onload = function(){
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = JSON.stringify(data.content);
         console.log(data);
-        Requester.get('/ue_api/internal/save_article', {
+        Requester.get('/ue_api/internal/save_question', {
             data: data,
             onsuccess: function (err, result) {
                 alert(result);

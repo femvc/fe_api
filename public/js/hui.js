@@ -3337,7 +3337,7 @@ hui.define('hui_requester', [], function () {
 
                 xhr.fire(stat);
 
-                // http://www.never-online.net/blog/article.asp?id=261 
+                // http://www.never-online.net/blog/question.asp?id=261 
                 // case 12002: // Server timeout 
                 // case 12029: // dropped connections 
                 // case 12030: // dropped connections 

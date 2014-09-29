@@ -44,7 +44,7 @@ window.onload = function(){
     hui.Control.init(hui.g('subject_add'));
     form = hui.Control.getByFormName('form');
     form.initSubject = function(){
-        Requester.get('/ue_api/internal/get_next_article', {
+        Requester.get('/ue_api/internal/get_next_question', {
             onsuccess: function (result) {
                 if (result && !result[0] && result[1]) {
                     var data = result[1];
@@ -124,7 +124,7 @@ window.onload = function(){
         
         if (data.content.indexOf('yes') !== -1) {
 
-            Requester.get('/ue_api/internal/save_next_article', {
+            Requester.get('/ue_api/internal/save_next_question', {
                 data: data,
                 onsuccess: function (err, result) {
                     form.initSubject();
@@ -140,7 +140,7 @@ window.onload = function(){
     subject_pre.onclick = function () {
         var data = {};
         data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
-        Requester.get('/ue_api/internal/save_next_article', {
+        Requester.get('/ue_api/internal/save_next_question', {
             data: data,
             onsuccess: function (err, result) {
                 // form.getByFormName('subject_nxt').setDisabled(false);
@@ -153,7 +153,7 @@ window.onload = function(){
     subject_skip.onclick = function () {
         var data = {};
         data.index = parseInt(hui.g('subject_index').innerHTML, 10) + 1;
-        Requester.get('/ue_api/internal/save_next_article', {
+        Requester.get('/ue_api/internal/save_next_question', {
             data: data,
             onsuccess: function (err, result) {
                 // form.getByFormName('subject_nxt').setDisabled(false);

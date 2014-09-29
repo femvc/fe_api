@@ -1,6 +1,6 @@
-﻿module.exports = {
+module.exports = {
 	createNew: function () {
-		var collName = 'quiz';
+		var collName = 'history';
 		userModel = require('./base').createNew(collName);
 
 		userModel.remove = function (_id, next) {
