@@ -81,9 +81,11 @@ var Util = {
 
             if (a[key] < b[key]) {
                 return -1 * sortBy;
-            } else if (a[key] == b[key]) {
+            }
+            else if (a[key] == b[key]) {
                 return 0 * sortBy;
-            } else if (a[key] > b[key]) {
+            }
+            else if (a[key] > b[key]) {
                 return 1 * sortBy;
             }
         };
@@ -101,14 +103,17 @@ var Util = {
                 if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
                     m = parseInt(m, 10);
                     n = parseInt(n, 10);
-                } else {
+                }
+                else {
                     if (m > n) {
                         m = 1;
                         n = -m;
-                    } else if (m < n) {
+                    }
+                    else if (m < n) {
                         m = -1;
                         n = -m;
-                    } else {
+                    }
+                    else {
                         m = 1;
                         n = m;
                     }
@@ -223,6 +228,81 @@ var Util = {
             }
         }
         return fmt;
+    },
+    randomOrder: function (countNum, min, max, seed) {
+        //todo
+        seed = seed === undefined ? new Date().getTime() + Math.random() * 100000000 : Number(seed);
+        min = min === undefined ? 0 : Number(min);
+        max = max === undefined ? 100000000000000 : Number(max) + 1;
+
+        var list = [],
+            key,
+            result = [];
+
+        if (Object.prototype.toString.call(countNum) !== '[object Array]') {
+            count = Math.max(Number(countNum), max - min);
+            for (var i = 0, len = count; i < len; i++) {
+                list.push(min + i % (max - min));
+            }
+        }
+        else {
+            list = countNum;
+        }
+        list.sort(function (m, n) {
+            return Math.random() > 0.5
+        });
+
+        var count = list;
+        list = [];
+
+        for (var i = 0, len = count.length; i < len; i++) {
+            key = Number(String(((i + seed) * 9301 + 49297) % 233280 / 233280.0).replace('0.', '').substring(6, 7));
+            list.push({
+                index: key,
+                value: i
+            });
+        }
+
+        var field = 'index',
+            order = 'desc';
+        list = list.sort(function (a, b) {
+            var m, n;
+            m = String(a[field]).toLowerCase();
+            n = String(b[field]).toLowerCase();
+
+            if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
+                m = parseInt(m, 10);
+                n = parseInt(n, 10);
+            }
+            else {
+                if (m > n) {
+                    m = 1;
+                    n = -m;
+                }
+                else if (m < n) {
+                    m = -1;
+                    n = -m;
+                }
+                else {
+                    m = 1;
+                    n = m;
+                }
+            }
+            return (order == 'desc' ? n - m : m - n);
+        });
+
+        for (var i = 0, len = list.length; i < len; i++) {
+            result.push(count[list[i].value]);
+        }
+
+        if (Object.prototype.toString.call(countNum) !== '[object Array]') {
+            list = result.splice(0, countNum);
+        }
+        else {
+            list = result;
+        }
+
+        return list;
     }
 }
 
@@ -240,3 +320,4 @@ exports.regEscape = Util.regEscape;
 exports.md5withSalt = Util.md5withSalt;
 exports.likeWith = Util.likeWith;
 exports.formatDate = Util.formatDate;
+exports.randomOrder = Util.randomOrder;
