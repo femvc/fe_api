@@ -1,6 +1,7 @@
 'use strict';
 var questionModel = require('../models/question').createNew();
-var paperModel = require('../models/paper').createNew();
+var paperModel  = require('../models/paper').createNew();
+var resultModel = require('../models/result').createNew();
 var Util = require('../helpers/common');
 
 exports.getTestResult = function (req, res, next) {
@@ -10,8 +11,8 @@ exports.getTestResult = function (req, res, next) {
         current = params.current || 1,
         count = params.count || 100,
         sort = {
-            "update_time": -1,
-            "create_time": -1
+            'update_time': -1,
+            'create_time': -1
         },
         filter = {};
 
@@ -29,7 +30,6 @@ exports.getTestResult = function (req, res, next) {
             if (err) {
                 response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
             }
-
 
             response.ok(req, res, [subject, doc]);
         });

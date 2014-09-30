@@ -1,5 +1,7 @@
-var account = require('./routes/account');
+var account  = require('./routes/account');
 var question = require('./routes/question');
+var paper = require('./routes/paper');
+var result = require('./routes/result');
 
 /*
  * CORS Support in Node.js web app written with Express
@@ -30,14 +32,14 @@ app.all('/ue_api/account/logout', account.logout);
 app.get('/ue_api/account/get_detail', account.auth, account.getDetail);
 
 //question
-/* internal */
+// internal 
 app.get('/ue_api/internal/get_questions', account.auth, question.getQuestions);
 app.get('/ue_api/internal/get_question', account.auth, question.getQuestion);
 app.all('/ue_api/internal/save_question', account.auth, question.saveQuestion);
 app.get('/ue_api/internal/remove_question', account.auth, question.removeQuestion);
-app.all('/ue_api/internal/get_next_question', account.auth, question.getNextQuestion);
-app.all('/ue_api/internal/save_next_question', account.auth, question.saveNextQuestion);
-app.all('/ue_api/internal/get_test_result', account.auth, question.getTestResult);
+app.all('/ue_api/internal/get_next_question', account.auth, paper.getNextQuestion);
+app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuestion);
+app.all('/ue_api/internal/get_test_result', account.auth, result.getTestResult);
 
 // Account
 app.get('/account/foo', account.foo);
@@ -48,3 +50,4 @@ app.all('/account/register', account.register);
 app.all('/account/login', account.login);
 app.all('/account/logout', account.logout);
 app.get('/account/get_detail', account.auth, account.getDetail);
+// */

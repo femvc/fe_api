@@ -1,7 +1,27 @@
 'use strict';
 var questionModel = require('../models/question').createNew();
 var paperModel = require('../models/paper').createNew();
+var resultModel = require('../models/result').createNew();
 var Util = require('../helpers/common');
+
+exports.getQuestion = function (req, res, next) {
+    var id = req.paramlist.atcid;
+    if (!id) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'id');
+    }
+    questionModel.getById(id, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        if (req.paramlist.answer != 'yes' && doc && doc.content) {
+            var list = doc.content;
+            for (var i in list) {
+                delete list[i].correct;
+            }
+        }
+        response.ok(req, res, doc);
+    });
+}
 
 exports.saveQuestion = function (req, res, next) {
     var id = req.paramlist.atcid,
@@ -24,8 +44,8 @@ exports.saveQuestion = function (req, res, next) {
         }
         response.ok(req, res, doc);
     }
-    //date = hui.formatDate(new Date(), "yyyy-MM-dd");
-    date = Util.formatDate(new Date(), "yyyy-MM-dd hh:mm");
+    //date = hui.formatDate(new Date(), 'yyyy-MM-dd');
+    date = Util.formatDate(new Date(), 'yyyy-MM-dd hh:mm');
     if (id) {
         question.update_time = date;
         questionModel.updateById(id, question, callback);
@@ -34,25 +54,6 @@ exports.saveQuestion = function (req, res, next) {
         question.update_time = date;
         questionModel.insert(question, callback);
     }
-}
-
-exports.getQuestion = function (req, res, next) {
-    var id = req.paramlist.atcid;
-    if (!id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'id');
-    }
-    questionModel.getById(id, function (err, doc) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        if (req.paramlist.answer != 'yes' && doc && doc.content) {
-            var list = doc.content;
-            for (var i in list) {
-                delete list[i].correct;
-            }
-        }
-        response.ok(req, res, doc);
-    });
 }
 
 exports.removeQuestion = function (req, res, next) {
@@ -75,8 +76,8 @@ exports.getQuestions = function (req, res, next) {
         current = params.current || 1,
         count = params.count || 100,
         sort = {
-            "update_time": -1,
-            "create_time": -1
+            'update_time': -1,
+            'create_time': -1
         },
         filter = {};
 

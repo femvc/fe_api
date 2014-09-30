@@ -9,12 +9,12 @@ var flow = require("flow");
 var request = require('request');
 var Util = {
     /**
-     * @name: packer
-     * @desc: 对一个数组分页读取
-     * @params: items: 待处理的数组
-     * @params: page: 第几页，从第0页开始
-     * @params: count: 读取多少元素
-     * @return: 返回该页的所有元素。
+     * @name packer
+     * @desc 对一个数组分页读取
+     * @params items 待处理的数组
+     * @params page 第几页，从第0页开始
+     * @params count 读取多少元素
+     * @return 返回该页的所有元素。
      */
     packer: function (items, page, count, next) {
         page = Number(page);
@@ -42,10 +42,10 @@ var Util = {
 
 
     /**
-     * @name: switchObjValueToString
-     * @desc: 把一个js对象中的值都转换成字符串。
-     * @params: obj: 待处理的js对象
-     * @return: 返回处理过的js对象。
+     * @name switchObjValueToString
+     * @desc 把一个js对象中的值都转换成字符串。
+     * @params obj 待处理的js对象
+     * @return 返回处理过的js对象。
      */
     switchObjValueToString: function (obj) {
         if (obj instanceof Object) {
@@ -62,10 +62,10 @@ var Util = {
         return (dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2');
     },
     /**
-     * @name: sort
-     * @desc: 对一个数组排序，数组中没一个元素都是一个js对象。该函数目的是根据key来排序数组中的元素。
-     * @params: key: 关键字段名
-     * @return: 返回排序后的数组。
+     * @name sort
+     * @desc 对一个数组排序，数组中没一个元素都是一个js对象。该函数目的是根据key来排序数组中的元素。
+     * @params key 关键字段名
+     * @return 返回排序后的数组。
      */
     sort: function (array, key, sortBy) {
         var sortBy = sortBy || 1;
@@ -139,9 +139,9 @@ var Util = {
         return paramObj;
     },
     /**
-     * @name: unicodeOnlyChs
-     * @desc: 对一个str中的所有中文编码成unicode形式的字符串。
-     * @return: 返回处理后的字符串。
+     * @name unicodeOnlyChs
+     * @desc 对一个str中的所有中文编码成unicode形式的字符串。
+     * @return 返回处理后的字符串。
      */
     unicodeOnlyChs: function (str) {
         if (!str instanceof String) {
@@ -153,10 +153,10 @@ var Util = {
         });
     },
     /**
-     * @name: httpPOST
-     * @desc: 发起POST请求。
-     * @params: obj: 待处理的js对象
-     * @return: 返回处理过的js对象。
+     * @name httpPOST
+     * @desc 发起POST请求。
+     * @params obj 待处理的js对象
+     * @return 返回处理过的js对象。
      */
     httpPOST: function (url, params, next) {
         flow.exec(
@@ -231,9 +231,9 @@ var Util = {
     },
     randomOrder: function (countNum, min, max, seed) {
         //todo
-        seed = seed === undefined ? new Date().getTime() + Math.random() * 100000000 : Number(seed);
         min = min === undefined ? 0 : Number(min);
         max = max === undefined ? 100000000000000 : Number(max) + 1;
+        seed = seed === undefined ? new Date().getTime() + Math.random() * 100000000 : Number(seed);
 
         var list = [],
             key,
