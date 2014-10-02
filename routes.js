@@ -1,4 +1,4 @@
-var account  = require('./routes/account');
+var account = require('./routes/account');
 var question = require('./routes/question');
 var paper = require('./routes/paper');
 var result = require('./routes/result');
@@ -30,6 +30,7 @@ app.all('/ue_api/account/register', account.register);
 app.all('/ue_api/account/login', account.login);
 app.all('/ue_api/account/logout', account.logout);
 app.get('/ue_api/account/get_detail', account.auth, account.getDetail);
+app.get('/ue_api/account/get_uid', account.auth, account.getUid);
 
 //question
 // internal 
@@ -37,9 +38,13 @@ app.get('/ue_api/internal/get_questions', account.auth, question.getQuestions);
 app.get('/ue_api/internal/get_question', account.auth, question.getQuestion);
 app.all('/ue_api/internal/save_question', account.auth, question.saveQuestion);
 app.get('/ue_api/internal/remove_question', account.auth, question.removeQuestion);
+
 app.all('/ue_api/internal/get_next_question', account.auth, paper.getNextQuestion);
 app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuestion);
-app.all('/ue_api/internal/get_test_result', account.auth, result.getTestResult);
+app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
+
+app.all('/ue_api/internal/get_result', account.auth, result.getResult);
+app.all('/ue_api/internal/get_results', account.auth, result.getResults);
 
 // Account
 app.get('/account/foo', account.foo);

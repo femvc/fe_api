@@ -178,94 +178,101 @@ hui.define('hui_util', ['hui'], function () {
 
     hui.util = {};
     hui.util.g = function (id, parentNode) {
-        if (!parentNode) {
-            return document.getElementById(id);
-        }
-        else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
-            return hui.bocument.getElementById(id);
-        }
-        else {
-            var i,
-                len,
-                childNode,
-                elements,
-                list,
-                childlist,
-                node;
-            elements = [], list = [parentNode];
-
-            while (list.length) {
-                childNode = list.pop();
-                if (!childNode) continue;
-                if (childNode.id == id) {
-                    break;
-                }
-                elements.push(childNode);
-                childlist = childNode.childNodes;
-                if (!childlist || childlist.length < 1) continue;
-                for (i = 0, len = childlist.length; i < len; i++) {
-                    node = childlist[i];
-                    list.push(node);
-                }
-            }
-            return (childNode.id == id ? childNode : null);
-        }
-    };
-
-    hui.util.c = function (searchClass, node, tag) {
-        if (document.getElementsByClassName) {
-            var nodes = (node || document).getElementsByClassName(searchClass),
-                result = nodes;
-            if (tag !== undefined) {
-                result = [];
-                for (var i = 0, len = nodes.length; i < len; i++) {
-                    if (tag === '*' || nodes[i].tagName.toUpperCase() === tag.toUpperCase()) {
-                        result.push(nodes[i]);
-                    }
-                }
-            }
-            return result;
+        if (window.jQuery) {
+            return !parentNode ?
+                window.jQuery('#' + id).get(0) :
+                window.jQuery('#' + id, (Object.prototype.toString.call(parentNode) === '[object String]' ?
+                    window.jQuery('#' + parentNode) : window.jQuery(parentNode))).get(0);
         }
         else {
-            searchClass = searchClass !== null ? String(searchClass).replace(/\s+/g, ' ') : '';
-            node = node || document;
-            tag = tag || '*';
-
-            var classes = searchClass.split(' '),
-                elements = (tag === '*' && node.all) ? node.all : node.getElementsByTagName(tag),
-                patterns = [],
-                returnElements = [],
-                current,
-                match;
-
-            var i = classes.length;
-            while (--i >= 0) {
-                patterns.push(new RegExp('(^|\\s)' + classes[i] + '(\\s|$)'));
+            if (!parentNode) {
+                return document.getElementById(id);
             }
-            var j = elements.length;
-            while (--j >= 0) {
-                current = elements[j];
-                match = false;
-                for (var k = 0, kl = patterns.length; k < kl; k++) {
-                    match = patterns[k].test(current.className);
-                    if (!match) {
+            else if (hui.bocument && (parentNode == hui.bocument || parentNode == hui.bocument.body)) {
+                return hui.bocument.getElementById(id);
+            }
+            else {
+                var i,
+                    len,
+                    childNode,
+                    elements,
+                    list,
+                    childlist,
+                    node;
+                elements = [], list = [parentNode];
+
+                while (list.length) {
+                    childNode = list.pop();
+                    if (!childNode) continue;
+                    if (childNode.id == id) {
                         break;
                     }
+                    elements.push(childNode);
+                    childlist = childNode.childNodes;
+                    if (!childlist || childlist.length < 1) continue;
+                    for (i = 0, len = childlist.length; i < len; i++) {
+                        node = childlist[i];
+                        list.push(node);
+                    }
                 }
-                if (match) {
-                    returnElements.push(current);
-                } 
+                return (childNode.id == id ? childNode : null);
             }
-            return returnElements;
         }
     };
-    hui.util.cc = function (searchClass, node, tag) {
-        return hui.util.c(searchClass, node, tag)[0];
+
+    hui.util.c = function (searchClass, node) {
+        if (window.jQuery) {
+            return !node ? window.jQuery('.' + searchClass) : window.jQuery('.' + searchClass, window.jQuery(node));
+        }
+        else {
+            if (document.getElementsByClassName) {
+                return (node || document).getElementsByClassName(searchClass);
+            }
+            else {
+                searchClass = searchClass !== null ? String(searchClass).replace(/\s+/g, ' ') : '';
+                node = node || document;
+
+                var classes = searchClass.split(' '),
+                    elements = node.all,
+                    patterns = [],
+                    returnElements = [],
+                    current,
+                    match;
+
+                var i = classes.length;
+                while (--i >= 0) {
+                    patterns.push(new RegExp('(^|\\s)' + classes[i] + '(\\s|$)'));
+                }
+                var j = elements.length;
+                while (--j >= 0) {
+                    current = elements[j];
+                    match = false;
+                    for (var k = 0, kl = patterns.length; k < kl; k++) {
+                        match = patterns[k].test(current.className);
+                        if (!match) {
+                            break;
+                        }
+                    }
+                    if (match) {
+                        returnElements.push(current);
+                    } 
+                }
+                return returnElements;
+            }
+        }
+    };
+    hui.util.cc = function (searchClass, node) {
+        return hui.util.c(searchClass, node)[0];
     };
 
     hui.util.t = function (tag, node) {
         node = node || document;
-        return node.getElementsByTagName(tag);
+        if (window.jQuery) {
+            return !node ? window.jQuery(tag) : window.jQuery(tag, window.jQuery(node));
+        }
+        else {
+            return node.getElementsByTagName(tag);
+        }
     };
 
     /**
@@ -275,18 +282,25 @@ hui.define('hui_util', ['hui'], function () {
      * @param {String} html 子元素HTML字符串
      */
     hui.util.appendHTML = function (elem, html) {
-        var node = document.createElement('DIV');
-        node.innerHTML = html;
-        elem.appendChild(node);
-        var list = [];
-        for (var i = 0, len = node.childNodes.length; i < len; i++) {
-            list[i] = node.childNodes[i];
+        if (window.jQuery) {
+            return window.jQuery(elem).append(html);
         }
-        for (var i = 0, len = list.length; i < len; i++) {
-            //for (var i=list.length--; i>-1; i--) {
-            elem.appendChild(list[i]);
+        else {
+            var node = document.createElement('DIV');
+            node.innerHTML = html;
+            elem.appendChild(node);
+            var list = [];
+            for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                list[i] = node.childNodes[i];
+            }
+            for (var i = 0, len = list.length; i < len; i++) {
+                //for (var i=list.length--; i>-1; i--) {
+                elem.appendChild(list[i]);
+            }
+            elem.removeChild(node);
+
+            return elem;
         }
-        elem.removeChild(node);
     };
     /**
      * @name 将innerHTML生成的元素append到elem后面
@@ -358,48 +372,61 @@ hui.define('hui_util', ['hui'], function () {
         return control;
     };
 
-
-
     hui.util.hasClass = function (element, className) {
-        return~ (' ' + element.className + ' ').indexOf(' ' + className + ' ');
+        if (window.jQuery) {
+            return window.jQuery(element).hasClass(className);
+        }
+        else {
+            return~ (' ' + element.className + ' ').indexOf(' ' + className + ' ');
+        }
     };
     hui.util.addClass = function (element, className) {
-        if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
-            for (var i = 0, len = element.length; i < len; i++) {
-                hui.util.addClass(element[i], className);
+        if (window.jQuery) {
+            return window.jQuery(element).addClass(className);
+        }
+        else {
+            if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
+                for (var i = 0, len = element.length; i < len; i++) {
+                    hui.util.addClass(element[i], className);
+                }
             }
+            else if (element) {
+                hui.util.removeClass(element, className);
+                element.className = (element.className + ' ' + className).replace(/(\s)+/ig, ' ');
+            }
+            return element;
         }
-        else if (element) {
-            hui.util.removeClass(element, className);
-            element.className = (element.className + ' ' + className).replace(/(\s)+/ig, ' ');
-        }
-        return element;
     };
     // Support * and ?, like hui.util.removeClass(elem, 'daneden-*');
     hui.util.removeClass = function (element, className) {
-        if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
-            for (var i = 0, len = element.length; i < len; i++) {
-                hui.util.removeClass(element[i], className);
-            }
+        if (window.jQuery && String(className).indexOf('*') === -1 && String(className).indexOf('?') === -1) {
+            return window.jQuery(element).removeClass(className);
         }
-        else if (element) {
-            var list = className.replace(/\s+/ig, ' ').split(' '),
-                /* Attention: str need two spaces!! */
-                str = (' ' + (element.className || '').replace(/(\s)/ig, '  ') + ' '),
-                name,
-                rex;
-            // 用list[i]移除str
-            for (var i = 0, len = list.length; i < len; i++) {
-                name = list[i];
-                name = name.replace(/(\*)/g, '\\S*').replace(/(\?)/g, '\\S?');
-                rex = new RegExp(' ' + name + ' ', 'ig');
-                str = str.replace(rex, ' ');
+        else {
+            if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
+                for (var i = 0, len = element.length; i < len; i++) {
+                    hui.util.removeClass(element[i], className);
+                }
             }
-            str = str.replace(/(\s)+/ig, ' ');
-            str = str.replace(/^(\s)+/ig, '').replace(/(\s)+$/ig, '');
-            element.className = str;
+            else if (element) {
+                var list = className.replace(/\s+/ig, ' ').split(' '),
+                    /* Attention: str need two spaces!! */
+                    str = (' ' + (element.className || '').replace(/(\s)/ig, '  ') + ' '),
+                    name,
+                    rex;
+                // 用list[i]移除str
+                for (var i = 0, len = list.length; i < len; i++) {
+                    name = list[i];
+                    name = name.replace(/(\*)/g, '\\S*').replace(/(\?)/g, '\\S?');
+                    rex = new RegExp(' ' + name + ' ', 'ig');
+                    str = str.replace(rex, ' ');
+                }
+                str = str.replace(/(\s)+/ig, ' ');
+                str = str.replace(/^(\s)+/ig, '').replace(/(\s)+$/ig, '');
+                element.className = str;
+            }
+            return element;
         }
-        return element;
     };
 
     hui.util.getDocumentHead = function (doc) {
@@ -605,21 +632,31 @@ hui.define('hui_util', ['hui'], function () {
      * @name 事件绑定与解绑
      */
     hui.util.on = function (elem, eventName, handler) {
-        if (elem.addEventListener) {
-            elem.addEventListener(eventName, handler, false);
+        if (window.jQuery && window.jQuery.prototype.on) {
+            return window.jQuery(elem).on(eventName, handler);
         }
-        else if (elem.attachEvent) {
-            elem.attachEvent('on' + eventName, handler);
-            // elem.attachEvent('on' + eventName, function(){handler.call(elem)}); 
-            //此处使用回调函数call()，让 this指向elem //注释掉原因：无法解绑
+        else {
+            if (elem.addEventListener) {
+                elem.addEventListener(eventName, handler, false);
+            }
+            else if (elem.attachEvent) {
+                elem.attachEvent('on' + eventName, handler);
+                // elem.attachEvent('on' + eventName, function(){handler.call(elem)}); 
+                //此处使用回调函数call()，让 this指向elem //注释掉原因：无法解绑
+            }
         }
     };
     hui.util.off = function (elem, eventName, handler) {
-        if (elem.removeEventListener) {
-            elem.removeEventListener(eventName, handler, false);
+        if (window.jQuery && window.jQuery.prototype.off) {
+            return window.jQuery(elem).off(eventName, handler);
         }
-        if (elem.detachEvent) {
-            elem.detachEvent('on' + eventName, handler);
+        else {
+            if (elem.removeEventListener) {
+                elem.removeEventListener(eventName, handler, false);
+            }
+            if (elem.detachEvent) {
+                elem.detachEvent('on' + eventName, handler);
+            }
         }
     };
 
@@ -1437,7 +1474,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                             main = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)) || {};
                             main.value = paramMap[formName];
                         }
-                        
+
                         ctr = null;
                     }
                 }
@@ -6970,6 +7007,15 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
 
 
 'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -7175,6 +7221,7 @@ hui.define('hui_md5', ['hui@0.0.1'], function () {
     })();
 
 });
+
 
 'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     
@@ -8136,7 +8183,7 @@ hui.define('hui_panel', ['hui'], function () {
 
         this.type = 'panel';
         this.controlMap = {};
-        
+
         // 进入控件处理主流程!
         if (pending != 'pending') {
             this.enterControl();
@@ -8170,7 +8217,7 @@ hui.define('hui_boxpanel', ['hui'], function () {
 
         this.type = 'boxpanel';
         this.controlMap = {};
-        
+
         // 进入控件处理主流程!
         if (pending != 'pending') {
             this.enterControl();
@@ -8282,6 +8329,9 @@ hui.define('hui_boxpanel', ['hui'], function () {
  * @author wanghaiyang
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
+ * @example
+ <div ui="type:'Dropdown',formName:'city',placeholder:'- 请选择 -',rule:'not_empty',options:[{value:110000,text:'北京市'},{value:310000,text:'上海市'},{value:120000,text:'天津市'}],size:{width:280}"></div>
+ <div ui="type:'Dropdown',formName:'mm',placeholder:'- 月 -',value:'',optionStart:1,optionEnd:12,optionStep:1,size:{width:86}"></div>
  */
 hui.define('hui_dropdown', ['hui@0.0.1'], function () {
 
@@ -8314,15 +8364,17 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
         getTitle: function () {
             var me = this,
                 main = me.getMain(),
-                title = hui.cc(me.getClass('title'), main);
-            if (!title) {
-                title = me.getDocument().createElement('DIV');
+                title_text = hui.cc(me.getClass('title_text'), main);
+            if (!title_text) {
+                var title = me.getDocument().createElement('DIV');
                 title.className = me.getClass('title');
-                title.innerHTML = '&nbsp;';
+                title.innerHTML = '<span class="' + me.getClass('title_text') + '">&nbsp;</span> <i class="' + me.getClass('arrow') + '"><s class="' + me.getClass('arrow_icon') + '">&nbsp;</s></i>';
                 main.appendChild(title);
                 main.insertBefore(title, main.childNodes[0]);
+
+                title_text = hui.cc(me.getClass('title_text'), title);
             }
-            return title;
+            return title_text;
         },
         getOptionContainer: function () {
             var me = this,
@@ -8353,9 +8405,9 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
         initBehavior: function () {
             var me = this,
                 main = me.getMain(),
-                title = me.getTitle(),
+                title = me.getTitle().parentNode,
                 optionContainer = me.getOptionContainer();
-            title.onclick = me.onTitleClick;
+            title.onclick = hui.fn(me.onTitleClick, me);
             optionContainer.onclick = me.onOptionsClick;
             main.onselectstart = new Function('return false;');
             me.getShowOptionsHandler();
@@ -8365,15 +8417,10 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
             }
         },
         onTitleClick: function (e) {
-            e = e || window.event;
-            var elem = e.target || e.srcElement;
             e.cancelBubble = true;
             e.stopPropagation && e.stopPropagation();
-            var ctr;
-            if (elem && elem.parentNode) {
-                ctr = hui.Control.getById(elem.parentNode.control);
-                ctr && ctr.showOptions();
-            }
+            var me = this;
+            me.showOptions();
         },
         getShowOptionsHandler: function () {
             // Use closure bind to body onclick
@@ -8564,7 +8611,18 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
     /* hui.Dropdown 继承了 hui.Control */
     hui.inherits(hui.Dropdown, hui.Control);
 
-
+    hui.util.importCssString(
+        '.hui_dropdown{position:relative;z-index:2;background-color:white;float:left;margin-right:9px;}' +
+        '.hui_dropdown .hui_dropdown_title{padding-left:12px;color:#333;height:37px;line-height:1.5em;border:1px solid #ddd;line-height:37px;cursor:pointer;}' +
+        '.hui_dropdown .hui_dropdown_title:hover{border:1px solid #D1D0D1;color:#666;}' +
+        '.hui_dropdown .hui_dropdown_options{display:none;border:1px #ddd solid;background-color:#fff;position:absolute;width:99%;z-index:900;max-height:196px;overflow:auto;}' +
+        '.hui_dropdown .hui_dropdown_item{padding-left:12px;color:#333;height:2em;line-height:2em;cursor:pointer;}' +
+        '.hui_dropdown .hui_dropdown_item:hover{background-color:#ececec;}' +
+        '.hui_dropdown_arrow{position: absolute;z-index: 1;right: 5px;top: 4px;padding: 10px 5px;width: 14px;height: 11px;}' +
+        '.hui_dropdown_arrow_icon{border-style: solid;border-color: #999 transparent transparent;border-width: 11px 7px 0px;width: 0px;overflow: hidden;font-size: 0;height: 0px;line-height: 0px;vertical-align: top;position: absolute;}' +
+        '.hui_dropdown_expand{display:block;z-index:3;}' +
+        '.hui_dropdown_expand .hui_dropdown_options{display:block;}'
+    );
 });
 
 

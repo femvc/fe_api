@@ -4,6 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ebbinghaus Intelligent Remember [v1.0]</title>
+<script type="text/javascript" src="js/jquery1.11.1.js"></script>
 <script type="text/javascript" src="js/hui.js"></script>
 <script type="text/javascript" src="js/table.js"></script>
 
@@ -48,8 +49,8 @@ window.listTable = [
     {
         width: 296,
         title: 'n3',
-        field: '_id',
-        content: function(item) {return item['_id'];}
+        field: 'atcid',
+        content: function(item) {return item['atcid'];}
     }
 ];
 window.listData = [
@@ -97,8 +98,8 @@ window.onload = function(){
                     {
                         width: 296,
                         title: 'action',
-                        field: '_id',
-                        content: function(item) {return '<a href="?atcid=' + item['_id'] + '">edit</a>';}
+                        field: 'atcid',
+                        content: function(item) {return '<a href="?atcid=' + item['atcid'] + '">edit</a>';}
                     }
                 ];
 
@@ -122,7 +123,7 @@ window.onload = function(){
                 
                 var data = result[1];
                 //data.content = JSON.parse(data.content);
-                data.atcid = data._id;
+                data.atcid = data.atcid;
                 
                 form.setValueByTree(data);
                 form.getByFormName('content').disposeChild();
@@ -191,6 +192,14 @@ window.onload = function(){
     };
     subject_add.onclick();
 
+    Requester.get('/ue_api/account/get_uid?rand='+Math.random(), {
+        onsuccess: function (result) {
+            if (result && !result[0] && result[1]) {
+                hui.g('uid').innerHTML = result[1];
+            }
+        }
+    });
+
 };
 //-->
 </script>
@@ -198,6 +207,7 @@ window.onload = function(){
 </head>
 
 <body class="page" style="">
+<a href="subject_test.htm">subject_test</a> uid: <span id="uid"></span>
 <!--target:test-->
 <div id="subject_add" class="subject_add">
 <!--target:test-->

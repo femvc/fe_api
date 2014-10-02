@@ -1,15 +1,14 @@
 'use strict';
 var questionModel = require('../models/question').createNew();
-var paperModel = require('../models/paper').createNew();
-var resultModel = require('../models/result').createNew();
-var Util = require('../helpers/common');
 
 exports.getQuestion = function (req, res, next) {
-    var id = req.paramlist.atcid;
-    if (!id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'id');
+    var atcid = req.paramlist.atcid;
+    if (!atcid) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
     }
-    questionModel.getById(id, function (err, doc) {
+    questionModel.getItem({
+        atcid: atcid
+    }, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
@@ -21,10 +20,10 @@ exports.getQuestion = function (req, res, next) {
         }
         response.ok(req, res, doc);
     });
-}
+};
 
 exports.saveQuestion = function (req, res, next) {
-    var id = req.paramlist.atcid,
+    var atcid = req.paramlist.atcid,
         question = {},
         callback, date;
 
@@ -43,35 +42,37 @@ exports.saveQuestion = function (req, res, next) {
             response.send(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
         response.ok(req, res, doc);
-    }
-    //date = hui.formatDate(new Date(), 'yyyy-MM-dd');
-    date = Util.formatDate(new Date(), 'yyyy-MM-dd hh:mm');
-    if (id) {
+    };
+
+    var now = new Date();
+    date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
+    if (atcid) {
         question.update_time = date;
-        questionModel.updateById(id, question, callback);
+        questionModel.updateItem({
+            atcid: atcid
+        }, question, callback);
     }
     else {
         question.update_time = date;
+        question.atcid = global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         questionModel.insert(question, callback);
     }
-}
+};
 
 exports.removeQuestion = function (req, res, next) {
-    var id = req.paramlist.atcid;
-    if (!id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'id');
+    var atcid = req.paramlist.atcid;
+    if (!atcid) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
     }
-    questionModel.remove(id, function (err) {
+    questionModel.remove(atcid, function (err) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
         response.ok(req, res, null);
     });
-}
+};
 
 exports.getQuestions = function (req, res, next) {
-
-    console.log(common);
     var params = req.paramlist,
         current = params.current || 1,
         count = params.count || 100,
@@ -82,7 +83,7 @@ exports.getQuestions = function (req, res, next) {
         filter = {};
 
     if (params.title)
-        filter.title = common.likeWith(params.title);
+        filter.title = global.common.likeWith(params.title);
     if (params.author)
         filter.author = params.author;
 
@@ -104,5 +105,4 @@ exports.getQuestions = function (req, res, next) {
             items: doc
         });
     });
-}
-
+};

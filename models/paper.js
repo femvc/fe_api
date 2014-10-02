@@ -1,7 +1,8 @@
+'use strict';
 module.exports = {
 	createNew: function () {
 		var collName = 'paper';
-		userModel = require('./base').createNew(collName);
+		var userModel = require('./base').createNew(collName);
 
 		userModel.remove = function (_id, next) {
 			var objId = (typeof _id == 'string') ? ObjectID(_id) : _id;
@@ -25,7 +26,7 @@ module.exports = {
 					}
 					return next(null, resp);
 				});
-		}
+		};
 
 		return userModel;
 	}

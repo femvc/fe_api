@@ -2,7 +2,6 @@
 var userLogic = require('../helpers/user');
 var userModel = require('../models/user').createNew();
 
-
 exports.login = function (req, res, next) {
     if (!req.paramlist.username) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'username');
@@ -64,7 +63,10 @@ exports.register = function (req, res, next) {
 exports.auth = function (req, res, next) {
     console.log('============' + req.sessionID + '===============');
     req.sessionStore.user = req.sessionStore.user || {};
-    req.sessionStore.subject = req.sessionStore.subject || {};
+    req.sessionStore.question = req.sessionStore.question || {};
+    req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
+    req.sessionStore.paper = req.sessionStore.paper || {};
+    req.sessionStore.paperContent = req.sessionStore.paperContent || {};
 
     if (req.sessionStore.user[req.sessionID]) {
         next();
@@ -74,6 +76,12 @@ exports.auth = function (req, res, next) {
         req.sessionStore.user[req.sessionID] = req.sessionID;
         next();
     }
+};
+
+exports.getUid = function (req, res, next) {
+    req.sessionStore.user = req.sessionStore.user || {};
+    var uid = req.sessionStore.user[req.sessionID];
+    response.ok(req, res, uid);
 };
 
 exports.getDetail = function (req, res, next) {
