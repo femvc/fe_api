@@ -1532,6 +1532,10 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this;
             return hui.Control.getByFormName(formName, me);
         },
+        getByFormNameAll: function (formName) {
+            var me = this;
+            return hui.Control.getByFormNameAll(formName, me);
+        },
         getById: function (id) {
             var me = this;
             return hui.Control.getById(id, me);
@@ -7690,283 +7694,6 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
 
 });
 
-'use strict';
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
-//                                                                   
-//                                                                   
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- */
-hui.define('hui_button', ['hui@0.0.1'], function () {
-
-    hui.Button = function (options, pending) {
-        this.isFormItem = false; // 注：getParamMap时不需要处理button
-        hui.Button.superClass.call(this, options, 'pending');
-
-        // 类型声明，用于生成控件子dom的id和class
-        this.type = 'btn';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.Button.prototype = {
-        /**
-         * @name button的html模板
-         * @private
-         */
-        tplButton: '<span id="#{2}" class="#{1}">#{0}</span>',
-
-        /**
-         * @name 默认的onclick事件执行函数, 不做任何事，容错
-         * @public
-         */
-        onclick: new Function(),
-
-        /**
-         * @name 获取button主区域的html
-         * @private
-         * @return {String}
-         */
-        getMainHtml: function () {
-            var me = this;
-
-            return hui.Control.format(
-                me.tplButton,
-                me.content || '&nbsp;',
-                me.getClass('label'),
-                me.getId('label')
-            );
-        },
-
-        /**
-         * @name 渲染控件
-         * @public
-         */
-        render: function () {
-            hui.Button.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain(),
-                innerDiv;
-
-            innerDiv = main.firstChild;
-            if (!me.content && innerDiv && innerDiv.tagName != 'DIV') {
-                me.content = me.getInnerHTML();
-            }
-
-            me.setInnerHTML(me, me.getMainHtml());
-
-            // 初始化状态事件
-            main.onclick = me.getHandlerClick();
-
-            // 设定宽度
-            me.width && (main.style.width = me.width + 'px');
-
-            // 设置disabled
-            me.setDisabled(!!me.disabled);
-        },
-
-        /**
-         * @name 获取按钮点击的事件处理程序
-         * @private
-         * @return {function}
-         */
-        getHandlerClick: function () {
-            var me = this;
-            return function (e) {
-                if (!me.isDisabled()) {
-                    me.onclick();
-                }
-            };
-        },
-
-        /**
-         * @name 设置按钮的显示文字
-         * @public
-         * @param {String} content 按钮的显示文字
-         */
-        setContent: function (content) {
-            this.setInnerHTML(hui.g(this.getId('label'), this.getMain()), content);
-            return this;
-        },
-        /**
-         * @name 设置按钮的显示文字
-         * @public
-         * @param {String} content 按钮的显示文字
-         */
-        showWaiting: function () {
-
-        }
-    };
-
-    /*通过hui.Control派生hui.Button*/
-    //hui.Control.derive(hui.Button);
-    /* hui.Button 继承了 hui.Control */
-    hui.inherits(hui.Button, hui.Control);
-
-
-});
-
-
-'use strict';
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
-//                                                                   
-//                                                                   
-
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- */
-hui.define('hui_checkbox', ['hui@0.0.1'], function () {
-
-    hui.Checkbox = function (options, pending) {
-        hui.Checkbox.superClass.call(this, options, 'pending');
-
-        this.type = 'checkbox';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.Checkbox.prototype = {
-        getInput: function () {
-            var me = this,
-                main = me.getMain(),
-                input = hui.c(me.getClass('input'), main)[0];
-            return input;
-        },
-        getIcon: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.c(me.getClass('icon'), main)[0];
-            return icon;
-        },
-        getLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.c(me.getClass('label'), main)[0];
-            return icon;
-        },
-        renderLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                label = me.getLabel(),
-                tpl = '<label class="#{0}">#{1}</label>';
-            if (!label) {
-                hui.appendHTML(main, hui.format(tpl,
-                    me.getClass('label'),
-                    me.label
-                ));
-            }
-            else {
-                main.appendChild(label);
-            }
-        },
-        /**
-         * @name 渲染控件
-         * @protected
-         * @param {Object} main 控件挂载的DOM.
-         */
-        render: function () {
-            hui.Checkbox.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            // 绘制宽度和高度
-            me.setSize();
-
-            var tpl = '<i class="#{1}"><input type="checkbox" class="#{0}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
-            hui.appendHTML(main, hui.format(tpl,
-                me.getClass('input'),
-                me.getClass('icon')
-            ));
-            me.renderLabel();
-        },
-        initBehavior: function () {
-            var me = this,
-                icon = me.getIcon(),
-                //label = me.getLabel(),
-                main = me.getMain();
-
-            me.setChecked(!!me.checked);
-            main.onclick = hui.fn(me.getClickHandler, me);
-            icon.onselectstart = new Function('return false;');
-        },
-        setValue: function (value) {
-            var me = this;
-            me.setChecked(!!value);
-        },
-        getValue: function () {
-            var me = this,
-                value = me.getChecked() ? me.getPresetValue() : '';
-            return value;
-        },
-        getPresetValue: function () {
-            var me = this,
-                value = me.value !== undefined ? me.value : me.getInput().value;
-            return value;
-        },
-        setPresetValue: function (value) {
-            var me = this,
-                input = me.getInput();
-            me.value = value;
-            input.value = value;
-        },
-        setChecked: function (checked) {
-            var me = this,
-                input = me.getInput(),
-                main = me.getMain();
-            if (checked === false) {
-                input.checked = false;
-                hui.removeClass(main, me.getClass('checked'));
-            }
-            else {
-                input.checked = true;
-                hui.addClass(main, me.getClass('checked'));
-            }
-        },
-        getChecked: function () {
-            var me = this;
-            return !!me.getInput().checked;
-        },
-        getClickHandler: function () {
-            var me = this;
-            me.setChecked(!me.getChecked());
-            me.onclick();
-        },
-        onclick: new Function()
-
-    };
-
-    /* hui.Checkbox 继承了 hui.Control */
-    hui.inherits(hui.Checkbox, hui.Control);
-
-
-});
 
 'use strict';
 //    ____     ____                _   _     ____          ____      ____                   
@@ -8234,10 +7961,6 @@ hui.define('hui_boxpanel', ['hui'], function () {
             var me = this;
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
-            hui.util.addCssRule('.' + me.getClass('html'), 'background-image: url("about:blank");background-attachment: fixed;');
-            hui.util.addCssRule('.' + me.getClass(), 'z-index: 9000000;position: fixed; _position: absolute; _top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px"); background-color:white;border: 5px solid #c6c6c6;border-color: rgba(0,0,0,0.3); border-color: #c6c6c6\\0;*border-color: #c6c6c6; border-radius: 5px; display: none;');
-            hui.util.addCssRule('.' + me.getClass('close') + '{background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;right: -16px;top: -16px;width: 22px;}');
-            hui.util.addCssRule('.' + me.getClass('close:hover') + '{background-color: #f62626;color: #fff; }');
         },
         initBehavior: function () {
             var me = this;
@@ -8309,7 +8032,157 @@ hui.define('hui_boxpanel', ['hui'], function () {
     // hui.BoxPanel 继承了 hui.Control 
     hui.inherits(hui.BoxPanel, hui.Control);
 
+    hui.util.importCssString(
+        '.hui_boxpanel_html{background-image: url("about:blank");background-attachment: fixed;}' +
+        '.hui_boxpanel{z-index: 9000000;position: fixed; _position: absolute; _top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px"); background-color:white;border: 5px solid #c6c6c6;border-color: rgba(0,0,0,0.3); border-color: #c6c6c6\\0;*border-color: #c6c6c6; border-radius: 5px; display: none;}' +
+        '.hui_boxpanel_close{background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;right: -16px;top: -16px;width: 22px;}' +
+        '.hui_boxpanel_close:hover{background-color: #f62626;color: #fff; }'
+    );
+
+
 });
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ */
+hui.define('hui_button', ['hui@0.0.1'], function () {
+
+    hui.Button = function (options, pending) {
+        this.isFormItem = false; // 注：getParamMap时不需要处理button
+        hui.Button.superClass.call(this, options, 'pending');
+
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'btn';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.Button.prototype = {
+        /**
+         * @name button的html模板
+         * @private
+         */
+        tplButton: '<span id="#{2}" class="#{1}">#{0}</span>',
+
+        /**
+         * @name 默认的onclick事件执行函数, 不做任何事，容错
+         * @public
+         */
+        onclick: new Function(),
+
+        /**
+         * @name 获取button主区域的html
+         * @private
+         * @return {String}
+         */
+        getMainHtml: function () {
+            var me = this;
+
+            return hui.Control.format(
+                me.tplButton,
+                me.content || '&nbsp;',
+                me.getClass('label'),
+                me.getId('label')
+            );
+        },
+
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.Button.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain(),
+                innerDiv;
+
+            innerDiv = main.firstChild;
+            if (!me.content && innerDiv && innerDiv.tagName != 'DIV') {
+                me.content = me.getInnerHTML();
+            }
+
+            me.setInnerHTML(me, me.getMainHtml());
+
+            // 初始化状态事件
+            main.onclick = me.getHandlerClick();
+
+            // 设定宽度
+            me.width && (main.style.width = me.width + 'px');
+
+            // 设置disabled
+            me.setDisabled(!!me.disabled);
+        },
+
+        /**
+         * @name 获取按钮点击的事件处理程序
+         * @private
+         * @return {function}
+         */
+        getHandlerClick: function () {
+            var me = this;
+            return function (e) {
+                if (!me.isDisabled()) {
+                    me.onclick();
+                }
+            };
+        },
+
+        /**
+         * @name 设置按钮的显示文字
+         * @public
+         * @param {String} content 按钮的显示文字
+         */
+        setContent: function (content) {
+            this.setInnerHTML(hui.g(this.getId('label'), this.getMain()), content);
+            return this;
+        },
+        /**
+         * @name 设置按钮的显示文字
+         * @public
+         * @param {String} content 按钮的显示文字
+         */
+        showWaiting: function () {
+
+        }
+    };
+
+    /*通过hui.Control派生hui.Button*/
+    //hui.Control.derive(hui.Button);
+    /* hui.Button 继承了 hui.Control */
+    hui.inherits(hui.Button, hui.Control);
+
+
+});
+
 
 'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     
@@ -8330,8 +8203,336 @@ hui.define('hui_boxpanel', ['hui'], function () {
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
  * @example
- <div ui="type:'Dropdown',formName:'city',placeholder:'- 请选择 -',rule:'not_empty',options:[{value:110000,text:'北京市'},{value:310000,text:'上海市'},{value:120000,text:'天津市'}],size:{width:280}"></div>
- <div ui="type:'Dropdown',formName:'mm',placeholder:'- 月 -',value:'',optionStart:1,optionEnd:12,optionStep:1,size:{width:86}"></div>
+<label ui="type:'Checkbox',formName:'book',value:'icdn0001',checked:''">基督山</label>
+<label ui="type:'Checkbox',formName:'book',value:'icdn0002',checked:''">呼啸山</label>
+ */
+hui.define('hui_checkbox', ['hui@0.0.1'], function () {
+
+    hui.Checkbox = function (options, pending) {
+        hui.Checkbox.superClass.call(this, options, 'pending');
+
+        this.type = 'checkbox';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.Checkbox.prototype = {
+        getInput: function () {
+            var me = this,
+                main = me.getMain(),
+                input = hui.c(me.getClass('input'), main)[0];
+            return input;
+        },
+        getIcon: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.c(me.getClass('icon'), main)[0];
+            return icon;
+        },
+        getLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.c(me.getClass('label'), main)[0];
+            return icon;
+        },
+        renderLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                label = me.getLabel(),
+                tpl = '<span class="#{0}">#{1}</span>';
+            if (!label) {
+                hui.appendHTML(main, hui.format(tpl,
+                    me.getClass('label'),
+                    me.label
+                ));
+            }
+            else {
+                main.appendChild(label);
+            }
+        },
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        render: function () {
+            hui.Checkbox.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            // 绘制宽度和高度
+            me.setSize();
+
+            var tpl = '<i class="#{1}"><input type="checkbox" class="#{0}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
+            hui.appendHTML(main, hui.format(tpl,
+                me.getClass('input'),
+                me.getClass('icon')
+            ));
+            me.renderLabel();
+        },
+        initBehavior: function () {
+            var me = this,
+                icon = me.getIcon(),
+                //label = me.getLabel(),
+                main = me.getMain();
+
+            me.setChecked(!!me.checked);
+            main.onclick = hui.fn(me.getClickHandler, me);
+            icon.onselectstart = new Function('return false;');
+        },
+        setValue: function (value) {
+            var me = this;
+            me.setChecked(!!value);
+        },
+        getValue: function () {
+            var me = this,
+                value = me.getChecked() ? me.getPresetValue() : '';
+            return value;
+        },
+        getPresetValue: function () {
+            var me = this,
+                value = me.value !== undefined ? me.value : me.getInput().value;
+            return value;
+        },
+        setPresetValue: function (value) {
+            var me = this,
+                input = me.getInput();
+            me.value = value;
+            input.value = value;
+        },
+        setChecked: function (checked) {
+            var me = this,
+                input = me.getInput(),
+                main = me.getMain();
+            if (checked === false) {
+                input.checked = false;
+                hui.removeClass(main, me.getClass('checked'));
+            }
+            else {
+                input.checked = true;
+                hui.addClass(main, me.getClass('checked'));
+            }
+        },
+        getChecked: function () {
+            var me = this;
+            return !!me.getInput().checked;
+        },
+        getClickHandler: function () {
+            var me = this;
+            me.setChecked(!me.getChecked());
+            me.onclick();
+        },
+        onclick: new Function()
+
+    };
+
+    /* hui.Checkbox 继承了 hui.Control */
+    hui.inherits(hui.Checkbox, hui.Control);
+
+    hui.util.importCssString(
+        '.hui_checkbox{float:left;}' +
+        '.hui_checkbox .hui_checkbox_label{}' +
+        '.hui_checkbox .hui_checkbox_label a{font-size:14px;}' +
+        '.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
+        '.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}' +
+        '.hui_checkbox .hui_checkbox_icon{color:#1ba8eb;text-indent:-100px;}' +
+        '.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:3px;}'
+    )
+});
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ * @example 
+    <label ui="type:'RadioInput',formName:'gender',targetForm:'result',value:'male'">
+        <input type="radio" class="hui_radioinput_input" />
+        <span class="hui_radioinput_label">男</span>
+    </label>
+ */
+hui.define('hui_radioinput', ['hui@0.0.1'], function () {
+
+    hui.RadioInput = function (options, pending) {
+        hui.RadioInput.superClass.call(this, options, 'pending');
+
+        this.type = 'radioinput';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.RadioInput.prototype = {
+        getInput: function () {
+            var me = this,
+                main = me.getMain(),
+                input = hui.cc(me.getClass('input'), main);
+            return input;
+        },
+        getIcon: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('icon'), main);
+            return icon;
+        },
+        getLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('label'), main);
+            return icon;
+        },
+        renderLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                label = me.getLabel(),
+                tpl = '<label class="#{0}">#{1}</label>';
+            if (!label) {
+                hui.appendHTML(main, hui.format(tpl,
+                    me.getClass('label'),
+                    me.label
+                ));
+            }
+            else {
+                main.appendChild(label);
+            }
+        },
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        render: function () {
+            hui.RadioInput.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            // 绘制宽度和高度
+            me.setSize();
+
+            var tpl = '<span class="#{1}"><span class="#{3}">〇</span><span class="#{2}">●</span><input type="radio" class="#{0}" style="display:none" /></span>';
+            hui.appendHTML(main, hui.format(tpl,
+                me.getClass('input'),
+                me.getClass('icon'),
+                me.getClass('point'),
+                me.getClass('dot')
+            ));
+            me.renderLabel();
+        },
+        initBehavior: function () {
+            var me = this,
+                icon = me.getIcon(),
+                label = me.getLabel();
+
+            me.setChecked(!!me.checked);
+            icon.onclick = label.onclick = hui.fn(me.getClickHandler, me);
+            icon.onselectstart = new Function('return false;');
+        },
+        setValue: function (value) {
+            var me = this;
+            me.setChecked(!!value);
+        },
+        getValue: function () {
+            var me = this,
+                value = me.getChecked() ? me.getPresetValue() : '';
+            return value;
+        },
+        getPresetValue: function () {
+            var me = this,
+                input = me.getInput(),
+                value = me.value;
+            if (value === undefined) {
+                value = me.getMain().value;
+            }
+            if (value === undefined) {
+                value = input.value;
+            }
+            if (value === undefined || value === null) {
+                value = '';
+            }
+            return String(value);
+        },
+        setPresetValue: function (value) {
+            var me = this,
+                input = me.getInput();
+            me.getMain().value = value;
+            input.value = value;
+        },
+        setChecked: function (checked) {
+            var me = this,
+                input = me.getInput(),
+                main = me.getMain(),
+                targetForm = me.parentControl === window ? hui.Control : me.parentControl;
+            if (me.targetForm) {
+                targetForm = hui.Control.getById(me.targetForm) || hui.Control.getByFormName(me.targetForm) || me.parentControl;
+            }
+
+            var list = targetForm.getByFormNameAll(me.getFormName());
+            for (var i = 0, len = list.length; i < len; i++) {
+                if (list[i] != me && list[i].getChecked()) {
+                    list[i].setChecked(false);
+                }
+            }
+
+            if (checked === false) {
+                input.checked = false;
+                hui.removeClass(main, me.getClass('checked'));
+            }
+            else {
+                input.checked = true;
+                hui.addClass(main, me.getClass('checked'));
+            }
+        },
+        getChecked: function () {
+            var me = this,
+                checked = !!me.getInput().checked;
+            return checked;
+        },
+        getClickHandler: function () {
+            var me = this;
+            me.setChecked(true);
+            me.onclick();
+        },
+        onclick: new Function()
+
+    };
+
+    /* hui.RadioInput 继承了 hui.Control */
+    hui.inherits(hui.RadioInput, hui.Control);
+
+    hui.util.importCssString(
+        '.hui_radioinput{float:left;padding-right:23px;cursor:pointer;width:100px;}' +
+        '.hui_radioinput .hui_radioinput_input{display:none;}' +
+        '.hui_radioinput .hui_radioinput_icon{float:left;display:inline-block;width:30px;height:20px;padding-top:0px;}' +
+        '.hui_radioinput .hui_radioinput_point{font-size:15px;color:transparent;width:13px;height:20px;line-height:21px;*line-height:20px;position:absolute;z-index:2;text-align:center;vertical-align:middle;margin-left:0px;font-family:microsoft;margin-top:0px;margin-left:4px;}' +
+        '.hui_radioinput .hui_radioinput_dot{font-size:16px;color:#ccc;width:20px;height:20px;line-height:20px;position:absolute;z-index:1;text-align:center;vertical-align:middle;margin-top:0px;font-family:microsoft yahei;}' +
+        '.hui_radioinput .hui_radioinput_icon li{float:left;padding:1px;margin:1px;height:33px;}' +
+        '.hui_radioinput .hui_radioinput_text{float:left;}' +
+        '.hui_radioinput_checked .hui_radioinput_icon{}' +
+        '.hui_radioinput_checked .hui_radioinput_point{color:#68bf4a;}' +
+        '.hui_radioinput_checked .hui_radioinput_dot{}'
+    );
+
+});
+
+
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ * @example
+ <div ui="type:'Dropdown',formName:'city',placeholder:'- 请选择 -',rule:'not_empty',
+ options:[{value:110000,text:'北京市'},{value:310000,text:'上海市'},{value:120000,text:'天津市'}],
+ size:{width:280}"></div>
+ <div ui="type:'Dropdown',formName:'mm',placeholder:'- 月 -',value:'',
+ optionStart:1,optionEnd:12,optionStep:1,
+ size:{width:86}"></div>
  */
 hui.define('hui_dropdown', ['hui@0.0.1'], function () {
 
@@ -8618,344 +8819,15 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
         '.hui_dropdown .hui_dropdown_options{display:none;border:1px #ddd solid;background-color:#fff;position:absolute;width:99%;z-index:900;max-height:196px;overflow:auto;}' +
         '.hui_dropdown .hui_dropdown_item{padding-left:12px;color:#333;height:2em;line-height:2em;cursor:pointer;}' +
         '.hui_dropdown .hui_dropdown_item:hover{background-color:#ececec;}' +
-        '.hui_dropdown_arrow{position: absolute;z-index: 1;right: 5px;top: 4px;padding: 10px 5px;width: 14px;height: 11px;}' +
-        '.hui_dropdown_arrow_icon{border-style: solid;border-color: #999 transparent transparent;border-width: 11px 7px 0px;width: 0px;overflow: hidden;font-size: 0;height: 0px;line-height: 0px;vertical-align: top;position: absolute;}' +
+        '.hui_dropdown_arrow{position: absolute;z-index: 1;right: 2px;top: 4px;padding: 10px 5px;width: 12px;height: 11px;}' +
+        '.hui_dropdown_arrow_icon{border-style: solid;border-color: #999 transparent transparent;border-width: 10px 6px 0px;width: 0px;overflow: hidden;font-size: 0;height: 0px;line-height: 0px;vertical-align: top;position: absolute;}' +
         '.hui_dropdown_expand{display:block;z-index:3;}' +
-        '.hui_dropdown_expand .hui_dropdown_options{display:block;}'
+        '.hui_dropdown_expand .hui_dropdown_options{display:block;}' +
+        '.hui_dropdown_expand .hui_dropdown_arrow{padding: 8px 5px 12px;}' +
+        '.hui_dropdown_expand .hui_dropdown_arrow_icon{border-color: transparent transparent #999 transparent;border-width: 0px 6px 10px;}'
     );
 });
 
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- */
-hui.define('hui_radioinputgroup', ['hui@0.0.1'], function () {
-
-    hui.RadioInputGroup = function (options, pending) {
-        hui.RadioInputGroup.superClass.call(this, options, 'pending');
-        // 类型声明，用于生成控件子dom的id和class
-        this.type = 'radioinputgroup';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.RadioInputGroup.prototype = {
-        /**
-         * @name 渲染控件
-         * @public
-         */
-        render: function () {
-            hui.RadioInputGroup.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            me.setSize();
-            hui.Control.init(main);
-        },
-        setChecked: function (child) {
-            var me = this,
-                c;
-            for (var i in me.controlMap) {
-                c = me.controlMap[i];
-                if (c && c !== child && c.setChecked) {
-                    c.setChecked(false);
-                }
-            }
-        },
-        getValue: function () {
-            var me = this,
-                value,
-                c;
-            for (var i in me.controlMap) {
-                c = me.controlMap[i];
-                if (c && c.getChecked && c.getChecked()) {
-                    value = c.getValue();
-                    break;
-                }
-            }
-            return value;
-        },
-        setValue: function (v) {
-            var me = this,
-                value,
-                c;
-            v = !v ? '' : String(v);
-            for (var i in me.controlMap) {
-                c = me.controlMap[i];
-                if (c && v !== undefined && c.getPresetValue && String(c.getPresetValue()) === v && c.setChecked) {
-                    c.setChecked(true);
-                }
-                else if (c && c.setChecked) {
-                    c.setChecked(false);
-                }
-            }
-            return value;
-        }
-    };
-
-    /*通过hui.Control派生hui.RadioInputGroup*/
-    //hui.Control.derive(hui.RadioInputGroup);
-    /* hui.RadioInputGroup 继承了 hui.Control */
-    hui.inherits(hui.RadioInputGroup, hui.Control);
-
-
-});
-
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- */
-hui.define('hui_radioinput', ['hui@0.0.1'], function () {
-
-    hui.RadioInput = function (options, pending) {
-        hui.RadioInput.superClass.call(this, options, 'pending');
-
-        this.type = 'radioinput';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.RadioInput.prototype = {
-        getInput: function () {
-            var me = this,
-                main = me.getMain(),
-                input = hui.cc(me.getClass('input'), main);
-            return input;
-        },
-        getIcon: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.cc(me.getClass('icon'), main);
-            return icon;
-        },
-        getLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.cc(me.getClass('label'), main);
-            return icon;
-        },
-        renderLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                label = me.getLabel(),
-                tpl = '<label class="#{0}">#{1}</label>';
-            if (!label) {
-                hui.appendHTML(main, hui.format(tpl,
-                    me.getClass('label'),
-                    me.label
-                ));
-            }
-            else {
-                main.appendChild(label);
-            }
-        },
-        /**
-         * @name 渲染控件
-         * @protected
-         * @param {Object} main 控件挂载的DOM.
-         */
-        render: function () {
-            hui.RadioInput.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            // 绘制宽度和高度
-            me.setSize();
-
-            var tpl = '<i class="#{1}"><input type="radio" class="#{0}" style="display:none" />&nbsp;</i>';
-            hui.appendHTML(main, hui.format(tpl,
-                me.getClass('input'),
-                me.getClass('icon')
-            ));
-            me.renderLabel();
-        },
-        initBehavior: function () {
-            var me = this,
-                icon = me.getIcon(),
-                label = me.getLabel();
-
-            me.setChecked(!!me.checked);
-            icon.onclick = label.onclick = hui.fn(me.getClickHandler, me);
-            icon.onselectstart = new Function('return false;');
-        },
-        setValue: function (value) {
-            var me = this;
-            me.setChecked(!!value);
-        },
-        getValue: function () {
-            var me = this,
-                value = me.getChecked() ? me.getPresetValue() : '';
-            return value;
-        },
-        getPresetValue: function () {
-            var me = this,
-                input = me.getInput(),
-                value = me.value;
-            if (value === undefined) {
-                value = me.getMain().value;
-            }
-            if (value === undefined) {
-                value = input.value;
-            }
-            if (value === undefined || value === null) {
-                value = '';
-            }
-            return String(value);
-        },
-        setPresetValue: function (value) {
-            var me = this,
-                input = me.getInput();
-            me.getMain().value = value;
-            input.value = value;
-        },
-        setChecked: function (checked) {
-            var me = this,
-                input = me.getInput(),
-                main = me.getMain();
-            if (checked && me.parentControl && me.parentControl.setChecked) {
-                me.parentControl.setChecked(me);
-            }
-            if (checked === false) {
-                input.checked = false;
-                hui.removeClass(main, me.getClass('checked'));
-            }
-            else {
-                input.checked = true;
-                hui.addClass(main, me.getClass('checked'));
-            }
-        },
-        getChecked: function () {
-            var me = this,
-                checked = !!me.getInput().checked;
-            return checked;
-        },
-        getClickHandler: function () {
-            var me = this;
-            me.setChecked(true);
-            me.onclick();
-        },
-        onclick: new Function()
-
-    };
-
-    /* hui.RadioInput 继承了 hui.Control */
-    hui.inherits(hui.RadioInput, hui.Control);
-
-
-});
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- */
-hui.define('hui_checkboxgroup', ['hui@0.0.1', 'hui_checkbox@0.0.1'], function () {
-
-    hui.CheckboxGroup = function (options, pending) {
-        hui.CheckboxGroup.superClass.call(this, options, 'pending');
-        // 类型声明，用于生成控件子dom的id和class
-        this.type = 'checkboxgroup';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.CheckboxGroup.prototype = {
-        /**
-         * @name 渲染控件
-         * @public
-         */
-        render: function () {
-            hui.CheckboxGroup.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            hui.Control.init(main);
-        },
-        getValue: function () {
-            var me = this,
-                value = [],
-                c;
-            for (var i in me.controlMap) {
-                c = me.controlMap[i];
-                if (c && c.getChecked && c.getChecked()) {
-                    value.push(c.getValue());
-                }
-            }
-            return value;
-        },
-        setValue: function (v) {
-            var me = this,
-                checkedMap = {},
-                c;
-            if (v && v.length && v.join) {
-                for (var i = 0, len = v.length; i < len; i++) {
-                    checkedMap[v[i]] = 1;
-                }
-            }
-            for (var i in me.controlMap) {
-                c = me.controlMap[i];
-                if (c && c.getFormName && checkedMap[c.getFormName()] && c.setChecked) {
-                    c.setChecked(true);
-                }
-                else if (c && c.setChecked) {
-                    c.setChecked(false);
-                }
-            }
-        },
-        renderOptions: function (datasource, checked) {
-            datasource = datasource && datasource.length && datasource.join ? datasource : [];
-            checked = checked && checked.length && checked.join ? checked : [];
-            var me = this,
-                html = '',
-                c,
-                m;
-            var tpl =
-                '<label class="hui_checkbox" ui="type:\'Checkbox\',formName:\'#{id}\',value:\'#{id}\',checked:\'#{checked}\'">' +
-                '    <span class="hui_checkbox_label">#{title}</span>' +
-                '</label>';
-            var checkedMap = {};
-            for (var i = 0, len = checked.length; i < len; i++) {
-                checkedMap[checked[i]] = 1;
-            }
-            me.disposeChild && me.disposeChild();
-
-            for (var i = 0, len = datasource.length; i < len; i++) {
-                c = datasource[i];
-                m = {
-                    id: c.id,
-                    title: c.title,
-                    checked: (checkedMap[c.id] ? 'checked' : '')
-                };
-                html += hui.format(tpl, m);
-            }
-            me.setInnerHTML(me, html);
-
-            hui.Control.init(me.getMain());
-        }
-
-    };
-
-    // hui.CheckboxGroup 继承了 hui.Control 
-    hui.inherits(hui.CheckboxGroup, hui.Control);
-
-
-});
 
 'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     

@@ -11,21 +11,6 @@
 .hui_table_body .hui_table_row{}
 .hui_table_body .hui_table_row .hui_table_tdsel{}
 .hui_table_body .hui_table_row .hui_table_tdcntr{display:inline-block}
-.hui_radioinput{float:left;padding-right:23px;cursor:pointer}
-.hui_radioinput .hui_radioinput_input{display:none}
-.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px}
-.hui_radioinput .hui_radioinput_text{float:left}
-.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px}
-.hui_radioinputgroup{overflow:hidden;float:left}
-.page .hui_checkbox{float:left;margin:11px 0px 0px 0px}
-.hui_checkbox .hui_checkbox_label{}
-.hui_checkbox .hui_checkbox_label a{font-size:14px}
-.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden}
-.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer}
-.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px}
-.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px}
-.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px}
-.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px}
 .page{font-family:microsoft yahei;font-size:14px;padding-left:15px;padding-top:5px}
 .page a{color:green;text-decoration:none}
 .page a:hover{color:#ff6500;text-decoration:underline}
@@ -62,10 +47,6 @@
 .page .subject_add .tr_row .hui_textinput{}
 .page .hui_btn{}
 .page .hui_btn_label{}
-.page .subject_add .tr_row .hui_checkbox{margin-top:11px}
-.page .subject_add .tr_row .hui_checkbox_icon{}
-.page .subject_add .tr_row .hui_checkbox_icon .hui_checkbox_input{}
-.page .subject_add .tr_row .hui_checkbox_label{}
 .page .hui_boxpanel_close{color:white}
 .page .hui_boxpanel_close:hover{color:#f5dcdc;text-decoration:none}
 .page .subject_box{background-color:#f7f8f8;background-repeat:no-repeat;width:920px}
@@ -84,21 +65,84 @@
 .subject_test .subject_box .subject_action .hui_btn_disabled,
 .subject_test .subject_box .subject_action .hui_btn_disabled:hover{background-color:#999;border-color:#999;color:#ccc}
 .subject_test .subject_box .subject_action .subject_pre{float:left;padding-left:20px;padding-right:5px;color:#fff;line-height:1.2em;font-size:18px;padding-bottom:5px;margin-top:10px;padding-top:21px;margin-left:0px}
-.subject_test .subject_box .subject_action .subject_end{float:right;background-image:url(../img/icon_exit.png);background-repeat:no-repeat;background-position:0px 9px;padding-left:27px;color:#fff;line-height:1.2em;font-size:16px;padding-bottom:5px;margin-top:21px;padding-top:10px;margin-right:40px}
+.subject_test .subject_box .subject_action .subject_end{float:right;background-image:url(img/icon_exit.png);background-repeat:no-repeat;background-position:0px 9px;padding-left:27px;color:#fff;line-height:1.2em;font-size:16px;padding-bottom:5px;margin-top:21px;padding-top:10px;margin-right:40px}
 .subject_test .subject_box .subject_skip{margin-top:15px;display:inline-block}
 .subject_test .subject_box{}
 .subject_test .subject_box{}
 .subject_test .subject_box .hui_panel{}
 .subject_test .subject_box .tr_row{color:#939393;line-height:2em;font-size:25px;padding:15px 0px 10px 34px;list-style-position:inside;border-bottom:1px solid #ddd}
 .subject_test .subject_box .tr_row .td_index{display:none}
-.subject_test .subject_box .hui_checkbox{}
-.subject_test .subject_box .hui_checkbox_icon{background-color:white;color:#16b4f9}
-.subject_test .subject_box .hui_checkbox_icon .hui_checkbox_input{}
-.subject_test .subject_box .hui_checkbox_label{}
 .subject_test .subject_box .tr_row .hui_label{color:#363636;font-size:19px;line-height:1.2em;padding-left:15px;vertical-align:top;padding-top:9px;display:inline-block;*display:block}
-.subject_test .hui_textinput{}
-.subject_test .hui_btn{font-family:microsoft yahei}
+.subject_test .hui_checkbox{margin-top:11px}
+.subject_test .hui_btn{font-family:microsoft yahei;}
 .subject_test .subject_box .tr_row .subject_nxt{}
 .subject_test .hui_btn_label{}
 .subject_test .subject_box .tr_row .subject_pre{}
 .subject_test .subject_box .tr_row .subject_end{}
+.result_box{
+    /* background-image: url(img/result2.png); */
+    background-position: -144px -137px;
+    background-repeat: no-repeat;
+    color: #999;
+    font-size: 19px;
+}
+.result_box b {
+    font-weight: normal;
+}
+.result_box .box_content {
+    padding: 20px 20px 30px;
+}
+.result_box .result_score{
+    padding-bottom: 20px;
+    font-size: 28px;
+    color: #888;
+}
+.result_box .result_score .score{
+    color: #168de2;
+    font-size: 31px;
+    font-weight: normal;
+    padding: 0px 5px;
+}
+.result_box .result_correct {
+    padding: 10px 0px;
+}
+.result_box .result_time {
+    padding: 10px 0px 25px;
+}
+.result_box .result_chart{
+    background-image: url(img/rate.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    height: 27px;
+    width: 400px;
+    padding: 0px 0px;
+}
+.result_box .result_rate{
+    padding: 20px 0px 10px;
+}
+.result_box .result_rate .rate{
+    color: #168de2;
+    padding: 0px 10px;
+}
+.result_box .result_tip{
+    padding: 20px 0px 30px;
+}
+.result_box .result_nxt{
+    background-color: #168de2;border: 0px;color: white;
+    padding: 6px 25px;border-radius: 16px;
+    font-size: 18px;
+}
+.candidate_box{}
+.candidate_box .box_content {}
+.candidate_box .row_package{}
+.candidate_box .row_item{}
+.candidate_box .row_item .title{}
+.candidate_box .row_career{}
+.candidate_box .candidate_nxt{}
+.report_box{}
+.report_box .box_content {}
+.report_box .b{}
+.report_box .tel{}
+.report_box .tel .spam{}
+.report_box .result_level{}
+.report_box .result_level .level{}

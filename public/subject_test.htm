@@ -8,24 +8,9 @@
 <script type="text/javascript" src="js/hui.js"></script>
 <script type="text/javascript" src="js/table.js"></script>
 
-<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="main.css">
 
 <style>
-.hui_checkbox{float:left;}
-.hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
-.hui_radioinput .hui_radioinput_input{display:none;}
-.hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
-.hui_radioinput .hui_radioinput_text{float:left;}
-.hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
-.hui_radioinputgroup{overflow:hidden;float:left;}
-.hui_checkbox .hui_checkbox_label{}
-.hui_checkbox .hui_checkbox_label a{font-size:14px;}
-.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
-.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
-.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
-.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
 
 </style>
 <script type="text/javascript">
@@ -196,7 +181,10 @@ window.onload = function(){
 
 
 <div id="subject_add" class="subject_test">
-
+<label ui="type:'RadioInput',formName:'male',value:'male'">
+                                            <input type="radio" class="hui_radioinput_input" />
+                                            <span class="hui_radioinput_label">男</span>
+                                        </label>
     <div class="subject_box" ui="type:'BoxPanel',formName:'form'">
         <div class="subject_action">
             <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
@@ -207,7 +195,9 @@ window.onload = function(){
         </div>
         <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
         <div class="form_content">
-            <div class="subject_title"><span ui="type:'Label',formName:'index2'">1</span>、<span ui="type:'Label',formName:'title'"></sapn></div>
+            <div class="subject_title">
+                <span ui="type:'Label',formName:'index2'">1</span>、<span ui="type:'Label',formName:'title'"></span>
+            </div>
             <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
             </ol>
             <div style="text-align: right;"><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
@@ -216,74 +206,79 @@ window.onload = function(){
     </div>
 
     <div class="result_box" ui="type:'BoxPanel',formName:'result'">
-        <div class="result_score">成绩 <b class="score" id="score">84</b> <span class="">分</span></div>
-        <div class="result_level">级别 <b class="level" id="level">高级前端工程师</b></div>
-        <div class="result_chart">64%</div>
-        <div class="result_rate">您打败了全国64%的对手!</div>
-
-        <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
-    </div>
-    <div class="result_box" ui="type:'BoxPanel',formName:'candidate'">
-        <div class="row_item row_package">
-            <div class="title">请选择您目前年薪档位：</div>
-            <div ui="type:'Dropdown',formName:'package',rule:'not_empty',options:[
-                {value:'5',text:'  &nbsp;5万'},
-                {value:'10',text:' 10万'},
-                {value:'15',text:' 15万'},
-                {value:'20',text:' 20万'},
-                {value:'25',text:' 25万'},
-                {value:'30',text:' 30万'},
-                {value:'35',text:' 35万'},
-                {value:'40',text:' 40万'},
-                {value:'45',text:' 45万'},
-                {value:'50',text:' 50万'},
-                {value:'55',text:' 55万'},
-                {value:'60',text:' 60万'},
-                {value:'75',text:' 75万'},
-                {value:'80',text:' 80万'},
-                {value:'85',text:' 85万'},
-                {value:'90',text:' 90万'},
-                {value:'100+',text:'100+'}],size:{width:80}"></div>
-         </div>
-        <div class="row_item row_career">
-            <div class="title">工作经验：</div>
-            <div ui="type:'Dropdown',formName:'career',rule:'not_empty',options:[
-                {value:'1',text:'1年'},
-                {value:'2',text:'2年'},
-                {value:'3',text:'3年'},
-                {value:'4',text:'4年'},
-                {value:'5',text:'5年'},
-                {value:'6',text:'6年'},
-                {value:'7',text:'7年'},
-                {value:'8',text:'8年'},
-                {value:'9',text:'9年'},
-                {value:'10+',text:'10+'},
-                ],size:{width:80}"></div>
+        <div class="box_content">
+            <div class="result_score">成绩 <b class="score" id="score">84</b> <span class="">分</span></div>
+            <div class="result_correct">答对 <b class="correct" id="correct">40</b> 题</div>
+            <div class="result_time">耗时 <b class="time" id="time">40</b> 分钟</div>
+            <div class="result_chart" id="result_chart">&nbsp;</div>
+            <div class="result_rate">您打败了<b class="rate" id="rate">64%</b>的竞争对手!</div>
+            <div class="result_tip">点击“下一步”查看您目前的薪资提升空间!</div>
+            <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
         </div>
-        
+    </div>
+    <div class="candidate_box" ui="type:'BoxPanel',formName:'candidate'">
+        <div class="box_content">
+            <div class="row_item row_package">
+                <div class="title">请选择您目前年薪档位：</div>
+                <div ui="type:'Dropdown',formName:'package',rule:'not_empty',options:[
+                    {value:'5',text:'  &nbsp;5万'},
+                    {value:'10',text:' 10万'},
+                    {value:'15',text:' 15万'},
+                    {value:'20',text:' 20万'},
+                    {value:'25',text:' 25万'},
+                    {value:'30',text:' 30万'},
+                    {value:'35',text:' 35万'},
+                    {value:'40',text:' 40万'},
+                    {value:'45',text:' 45万'},
+                    {value:'50',text:' 50万'},
+                    {value:'55',text:' 55万'},
+                    {value:'60',text:' 60万'},
+                    {value:'75',text:' 75万'},
+                    {value:'80',text:' 80万'},
+                    {value:'85',text:' 85万'},
+                    {value:'90',text:' 90万'},
+                    {value:'100+',text:'100+'}],size:{width:80}"></div>
+             </div>
+            <div class="row_item row_career">
+                <div class="title">请选择您工作经验：</div>
+                <div ui="type:'Dropdown',formName:'career',rule:'not_empty',options:[
+                    {value:'1',text:'1年'},
+                    {value:'2',text:'2年'},
+                    {value:'3',text:'3年'},
+                    {value:'4',text:'4年'},
+                    {value:'5',text:'5年'},
+                    {value:'6',text:'6年'},
+                    {value:'7',text:'7年'},
+                    {value:'8',text:'8年'},
+                    {value:'9',text:'9年'},
+                    {value:'10+',text:'10+'},
+                    ],size:{width:80}"></div>
+            </div>
+        </div>
         <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt'" tabindex="100">查看评估结果</button>
     </div>
-    <div class="result_box" ui="type:'BoxPanel',formName:'report'">    
-        <div onmousedown="hui.c('spam', this).remove()">根据测评结果，预计经过前端训练营的 <b class="b">前端架构师特训</b> 您的收入能提高 <b class="b">5~8</b>万/年 预约电话：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> </div>
+    <div class="report_box" ui="type:'BoxPanel',formName:'report'">    
+        <div class="box_content">
+            <div onmousedown="hui.c('spam', this).remove()">根据测评结果，预计经过前端训练营的 <b class="b">前端架构师特训</b> 您的收入能提高 <b class="b">5~8</b>万/年 预约电话：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> </div>
 
-        <div> 您的测评结果如下：<br/>
+            <div> 您的测评结果如下：<br/>
+            <div class="result_level">级别 <b class="level" id="level">高级前端工程师</b></div>
+            初级前端工程师 0-35        1000 <br/>
+            中级前端工程师 35-55       200 <br/>
+            高级前端工程师 50-70       300 <br/>
+            前端架构师     65-85       10 <br/>
+            资深前端架构师 80-100      1  <br/>      
+
+            布局<br/>
+            面向对象<br/>
+            兼容性<br/>
+            移动端<br/>
+            PS<br/>
+            Nodejs<br/>
+
         
-        初级前端工程师 0-35        1000
-        中级前端工程师 35-55       200
-        高级前端工程师 50-70       300
-        前端架构师     65-85       10
-        资深前端架构师 80-100      1        
 
-        布局
-        面向对象
-        兼容性
-        移动端
-        PS
-        Nodejs
-
-        
-
-
+        </div>
     </div>
 </div>
 
