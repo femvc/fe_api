@@ -1,3 +1,7 @@
+.clearfix{*zoom:1}
+.clearfix:after{display:table;content:" ";clear:both;}
+hr.clearfix {font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; clear: both; border: 0px; padding: 0px; margin: -1px 0px 0px 0px; list-style: none; border-style: none; background: none; visibility: hidden;}
+
 .hui_table{}
 .hui_table_head{}
 .hui_table_head .hui_table_row{}
@@ -109,12 +113,21 @@
 .result_box .result_time {
     padding: 10px 0px 25px;
 }
+
+.result_box .result_chart_bg{
+    background-image: url(img/rate3.png?456);
+    background-repeat: no-repeat;
+    background-position: 0px -50px;
+    height: 39px;
+    width: 400px;
+    padding: 0px 0px;
+}
 .result_box .result_chart{
-    background-image: url(img/rate.png);
+    background-image: url(img/rate3.png?123);
     background-repeat: no-repeat;
     background-position: 0px 0px;
-    height: 27px;
-    width: 400px;
+    height: 39px;
+    width: 220px;
     padding: 0px 0px;
 }
 .result_box .result_rate{
@@ -132,17 +145,66 @@
     padding: 6px 25px;border-radius: 16px;
     font-size: 18px;
 }
-.candidate_box{}
-.candidate_box .box_content {}
-.candidate_box .row_package{}
-.candidate_box .row_item{}
-.candidate_box .row_item .title{}
-.candidate_box .row_career{}
-.candidate_box .candidate_nxt{}
-.report_box{}
-.report_box .box_content {}
-.report_box .b{}
-.report_box .tel{}
+.candidate_box{
+    font-size: 19px;
+    color: #999;
+}
+.candidate_box .box_content {
+    padding: 20px 20px 30px;
+}
+.candidate_box .row_package{
+    padding-bottom: 10px;  padding-top: 5px;
+}
+.candidate_box .row_item{
+}
+.candidate_box .row_item .title{
+    clear: both;
+    padding-bottom: 10px;
+}
+.candidate_box .row_career{
+    padding-bottom: 50px;
+}
+.candidate_box .candidate_nxt{
+    background-color: #168de2;  border: 0px;  color: white;  padding: 6px 25px;  border-radius: 16px;  font-size: 18px;
+}
+.report_box{
+    font-size: 19px;
+    color: #999;
+}
+.report_box .box_content {
+    padding: 20px 20px 30px;
+    line-height: 2em;
+}
+
+.report_box .result_detail {
+    padding: 10px 0px;
+
+}
+.report_box .result_detail table {
+    border-collapse: collapse;
+
+}
+.report_box .result_detail th {
+    border-bottom: 1px solid #eee;
+
+    color: #888;
+}
+.report_box .result_detail td {
+    border-bottom: 1px solid #eee;
+
+}
+.report_box .effect .b{
+    color: #168de2;
+}
+.report_box .tel{
+    color: #666;
+}
 .report_box .tel .spam{}
 .report_box .result_level{}
-.report_box .result_level .level{}
+.report_box .result_level .level{
+    color: #168de2;
+    padding-left: 10px;
+}
+.report_box .effect{
+    padding-top: 10px;
+}

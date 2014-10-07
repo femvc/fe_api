@@ -7959,6 +7959,7 @@ hui.define('hui_boxpanel', ['hui'], function () {
         render: function (options) {
             hui.BoxPanel.superClass.prototype.render.call(this);
             var me = this;
+            me.setSize();
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
         },
