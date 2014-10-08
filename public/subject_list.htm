@@ -213,6 +213,20 @@ window.onload = function(){
 <!--target:test-->
 
     <div ui="type:'Panel',formName:'form'">
+        <div class="tr_row">
+            <span class="row_title">大类：</span>
+            <div>
+            <div ui="type:'Checkbox',formName:'major',value:'FE'"       > FE</div>
+            <div ui="type:'Checkbox',formName:'major',value:'PHP'"      > PHP</div>
+            <div ui="type:'Checkbox',formName:'major',value:'J2EE'"     > J2EE</div>
+            <div ui="type:'Checkbox',formName:'major',value:'.NET'"     > .NET</div>
+            <div ui="type:'Checkbox',formName:'major',value:'ROR'"      > ROR</div>
+            <div ui="type:'Checkbox',formName:'major',value:'PYTHON'"   > PYTHON</div>
+            <div ui="type:'Checkbox',formName:'major',value:'DB'"       > DB</div>
+            <div ui="type:'Checkbox',formName:'major',value:'SERVER'"   > SERVER</div>
+            </div>
+            
+        </div>
         <h3 class="form_title">
             <span id="title"> 增加题目</span> 
             <a href="javascript:"  ui="type:'Button',formName:'subject_add'">add</a>
@@ -223,6 +237,14 @@ window.onload = function(){
             <span class="row_title">题目：</span>
             <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
             <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
+        </div>
+        <div class="tr_row">
+            <span class="row_title">级别：</span>
+            
+        </div>
+        <div class="tr_row">
+            <span class="row_title">小类：</span>
+            
         </div>
         <div class="row_head">
             <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
