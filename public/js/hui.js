@@ -1194,7 +1194,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             }
         },
         // 注: controlMap不能放在这里,放在这里会导致"原型继承属性只是用一个副本的坑"!!
-        // controlMap: {},
+        // controlMap: [],
         /**
          * @name 获取dom子部件的css class
          * @protected
@@ -1324,10 +1324,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this,
                 main = me.getMain();
             if (me.controlMap) {
-                for (var i in me.controlMap) {
-                    if (me.controlMap.hasOwnProperty(i)) {
-                        me.controlMap[i].initBehaviorByTree();
-                    }
+                for (var i = 0, len = me.controlMap.length; i < len; i++) {
+                    me.controlMap[i].initBehaviorByTree();
                 }
             }
             if (main.getAttribute('_initBehavior') != 'true') {
@@ -1366,12 +1364,10 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             if (!me.rule && controlMap && !me.isDisabled()) {
                 result = true;
                 m = null;
-                for (var i in controlMap) {
-                    if (i && controlMap.hasOwnProperty(i) && controlMap[i]) {
-                        n = controlMap[i].validate(show_error);
-                        result = n && result;
-                        m = m === null && !n ? controlMap[i] : m;
-                    }
+                for (var i = 0, len = controlMap.length; i < len; i++) {
+                    n = controlMap[i].validate(show_error);
+                    result = n && result;
+                    m = m === null && !n ? controlMap[i] : m;
                 }
                 //m && m.getInput && m.getInput() && m.getInput().focus();
             }
@@ -1383,10 +1379,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 Validator = hui.Control.getExtClass('hui.Validator');
             Validator.cancelNotice(me.getMain());
             if (me.controlMap) {
-                for (var i in me.controlMap) {
-                    if (i && me.controlMap.hasOwnProperty(i) && me.controlMap[i]) {
-                        me.controlMap[i].hideError();
-                    }
+                for (var i = 0, len = me.controlMap.length; i < len; i++) {
+                    me.controlMap[i].hideError();
                 }
             }
         },
@@ -1402,21 +1396,32 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         },
         showErrorByTree: function (paramMap, code) {
             var me = this,
+                value,
+                list,
                 ctr;
             if (me.controlMap && paramMap) {
                 for (var formName in paramMap) {
                     if (formName && paramMap.hasOwnProperty(formName)) {
-                        ctr = me.controlMap[formName] || me.getByFormName(formName);
-                        if (!ctr) {
+                        value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
+                            [paramMap[formName]] : paramMap[formName];
+                        ctr = me.getById(formName);
+                        list = ctr ? [ctr] : me.getByFormNameAll(formName);
+                        if (list.length < 1) {
                             continue;
                         }
-                        if (Object.prototype.toString.call(paramMap[formName]) === '[object Object]' && ctr.controlMap) {
-                            ctr.showErrorByTree(paramMap[formName], code);
+                        for (var i = 0, len = value.length; i < len; i++) {
+                            ctr = list[i];
+                            if (ctr) {
+                                if (Object.prototype.toString.call(value[i]) === '[object Object]' &&
+                                    ctr.controlMap) {
+                                    ctr.showErrorByTree(value[i], code);
+                                }
+                                else if (ctr.showError) {
+                                    ctr.showError(value[i], code);
+                                }
+                                ctr = null;
+                            }
                         }
-                        else if (ctr.showError) {
-                            ctr.showError(paramMap[formName], code);
-                        }
-                        ctr = null;
                     }
                 }
             }
@@ -1438,7 +1443,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         //getValue:   new Function(), // 注: 控件直接返回值(对象/数组/字符串)时才能使用getValue! 获取所有子控件的值,应该用getParamMap
         setValue: function (paramMap) {
             var me = this;
-            if (me.controlMap) {
+            if (me.controlMap && (/\[object Object\]/.test(Object.prototype.toString.call(paramMap)))) {
                 me.setValueByTree(this.value);
             }
             else {
@@ -1451,31 +1456,40 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
          */
         setValueByTree: function (paramMap) {
             var me = this,
+                value,
+                list,
                 ctr,
                 main;
             if (me.controlMap && paramMap) {
                 for (var formName in paramMap) {
                     if (formName && paramMap.hasOwnProperty(formName)) {
-                        ctr = me.controlMap[formName] || me.getByFormName(formName);
-                        if (!ctr) {
+                        value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
+                            [paramMap[formName]] : paramMap[formName];
+                        ctr = me.getById(formName);
+                        list = ctr ? [ctr] : me.getByFormNameAll(formName);
+                        if (list.length < 1) {
                             continue;
                         }
-                        if (ctr.constructor &&
-                            ctr.constructor.prototype &&
-                            ctr.constructor.prototype.hasOwnProperty &&
-                            ctr.constructor.prototype.hasOwnProperty('setValue')) {
+                        for (var i = 0, len = list.length; i < len; i++) {
+                            ctr = list[i];
 
-                            ctr.setValue(paramMap[formName]);
-                        }
-                        else if (ctr.controlMap) {
-                            ctr.setValueByTree(paramMap[formName]);
-                        }
-                        else if (ctr.getMain || ctr.main) {
-                            main = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)) || {};
-                            main.value = paramMap[formName];
-                        }
+                            if (ctr.constructor &&
+                                ctr.constructor.prototype &&
+                                ctr.constructor.prototype.hasOwnProperty &&
+                                ctr.constructor.prototype.hasOwnProperty('setValue')) {
 
-                        ctr = null;
+                                ctr.setValue(value[i]);
+                            }
+                            else if (ctr.controlMap) {
+                                ctr.setValueByTree(value[i]);
+                            }
+                            else if (ctr.getMain || ctr.main) {
+                                main = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)) || {};
+                                main.value = value[i];
+                            }
+
+                            ctr = null;
+                        }
                     }
                 }
             }
@@ -1492,27 +1506,25 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 value;
             // 如果有子控件建议递归调用子控件的getValue!!
             if (me.controlMap) {
-                for (var i in me.controlMap) {
-                    if (i && me.controlMap.hasOwnProperty(i) && me.controlMap[i]) {
-
-                        ctr = me.controlMap[i];
-                        formName = hui.Control.prototype.getFormName.call(ctr);
-                        if (String(ctr.isFormItem) !== 'false') {
-                            paramMap[formName] = paramMap[formName] ? paramMap[formName] : [];
-                            if (ctr.getValue) {
-                                value = ctr.getValue();
-                                paramMap[formName].push(value);
-                            }
-                            else if (ctr.getMain || ctr.main) {
-                                value = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)).value;
-                                paramMap[formName].push(value);
-                            }
-                            else if (ctr.controlMap) {
-                                value = ctr.getParamMap();
-                                paramMap[formName].push(value);
-                            }
+                for (var i = 0, len = me.controlMap.length; i < len; i++) {
+                    ctr = me.controlMap[i];
+                    formName = hui.Control.prototype.getFormName.call(ctr);
+                    if (String(ctr.isFormItem) !== 'false') {
+                        paramMap[formName] = paramMap[formName] ? paramMap[formName] : [];
+                        if (ctr.getValue) {
+                            value = ctr.getValue();
+                            paramMap[formName].push(value);
+                        }
+                        else if (ctr.getMain || ctr.main) {
+                            value = (ctr.getMain ? ctr.getMain() : me.getDocument().getElementById(ctr.main)).value;
+                            paramMap[formName].push(value);
+                        }
+                        else if (ctr.controlMap) {
+                            value = ctr.getParamMap();
+                            paramMap[formName].push(value);
                         }
                     }
+
                 }
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
@@ -1662,9 +1674,12 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             // 从父控件的controlMap中删除引用
             if (me.parentControl) {
                 controlMap = me.parentControl.controlMap;
-                k = me.getId ? me.getId() : me.id;
-                controlMap[k] = undefined;
-                delete controlMap[k];
+                for (var i = 0, len = controlMap.length; i < len; i++) {
+                    if (controlMap[i] === me) {
+                        controlMap.splice(i, 1);
+                        break;
+                    }
+                }
             }
 
             me.disposeChild && me.disposeChild();
@@ -1730,17 +1745,14 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             // 因为使用的属性而非闭包实现的EventDispatcher，因此无需担心内存回收的问题。
         },
         disposeChild: function () {
-            var me = this,
-                controlMap = me.controlMap;
+            var me = this;
             // dispose子控件
-            if (controlMap) {
-                for (var k in controlMap) {
-                    if (k && controlMap.hasOwnProperty(k)) {
-                        controlMap[k].dispose();
-                        delete controlMap[k];
-                    }
+            if (me.controlMap) {
+                for (var i = me.controlMap.length - 1; i > -1; i--) {
+                    me.controlMap[i].dispose();
+                    me.controlMap[i] = null;
                 }
-                me.controlMap = {};
+                me.controlMap = [];
             }
         },
         /**
@@ -1946,7 +1958,6 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
         while (elem && elem.tagName && elem.parentNode) {
             elem = elem.parentNode;
-            // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
             if (~'html,body'.indexOf(String(elem.tagName).toLowerCase()) == -1) break;
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i] == elem) {
@@ -1997,7 +2008,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         opt_propMap = opt_propMap || {}; // 这里并不会缓存BaseModel，因此销毁空间时无须担心BaseModel
         // parentControl不传默认为window对象
         parentControl = parentControl || (opt_wrap.getDocument && opt_wrap.getDocument() == hui.bocument ? hui.window : window);
-        parentControl.controlMap = parentControl.controlMap || {};
+        parentControl.controlMap = parentControl.controlMap || [];
 
 
         var uiAttr = hui.Control.UI_ATTRIBUTE || 'ui';
@@ -2198,19 +2209,26 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         // Add: 上面这样做静态没问题，动态生成appendSelfTo就会出问题，因此需要加上options.parentControl
         // Fixme: 第二次执行到这里hui.Action.get()居然是前一个action？
         parent = parent || hui.window;
-        parent.controlMap = parent.controlMap || {};
+        parent.controlMap = parent.controlMap || [];
 
         var ctrId = uiObj.getId ? uiObj.getId() : uiObj.id;
         // 注：从原来的父控件controlMap中移除
         if (uiObj.parentControl && uiObj.parentControl.controlMap) {
-            uiObj.parentControl.controlMap[ctrId] = undefined;
-            delete uiObj.parentControl.controlMap[ctrId];
+            var list = uiObj.parentControl.controlMap;
+            for (var i = list.length - 1; i > -1; i--) {
+                if (list[i] === uiObj) {
+                    list.splice(i, 1);
+                    break;
+                }
+            }
         }
 
         // !!!悲催的案例,如果将controlMap放在prototype里, 这里parent.controlMap===uiObj.controlMap!!!
-        parent.controlMap[ctrId] = uiObj;
+        parent.controlMap.push(uiObj);
         // 重置parentControl标识
         uiObj.parentControl = parent;
+        // 移动DOM
+        parent.getMain().appendChild(uiObj.getMain());
     };
 
     /**
@@ -2270,15 +2288,11 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         while (list.length) {
             childNode = list.pop();
             if (!childNode) continue;
+
             elements.push(childNode);
-            childlist = childNode.controlMap;
-            if (!childlist) continue;
-            for (i in childlist) {
-                if (childlist.hasOwnProperty(i)) {
-                    node = childlist[i];
-                    list.push(node);
-                }
-            }
+
+            if (!childNode.controlMap) continue;
+            list = list.concat(childNode.controlMap);
         }
         // 去掉顶层父控件或Action,如不去掉处理复合控件时会导致死循环!!
         if (elements.length > 0) elements.shift();
@@ -2293,17 +2307,16 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      */
     hui.Control.findElemControl = function (parentElement) {
         var control = null;
-        while (parentElement && parentElement.tagName && parentElement.parentNode) {
-            parentElement = parentElement.parentNode;
+        while (parentElement && parentElement.tagName) {
             //label标签自带control属性!!
             if (parentElement && hui.Control.isControlMain(parentElement)) {
                 control = hui.Control.getById(parentElement.control);
                 break;
             }
-            // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
             else if (~'html,body'.indexOf(String(parentElement.tagName).toLowerCase())) {
                 break;
             }
+            parentElement = parentElement.parentNode;
         }
         return control;
     };
@@ -2366,16 +2379,16 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             formName = String(formName);
 
             // 先查找自身
-            childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : {};
+            childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : [];
             //childNodes.unshift(parentControl);
             if (parentControl.getFormName && parentControl.getFormName() === formName) {
                 list.push(parentControl);
             }
 
             // 再遍历控件树
-            childNodes = parentControl && parentControl.controlMap ? hui.Control.findAllControl(parentControl) : {};
-            for (var i in childNodes) {
-                if (childNodes.hasOwnProperty(i) && childNodes[i].getFormName() === formName) {
+            childNodes = parentControl && parentControl.controlMap ? hui.Control.findAllControl(parentControl) : [];
+            for (var i = 0, len = childNodes.length; i < len; i++) {
+                if (childNodes[i].getFormName() === formName) {
                     list.push(childNodes[i]);
                 }
             }
@@ -5869,7 +5882,7 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
         var baseModel = hui.Action.getExtClass('hui.BaseModel');
         this.model = new baseModel();
         // Action的顶层控件容器
-        this.controlMap = {};
+        this.controlMap = [];
         // 声明类型
         this.type = 'action';
 
@@ -5972,7 +5985,7 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
                 hui.Action.getExtClass('hui.Control').init(me.getMain(), me.model, me);
 
                 // 控件事件绑定
-                me.initBehavior(me.controlMap);
+                me.initBehavior();
 
                 // hui.Action.getExtClass('hui.Mask').hideLoading();
                 // 渲染结束，检查渲染期间是否有新请求
@@ -6077,31 +6090,31 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
                     action[i] = me[i];
                 }
             }
-            hui.Action.controlMap[action.id] = action;
+            hui.Action.controlMap.push(action);
         }
     };
     hui.Action.MAIN_ID = 'main';
     /**
      * @name Action的静态属性[索引Action]
      */
-    hui.Action.controlMap = {};
+    hui.Action.controlMap = [];
 
     /**
      * @name 获取action
      * 获取控件用hui.Action.getExtClass('hui.Control').get(id, ctr||action)
      */
     hui.Action.get = function (id) {
-        var map = hui.Action.controlMap,
+        var list = hui.Action.controlMap,
             action,
             v,
             cur;
-        for (var i in map) {
-            v = map[i];
+        for (var i = 0, len = list.length; i < len; i++) {
+            v = list[i];
             if (id !== undefined && v && v.id !== undefined && v.id == id) {
-                action = map[i];
+                action = list[i];
             }
             if (v && v.active) {
-                cur = map[i];
+                cur = list[i];
             }
         }
         return (id !== undefined ? action : cur);
@@ -8284,8 +8297,9 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
             icon.onselectstart = new Function('return false;');
         },
         setValue: function (value) {
-            var me = this;
-            me.setChecked(!!value);
+            var me = this,
+                preset = me.getPresetValue();
+            me.setChecked(value == preset && String(value) == String(preset));
         },
         getValue: function () {
             var me = this,
