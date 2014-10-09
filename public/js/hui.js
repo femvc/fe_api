@@ -2218,7 +2218,6 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             for (var i = list.length - 1; i > -1; i--) {
                 if (list[i] === uiObj) {
                     list.splice(i, 1);
-                    break;
                 }
             }
         }
@@ -2228,7 +2227,11 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         // 重置parentControl标识
         uiObj.parentControl = parent;
         // 移动DOM
-        parent.getMain().appendChild(uiObj.getMain());
+        var parentNode = parent.getMain ? parent.getMain() : null,
+            main = uiObj.getMain();
+        if (parentNode && main) {
+            parentNode.appendChild(main);
+        };
     };
 
     /**
@@ -2296,6 +2299,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         }
         // 去掉顶层父控件或Action,如不去掉处理复合控件时会导致死循环!!
         if (elements.length > 0) elements.shift();
+        // 后序遍历出来的结果，因此需要反转数组
+        elements.reverse();
         return elements;
     };
     // 所有控件实例的索引. 注释掉原因: 建了索引会造成无法GC内存暴涨!
@@ -6110,7 +6115,7 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
             cur;
         for (var i = 0, len = list.length; i < len; i++) {
             v = list[i];
-            if (id !== undefined && v && v.id !== undefined && v.id == id) {
+            if (id !== undefined && v && v.id !== undefined && String(v.id) === String(id)) {
                 action = list[i];
             }
             if (v && v.active) {
@@ -6124,7 +6129,7 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
      * @param {Function|Object} actionName action的单例或构造类
      */
     hui.Action.getByActionName = function (actionName) { /*接收参数:Action子类|Action子类名|Object，返回action实例*/
-        var map = hui.Action.controlMap,
+        var list = hui.Action.controlMap,
             action = null,
             v,
             action_constructor;
@@ -6132,19 +6137,19 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
             // Action function
             action_constructor = Object.prototype.toString.call(actionName) === '[object Function]' ? actionName : (hui[actionName] || hui.getObjectByName(actionName));
             if (action_constructor && Object.prototype.toString.call(action_constructor) === '[object Function]') {
-                for (var i in map) {
-                    v = map[i];
+                for (var i = 0, len = list.length; i < len; i++) {
+                    v = list[i];
                     if (v instanceof action_constructor && v.constructor === action_constructor) {
-                        action = map[i];
+                        action = list[i];
                     }
                 }
             }
             // Object
             else {
-                for (var i in map) {
-                    v = map[i];
+                for (var i = 0, len = list.length; i < len; i++) {
+                    v = list[i];
                     if (v === actionName) {
-                        action = map[i];
+                        action = list[i];
                     }
                 }
             }
@@ -6160,11 +6165,11 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
      * @public
      */
     hui.Action.removeActionIndex = function (action) {
-        var map = hui.Action.controlMap,
+        var list = hui.Action.controlMap,
             i;
-        for (i in map) {
-            if (map[i] == action) {
-                map[i] = undefined;
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (list[i] === action) {
+                list[i] = undefined;
             }
         }
     };
@@ -7010,7 +7015,7 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
          * @name 初始化列表行为
          * @param {Object} controlMap 当前主内容区域绘制的控件集合.
          */
-        initBehavior: function (controlMap) {
+        initBehavior: function () {
             //var me = this;
 
         }
@@ -7922,7 +7927,7 @@ hui.define('hui_panel', ['hui'], function () {
         hui.Panel.superClass.call(this, options, 'pending');
 
         this.type = 'panel';
-        this.controlMap = {};
+        this.controlMap = [];
 
         // 进入控件处理主流程!
         if (pending != 'pending') {
@@ -7956,7 +7961,7 @@ hui.define('hui_boxpanel', ['hui'], function () {
         hui.BoxPanel.superClass.call(this, options, 'pending');
 
         this.type = 'boxpanel';
-        this.controlMap = {};
+        this.controlMap = [];
 
         // 进入控件处理主流程!
         if (pending != 'pending') {
