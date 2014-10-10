@@ -1405,7 +1405,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                         value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
                             [paramMap[formName]] : paramMap[formName];
                         ctr = me.getById(formName);
-                        list = ctr ? [ctr] : me.getByFormNameAll(formName);
+                        list = ctr ? [ctr] : me.getByFormNameAll(formName, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -1466,7 +1466,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                         value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
                             [paramMap[formName]] : paramMap[formName];
                         ctr = me.getById(formName);
-                        list = ctr ? [ctr] : me.getByFormNameAll(formName);
+                        list = ctr ? [ctr] : me.getByFormNameAll(formName, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -1544,9 +1544,9 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             var me = this;
             return hui.Control.getByFormName(formName, me);
         },
-        getByFormNameAll: function (formName) {
+        getByFormNameAll: function (formName, all) {
             var me = this;
-            return hui.Control.getByFormNameAll(formName, me);
+            return hui.Control.getByFormNameAll(formName, me, all);
         },
         getById: function (id) {
             var me = this;
@@ -2226,12 +2226,12 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         parent.controlMap.push(uiObj);
         // 重置parentControl标识
         uiObj.parentControl = parent;
-        // 移动DOM
-        var parentNode = parent.getMain ? parent.getMain() : null,
+        // !!!不能移动DOM，需自行解决，因为会打乱html布局
+        /*var parentNode = parent.getMain ? parent.getMain() : null,
             main = uiObj.getMain();
         if (parentNode && main) {
             parentNode.appendChild(main);
-        };
+        };*/
     };
 
     /**
@@ -2374,7 +2374,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      * @static
      * @param {String} 控件formName
      */
-    hui.Control.getByFormNameAll = function (formName, parentNode) {
+    hui.Control.getByFormNameAll = function (formName, parentNode, all) {
         var list = [],
             childNodes,
             /* 强制确认parentControl: 如果传入是parentControl的id，则找出其对应的Control */
@@ -2391,7 +2391,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             }
 
             // 再遍历控件树
-            childNodes = parentControl && parentControl.controlMap ? hui.Control.findAllControl(parentControl) : [];
+            childNodes = parentControl && parentControl.controlMap ?
+                (all === false ? parentControl.controlMap : hui.Control.findAllControl(parentControl)) : [];
             for (var i = 0, len = childNodes.length; i < len; i++) {
                 if (childNodes[i].getFormName() === formName) {
                     list.push(childNodes[i]);

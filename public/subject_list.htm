@@ -139,7 +139,7 @@ window.onload = function(){
     form = hui.Control.getByFormName('form');
 
     form.addOption = function (obj) {
-        var content = form.getByFormName('content').getMain(),
+        var content = form.getById('content').getMain(),
             list,
             index;
         obj = obj || {};
@@ -215,15 +215,15 @@ window.onload = function(){
     <div ui="type:'Panel',formName:'form'">
         <div class="tr_row">
             <span class="row_title">大类：</span>
-            <div>
-            <div ui="type:'Checkbox',formName:'major',value:'FE'"       > FE</div>
-            <div ui="type:'Checkbox',formName:'major',value:'PHP'"      > PHP</div>
-            <div ui="type:'Checkbox',formName:'major',value:'J2EE'"     > J2EE</div>
-            <div ui="type:'Checkbox',formName:'major',value:'.NET'"     > .NET</div>
-            <div ui="type:'Checkbox',formName:'major',value:'ROR'"      > ROR</div>
-            <div ui="type:'Checkbox',formName:'major',value:'PYTHON'"   > PYTHON</div>
-            <div ui="type:'Checkbox',formName:'major',value:'DB'"       > DB</div>
-            <div ui="type:'Checkbox',formName:'major',value:'SERVER'"   > SERVER</div>
+            <div class="row_major" ui="type:'Panel',formName:'form2',isFormItem:'true'">
+                <div ui="type:'Checkbox',formName:'major',value:'FE',checked:'checked'"       > FE</div>
+                <div ui="type:'Checkbox',formName:'major',value:'PHP'"      > PHP</div>
+                <div ui="type:'Checkbox',formName:'major',value:'J2EE'"     > J2EE</div>
+                <div ui="type:'Checkbox',formName:'major',value:'.NET'"     > .NET</div>
+                <div ui="type:'Checkbox',formName:'major',value:'ROR'"      > ROR</div>
+                <div ui="type:'Checkbox',formName:'major',value:'PYTHON'"   > PYTHON</div>
+                <div ui="type:'Checkbox',formName:'major',value:'DB'"       > DB</div>
+                <div ui="type:'Checkbox',formName:'major',value:'SERVER'"   > SERVER</div>
             </div>
             
         </div>
@@ -241,16 +241,24 @@ window.onload = function(){
         </div>
         <div class="tr_row">
             <span class="row_title">级别：</span>
-            
+            <div class="row_level">
+                <div ui="type:'Checkbox',formName:'level',value:'1'"> 初级</div>
+                <div ui="type:'Checkbox',formName:'level',value:'3'"> 中级</div>
+                <div ui="type:'Checkbox',formName:'level',value:'5'"> 高级</div>
+                <div ui="type:'Checkbox',formName:'level',value:'7'"> 架构师</div>
+                <div ui="type:'Checkbox',formName:'level',value:'9'"> 专家</div>
+            </div>
         </div>
         <div class="tr_row">
             <span class="row_title">小类：</span>
-            
+            <div class="row_label">
+                'javascript|Nodejs|HTML|CSS|HTML5|CSS3|canvas|svg|vml|xml|sax|xpath|xlst|JSON|AJAX|XHR|jQuery|Zipto|JS框架|JS库|MVC|MVVM|MD5|RSA|BASE64|mongodb|redis|sql|mysql|sqlserver|oracle|Chrome扩展|Firefox扩展|IE6|IE7|IE8|IE9|IE10|IE11|IEDevToolbar|Firebug|ChromeDebug|Fiddler|Cache|CDN|PS|AI|Font|RGB|CMYK|Cookie|JSONP|CrossDomain|Selinum|WebDriver|DOM|Tomcat|Servlet|HTTP|workspace|cssupdate|doT|markdown|'
+            </div>
         </div>
         <div class="row_head">
             <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
         </div>
-        <div ui="type:'Panel',formName:'content',isFormItem: true">
+        <div ui="type:'Panel',id:'content',isFormItem: true">
         </div>
     </div>
 </div>
