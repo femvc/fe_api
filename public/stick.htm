@@ -4,6 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ebbinghaus Intelligent Remember [v1.0]</title>
+<link rel="stylesheet" href="cloudlabel.css" />
 <script type="text/javascript" src="js/jquery1.11.1.js"></script>
 <script type="text/javascript" src="js/hui.js"></script>
 <script>
@@ -47,10 +48,10 @@ hui.define('hui_'+String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function ()
          */
         getTplCloudLabel: function(){
             var tpl = [
-                '<span class="cloudlabel_item" label_id="#{label_id}" title="#{value}">',
-                '    <span class="text" ondblclick="hui.Control.getById(\'#{ctr_id}\').editLabel  (this, \'#{label_id}\')" >#{value}</span>',
-                '    <input class="input"   onblur="hui.Control.getById(\'#{ctr_id}\').saveLabel  (this, \'#{label_id}\')" value="#{value}" type="text" size="5" style="display:none" /> ',
-                '    <span class="remove"  onclick="hui.Control.getById(\'#{ctr_id}\').removeLabel(this, \'#{label_id}\')">X</span>',
+                '<span class="cloudlabel_item" label_id="#{label_id}" value="#{value}">',
+                '    <span class="text" ondblclick="hui.Control.getById(\'#{ctr_id}\').editLabel  (\'#{label_id}\')" >#{value}</span>',
+                '    <input class="input"   onblur="hui.Control.getById(\'#{ctr_id}\').saveLabel  (\'#{label_id}\')" value="#{value}" type="text" size="5" style="display:none" /> ',
+                '    <span class="remove"  onclick="hui.Control.getById(\'#{ctr_id}\').removeLabel(\'#{label_id}\')">X</span>',
                 '</span>'].join('');
             return tpl;
         },
@@ -60,27 +61,6 @@ hui.define('hui_'+String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function ()
          * @public
          */
         onclick: new Function(),
-
-        /**
-         * @name 获取button主区域的html
-         * @private
-         * @return {String}
-         */
-        getMainHtml: function () {
-            var me = this,
-                tpl = me.getTplCloudLabel(),
-                html = '',
-                list = me.value,
-                item,
-                ctr_id = me.getId();
-            for (var i=0,len=list.length; i<len; i++) {
-                item = list[i];
-                html += hui.Control.format(tpl, {label_id: item.label_id, value: item.value, ctr_id: ctr_id});
-            }
-
-            return html;
-        },
-
         /**
          * @name 渲染控件
          * @public
@@ -89,15 +69,12 @@ hui.define('hui_'+String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function ()
             hui.CloudLabel.superClass.prototype.render.call(this);
             var me = this,
                 main = me.getMain();
-
-            me.setInnerHTML(main, me.getMainHtml());
-
+            // 生成DOM
+            me.refreshLabel();
             // 初始化状态事件
             main.onclick = me.getHandlerClick();
-
             // 设定宽度
             me.width && (main.style.width = me.width + 'px');
-
             // 设置disabled
             me.setDisabled(!!me.disabled);
         },
@@ -114,47 +91,111 @@ hui.define('hui_'+String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function ()
                 }
             };
         },
+        refreshLabel:  function () {
+            var me = this;
+            me.getMain().innerHTML = '';
+            me.refreshLabelCallback();
+        },
+        refreshLabelCallback: function () {
+            var me = this,
+                list = me.value;
+            for (var i=0,len=list.length; i<len; i++) {
+                me.addLabel(list[i]);
+            }
+            me.addLabel({value: '', label_id: '-1'});
+            me.editLabel('-1');
+        },
+        /**
+         * @name 删除标签
+         * @public
+         */
+        addLabel: function (item) {
+            var me = this,
+                tpl = me.getTplCloudLabel(),
+                main = me.getMain(),
+                ctr_id = me.getId(),
+                html;
+            html = hui.Control.format(tpl, {label_id: item.label_id, value: item.value, ctr_id: ctr_id});
+            hui.util.appendHTML(main, html);
+        },
+        findLabel: function(label_id){
+            var me = this,
+                list = hui.c('cloudlabel_item', me.getMain()),
+                elem = null;
+            for (var i=list.length-1; i>-1; i--) {
+                if (list[i].getAttribute('label_id') === label_id) {
+                    elem = list[i];
+                    break;
+                }
+            }
+            return elem;
+        },
         /**
          * @name 编辑标签
          * @public
          */
-        editLabel: function (elem, label_id) {
+        editLabel: function (label_id) {
             var me = this,
-                parent = elem.parentNode,
-                input = hui.util.findSiblingByClassName(elem, 'input', 'next');
-            input.value = elem.value;
-            parent.setAttribute('value', elem.value)
-            input.style.display = 'inline';
-            elem.style.display = 'none';
+                label = me.findLabel(label_id),
+                input = hui.cc('input', label),
+                text = hui.cc('text', label),
+                value = label.getAttribute('value');
+            input.value = value;
+            input.style.display = 'inline-block';
+            input.style.width = text.clientWidth + 'px';
+            text.style.display = 'none';
+            input.focus();
             
         },
         /**
          * @name 保存标签
          * @public
          */
-        saveLabel: function (elem, label_id) {
+        saveLabel: function (label_id) {
             var me = this,
-                parent = elem.parentNode,
-                text = hui.util.findSiblingByClassName(elem, 'text', 'pre');
-            me.setInnerHTML(text, elem.value);
-            parent.setAttribute('value', elem.value)
-            text.style.display = 'inline';
-            elem.style.display = 'none';
+                label = me.findLabel(label_id),
+                input = hui.cc('input', label),
+                text = hui.cc('text', label),
+                value = input.value;
+            if (value === '' && label_id !== '-1') {
+                input.value = label.getAttribute('value');
+                me.removeLabel(label_id);
+            }
+            else if (label.getAttribute('value') !== value) {
+                me.setInnerHTML(text, value);
+                label.setAttribute('value', value);
+                hui.Mockup.setRule('/savelabel');
+                window.Requester.get('/savelabel',{
+                    data: {value: value},
+                    onsuccess: function(){
+                        alert('savelabel');
+                        me.refreshLabel();
+                    }
+                });
+            }
+            else if (label_id !== '-1') {
+                text.style.display = 'inline-block';
+                input.style.display = 'none';
+            }
+
         },
         /**
          * @name 删除标签
          * @public
          */
-        removeLabel: function (elem, label_id) {
-            var me = this,
-                main = me.getMain(),
-                list = hui.c('cloudlabel_item'),
-                parent;
-            for (var i=list.length-1; i>-1; i--) {
-                if (list[i].getAttribute('label_id') === label_id) {
-                    parent = list[i].parentNode;
-                    parent.removeChild(list[i]);
-                }
+        removeLabel: function (label_id) {
+            if (window.confirm('Are you sure remove label?')) {
+                var me = this,
+                    label = me.findLabel(label_id);
+                label.parentNode.removeChild(label);
+                
+                hui.Mockup.setRule('/removelabel');
+                window.Requester.get('/removelabel?label_id='+label_id,{
+                    onsuccess: function(){
+                        alert('removelabel');
+                        me.refreshLabel();
+                    }
+                });
             }
         }
     };
