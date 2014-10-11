@@ -351,7 +351,7 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.findSiblingByClassName = function (cur, className, pre) {
         var control = null,
             element = cur;
-        if (!pre || pre == 'next' || pre == 'last') {
+        if (!pre || pre == 'next' || pre == 'nxt' || pre == 'last') {
             while (element) {
                 if (hui.Control.hasClass(element, className)) {
                     control = element;
