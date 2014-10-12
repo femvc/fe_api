@@ -1447,6 +1447,9 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 me.setValueByTree(this.value);
             }
             else {
+                // 注：在setValue/getValue时不允许使用me.getMain().setAttirbute('value', value)和me.getMain()
+                // .getAttirbute('value'),因为value有可能是数组/对象！！
+                // 如果确定value是num或str可以在子类中覆盖setValue/getValue！！
                 me.getMain().value = paramMap;
             }
         },
@@ -1493,6 +1496,15 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     }
                 }
             }
+        },
+        getValue: function () {
+            var me = this,
+                main = me.getMain ? me.getMain() : me.getDocument().getElementById(me.main),
+                value = main.value;
+            if (me.controlMap) {
+                value = me.getParamMap();
+            }
+            return value;
         },
         /**
          * @name 获取子控件的值，返回一个map
@@ -1551,15 +1563,6 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         getById: function (id) {
             var me = this;
             return hui.Control.getById(id, me);
-        },
-        getValue: function () {
-            var me = this,
-                main = me.getMain ? me.getMain() : me.getDocument().getElementById(me.main),
-                value = me.value || main.value;
-            if (me.controlMap) {
-                value = me.getParamMap();
-            }
-            return value;
         },
         /**
          * @name 显示控件
@@ -1772,7 +1775,10 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             if (!elem) {
                 return hui.Control.error('Control\'s main element is invalid');
             }
-
+            // 默认设置value
+            if (uiObj.value !== undefined) {
+                elem.value = uiObj.value;
+            }
             // 便于通过elem.control找到control
             elem.control = uiObj.getId ? uiObj.getId() : uiObj.id;
             // 动态生成control需手动维护me.parentControl
@@ -1807,11 +1813,11 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             }
 
             /*注: 如果isRendered为false则默认调用父类的渲染函数,子类的render中有异步情况需特殊处理!
-        if (!uiObj.isRendered){
-            uiObj.constructor.superClass.prototype.render.call(uiObj);
-        }
-        //注释掉的原因：调用父类的render应该由子类自己决定!
-        */
+            if (!uiObj.isRendered){
+                uiObj.constructor.superClass.prototype.render.call(uiObj);
+            }
+            //注释掉的原因：调用父类的render应该由子类自己决定!
+            */
 
             // 解除obj对DOM的引用!
             // uiObj.main = elem.getAttribute('id'); // elem.getAttribute('id')无法取到id的
@@ -2066,7 +2072,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      * @return {hui.Control} 创建的控件对象
      */
     hui.Control.create = function (type, options) {
-        // 注：扩展一下，直接支持hui.Control.create(Element);
+        // 注：扩展了一下，直接支持hui.Control.create(Element);
         if (type && Object.prototype.toString.call(type) != '[object String]' && type.getAttribute) {
             options = options || {};
             if (hui.Control.isControlMain(type)) {
@@ -2086,10 +2092,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 }
             }
             catch (e) {
-                window.JSON && window.JSON.stringify && window.console && window.console.log({
-                    type: type,
-                    options: options
-                });
+                window.JSON && window.JSON.stringify && window.console && window.console.error && window.console.error('JSON Error: ', str);
                 return;
             }
 
@@ -2125,7 +2128,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             }
             // 注：每个控件必须有id
             attrs.id = attrs.id ? attrs.id : hui.Control.makeGUID(attrs['formName']);
-
+            // 注：type即elem
             type.id = type.id || hui.Control.makeElemGUID(attrs.id);
             attrs.main = type.id;
             attrs.bocument = type.bocument;
@@ -3418,7 +3421,7 @@ hui.define('hui_requester', [], function () {
                         xhr.fire('success');
                     }
                     else {
-                        if (stat === 0 && window.console && window.console.log) {
+                        if (stat === 0 && window.console && window.console.error) {
                             window.console.error('XHR Error: Cross domain, cannot access: %s.', xhr.url);
                         }
                         xhr.fire('failure');
@@ -3966,7 +3969,7 @@ function doit() {
     };
     hui.Mockup.maps = {};
 
-    hui.Mockup.setRule('/hui_mockup_helloworld', {
+    hui.Mockup.setRule('/hui_helloworld', {
         status: 0,
         message: '',
         data: 'Hello world.'
@@ -7272,7 +7275,9 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         this.type = 'textinput'; //注：在后面会自动判断
         this.form = 1;
         this.tagName = 'input';
-        this.value = this.value === 0 ? 0 : (this.value || '');
+        if (this.value !== undefined) {
+            this.value = String(this.value);
+        }
         // useAgent: false <input ui="type:'TextInput'", true <div ui="type:'TextInput'"
         this.useAgent = false;
         this.autoHideError = this.autoHideError === undefined ? false : this.autoHideError;
@@ -7473,9 +7478,6 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
                 me.renderEye();
             }
             me.setSize();
-            if (me.main && !!me.value) {
-                me.getMain().value = me.value;
-            }
         },
         initBehavior: function () {
             var me = this,
@@ -7488,7 +7490,9 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             if (input.value && placeholder) {
                 placeholder.style.display = 'none';
             }
-            me.setValue(me.getValue());
+            if (me.value !== undefined) {
+                me.setValue(me.value);
+            }
             // 绑定事件
             main.onpaste =
                 main.onkeydown = me.getPressDownHandler;
@@ -8556,7 +8560,6 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
  size:{width:86}"></div>
  */
 hui.define('hui_dropdown', ['hui@0.0.1'], function () {
-
     hui.Dropdown = function (options, pending) {
         hui.Dropdown.superClass.call(this, options, 'pending');
 
@@ -8862,14 +8865,12 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
 //                                                                   
 
 /**
- * @name 按钮控件
+ * @name 生日选择控件
  * @public
  * @author wanghaiyang
  * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
  */
 hui.define('hui_birthdaydropdown', ['hui@0.0.1'], function () {
-
     hui.BirthdayDropdown = function (options, pending) {
         hui.BirthdayDropdown.superClass.call(this, options, 'pending');
         // 类型声明，用于生成控件子dom的id和class
@@ -9014,41 +9015,8 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
     hui.CitylistDropdown.prototype = {
         getProvincelist: function () {
             var list = new Array(
-                new Array(110000, '北京市'),
-                new Array(310000, '上海市'),
-                new Array(120000, '天津市'),
-                new Array(500000, '重庆市'),
-                new Array(440000, '广东省'),
-                new Array(320000, '江苏省'),
-                new Array(330000, '浙江省'),
-                new Array(340000, '安徽省'),
-                new Array(370000, '山东省'),
-                new Array(350000, '福建省'),
-                new Array(430000, '湖南省'),
-                new Array(420000, '湖北省'),
-                new Array(510000, '四川省'),
-                new Array(610000, '陕西省'),
-                new Array(130000, '河北省'),
-                new Array(410000, '河南省'),
-                new Array(360000, '江西省'),
-                new Array(140000, '山西省'),
-                new Array(150000, '内蒙古'),
-                new Array(210000, '辽宁省'),
-                new Array(220000, '吉林省'),
-                new Array(230000, '黑龙江省'),
-                new Array(450000, '广西'),
-                new Array(460000, '海南省'),
-                new Array(520000, '贵州省'),
-                new Array(530000, '云南省'),
-                new Array(540000, '西藏'),
-                new Array(620000, '甘肃省'),
-                new Array(640000, '宁夏'),
-                new Array(630000, '青海省'),
-                new Array(650000, '新疆'),
-                new Array(710000, '台湾省'),
-                new Array(810000, '香港'),
-                new Array(820000, '澳门'),
-                new Array(830000, '海外')
+                new Array(110000, '北京市'), new Array(310000, '上海市'), new Array(120000, '天津市'), new Array(500000, '重庆市'), new Array(440000, '广东省'), new Array(320000, '江苏省'), new Array(330000, '浙江省'), new Array(340000, '安徽省'), new Array(370000, '山东省'), new Array(350000, '福建省'), new Array(430000, '湖南省'), new Array(420000, '湖北省'), new Array(510000, '四川省'), new Array(610000, '陕西省'), new Array(130000, '河北省'), new Array(410000, '河南省'), new Array(360000, '江西省'), new Array(140000, '山西省'), new Array(150000, '内蒙古'), new Array(210000, '辽宁省'),
+                new Array(220000, '吉林省'), new Array(230000, '黑龙江省'), new Array(450000, '广西'), new Array(460000, '海南省'), new Array(520000, '贵州省'), new Array(530000, '云南省'), new Array(540000, '西藏'), new Array(620000, '甘肃省'), new Array(640000, '宁夏'), new Array(630000, '青海省'), new Array(650000, '新疆'), new Array(710000, '台湾省'), new Array(810000, '香港'), new Array(820000, '澳门'), new Array(830000, '海外')
             );
             var result = [],
                 c;
@@ -9064,366 +9032,28 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
         },
         getCitylist: function (value) {
             var list = new Array(
-                new Array(110100, '北京'),
-                new Array(120100, '天津'),
-                new Array(130101, '石家庄'),
-                new Array(130201, '唐山'),
-                new Array(130301, '秦皇岛'),
-                new Array(130701, '张家口'),
-                new Array(130801, '承德'),
-                new Array(131001, '廊坊'),
-                new Array(130401, '邯郸'),
-                new Array(130501, '邢台'),
-                new Array(130601, '保定'),
-                new Array(130901, '沧州'),
-                new Array(133001, '衡水'),
-                new Array(140101, '太原'),
-                new Array(140201, '大同'),
-                new Array(140301, '阳泉'),
-                new Array(140501, '晋城'),
-                new Array(140601, '朔州'),
-                new Array(142201, '忻州'),
-                new Array(142331, '离石'),
-                new Array(142401, '榆次'),
-                new Array(142601, '临汾'),
-                new Array(142701, '运城'),
-                new Array(140401, '长治'),
-                new Array(150101, '呼和浩特'),
-                new Array(150201, '包头'),
-                new Array(150301, '乌海'),
-                new Array(152601, '集宁'),
-                new Array(152701, '东胜'),
-                new Array(152801, '临河'),
-                new Array(152921, '阿拉善左旗'),
-                new Array(150401, '赤峰'),
-                new Array(152301, '通辽'),
-                new Array(152502, '锡林浩特'),
-                new Array(152101, '海拉尔'),
-                new Array(152201, '乌兰浩特'),
-                new Array(210101, '沈阳'),
-                new Array(210201, '大连'),
-                new Array(210301, '鞍山'),
-                new Array(210401, '抚顺'),
-                new Array(210501, '本溪'),
-                new Array(210701, '锦州'),
-                new Array(210801, '营口'),
-                new Array(210901, '阜新'),
-                new Array(211101, '盘锦'),
-                new Array(211201, '铁岭'),
-                new Array(211301, '朝阳'),
-                new Array(211401, '锦西'),
-                new Array(210601, '丹东'),
-                new Array(220101, '长春'),
-                new Array(220201, '吉林'),
-                new Array(220301, '四平'),
-                new Array(220401, '辽源'),
-                new Array(220601, '浑江'),
-                new Array(222301, '白城'),
-                new Array(222401, '延吉'),
-                new Array(220501, '通化'),
-                new Array(230101, '哈尔滨'),
-                new Array(230301, '鸡西'),
-                new Array(230401, '鹤岗'),
-                new Array(230501, '双鸭山'),
-                new Array(230701, '伊春'),
-                new Array(230801, '佳木斯'),
-                new Array(230901, '七台河'),
-                new Array(231001, '牡丹江'),
-                new Array(232301, '绥化'),
-                new Array(230201, '齐齐哈尔'),
-                new Array(230601, '大庆'),
-                new Array(232601, '黑河'),
-                new Array(232700, '加格达奇'),
-                new Array(310100, '上海'),
-                new Array(320101, '南京'),
-                new Array(320201, '无锡'),
-                new Array(320301, '徐州'),
-                new Array(320401, '常州'),
-                new Array(320501, '苏州'),
-                new Array(320600, '南通'),
-                new Array(320701, '连云港'),
-                new Array(320801, '淮阴'),
-                new Array(320901, '盐城'),
-                new Array(321001, '扬州'),
-                new Array(321101, '镇江'),
-                new Array(321201, '昆山'),
-                new Array(321301, '常熟'),
-                new Array(321401, '张家港'),
-                new Array(321501, '太仓'),
-                new Array(321601, '江阴'),
-                new Array(321701, '宜兴'),
-                new Array(321801, '泰州'),
-                new Array(330101, '杭州'),
-                new Array(330201, '宁波'),
-                new Array(330301, '温州'),
-                new Array(330401, '嘉兴'),
-                new Array(330501, '湖州'),
-                new Array(330601, '绍兴'),
-                new Array(330701, '金华'),
-                new Array(330801, '衢州'),
-                new Array(330901, '舟山'),
-                new Array(332501, '丽水'),
-                new Array(332602, '临海'),
-                new Array(332702, '义乌'),
-                new Array(332802, '萧山'),
-                new Array(332901, '慈溪'),
-                new Array(332603, '台州'),
-                new Array(340101, '合肥'),
-                new Array(340201, '芜湖'),
-                new Array(340301, '蚌埠'),
-                new Array(340401, '淮南'),
-                new Array(340501, '马鞍山'),
-                new Array(340601, '淮北'),
-                new Array(340701, '铜陵'),
-                new Array(340801, '安庆'),
-                new Array(341001, '黄山'),
-                new Array(342101, '阜阳'),
-                new Array(342201, '宿州'),
-                new Array(342301, '滁州'),
-                new Array(342401, '六安'),
-                new Array(342501, '宣州'),
-                new Array(342601, '巢湖'),
-                new Array(342901, '贵池'),
-                new Array(350101, '福州'),
-                new Array(350201, '厦门'),
-                new Array(350301, '莆田'),
-                new Array(350401, '三明'),
-                new Array(350501, '泉州'),
-                new Array(350601, '漳州'),
-                new Array(352101, '南平'),
-                new Array(352201, '宁德'),
-                new Array(352601, '龙岩'),
-                new Array(360101, '南昌'),
-                new Array(360201, '景德镇'),
-                new Array(362101, '赣州'),
-                new Array(360301, '萍乡'),
-                new Array(360401, '九江'),
-                new Array(360501, '新余'),
-                new Array(360601, '鹰潭'),
-                new Array(362201, '宜春'),
-                new Array(362301, '上饶'),
-                new Array(362401, '吉安'),
-                new Array(362502, '临川'),
-                new Array(370101, '济南'),
-                new Array(370201, '青岛'),
-                new Array(370301, '淄博'),
-                new Array(370401, '枣庄'),
-                new Array(370501, '东营'),
-                new Array(370601, '烟台'),
-                new Array(370701, '潍坊'),
-                new Array(370801, '济宁'),
-                new Array(370901, '泰安'),
-                new Array(371001, '威海'),
-                new Array(371100, '日照'),
-                new Array(371200, '莱芜市'),
-                new Array(372301, '滨州'),
-                new Array(372401, '德州'),
-                new Array(372501, '聊城'),
-                new Array(372801, '临沂'),
-                new Array(372901, '菏泽'),
-                new Array(410101, '郑州'),
-                new Array(410201, '开封'),
-                new Array(410301, '洛阳'),
-                new Array(410401, '平顶山'),
-                new Array(410501, '安阳'),
-                new Array(410601, '鹤壁'),
-                new Array(410701, '新乡'),
-                new Array(410801, '焦作'),
-                new Array(410901, '濮阳'),
-                new Array(411001, '许昌'),
-                new Array(411101, '漯河'),
-                new Array(411201, '三门峡'),
-                new Array(412301, '商丘'),
-                new Array(412701, '周口'),
-                new Array(412801, '驻马店'),
-                new Array(412901, '南阳'),
-                new Array(413001, '信阳'),
-                new Array(420101, '武汉'),
-                new Array(420201, '黄石'),
-                new Array(420301, '十堰'),
-                new Array(420400, '荆州'),
-                new Array(420501, '宜昌'),
-                new Array(420601, '襄阳'),
-                new Array(420701, '鄂州'),
-                new Array(420801, '荆门'),
-                new Array(422103, '黄冈'),
-                new Array(422201, '孝感'),
-                new Array(422301, '咸宁'),
-                new Array(433000, '仙桃'),
-                new Array(433100, '潜江'),
-                new Array(431700, '天门'),
-                new Array(421300, '随州'),
-                new Array(422801, '恩施'),
-                new Array(430101, '长沙'),
-                new Array(430401, '衡阳'),
-                new Array(430501, '邵阳'),
-                new Array(432801, '郴州'),
-                new Array(432901, '永州'),
-                new Array(430801, '大庸'),
-                new Array(433001, '怀化'),
-                new Array(433101, '吉首'),
-                new Array(430201, '株洲'),
-                new Array(430301, '湘潭'),
-                new Array(430601, '岳阳'),
-                new Array(430701, '常德'),
-                new Array(432301, '益阳'),
-                new Array(432501, '娄底'),
-                new Array(440101, '广州'),
-                new Array(440301, '深圳'),
-                new Array(441501, '汕尾'),
-                new Array(441301, '惠州'),
-                new Array(441601, '河源'),
-                new Array(440601, '佛山'),
-                new Array(441801, '清远'),
-                new Array(441901, '东莞'),
-                new Array(440401, '珠海'),
-                new Array(440701, '江门'),
-                new Array(441201, '肇庆'),
-                new Array(442001, '中山'),
-                new Array(440801, '湛江'),
-                new Array(440901, '茂名'),
-                new Array(440201, '韶关'),
-                new Array(440501, '汕头'),
-                new Array(441401, '梅州'),
-                new Array(441701, '阳江'),
-                new Array(441901, '潮州'),
-                new Array(445200, '揭阳'),
-                new Array(450101, '南宁'),
-                new Array(450401, '梧州'),
-                new Array(452501, '玉林'),
-                new Array(450301, '桂林'),
-                new Array(452601, '百色'),
-                new Array(452701, '河池'),
-                new Array(452802, '钦州'),
-                new Array(450201, '柳州'),
-                new Array(450501, '北海'),
-                new Array(460100, '海口'),
-                new Array(460200, '三亚'),
-                new Array(510101, '成都'),
-                new Array(513321, '康定'),
-                new Array(513101, '雅安'),
-                new Array(513229, '马尔康'),
-                new Array(510301, '自贡'),
-                new Array(500100, '重庆'),
-                new Array(512901, '南充'),
-                new Array(510501, '泸州'),
-                new Array(510601, '德阳'),
-                new Array(510701, '绵阳'),
-                new Array(510901, '遂宁'),
-                new Array(511001, '内江'),
-                new Array(511101, '乐山'),
-                new Array(512501, '宜宾'),
-                new Array(510801, '广元'),
-                new Array(513021, '达县'),
-                new Array(513401, '西昌'),
-                new Array(510401, '攀枝花'),
-                //new Array(500239,'黔江土家族苗族自治县'),
-                new Array(520101, '贵阳'),
-                new Array(520200, '六盘水'),
-                new Array(522201, '铜仁'),
-                new Array(522501, '安顺'),
-                new Array(522601, '凯里'),
-                new Array(522701, '都匀'),
-                new Array(522301, '兴义'),
-                new Array(522421, '毕节'),
-                new Array(522101, '遵义'),
-                new Array(530101, '昆明'),
-                new Array(530201, '东川'),
-                new Array(532201, '曲靖'),
-                new Array(532301, '楚雄'),
-                new Array(532401, '玉溪'),
-                new Array(532501, '个旧'),
-                new Array(532621, '文山'),
-                new Array(532721, '思茅'),
-                new Array(532101, '昭通'),
-                new Array(532821, '景洪'),
-                new Array(532901, '大理'),
-                new Array(533001, '保山'),
-                new Array(533121, '潞西'),
-                new Array(533221, '丽江纳西族自治县'),
-                new Array(533321, '泸水'),
-                new Array(533421, '中甸'),
-                new Array(533521, '临沧'),
-                new Array(540101, '拉萨'),
-                new Array(542121, '昌都'),
-                new Array(542221, '乃东'),
-                new Array(542301, '日喀则'),
-                new Array(542421, '那曲'),
-                new Array(542523, '噶尔'),
-                new Array(542621, '林芝'),
-                new Array(610101, '西安'),
-                new Array(610201, '铜川'),
-                new Array(610301, '宝鸡'),
-                new Array(610401, '咸阳'),
-                new Array(612101, '渭南'),
-                new Array(612301, '汉中'),
-                new Array(612401, '安康'),
-                new Array(612501, '商州'),
-                new Array(612601, '延安'),
-                new Array(612701, '榆林'),
-                new Array(620101, '兰州'),
-                new Array(620401, '白银'),
-                new Array(620301, '金昌'),
-                new Array(620501, '天水'),
-                new Array(622201, '张掖'),
-                new Array(622301, '武威'),
-                new Array(622421, '定西'),
-                new Array(622624, '成县'),
-                new Array(622701, '平凉'),
-                new Array(622801, '西峰'),
-                new Array(622901, '临夏'),
-                new Array(623027, '夏河'),
-                new Array(620201, '嘉峪关'),
-                new Array(622102, '酒泉'),
-                new Array(630100, '西宁'),
-                new Array(632121, '平安'),
-                new Array(632221, '门源回族自治县'),
-                new Array(632321, '同仁'),
-                new Array(632521, '共和'),
-                new Array(632621, '玛沁'),
-                new Array(632721, '玉树'),
-                new Array(632802, '德令哈'),
-                new Array(640101, '银川'),
-                new Array(640201, '石嘴山'),
-                new Array(642101, '吴忠'),
-                new Array(642221, '固原'),
-                new Array(650101, '乌鲁木齐'),
-                new Array(650201, '克拉玛依'),
-                new Array(652101, '吐鲁番'),
-                new Array(652201, '哈密'),
-                new Array(652301, '昌吉'),
-                new Array(652701, '博乐'),
-                new Array(652801, '库尔勒'),
-                new Array(652901, '阿克苏'),
-                new Array(653001, '阿图什'),
-                new Array(653101, '喀什'),
-                new Array(654101, '伊宁'),
-                new Array(710001, '台北'),
-                new Array(710002, '基隆'),
-                new Array(710020, '台南'),
-                new Array(710019, '高雄'),
-                new Array(710008, '台中'),
-                new Array(211001, '辽阳'),
-                new Array(653201, '和田'),
-                new Array(542200, '泽当镇'),
-                new Array(542600, '八一镇'),
-                new Array(820001, '澳门'),
-                new Array(830001, '美国'),
-                new Array(830002, '加拿大'),
-                new Array(830003, '日本'),
-                new Array(830004, '韩国'),
-                new Array(830005, '新加坡'),
-                new Array(830006, '澳大利亚'),
-                new Array(830007, '新西兰'),
-                new Array(830008, '英国'),
-                new Array(830009, '法国'),
-                new Array(830010, '德国'),
-                new Array(830011, '意大利'),
-                new Array(830012, '俄罗斯'),
-                new Array(830013, '印尼'),
-                new Array(830014, '马来西亚'),
-                new Array(830015, '其他'),
-                new Array(810001, '香港')
+                new Array(110100, '北京'), new Array(120100, '天津'), new Array(130101, '石家庄'), new Array(130201, '唐山'), new Array(130301, '秦皇岛'), new Array(130701, '张家口'), new Array(130801, '承德'), new Array(131001, '廊坊'), new Array(130401, '邯郸'), new Array(130501, '邢台'), new Array(130601, '保定'), new Array(130901, '沧州'), new Array(133001, '衡水'),
+                new Array(140101, '太原'), new Array(140201, '大同'), new Array(140301, '阳泉'), new Array(140501, '晋城'), new Array(140601, '朔州'), new Array(142201, '忻州'), new Array(142331, '离石'), new Array(142401, '榆次'), new Array(142601, '临汾'), new Array(142701, '运城'), new Array(140401, '长治'),
+                new Array(150101, '呼和浩特'), new Array(150201, '包头'), new Array(150301, '乌海'), new Array(152601, '集宁'), new Array(152701, '东胜'), new Array(152801, '临河'), new Array(152921, '阿拉善左旗'), new Array(150401, '赤峰'), new Array(152301, '通辽'), new Array(152502, '锡林浩特'), new Array(152101, '海拉尔'), new Array(152201, '乌兰浩特'),
+                new Array(210101, '沈阳'), new Array(210201, '大连'), new Array(210301, '鞍山'), new Array(210401, '抚顺'), new Array(210501, '本溪'), new Array(210701, '锦州'), new Array(210801, '营口'), new Array(210901, '阜新'), new Array(211101, '盘锦'), new Array(211201, '铁岭'), new Array(211301, '朝阳'), new Array(211401, '锦西'), new Array(210601, '丹东'),
+                new Array(220101, '长春'), new Array(220201, '吉林'), new Array(220301, '四平'), new Array(220401, '辽源'), new Array(220601, '浑江'), new Array(222301, '白城'), new Array(222401, '延吉'), new Array(220501, '通化'),
+                new Array(230101, '哈尔滨'), new Array(230301, '鸡西'), new Array(230401, '鹤岗'), new Array(230501, '双鸭山'), new Array(230701, '伊春'), new Array(230801, '佳木斯'), new Array(230901, '七台河'), new Array(231001, '牡丹江'), new Array(232301, '绥化'), new Array(230201, '齐齐哈尔'), new Array(230601, '大庆'), new Array(232601, '黑河'), new Array(232700, '加格达奇'),
+                new Array(310100, '上海'), new Array(320101, '南京'), new Array(320201, '无锡'), new Array(320301, '徐州'), new Array(320401, '常州'), new Array(320501, '苏州'), new Array(320600, '南通'), new Array(320701, '连云港'), new Array(320801, '淮阴'), new Array(320901, '盐城'), new Array(321001, '扬州'), new Array(321101, '镇江'), new Array(321201, '昆山'), new Array(321301, '常熟'), new Array(321401, '张家港'), new Array(321501, '太仓'), new Array(321601, '江阴'), new Array(321701, '宜兴'), new Array(321801, '泰州'),
+                new Array(330101, '杭州'), new Array(330201, '宁波'), new Array(330301, '温州'), new Array(330401, '嘉兴'), new Array(330501, '湖州'), new Array(330601, '绍兴'), new Array(330701, '金华'), new Array(330801, '衢州'), new Array(330901, '舟山'), new Array(332501, '丽水'), new Array(332602, '临海'), new Array(332702, '义乌'), new Array(332802, '萧山'), new Array(332901, '慈溪'), new Array(332603, '台州'),
+                new Array(340101, '合肥'), new Array(340201, '芜湖'), new Array(340301, '蚌埠'), new Array(340401, '淮南'), new Array(340501, '马鞍山'), new Array(340601, '淮北'), new Array(340701, '铜陵'), new Array(340801, '安庆'), new Array(341001, '黄山'), new Array(342101, '阜阳'), new Array(342201, '宿州'), new Array(342301, '滁州'), new Array(342401, '六安'), new Array(342501, '宣州'), new Array(342601, '巢湖'), new Array(342901, '贵池'),
+                new Array(350101, '福州'), new Array(350201, '厦门'), new Array(350301, '莆田'), new Array(350401, '三明'), new Array(350501, '泉州'), new Array(350601, '漳州'), new Array(352101, '南平'), new Array(352201, '宁德'), new Array(352601, '龙岩'), new Array(360101, '南昌'), new Array(360201, '景德镇'), new Array(362101, '赣州'), new Array(360301, '萍乡'), new Array(360401, '九江'), new Array(360501, '新余'), new Array(360601, '鹰潭'), new Array(362201, '宜春'), new Array(362301, '上饶'), new Array(362401, '吉安'), new Array(362502, '临川'),
+                new Array(370101, '济南'), new Array(370201, '青岛'), new Array(370301, '淄博'), new Array(370401, '枣庄'), new Array(370501, '东营'), new Array(370601, '烟台'), new Array(370701, '潍坊'), new Array(370801, '济宁'), new Array(370901, '泰安'), new Array(371001, '威海'), new Array(371100, '日照'), new Array(371200, '莱芜市'), new Array(372301, '滨州'), new Array(372401, '德州'), new Array(372501, '聊城'), new Array(372801, '临沂'), new Array(372901, '菏泽'),
+                new Array(410101, '郑州'), new Array(410201, '开封'), new Array(410301, '洛阳'), new Array(410401, '平顶山'), new Array(410501, '安阳'), new Array(410601, '鹤壁'), new Array(410701, '新乡'), new Array(410801, '焦作'), new Array(410901, '濮阳'), new Array(411001, '许昌'), new Array(411101, '漯河'), new Array(411201, '三门峡'), new Array(412301, '商丘'), new Array(412701, '周口'), new Array(412801, '驻马店'), new Array(412901, '南阳'), new Array(413001, '信阳'),
+                new Array(420101, '武汉'), new Array(420201, '黄石'), new Array(420301, '十堰'), new Array(420400, '荆州'), new Array(420501, '宜昌'), new Array(420601, '襄阳'), new Array(420701, '鄂州'), new Array(420801, '荆门'), new Array(422103, '黄冈'), new Array(422201, '孝感'), new Array(422301, '咸宁'), new Array(433000, '仙桃'), new Array(433100, '潜江'), new Array(431700, '天门'), new Array(421300, '随州'), new Array(422801, '恩施'),
+                new Array(430101, '长沙'), new Array(430401, '衡阳'), new Array(430501, '邵阳'), new Array(432801, '郴州'), new Array(432901, '永州'), new Array(430801, '大庸'), new Array(433001, '怀化'), new Array(433101, '吉首'), new Array(430201, '株洲'), new Array(430301, '湘潭'), new Array(430601, '岳阳'), new Array(430701, '常德'), new Array(432301, '益阳'), new Array(432501, '娄底'),
+                new Array(440101, '广州'), new Array(440301, '深圳'), new Array(441501, '汕尾'), new Array(441301, '惠州'), new Array(441601, '河源'), new Array(440601, '佛山'), new Array(441801, '清远'), new Array(441901, '东莞'), new Array(440401, '珠海'), new Array(440701, '江门'), new Array(441201, '肇庆'), new Array(442001, '中山'), new Array(440801, '湛江'), new Array(440901, '茂名'), new Array(440201, '韶关'), new Array(440501, '汕头'), new Array(441401, '梅州'), new Array(441701, '阳江'), new Array(441901, '潮州'), new Array(445200, '揭阳'),
+                new Array(450101, '南宁'), new Array(450401, '梧州'), new Array(452501, '玉林'), new Array(450301, '桂林'), new Array(452601, '百色'), new Array(452701, '河池'), new Array(452802, '钦州'), new Array(450201, '柳州'), new Array(450501, '北海'), new Array(460100, '海口'), new Array(460200, '三亚'), new Array(510101, '成都'), new Array(513321, '康定'), new Array(513101, '雅安'), new Array(513229, '马尔康'), new Array(510301, '自贡'), new Array(500100, '重庆'),
+                new Array(512901, '南充'), new Array(510501, '泸州'), new Array(510601, '德阳'), new Array(510701, '绵阳'), new Array(510901, '遂宁'), new Array(511001, '内江'), new Array(511101, '乐山'), new Array(512501, '宜宾'), new Array(510801, '广元'), new Array(513021, '达县'), new Array(513401, '西昌'), new Array(510401, '攀枝花'), /*new Array(500239,'黔江土家族苗族自治县'),*/ new Array(520101, '贵阳'), new Array(520200, '六盘水'), new Array(522201, '铜仁'), new Array(522501, '安顺'), new Array(522601, '凯里'), new Array(522701, '都匀'), new Array(522301, '兴义'), new Array(522421, '毕节'),
+                new Array(522101, '遵义'), new Array(530101, '昆明'), new Array(530201, '东川'), new Array(532201, '曲靖'), new Array(532301, '楚雄'), new Array(532401, '玉溪'), new Array(532501, '个旧'), new Array(532621, '文山'), new Array(532721, '思茅'), new Array(532101, '昭通'), new Array(532821, '景洪'), new Array(532901, '大理'), new Array(533001, '保山'), new Array(533121, '潞西'), new Array(533221, '丽江纳西族自治县'), new Array(533321, '泸水'), new Array(533421, '中甸'), new Array(533521, '临沧'), new Array(540101, '拉萨'), new Array(542121, '昌都'),
+                new Array(542221, '乃东'), new Array(542301, '日喀则'), new Array(542421, '那曲'), new Array(542523, '噶尔'), new Array(542621, '林芝'), new Array(610101, '西安'), new Array(610201, '铜川'), new Array(610301, '宝鸡'), new Array(610401, '咸阳'), new Array(612101, '渭南'), new Array(612301, '汉中'), new Array(612401, '安康'), new Array(612501, '商州'), new Array(612601, '延安'), new Array(612701, '榆林'), new Array(620101, '兰州'), new Array(620401, '白银'), new Array(620301, '金昌'), new Array(620501, '天水'), new Array(622201, '张掖'),
+                new Array(622301, '武威'), new Array(622421, '定西'), new Array(622624, '成县'), new Array(622701, '平凉'), new Array(622801, '西峰'), new Array(622901, '临夏'), new Array(623027, '夏河'), new Array(620201, '嘉峪关'), new Array(622102, '酒泉'), new Array(630100, '西宁'), new Array(632121, '平安'), new Array(632221, '门源回族自治县'), new Array(632321, '同仁'), new Array(632521, '共和'), new Array(632621, '玛沁'), new Array(632721, '玉树'), new Array(632802, '德令哈'), new Array(640101, '银川'), new Array(640201, '石嘴山'), new Array(642101, '吴忠'),
+                new Array(642221, '固原'), new Array(650101, '乌鲁木齐'), new Array(650201, '克拉玛依'), new Array(652101, '吐鲁番'), new Array(652201, '哈密'), new Array(652301, '昌吉'), new Array(652701, '博乐'), new Array(652801, '库尔勒'), new Array(652901, '阿克苏'), new Array(653001, '阿图什'), new Array(653101, '喀什'), new Array(654101, '伊宁'), new Array(710001, '台北'), new Array(710002, '基隆'), new Array(710020, '台南'), new Array(710019, '高雄'), new Array(710008, '台中'), new Array(211001, '辽阳'), new Array(653201, '和田'), new Array(542200, '泽当镇'),
+                new Array(542600, '八一镇'), new Array(820001, '澳门'), new Array(830001, '美国'), new Array(830002, '加拿大'), new Array(830003, '日本'), new Array(830004, '韩国'), new Array(830005, '新加坡'), new Array(830006, '澳大利亚'), new Array(830007, '新西兰'), new Array(830008, '英国'), new Array(830009, '法国'), new Array(830010, '德国'), new Array(830011, '意大利'), new Array(830012, '俄罗斯'), new Array(830013, '印尼'), new Array(830014, '马来西亚'), new Array(830015, '其他'), new Array(810001, '香港')
             );
             if (Number(value) !== Number(value)) {
                 var plist = this.getProvincelist();
@@ -9477,13 +9107,13 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
             province.setOptions(me.getProvincelist());
 
             me.updateCity();
-            if (me.value) {
-                me.setValue(me.value);
-            }
         },
         initBehavior: function () {
             var me = this,
                 province = me.getByFormName('child_province');
+            if (me.value !== undefined) {
+                me.setValue(me.value);
+            }
             province.onchange = hui.fn(me.updateCity, me);
         },
         updateCity: function () {
@@ -9554,6 +9184,259 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
 
     /* hui.CitylistDropdown 继承了 hui.Control */
     hui.inherits(hui.CitylistDropdown, hui.Control);
+});
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+/**
+ * @name 标签云控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/10/12
+ * @example
+ <div ui="type:'CloudLabel',id:'ddd',value:[{label_id:1,value:'javascript'},{label_id:2,value:'css'}],
+ url_save:'/savelabelUrl',url_remove:'/removelabelUrl',url_list:'/labellist',auto123:'true'"></div>
+ */
+hui.define('hui_' + String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function () {
+    hui.CloudLabel = function (options, pending) {
+        this.isFormItem = false; // 注：getParamMap时不需要处理button
+        hui.CloudLabel.superClass.call(this, options, 'pending');
+
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = String('CloudLabel').toLowerCase();
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.CloudLabel.prototype = {
+        /**
+         * @name button的html模板
+         * @private
+         */
+        getTplCloudLabel: function () {
+            var tpl = [
+                '<span class="cloudlabel_item" label_id="#{label_id}" value="#{value}">',
+                '    <span class="text" ondblclick="hui.Control.getById(\'#{ctr_id}\').editLabel  (\'#{label_id}\')" >#{value}</span>',
+                '    <input class="input"   onblur="hui.Control.getById(\'#{ctr_id}\').saveLabel  (\'#{label_id}\')" value="#{value}" type="text" size="5" style="display:none" /> ',
+                '    <span class="remove"  onclick="hui.Control.getById(\'#{ctr_id}\').removeLabel(\'#{label_id}\')">X</span>',
+                '</span>'
+            ].join('');
+            return tpl;
+        },
+
+        /**
+         * @name 默认的onclick事件执行函数, 不做任何事，容错
+         * @public
+         */
+        onclick: new Function(),
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.CloudLabel.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            // 生成DOM
+            if (!me.url_list || !me.auto) {
+                me.refreshListCallback();
+            }
+            else {
+                me.refreshList();
+            }
+            // 初始化状态事件
+            main.onclick = me.getHandlerClick();
+            // 设定宽度
+            me.width && (main.style.width = me.width + 'px');
+            // 设置disabled
+            me.setDisabled(!!me.disabled);
+        },
+        /**
+         * @name 获取按钮点击的事件处理程序
+         * @private
+         * @return {function}
+         */
+        getHandlerClick: function () {
+            var me = this;
+            return function (e) {
+                if (!me.isDisabled()) {
+                    me.onclick();
+                }
+            };
+        },
+        refreshList: function () {
+            var me = this;
+            me.getMain().innerHTML = '';
+            if (me.url_list) {
+                hui.Mockup.setRule(me.url_list, [null, [{
+                    label_id: 1,
+                    value: 'fff'
+                }, {
+                    label_id: 2,
+                    value: 'eee'
+                }]]);
+                window.Requester.get(me.url_list, {
+                    onsuccess: function (result) {
+                        // alert('labellist');
+                        if (!result[0] && result[1]) {
+                            me.setValue(result[1]);
+                            me.refreshListCallback();
+                        }
+                    }
+                });
+            }
+            else {
+                me.refreshListCallback();
+            }
+        },
+        refreshListCallback: function () {
+            var me = this,
+                list = me.getValue();
+            for (var i = 0, len = list.length; i < len; i++) {
+                me.addLabel(list[i]);
+            }
+            me.addLabel({
+                value: '',
+                label_id: -Math.random()
+            });
+        },
+        /**
+         * @name 添加标签
+         * @public
+         */
+        addLabel: function (item) {
+            var me = this,
+                tpl = me.getTplCloudLabel(),
+                main = me.getMain(),
+                ctr_id = me.getId(),
+                html;
+            html = hui.Control.format(tpl, {
+                label_id: item.label_id,
+                value: item.value,
+                ctr_id: ctr_id
+            });
+            hui.util.appendHTML(main, html);
+            me.editLabel(item.label_id);
+        },
+        /**
+         * @name 查找标签
+         * @public
+         */
+        findLabel: function (label_id) {
+            var me = this,
+                list = hui.c('cloudlabel_item', me.getMain()),
+                elem = null;
+            for (var i = list.length - 1; i > -1; i--) {
+                if (list[i].getAttribute('label_id') === String(label_id)) {
+                    elem = list[i];
+                    break;
+                }
+            }
+            return elem;
+        },
+        /**
+         * @name 编辑标签
+         * @public
+         */
+        editLabel: function (label_id) {
+            var me = this,
+                label = me.findLabel(label_id),
+                input = hui.cc('input', label),
+                text = hui.cc('text', label),
+                value = label.getAttribute('value');
+            input.value = value;
+            input.style.display = 'inline-block';
+            input.style.width = text.clientWidth + 'px';
+            text.style.display = 'none';
+            input.focus();
+        },
+        /**
+         * @name 保存标签
+         * @public
+         */
+        saveLabel: function (label_id) {
+            var me = this,
+                label = me.findLabel(label_id),
+                input = hui.cc('input', label),
+                text = hui.cc('text', label),
+                value = input.value;
+            if (value === '' && Number(label_id) > 0) {
+                input.value = label.getAttribute('value');
+                me.removeLabel(label_id);
+            }
+            else if (label.getAttribute('value') !== value) {
+                me.setInnerHTML(text, value);
+                label.setAttribute('value', value);
+
+                hui.Mockup.setRule(me.url_save, []);
+                window.Requester.get(me.url_save, {
+                    data: {
+                        label_id: label_id,
+                        value: value
+                    },
+                    onsuccess: function () {
+                        // alert('savelabel');
+                        me.refreshList();
+                    }
+                });
+            }
+            else if (label_id > 0) {
+                text.style.display = 'inline-block';
+                input.style.display = 'none';
+            }
+        },
+        /**
+         * @name 删除标签
+         * @public
+         */
+        removeLabel: function (label_id) {
+            if (window.confirm('Are you sure remove label?')) {
+                var me = this,
+                    label = me.findLabel(label_id);
+                label.parentNode.removeChild(label);
+
+                if (Number(label_id) > 0) {
+                    hui.Mockup.setRule(me.url_save, []);
+                    window.Requester.get(me.url_save, {
+                        data: {
+                            label_id: label_id,
+                            value: '',
+                            opt: 'remove'
+                        },
+                        onsuccess: function () {
+                            // alert('removelabel');
+                            me.refreshList();
+                        }
+                    });
+                }
+            }
+        }
+    };
+
+    // hui.CloudLabel 继承了 hui.Control 
+    hui.inherits(hui.CloudLabel, hui.Control);
+
+    hui.util.importCssString(
+        '.hui_cloudlabel{}' +
+        '.hui_cloudlabel .cloudlabel_item{}' +
+        '.hui_cloudlabel .text{display:inline-block;padding-top:6px;font-family:arial;padding-bottom:6px;font-size:16px;padding-left:5px;margin-right:5px;}' +
+        '.hui_cloudlabel .input{font-family:arial;font-size:16px;border:0px;padding-left:2px;min-width:30px;border:1px solid #eee;}' +
+        '.hui_cloudlabel .remove{cursor:pointer;font-family:arial;margin:0px 3px;}' +
+        '.hui_cloudlabel .remove:hover{color:#fff;background-color:red;}'
+    );
+
 });
 
 hui.util.importCssString('html {}');

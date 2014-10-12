@@ -2,6 +2,7 @@ var account = require('./routes/account');
 var question = require('./routes/question');
 var paper = require('./routes/paper');
 var result = require('./routes/result');
+var cloudlabel = require('./routes/cloudlabel');
 
 /*
  * CORS Support in Node.js web app written with Express
@@ -45,6 +46,9 @@ app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
 
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);
+
+app.all('/ue_api/internal/save_cloudlabel', account.auth, cloudlabel.saveCloudlabel);
+app.all('/ue_api/internal/get_cloudlabels', account.auth, cloudlabel.getCloudlabels);
 
 // Account
 app.get('/account/foo', account.foo);

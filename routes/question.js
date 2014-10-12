@@ -48,9 +48,9 @@ exports.saveQuestion = function (req, res, next) {
     date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
     if (atcid) {
         question.update_time = date;
-        questionModel.updateItem({
+        questionModel.update({
             atcid: atcid
-        }, question, callback);
+        }, question, false, false, callback);
     }
     else {
         question.update_time = date;
@@ -64,7 +64,9 @@ exports.removeQuestion = function (req, res, next) {
     if (!atcid) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
     }
-    questionModel.remove(atcid, function (err) {
+    questionModel.remove({
+        atcid: atcid
+    }, function (err) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }

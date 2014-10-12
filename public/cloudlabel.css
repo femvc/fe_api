@@ -1,31 +1,6 @@
-.hui_cloudlabel { }
-.hui_cloudlabel .cloudlabel_item { }
-.hui_cloudlabel .cloudlabel_item .text {
-    display: inline-block;
-    /* height: 40px; */
-    padding-top: 6px;
-    font-family: arial;
-    padding-bottom: 6px;
-    font-size: 16px;
-    padding-left: 5px;
-    margin-right: 5px;
-}
-.hui_cloudlabel .cloudlabel_item .input {
-    font-family: arial;
- 
-    font-size: 16px;
-    border: 0px;
-    padding-left: 2px;
-    min-width: 30px;
-    border: 1px solid #eee;
-}
-.hui_cloudlabel .cloudlabel_item .remove {
-    cursor: pointer;
- 
-    font-family: arial;
-    margin: 0px 3px;
-}
-.hui_cloudlabel .cloudlabel_item .remove:hover {color: #fff; background-color: red;}
-.cloudlabel_item { }
-.cloudlabel_item .txt { }
-.cloudlabel_item .del { }
+.hui_cloudlabel{}
+.hui_cloudlabel .cloudlabel_item{}
+.hui_cloudlabel .text{display:inline-block;padding-top:6px;font-family:arial;padding-bottom:6px;font-size:16px;padding-left:5px;margin-right:5px;}
+.hui_cloudlabel .input{font-family:arial;font-size:16px;border:0px;padding-left:2px;min-width:30px;border:1px solid #eee;}
+.hui_cloudlabel .remove{cursor:pointer;font-family:arial;margin:0px 3px;}
+.hui_cloudlabel .remove:hover{color:#fff;background-color:red;}

@@ -61,6 +61,7 @@ window.listData = [
 var form;
 
 window.onload = function(){
+    hui.Mockup.stop = true;
     // subject_list
     Requester.get('/ue_api/internal/get_questions?answer=yes', {
         onsuccess: function (result) {
@@ -126,7 +127,7 @@ window.onload = function(){
                 data.atcid = data.atcid;
                 
                 form.setValueByTree(data);
-                form.getByFormName('content').disposeChild();
+                form.getById('content').disposeChild();
                 
                 for (var i in data.content) {
                     data.content[i].index = i;
@@ -156,14 +157,14 @@ window.onload = function(){
         var tpl = 
             '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
             '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
-            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\'"tabindex="#{index}">#{content}</textarea>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\',value11:\'#{content}\'" tabindex="#{index}">#{content}</textarea>' +
             '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
         hui.util.appendHTML(content, hui.format(tpl, obj));
         hui.Control.create(hui.g('content'+obj.index));
     };
     form.removeOption = function (index) {
-        var content = form.getByFormName('content');
+        var content = form.getById('content');
         content.getByFormName(index).dispose();
     };
     
@@ -184,7 +185,7 @@ window.onload = function(){
     
     var subject_add = form.getByFormName('subject_add');
     subject_add.onclick = function () {
-        form.getByFormName('content').disposeChild();
+        form.getById('content').disposeChild();
         form.addOption();
         form.addOption();
         form.addOption();
@@ -252,7 +253,8 @@ window.onload = function(){
         <div class="tr_row">
             <span class="row_title">小类：</span>
             <div class="row_label">
-                'javascript|Nodejs|HTML|CSS|HTML5|CSS3|canvas|svg|vml|xml|sax|xpath|xlst|JSON|AJAX|XHR|jQuery|Zipto|JS框架|JS库|MVC|MVVM|MD5|RSA|BASE64|mongodb|redis|sql|mysql|sqlserver|oracle|Chrome扩展|Firefox扩展|IE6|IE7|IE8|IE9|IE10|IE11|IEDevToolbar|Firebug|ChromeDebug|Fiddler|Cache|CDN|PS|AI|Font|RGB|CMYK|Cookie|JSONP|CrossDomain|Selinum|WebDriver|DOM|Tomcat|Servlet|HTTP|workspace|cssupdate|doT|markdown|算法|数据结构|兼容性|内存泄露|单元测试|敏捷模式|'
+                <div ui="type:'CloudLabel',id:'ddd',value:[{label_id:1,value:'javascript'},{label_id:2,value:'css'}],url_save:'/ue_api/internal/save_cloudlabel',url_list:'/ue_api/internal/get_cloudlabels',auto:'true'"></div>
+                
             </div>
         </div>
         <div class="row_head">
