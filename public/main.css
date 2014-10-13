@@ -42,13 +42,14 @@ hr.clearfix {font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; cl
 .page .subject_list .option_list .yes{list-style-type:square;color:green}
 .page .subject_list .option_list .txt{font-size:14px;line-height:18px;color:#333}
 .page .subject_add{width:530px;float:left}
-.page .subject_add .form_title{padding:0px;margin:0px;padding:24px;text-align:center;font-size:22px}
+.page .subject_add .form_title{padding:0px;margin:0px;padding:24px 0px;text-align:left;font-size:22px}
 .page .subject_add .tr_row{clear:both;border-bottom:1px solid #ccc;padding:10px 0px;overflow:hidden;margin-top:-1px}
 .page .subject_add .tr_row .td_index{float:left;padding:5px 10px 0px;font-size:25px}
 .page .subject_add .tr_row .td_action{float:left;padding:10px}
 .page .subject_add .tr_row .hui_textinput{float:left}
 .page .subject_add .tr_row .row_title{display:inline-block;float:left;padding-top:10px;width:65px}
 .page .subject_add .tr_row .hui_textinput{}
+.page .subject_add .tr_row .hui_btn{ height: 38px;padding: 0px 10px; cursor: pointer;}
 .page .hui_btn{}
 .page .hui_btn_label{}
 .page .hui_boxpanel_close{color:white}

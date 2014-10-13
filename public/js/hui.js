@@ -9208,7 +9208,7 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
  */
 hui.define('hui_' + String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function () {
     hui.CloudLabel = function (options, pending) {
-        this.isFormItem = false; // 注：getParamMap时不需要处理button
+        this.isFormItem = true; // 注：getParamMap时不需要处理button
         hui.CloudLabel.superClass.call(this, options, 'pending');
 
         // 类型声明，用于生成控件子dom的id和class

@@ -48,9 +48,12 @@ exports.saveCloudlabel = function (req, res, next) {
     }
     else {
         cloudlabel.update_time = date;
+        cloudlabel.label_id = label_id;
         cloudlabelModel.update({
             label_id: label_id
-        }, cloudlabel, false, false, callback);
+        }, {
+            $set: cloudlabel
+        }, true, false, callback);
     }
 
 };

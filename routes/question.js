@@ -12,8 +12,8 @@ exports.getQuestion = function (req, res, next) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-        if (req.paramlist.answer != 'yes' && doc && doc.content) {
-            var list = doc.content;
+        if (req.paramlist.answer != 'yes' && doc && doc.options) {
+            var list = doc.options;
             for (var i in list) {
                 delete list[i].correct;
             }
@@ -30,12 +30,14 @@ exports.saveQuestion = function (req, res, next) {
     if (!req.paramlist.title) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'title');
     }
-    if (!req.paramlist.content) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'content');
+    if (!req.paramlist.options) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'options');
     }
 
     question.title = req.paramlist.title;
-    question.content = JSON.parse(req.paramlist.content);
+    question.options = JSON.parse(req.paramlist.options);
+    question.level = JSON.parse(req.paramlist.level);
+    question.major = JSON.parse(req.paramlist.major);
 
     callback = function (err, doc) {
         if (err) {
@@ -48,9 +50,12 @@ exports.saveQuestion = function (req, res, next) {
     date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
     if (atcid) {
         question.update_time = date;
+        question.atcid = atcid;
         questionModel.update({
             atcid: atcid
-        }, question, false, false, callback);
+        }, {
+            $set: question
+        }, true, false, callback);
     }
     else {
         question.update_time = date;
@@ -96,7 +101,7 @@ exports.getQuestions = function (req, res, next) {
 
         if (req.paramlist.answer != 'yes') {
             for (var j in doc) {
-                var list = doc[j].content;
+                var list = doc[j].options;
                 for (var i in list) {
                     delete list[i].correct;
                 }
