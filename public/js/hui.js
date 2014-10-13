@@ -7394,21 +7394,21 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.c(me.getClass('text'))[0] : main;
+                input = me.useAgent ? hui.cc(me.getClass('text')) : main;
             return input;
         },
         getPlaceholder: function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.c(me.getClass('placeholder'))[0] : hui.util.findSiblingByClassName(main, me.getClass('placeholder'), 'pre');
+                input = me.useAgent ? hui.cc(me.getClass('placeholder')) : hui.util.findSiblingByClassName(main, me.getClass('placeholder'), 'pre');
             return input;
         },
         getEye: function () {
             var me = this,
                 main = me.getMain(),
                 input,
-                input = me.useAgent ? hui.c(me.getClass('eye'))[0] : hui.util.findSiblingByClassName(main, me.getClass('eye'), 'pre');
+                input = me.useAgent ? hui.cc(me.getClass('eye')) : hui.util.findSiblingByClassName(main, me.getClass('eye'), 'pre');
             return input;
         },
         renderInput: function () {
@@ -8219,154 +8219,6 @@ hui.define('hui_button', ['hui@0.0.1'], function () {
 //                                                                   
 //                                                                   
 
-
-/**
- * @name 按钮控件
- * @public
- * @author wanghaiyang
- * @date 2014/05/05
- * @param {Object} options 控件初始化参数.
- * @example
-<label ui="type:'Checkbox',formName:'book',value:'icdn0001',checked:''">基督山</label>
-<label ui="type:'Checkbox',formName:'book',value:'icdn0002',checked:''">呼啸山</label>
- */
-hui.define('hui_checkbox', ['hui@0.0.1'], function () {
-
-    hui.Checkbox = function (options, pending) {
-        hui.Checkbox.superClass.call(this, options, 'pending');
-
-        this.type = 'checkbox';
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.Checkbox.prototype = {
-        getInput: function () {
-            var me = this,
-                main = me.getMain(),
-                input = hui.c(me.getClass('input'), main)[0];
-            return input;
-        },
-        getIcon: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.c(me.getClass('icon'), main)[0];
-            return icon;
-        },
-        getLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                icon = hui.c(me.getClass('label'), main)[0];
-            return icon;
-        },
-        renderLabel: function () {
-            var me = this,
-                main = me.getMain(),
-                label = me.getLabel(),
-                tpl = '<span class="#{0}">#{1}</span>';
-            if (!label) {
-                hui.appendHTML(main, hui.format(tpl,
-                    me.getClass('label'),
-                    me.label
-                ));
-            }
-            else {
-                main.appendChild(label);
-            }
-        },
-        /**
-         * @name 渲染控件
-         * @protected
-         * @param {Object} main 控件挂载的DOM.
-         */
-        render: function () {
-            hui.Checkbox.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            // 绘制宽度和高度
-            me.setSize();
-
-            var tpl = '<i class="#{1}"><input type="checkbox" class="#{0}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
-            hui.appendHTML(main, hui.format(tpl,
-                me.getClass('input'),
-                me.getClass('icon')
-            ));
-            me.renderLabel();
-        },
-        initBehavior: function () {
-            var me = this,
-                icon = me.getIcon(),
-                //label = me.getLabel(),
-                main = me.getMain();
-
-            me.setChecked(!!me.checked);
-            main.onclick = hui.fn(me.getClickHandler, me);
-            icon.onselectstart = new Function('return false;');
-        },
-        setValue: function (value) {
-            var me = this,
-                preset = me.getPresetValue();
-            me.setChecked(value == preset && String(value) == String(preset));
-        },
-        getValue: function () {
-            var me = this,
-                value = me.getChecked() ? me.getPresetValue() : '';
-            return value;
-        },
-        getPresetValue: function () {
-            var me = this,
-                value = me.value !== undefined ? me.value : me.getInput().value;
-            return value;
-        },
-        setPresetValue: function (value) {
-            var me = this,
-                input = me.getInput();
-            me.value = value;
-            input.value = value;
-        },
-        setChecked: function (checked) {
-            var me = this,
-                input = me.getInput(),
-                main = me.getMain();
-            if (checked === false) {
-                input.checked = false;
-                hui.removeClass(main, me.getClass('checked'));
-            }
-            else {
-                input.checked = true;
-                hui.addClass(main, me.getClass('checked'));
-            }
-        },
-        getChecked: function () {
-            var me = this;
-            return !!me.getInput().checked;
-        },
-        getClickHandler: function () {
-            var me = this;
-            me.setChecked(!me.getChecked());
-            me.onclick();
-        },
-        onclick: new Function()
-
-    };
-
-    /* hui.Checkbox 继承了 hui.Control */
-    hui.inherits(hui.Checkbox, hui.Control);
-
-    hui.util.importCssString(
-        '.hui_checkbox{float:left;}' +
-        '.hui_checkbox .hui_checkbox_label{}' +
-        '.hui_checkbox .hui_checkbox_label a{font-size:14px;}' +
-        '.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
-        '.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}' +
-        '.hui_checkbox .hui_checkbox_icon{color:#1ba8eb;text-indent:-100px;}' +
-        '.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:3px;}'
-    )
-});
-
 /**
  * @name 按钮控件
  * @public
@@ -8539,6 +8391,350 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
         '.hui_radioinput_checked .hui_radioinput_icon{}' +
         '.hui_radioinput_checked .hui_radioinput_point{color:#68bf4a;}' +
         '.hui_radioinput_checked .hui_radioinput_dot{}'
+    );
+
+});
+
+/**
+ * @name 按钮控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ * @example
+<label ui="type:'Checkbox',formName:'book',value:'icdn0001',checked:'',label:'基督山'"></label>
+<label ui="type:'Checkbox',formName:'book',value:'icdn0002',checked:''">呼啸山</label>
+ */
+hui.define('hui_checkbox', ['hui@0.0.1'], function () {
+
+    hui.Checkbox = function (options, pending) {
+        hui.Checkbox.superClass.call(this, options, 'pending');
+
+        this.type = 'checkbox';
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.Checkbox.prototype = {
+        getInput: function () {
+            var me = this,
+                main = me.getMain(),
+                input = hui.cc(me.getClass('input'), main);
+            return input;
+        },
+        getIcon: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('icon'), main);
+            return icon;
+        },
+        getLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = hui.cc(me.getClass('label'), main);
+            return icon;
+        },
+        renderLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                label = me.getLabel();
+            if (!label) {
+                hui.appendHTML(main, hui.format('<span class="#{0}">#{1}</span>',
+                    me.getClass('label'),
+                    me.label
+                ));
+            }
+            else {
+                main.appendChild(label);
+            }
+        },
+        getTpl: function () {
+            return '<i class="#{1}"><input type="checkbox" class="#{0}" style="display:none" />✓&nbsp;&nbsp;&nbsp;</i>';
+        },
+        /**
+         * @name 渲染控件
+         * @protected
+         * @param {Object} main 控件挂载的DOM.
+         */
+        render: function () {
+            hui.Checkbox.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+            // 绘制宽度和高度
+            me.setSize();
+
+            var tpl = me.getTpl();
+            hui.appendHTML(main, hui.format(tpl,
+                me.getClass('input'),
+                me.getClass('icon')
+            ));
+            me.renderLabel();
+        },
+        initBehavior: function () {
+            var me = this,
+                icon = me.getIcon(),
+                //label = me.getLabel(),
+                main = me.getMain();
+
+            me.setChecked(!!me.checked);
+            main.onclick = hui.fn(me.getClickHandler, me);
+            icon.onselectstart = new Function('return false;');
+        },
+        setLabel: function (label) {
+            var me = this,
+                elem = me.getLabel();
+            me.label = label;
+            me.setInnerHTML(elem, label);
+        },
+        setValue: function (value) {
+            var me = this,
+                preset = me.getPresetValue();
+            me.setChecked(value == preset && String(value) == String(preset));
+        },
+        getValue: function () {
+            var me = this,
+                value = me.getChecked() ? me.getPresetValue() : '';
+            return value;
+        },
+        getPresetValue: function () {
+            var me = this,
+                value = me.value !== undefined ? me.value : me.getInput().value;
+            return value;
+        },
+        setPresetValue: function (value) {
+            var me = this,
+                input = me.getInput();
+            me.value = value;
+            input.value = value;
+        },
+        setChecked: function (checked) {
+            var me = this,
+                input = me.getInput(),
+                main = me.getMain();
+            if (checked === false) {
+                input.checked = false;
+                hui.removeClass(main, me.getClass('checked'));
+            }
+            else {
+                input.checked = true;
+                hui.addClass(main, me.getClass('checked'));
+            }
+        },
+        getChecked: function () {
+            var me = this;
+            return !!me.getInput().checked;
+        },
+        getClickHandler: function () {
+            var me = this;
+            me.setChecked(!me.getChecked());
+            me.onclick();
+        },
+        onclick: new Function()
+
+    };
+
+    /* hui.Checkbox 继承了 hui.Control */
+    hui.inherits(hui.Checkbox, hui.Control);
+
+    hui.util.importCssString(
+        '.hui_checkbox{float:left;}' +
+        '.hui_checkbox .hui_checkbox_label{}' +
+        '.hui_checkbox .hui_checkbox_label a{font-size:14px;}' +
+        '.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
+        '.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}' +
+        '.hui_checkbox .hui_checkbox_icon{color:#1ba8eb;text-indent:-100px;}' +
+        '.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:3px;}'
+    )
+});
+
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+/**
+ * @name 标签云控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/10/12
+ * @example
+ <div ui="type:'CheckLabel',id:'ddd',value:[{label_id:1,value:'javascript'},{label_id:2,value:'css'}],
+ url_save:'/savelabelUrl',url_remove:'/removelabelUrl',url_list:'/labellist',auto123:'true'"></div>
+ */
+hui.define('hui_checklabel', ['hui@0.0.1'], function () {
+    hui.CheckLabel = function (options, pending) {
+        this.isFormItem = true;
+        hui.CheckLabel.superClass.call(this, options, 'pending');
+
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = String('CheckLabel').toLowerCase();
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.CheckLabel.prototype = {
+        /**
+         * @name button的html模板
+         * @private
+         */
+        getCheckLabelTpl: function () {
+            var tpl = [
+                '<input class="#{0}" value="#{1}" type="text" size="5" /> '
+                //'<!--span class="#{2}">X</span-->'
+            ].join('');
+            return tpl;
+        },
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.CheckLabel.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+
+            hui.util.appendHTML(main, hui.format(me.getCheckLabelTpl(),
+                me.getClass('textarea'),
+                me.label,
+                me.getClass('remove')
+            ));
+            // 初始化状态事件
+            // main.onclick = me.getHandlerClick();
+            // 设定宽度
+            // me.width && (main.style.width = me.width + 'px');
+            // 设置disabled
+            // me.setDisabled(!!me.disabled);
+        },
+        initBehavior: function () {
+            var me = this,
+                main = me.getMain(),
+                icon = me.getIcon(),
+                label = me.getLabel(),
+                textarea = hui.cc(me.getClass('textarea'), main);
+            me.setChecked(!!me.checked);
+            icon.onclick = hui.fn(me.getClickHandler, me);
+            icon.onselectstart = new Function('return false;');
+            label.onclick = hui.fn(me.getDbClickHandler, me);
+            textarea.onblur = hui.fn(me.getBlurHandler, me);
+        },
+        getDbClickHandler: function () {
+            var me = this;
+            me.editLabel();
+        },
+        getBlurHandler: function () {
+            var me = this;
+            me.saveLabel();
+        },
+        /**
+         * @name 编辑标签
+         * @public
+         */
+        editLabel: function () {
+            var me = this,
+                main = me.getMain(),
+                textarea = hui.cc(me.getClass('textarea'), main),
+                label = hui.cc(me.getClass('label'), main);
+            hui.addClass(main, me.getClass('edit'));
+            textarea.focus();
+        },
+        /**
+         * @name 保存标签
+         * @public
+         */
+        saveLabel: function () {
+            var me = this,
+                label_id = me.label_id,
+                main = me.getMain(),
+                label = hui.cc(me.getClass('label'), main),
+                textarea = hui.cc(me.getClass('textarea'), main),
+                value = textarea.value;
+
+            if (value === '' && Number(label_id) > 0) {
+                textarea.value = main.getAttribute('value');
+                me.removeLabel();
+            }
+            else if (main.getAttribute('value') !== value) {
+                me.setInnerHTML(label, value);
+                main.setAttribute('value', value);
+                hui.removeClass(main, me.getClass('edit'));
+
+                hui.Mockup.setRule(me.url_save, []);
+                window.Requester.get(me.url_save, {
+                    data: {
+                        label_id: label_id,
+                        value: value
+                    },
+                    onsuccess: function () {
+                        // alert('savelabel');
+                        me.refreshList();
+                    }
+                });
+            }
+            else if (label_id > 0) {
+                hui.removeClass(main, me.getClass('edit'));
+            }
+        },
+        /**
+         * @name 删除标签
+         * @public
+         */
+        removeLabel: function () {
+            var me = this,
+                label = me.getMain(),
+                label_id = me.label_id;
+            if (window.confirm('Are you sure remove label?')) {
+                label.parentNode.removeChild(label);
+
+                if (Number(label_id) > 0) {
+                    hui.Mockup.setRule(me.url_save, []);
+                    window.Requester.get(me.url_save, {
+                        data: {
+                            label_id: label_id,
+                            value: '',
+                            opt: 'remove'
+                        },
+                        onsuccess: function () {
+                            // alert('removelabel');
+                            me.refreshList();
+                        }
+                    });
+                }
+            }
+            else {
+                hui.removeClass(me.getMain(), me.getClass('edit'));
+            }
+        },
+        refreshList: function () {}
+    };
+
+    // hui.CheckLabel 继承了 hui.Control 
+    hui.inherits(hui.CheckLabel, hui.Checkbox);
+
+    hui.util.importCssString(
+        '.hui_checklabel{float:left;}' +
+        '.hui_checklabel .hui_checklabel_label{}' +
+        '.hui_checklabel .hui_checklabel_label a{font-size:14px;}' +
+        '.hui_checklabel .hui_checklabel_icon{float:left;font-family:simsun;margin:1px 10px 0 0;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
+        '.hui_checklabel .hui_checklabel_label{float:left;color:#666666;font-size:14px;line-height:20px;padding-left:0px;cursor:pointer;}' +
+        '.hui_checklabel .hui_checklabel_icon{color:#1ba8eb;text-indent:-100px;}' +
+        '.hui_checklabel .hui_checklabel_textarea{float:left;font-family:arial;font-size:14px;border:0px;padding-left:2px;min-width:30px;border:1px solid #eee;margin-top: -1px;display:none;}' +
+        '.hui_checklabel .hui_checklabel_remove{cursor:pointer;font-family:arial;margin:0px 3px;}' +
+        '.hui_checklabel .hui_checklabel_remove:hover{color:#fff;background-color:red;}' +
+        '.hui_checklabel_checked .hui_checklabel_icon{visibility:visible;color:#68bf4a;text-indent:3px;}' +
+        '.hui_checklabel_edit .hui_checklabel_label{display:none;}' +
+        '.hui_checklabel_edit .hui_checklabel_textarea{display:inline;}'
     );
 
 });
@@ -9186,257 +9382,6 @@ hui.define('hui_citylistdropdown', ['hui@0.0.1'], function () {
     hui.inherits(hui.CitylistDropdown, hui.Control);
 });
 
-'use strict';
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
-//                                                                   
-//                                                                   
 
-/**
- * @name 标签云控件
- * @public
- * @author wanghaiyang
- * @date 2014/10/12
- * @example
- <div ui="type:'CloudLabel',id:'ddd',value:[{label_id:1,value:'javascript'},{label_id:2,value:'css'}],
- url_save:'/savelabelUrl',url_remove:'/removelabelUrl',url_list:'/labellist',auto123:'true'"></div>
- */
-hui.define('hui_' + String('CloudLabel').toLowerCase(), ['hui@0.0.1'], function () {
-    hui.CloudLabel = function (options, pending) {
-        this.isFormItem = true; // 注：getParamMap时不需要处理button
-        hui.CloudLabel.superClass.call(this, options, 'pending');
-
-        // 类型声明，用于生成控件子dom的id和class
-        this.type = String('CloudLabel').toLowerCase();
-
-        //进入控件处理主流程!
-        if (pending != 'pending') {
-            this.enterControl();
-        }
-    };
-
-    hui.CloudLabel.prototype = {
-        /**
-         * @name button的html模板
-         * @private
-         */
-        getTplCloudLabel: function () {
-            var tpl = [
-                '<span class="cloudlabel_item" label_id="#{label_id}" value="#{value}">',
-                '    <span class="text" ondblclick="hui.Control.getById(\'#{ctr_id}\').editLabel  (\'#{label_id}\')" >#{value}</span>',
-                '    <input class="input"   onblur="hui.Control.getById(\'#{ctr_id}\').saveLabel  (\'#{label_id}\')" value="#{value}" type="text" size="5" style="display:none" /> ',
-                '    <span class="remove"  onclick="hui.Control.getById(\'#{ctr_id}\').removeLabel(\'#{label_id}\')">X</span>',
-                '</span>'
-            ].join('');
-            return tpl;
-        },
-
-        /**
-         * @name 默认的onclick事件执行函数, 不做任何事，容错
-         * @public
-         */
-        onclick: new Function(),
-        /**
-         * @name 渲染控件
-         * @public
-         */
-        render: function () {
-            hui.CloudLabel.superClass.prototype.render.call(this);
-            var me = this,
-                main = me.getMain();
-            // 生成DOM
-            if (!me.url_list || !me.auto) {
-                me.refreshListCallback();
-            }
-            else {
-                me.refreshList();
-            }
-            // 初始化状态事件
-            main.onclick = me.getHandlerClick();
-            // 设定宽度
-            me.width && (main.style.width = me.width + 'px');
-            // 设置disabled
-            me.setDisabled(!!me.disabled);
-        },
-        /**
-         * @name 获取按钮点击的事件处理程序
-         * @private
-         * @return {function}
-         */
-        getHandlerClick: function () {
-            var me = this;
-            return function (e) {
-                if (!me.isDisabled()) {
-                    me.onclick();
-                }
-            };
-        },
-        refreshList: function () {
-            var me = this;
-            me.getMain().innerHTML = '';
-            if (me.url_list) {
-                hui.Mockup.setRule(me.url_list, [null, [{
-                    label_id: 1,
-                    value: 'fff'
-                }, {
-                    label_id: 2,
-                    value: 'eee'
-                }]]);
-                window.Requester.get(me.url_list, {
-                    onsuccess: function (result) {
-                        // alert('labellist');
-                        if (!result[0] && result[1]) {
-                            me.setValue(result[1]);
-                            me.refreshListCallback();
-                        }
-                    }
-                });
-            }
-            else {
-                me.refreshListCallback();
-            }
-        },
-        refreshListCallback: function () {
-            var me = this,
-                list = me.getValue();
-            for (var i = 0, len = list.length; i < len; i++) {
-                me.addLabel(list[i]);
-            }
-            me.addLabel({
-                value: '',
-                label_id: -Math.random()
-            });
-        },
-        /**
-         * @name 添加标签
-         * @public
-         */
-        addLabel: function (item) {
-            var me = this,
-                tpl = me.getTplCloudLabel(),
-                main = me.getMain(),
-                ctr_id = me.getId(),
-                html;
-            html = hui.Control.format(tpl, {
-                label_id: item.label_id,
-                value: item.value,
-                ctr_id: ctr_id
-            });
-            hui.util.appendHTML(main, html);
-            me.editLabel(item.label_id);
-        },
-        /**
-         * @name 查找标签
-         * @public
-         */
-        findLabel: function (label_id) {
-            var me = this,
-                list = hui.c('cloudlabel_item', me.getMain()),
-                elem = null;
-            for (var i = list.length - 1; i > -1; i--) {
-                if (list[i].getAttribute('label_id') === String(label_id)) {
-                    elem = list[i];
-                    break;
-                }
-            }
-            return elem;
-        },
-        /**
-         * @name 编辑标签
-         * @public
-         */
-        editLabel: function (label_id) {
-            var me = this,
-                label = me.findLabel(label_id),
-                input = hui.cc('input', label),
-                text = hui.cc('text', label),
-                value = label.getAttribute('value');
-            input.value = value;
-            input.style.display = 'inline-block';
-            input.style.width = text.clientWidth + 'px';
-            text.style.display = 'none';
-            input.focus();
-        },
-        /**
-         * @name 保存标签
-         * @public
-         */
-        saveLabel: function (label_id) {
-            var me = this,
-                label = me.findLabel(label_id),
-                input = hui.cc('input', label),
-                text = hui.cc('text', label),
-                value = input.value;
-            if (value === '' && Number(label_id) > 0) {
-                input.value = label.getAttribute('value');
-                me.removeLabel(label_id);
-            }
-            else if (label.getAttribute('value') !== value) {
-                me.setInnerHTML(text, value);
-                label.setAttribute('value', value);
-
-                hui.Mockup.setRule(me.url_save, []);
-                window.Requester.get(me.url_save, {
-                    data: {
-                        label_id: label_id,
-                        value: value
-                    },
-                    onsuccess: function () {
-                        // alert('savelabel');
-                        me.refreshList();
-                    }
-                });
-            }
-            else if (label_id > 0) {
-                text.style.display = 'inline-block';
-                input.style.display = 'none';
-            }
-        },
-        /**
-         * @name 删除标签
-         * @public
-         */
-        removeLabel: function (label_id) {
-            if (window.confirm('Are you sure remove label?')) {
-                var me = this,
-                    label = me.findLabel(label_id);
-                label.parentNode.removeChild(label);
-
-                if (Number(label_id) > 0) {
-                    hui.Mockup.setRule(me.url_save, []);
-                    window.Requester.get(me.url_save, {
-                        data: {
-                            label_id: label_id,
-                            value: '',
-                            opt: 'remove'
-                        },
-                        onsuccess: function () {
-                            // alert('removelabel');
-                            me.refreshList();
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    // hui.CloudLabel 继承了 hui.Control 
-    hui.inherits(hui.CloudLabel, hui.Control);
-
-    hui.util.importCssString(
-        '.hui_cloudlabel{}' +
-        '.hui_cloudlabel .cloudlabel_item{}' +
-        '.hui_cloudlabel .text{display:inline-block;padding-top:6px;font-family:arial;padding-bottom:6px;font-size:16px;padding-left:5px;margin-right:5px;}' +
-        '.hui_cloudlabel .input{font-family:arial;font-size:16px;border:0px;padding-left:2px;min-width:30px;border:1px solid #eee;}' +
-        '.hui_cloudlabel .remove{cursor:pointer;font-family:arial;margin:0px 3px;}' +
-        '.hui_cloudlabel .remove:hover{color:#fff;background-color:red;}'
-    );
-
-});
 
 hui.util.importCssString('html {}');
