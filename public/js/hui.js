@@ -8655,7 +8655,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
          */
         saveLabel: function () {
             var me = this,
-                label_id = me.label_id,
+                label_id = me.getFormName(),
                 main = me.getMain(),
                 label = hui.cc(me.getClass('label'), main),
                 textarea = hui.cc(me.getClass('textarea'), main),
@@ -8693,7 +8693,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
         removeLabel: function () {
             var me = this,
                 label = me.getMain(),
-                label_id = me.label_id;
+                label_id = me.getFormName();
             if (window.confirm('Are you sure remove label?')) {
                 label.parentNode.removeChild(label);
 
