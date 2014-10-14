@@ -334,7 +334,11 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                 textarea = hui.cc(me.getClass('textarea'), main),
                 label = hui.cc(me.getClass('label'), main);
             hui.addClass(main, me.getClass('edit'));
+            if (String(me.getPresetValue()).indexOf('-') === 0) {
+                textarea.value = '';
+            }
             textarea.focus();
+
         },
         /**
          * @name 保存标签
@@ -348,9 +352,11 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                 textarea = hui.cc(me.getClass('textarea'), main),
                 value = textarea.value;
             
-                if (value === '' && Number(label_id) > 0) {
-                    textarea.value = textarea.getAttribute('old');
-                    me.removeLabel();
+                if (value === '' && (Number(label_id) > 0 || String(me.getPresetValue()).indexOf('-') === 0)) {
+                    if (String(me.getPresetValue()).indexOf('-') !== 0) {
+                        textarea.value = textarea.getAttribute('old');
+                        me.removeLabel();
+                    }
                 }
                 else if (textarea.getAttribute('old') !== value) {
                     if (window.confirm('Are you sure change label?')) {
