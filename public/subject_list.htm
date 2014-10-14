@@ -200,6 +200,37 @@ window.onload = function(){
         }
     });
 
+    Requester.get('/ue_api/internal/get_cloudlabels', {
+        onsuccess: function (result) {
+            var data = result[1],
+                item,
+                label,
+                main,
+                html = '<div class="label_list">',
+                tpl = '<label ui="type:\'CheckLabel\',formName:\'list\' ,value:\'#{value}\', label:\'#{label}\'"></label>';
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    item = data[i];
+                    html += hui.format(tpl, item);
+                };
+                html += hui.format(tpl, {value:-Math.random(),label:'_______'});
+                html += '</div>';
+
+                label = form.getByFormName('label');
+                main = label.getMain();
+                label.disposeChild();
+                label.setInnerHTML(main, html);
+                hui.Control.init(hui.cc('label_list', main));
+                //hui.Control.init(hui.g('subject_list'));
+                
+            };
+            
+        }
+    });
+
+    hui.Control.init(hui.g('subject_add'));
+    
+
 };
 
 'use strict';
@@ -327,7 +358,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                         textarea.setAttribute('old', value);
                         hui.removeClass(main, me.getClass('edit'));
 
-                        hui.Mockup.setRule(me.getUrlSave(), []);
+                        //hui.Mockup.setRule(me.getUrlSave(), []);
                         window.Requester.get(me.getUrlSave(), {
                             data: {
                                 value: label_id,
@@ -361,7 +392,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                 label.parentNode.removeChild(label);
 
                 if (Number(label_id) > 0) {
-                    hui.Mockup.setRule(me.getUrlSave(), []);
+                    //hui.Mockup.setRule(me.getUrlSave(), []);
                     window.Requester.get(me.getUrlSave(), {
                         data: {
                             value: label_id,
@@ -417,7 +448,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
 <div id="subject_add" class="subject_add">
 <!--target:test-->
 
-    <div ui="type:'Panel',formName:'form',url_save:'/ue_api/internal/save_cloudlabel'">
+    <div ui="type:'Panel',formName:'form'">
         <div class="tr_row">
             <span class="row_title">大类：</span>
             <div class="row_major">
@@ -457,10 +488,13 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
             <span class="row_title">小类：</span>
             <div class="row_label">
                 <div ui123="type:'CloudLabel',id:'ddd',value:[{label_id:1,value:'javascript'},{label_id:2,value:'css'}],url_save:'/ue_api/internal/save_cloudlabel',url_list:'/ue_api/internal/get_cloudlabels',auto:'true'"></div>
+                <div ui="type:'Panel',formName:'label',isFormItem:'true',url_save:'/ue_api/internal/save_cloudlabel'">
+                    <div id="label_list">
+                        <label ui="type:'CheckLabel',formName:'list' ,value:'1000000003', label:'js34'"></label>
+                        <label ui="type:'CheckLabel',formName:'list' ,value:'1000000003', label:'js34'"></label>
+                    </div>
+                </div>
 
-                <label ui="type:'CheckLabel',formName:'label' ,value:'1000000001', label:'html123'"></label>
-                <label ui="type:'CheckLabel',formName:'label' ,value:'1000000002', label:'css12'"></label>
-                <label ui="type:'CheckLabel',formName:'label' ,value:'1000000003', label:'js34'"></label>
                 
             </div>
         </div>
