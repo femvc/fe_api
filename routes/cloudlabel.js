@@ -2,22 +2,22 @@
 var cloudlabelModel = require('../models/cloudlabel').createNew();
 
 exports.saveCloudlabel = function (req, res, next) {
-    var label_id = req.paramlist.label_id,
-        value = req.paramlist.value,
+    var value = req.paramlist.value,
+        label = req.paramlist.label,
         opt = req.paramlist.opt,
         cloudlabel = {},
         callback,
         date;
 
-    if (!label_id) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'label_id');
+    if (!value) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'value');
     }
-    if (value === undefined && !opt) {
-        return response.err(req, res, 'MISSING_PARAMETERS', 'value|opt');
+    if (label === undefined && !opt) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'label|opt');
     }
 
-    cloudlabel.label_id = label_id;
     cloudlabel.value = value;
+    cloudlabel.label = label;
 
     var opt = req.paramlist.opt;
 
@@ -32,25 +32,25 @@ exports.saveCloudlabel = function (req, res, next) {
     date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
 
     if (opt === 'remove') {
-        if (String(label_id).indexOf('-0.') === 0) {
+        if (String(value).indexOf('-0.') === 0) {
             callback(null, []);
         }
         else {
             cloudlabelModel.remove({
-                label_id: label_id
+                value: value
             }, callback);
         }
     }
-    else if (String(label_id).indexOf('-0.') === 0) {
+    else if (String(value).indexOf('-0.') === 0) {
         cloudlabel.update_time = date;
-        cloudlabel.label_id = global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        cloudlabel.value = global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         cloudlabelModel.insert(cloudlabel, callback);
     }
     else {
         cloudlabel.update_time = date;
-        cloudlabel.label_id = label_id;
+        cloudlabel.value = value;
         cloudlabelModel.update({
-            label_id: label_id
+            value: value
         }, {
             $set: cloudlabel
         }, true, false, callback);
