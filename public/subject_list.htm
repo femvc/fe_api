@@ -359,7 +359,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                     }
                 }
                 else if (textarea.getAttribute('old') !== value) {
-                    if (window.confirm('Are you sure change label?')) {
+                    if (String(me.getPresetValue()).indexOf('-') === 0 || window.confirm('Are you sure change label?')) {
                         me.setInnerHTML(label, value);
                         textarea.setAttribute('old', value);
                         hui.removeClass(main, me.getClass('edit'));
