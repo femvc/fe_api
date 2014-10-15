@@ -1004,6 +1004,7 @@ hui.define('hui_util', ['hui'], function () {
         if (elem && elem.innerHTML !== undefined) {
             elem.innerHTML = html;
         }
+        return elem;
     };
     hui.util.setInnerText = function (elem, text) {
         if (!elem) return;
@@ -1288,10 +1289,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
          * @return {String}
          */
         setInnerHTML: function (elem, html) {
-            elem = elem && elem.getMain ? elem.getMain() : elem;
-            if (elem && elem.innerHTML !== undefined) {
-                elem.innerHTML = html;
-            }
+            return hui.util.setInnerHTML(elem, html);
         },
         /**
          * @name 渲染控件
@@ -1300,10 +1298,10 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         render: function () {
             var me = this,
                 elem = me.getMain();
-            if (elem && elem.getAttribute('_initView') != 'true') {
+            if (elem && elem.getAttribute('_initview') != 'true') {
                 hui.Control.addClass(elem, me.getClass());
                 me.initView();
-                elem.setAttribute('_initView', 'true');
+                elem.setAttribute('_initview', 'true');
             }
         },
         /**
@@ -1328,8 +1326,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     me.controlMap[i].initBehaviorByTree();
                 }
             }
-            if (main.getAttribute('_initBehavior') != 'true') {
-                main.setAttribute('_initBehavior', 'true');
+            if (main.getAttribute('_initbehavior') != 'true') {
+                main.setAttribute('_initbehavior', 'true');
                 me.initBehavior();
             }
         },
@@ -1777,8 +1775,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             if (uiObj.value !== undefined) {
                 elem.value = uiObj.value;
             }
-            // 便于通过elem.control找到control
-            elem.control = uiObj.getId ? uiObj.getId() : uiObj.id;
+            // 便于通过elem.getAttribute('control')找到control
+            elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
             // 动态生成control需手动维护me.parentControl
             // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
             parentElement = elem;
@@ -1786,7 +1784,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 parentElement = parentElement.parentNode;
                 //label标签自带control属性!!
                 if (parentElement && hui.Control.isControlMain(parentElement)) {
-                    control = hui.Control.getById(parentElement.control, parentControl);
+                    control = hui.Control.getById(parentElement.getAttribute('control'), parentControl);
                     hui.Control.appendControl(control, uiObj);
                     break;
                 }
@@ -1805,7 +1803,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             // 1. initView()会在render调用父类的render时自动调用，
             // 2. 不管是批量hui.Control.init()还是hui.Control.create(), 都会通过enterControl来执行render
             // 3. initBehavior()会在后面执行
-            if (elem && elem.getAttribute && elem.getAttribute('_initView') != 'true' && uiObj.render) {
+            if (elem && elem.getAttribute && elem.getAttribute('_initview') != 'true' && uiObj.render) {
                 uiObj.render();
                 uiObj.rendered = 'true';
             }
@@ -1980,7 +1978,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      */
     hui.Control.isControlMain = function (elem) {
         var result = false;
-        if (elem && elem.getAttribute && elem.control && Object.prototype.toString.call(elem.control) === '[object String]') {
+        // label的control是DOM
+        if (elem && elem.getAttribute && elem.getAttribute('control') && elem.getAttribute('ui')) {
             result = true;
         }
         return result;
@@ -2028,7 +2027,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         // <div ui="type:'UIType',id:'uiId',..."></div>
         for (var i = 0, len = realEls.length; i < len; i++) {
             elem = realEls[i];
-            if (elem && elem.getAttribute && elem.getAttribute(uiAttr)) {
+            if (elem && elem.getAttribute && elem.getAttribute(uiAttr) && (elem.getAttribute('_initview') !== 'true' || elem.getAttribute('_initbehavior') !== 'true')) {
                 uiEls.push(elem);
             }
         }
@@ -2074,7 +2073,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         if (type && Object.prototype.toString.call(type) != '[object String]' && type.getAttribute) {
             options = options || {};
             if (hui.Control.isControlMain(type)) {
-                var control = hui.Control.getById(type.control);
+                var control = hui.Control.getById(type.getAttribute('control'));
                 if (control) {
                     hui.Control.appendControl(options.parentControl, control);
                 }
@@ -2242,9 +2241,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      * @param {String} stopAttr 如果元素存在该属性,如'ui',则不遍历其下面的子元素
      */
     hui.Control.findAllNodes = function (main, stopAttr) {
-        var i,
-            len,
-            childNode,
+        var childNode,
             elements,
             list,
             childlist,
@@ -2264,7 +2261,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
             if (childNode != main && stopAttr !== undefined && childNode.getAttribute(stopAttr)) {
                 continue;
             }
-            for (i = 0, len = childlist.length; i < len; i++) {
+            // 注：Nodelist是伪数组且IE不支持Array.prototype.slice.call(Nodelist)转化数组
+            for (var i = 0, len = childlist.length; i < len; i++) {
                 node = childlist[i];
                 list.push(node);
             }
@@ -2280,29 +2278,40 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      * @param {Object} control
      */
     hui.Control.findAllControl = function (parentControl) {
-        var i,
-            childNode,
-            elements,
+        var childNode,
+            results,
             list,
             childlist,
-            node;
-        elements = [];
-        list = [parentControl];
-
-        while (list.length) {
-            childNode = list.pop();
-            if (!childNode) continue;
-
-            elements.push(childNode);
-
-            if (!childNode.controlMap) continue;
-            list = list.concat(childNode.controlMap);
+            control;
+        results = [];
+        if (Object.prototype.toString.call(parentControl).indexOf('Element') > -1) {
+            list = hui.Control.findAllNodes(parentControl);
+            for (var i = 0, len = list.length; i < len; i++) {
+                if (hui.Control.isControlMain(list[i])) {
+                    control = hui.Control.getById(list[i].getAttribute('control'));
+                    if (control) {
+                        results.push(control);
+                    }
+                }
+            }
         }
-        // 去掉顶层父控件或Action,如不去掉处理复合控件时会导致死循环!!
-        if (elements.length > 0) elements.shift();
-        // 后序遍历出来的结果，因此需要反转数组
-        elements.reverse();
-        return elements;
+        else {
+            list = [parentControl];
+            while (list.length) {
+                childNode = list.pop();
+                if (!childNode) continue;
+
+                results.push(childNode);
+
+                if (!childNode.controlMap) continue;
+                list = list.concat(childNode.controlMap);
+            }
+            // 去掉顶层父控件或Action,如不去掉处理复合控件时会导致死循环!!
+            if (results.length > 0) results.shift();
+            // 后序遍历出来的结果，因此需要反转数组
+            results.reverse();
+        }
+        return results;
     };
     // 所有控件实例的索引. 注释掉原因: 建了索引会造成无法GC内存暴涨!
     // hui.Control.elemList = [];
@@ -2311,12 +2320,12 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
      * @public
      * @param {Element} parentElement DOM元素
      */
-    hui.Control.findElemControl = function (parentElement) {
+    hui.Control.findByElem = function (parentElement) {
         var control = null;
         while (parentElement && parentElement.tagName) {
             //label标签自带control属性!!
             if (parentElement && hui.Control.isControlMain(parentElement)) {
-                control = hui.Control.getById(parentElement.control);
+                control = hui.Control.getById(parentElement.getAttribute('control'));
                 break;
             }
             else if (~'html,body'.indexOf(String(parentElement.tagName).toLowerCase())) {
@@ -2429,7 +2438,20 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
 
         return result;
     };
-
+    /**
+     * @name 销毁一组控件
+     * @static
+     * @param {String} list 一组控件
+     */
+    hui.Control.disposeList = function (list) {
+        if (Object.prototype.toString.call(list) === '[object Array]') {
+            for (var i = 0, len = list.length; i < len; i++) {
+                if (list[i] && list[i].dispose) {
+                    list[i].dispose();
+                }
+            }
+        }
+    };
     /**
      * @name 判断控件是否在某父元素下
      * @static
@@ -2598,7 +2620,6 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
                 return text;
             }
         },
-
         /**
          * @name 设定控件的innerHTML[nodejs&browser]
          * @public
@@ -2607,10 +2628,7 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
          * @return {String}
          */
         setInnerHTML: function (elem, html) {
-            elem = elem && elem.getMain ? elem.getMain() : elem;
-            if (elem && elem.innerHTML !== undefined) {
-                elem.innerHTML = html;
-            }
+            return hui.util.setInnerHTML(elem, html);
         },
         /**
          * @name 在父元素的末尾提示信息
@@ -5948,8 +5966,8 @@ hui.define('hui_action', ['hui@0.0.1', 'hui_template@0.0.1'], function () {
                 if (!elem) {
                     return hui.Control.error('Action\'s main element is invalid');
                 }
-                // 便于通过elem.control找到control
-                elem.control = uiObj.getId ? uiObj.getId() : uiObj.id;
+                // 便于通过elem.getAttribute('control')找到control
+                elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
 
                 // 保存通过URL传过来的参数
                 me.args = args;
@@ -7510,7 +7528,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         getFocusHandler: function (e) {
             // this -> control's main element
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
 
             if (me.autoHideError) {
                 me.hideError();
@@ -7526,7 +7544,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         getBlurHandler: function (e) {
             // this -> control's main element
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
 
             if (me.allowSpace === false) {
                 me.removeSpace();
@@ -7563,7 +7581,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
          */
         getPressHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
 
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
@@ -7574,7 +7592,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         },
         getPressDownHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
             if (keyCode != 8) { // back/delete
@@ -7586,7 +7604,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         },
         getPressUpHandler: function (e) {
             var main = this,
-                me = main.getMain ? main : hui.Control.getById(main.control),
+                me = main.getMain ? main : hui.Control.getById(main.getAttribute('control')),
                 value = me.getValue();
             (value ? me.hidePlaceholder('force') : me.showPlaceholder());
             // 注：搜狗输入法会默认加个空格占位，去掉的话会导致无法输入！
@@ -7602,7 +7620,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         },
         getChangeHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
             var value = (e && (e.target || e.srcElement)) ? me.getMain().value : e;
             me.onchange(value);
         },
@@ -7653,7 +7671,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         onchange: new Function(),
         onmousedown: function () {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
             main = me.getMain();
             me.old_type = main.type;
             //main.type = 'text';
@@ -7672,7 +7690,7 @@ hui.define('hui_textinput', ['hui@0.0.1'], function () {
         },
         onmouseup: function () {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.control);
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
             main = me.getMain();
             main.type = me.old_type || 'text';
 
@@ -8683,7 +8701,7 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
         onOptionsClick: function (e) {
             e = e || window.event;
             var elem = e.target || e.srcElement,
-                ctr = hui.Control.findElemControl(elem),
+                ctr = hui.Control.findByElem(elem),
                 item,
                 value;
             if (ctr) {
