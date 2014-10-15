@@ -11,21 +11,11 @@
 <link rel="stylesheet" type="text/css" href="main.css">
 
 <style>
-.hui_checkbox{float:left;}
 .hui_radioinput{float:left;padding-right:23px;cursor:pointer;}
 .hui_radioinput .hui_radioinput_input{display:none;}
 .hui_radioinput .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px -50px;width:18px;height:18px;overflow:hidden;*zoom:1;float:left;margin-right:6px;}
 .hui_radioinput .hui_radioinput_text{float:left;}
 .hui_radioinput_checked .hui_radioinput_icon{background-image:url(/static/img/hui_radioinput.png);background-repeat:no-repeat;background-position:0px 0px;width:18px;height:18px;overflow:hidden;float:left;margin-right:6px;}
-.hui_radioinputgroup{overflow:hidden;float:left;}
-.hui_checkbox .hui_checkbox_label{}
-.hui_checkbox .hui_checkbox_label a{font-size:14px;}
-.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;color:#1ba8eb;text-indent:-20px;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}
-.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}
-.hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
-.hj001_login_box .hui_checkbox .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:-100px;}
-.hj001_login_box .hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:4px;}
 
 </style>
 <script type="text/javascript">
@@ -200,6 +190,15 @@ window.onload = function(){
         }
     });
 
+    refreshList();
+    hui.CheckLabel.prototype.refreshList = refreshList;
+
+    hui.Control.init(hui.g('subject_add'));
+    
+
+};
+
+function refreshList () {
     Requester.get('/ue_api/internal/get_cloudlabels', {
         onsuccess: function (result) {
             var data = result[1],
@@ -216,7 +215,7 @@ window.onload = function(){
                 html += hui.format(tpl, {value:-Math.random(),label:'_______'});
                 html += '</div>';
 
-                label = form.getByFormName('label');
+                label = hui.Control.getByFormName('form').getByFormName('label');
                 main = label.getMain();
                 label.disposeChild();
                 label.setInnerHTML(main, html);
@@ -227,11 +226,7 @@ window.onload = function(){
             
         }
     });
-
-    hui.Control.init(hui.g('subject_add'));
-    
-
-};
+}
 
 'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     
@@ -315,6 +310,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
             label.ondblclick = hui.fn(me.getDbClickHandler, me);
             //textarea.onblur = hui.fn(me.getBlurHandler, me);
             hui.util.onesc(textarea, hui.fn(me.onesc, me));
+            hui.util.onenter(textarea, hui.fn(me.onenter, me));
         },
         getDbClickHandler: function () {
             var me = this;
@@ -422,6 +418,9 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                 main = me.getMain(),
                 textarea = hui.cc(me.getClass('textarea'), main);
             textarea.value = textarea.getAttribute('old');
+        },
+        onenter: function () {
+            this.getBlurHandler();
         }
     };
 
@@ -431,8 +430,8 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
     hui.util.importCssString(
         '.hui_checklabel{float:left;}' +
         '.hui_checklabel .hui_checklabel_label a{font-size:14px;}' +
-        '.hui_checklabel .hui_checklabel_icon{float:left;font-family:simsun;margin:1px 10px 0 0;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
-        '.hui_checklabel .hui_checklabel_label{float:left;font-family:arial;color:#666666;font-size:14px;line-height:20px;padding-left:0px;cursor:pointer;}' +
+        '.hui_checklabel .hui_checklabel_icon{float:left;font-family:simsun;margin:1px 5px 0 0;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
+        '.hui_checklabel .hui_checklabel_label{float:left;font-family:arial;color:#666666;font-size:14px;line-height:20px;padding-left:0px;padding-right:10px;cursor:pointer;}' +
         '.hui_checklabel .hui_checklabel_icon{color:#1ba8eb;text-indent:-100px;}' +
         '.hui_checklabel .hui_checklabel_textarea{float:left;font-family:arial;font-size:14px;border:0px;padding-left:2px;min-width:30px;border:1px solid #eee;margin-top:0px; margin-left: -3px;display:none;}' +
         '.hui_checklabel .hui_checklabel_remove{cursor:pointer;font-family:arial;margin:0px 3px;}' +

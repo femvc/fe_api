@@ -667,7 +667,7 @@ hui.define('hui_util', ['hui'], function () {
      * @param {Function} fn 事件处理函数
      */
     hui.util.onenter = function (elem, fn) {
-        hui.util.on(elem, 'keypress', function (e) {
+        hui.util.on(elem, 'keyup', function (e) {
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
             if (keyCode == 13) {
@@ -684,7 +684,7 @@ hui.define('hui_util', ['hui'], function () {
      * @param {Function} fn 事件处理函数
      */
     hui.util.onesc = function (elem, fn) {
-        hui.util.on(elem, 'keypress', function (e) {
+        hui.util.on(elem, 'keyup', function (e) {
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
             if (keyCode == 27) {
@@ -8541,8 +8541,8 @@ hui.define('hui_checkbox', ['hui@0.0.1'], function () {
         '.hui_checkbox{float:left;}' +
         '.hui_checkbox .hui_checkbox_label{}' +
         '.hui_checkbox .hui_checkbox_label a{font-size:14px;}' +
-        '.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 10px 0 0;float:left;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
-        '.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;cursor:pointer;}' +
+        '.hui_checkbox .hui_checkbox_icon{font-family:simsun;margin:1px 5px 0 0;float:left;border:1px solid #d9d9d9;font-size:15px;font-style:normal;line-height:1.1em;width:16px;height:16px;cursor:pointer;overflow:hidden;}' +
+        '.hui_checkbox .hui_checkbox_label{color:#666666;font-size:14px;line-height:20px;float:left;padding-left:0px;padding-right:5px;cursor:pointer;}' +
         '.hui_checkbox .hui_checkbox_icon{color:#1ba8eb;text-indent:-100px;}' +
         '.hui_checkbox_checked .hui_checkbox_icon{visibility:visible;color:#68bf4a;text-indent:3px;}'
     )
