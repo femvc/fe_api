@@ -34,10 +34,11 @@ exports.saveQuestion = function (req, res, next) {
         return response.err(req, res, 'MISSING_PARAMETERS', 'options');
     }
 
-    question.title = req.paramlist.title;
-    question.options = JSON.parse(req.paramlist.options);
-    question.level = JSON.parse(req.paramlist.level);
     question.major = JSON.parse(req.paramlist.major);
+    question.title = req.paramlist.title;
+    question.level = JSON.parse(req.paramlist.level);
+    question.label = JSON.parse(req.paramlist.label);
+    question.options = JSON.parse(req.paramlist.options);
 
     callback = function (err, doc) {
         if (err) {

@@ -141,6 +141,7 @@ window.onload = function(){
         data.options = JSON.stringify(data.options);
         data.major = JSON.stringify(data.major);
         data.level = JSON.stringify(data.level);
+        data.label = JSON.stringify(data.label);
         console.log(data);
         Requester.get('/ue_api/internal/save_question', {
             data: data,
@@ -165,6 +166,7 @@ window.onload = function(){
                 data.atcid = data.atcid;
                 
                 form.setValueByTree(data);
+                form.labellist = data.label;
                 form.getById('options').disposeChild();
                 
                 for (var i in data.options) {
@@ -214,6 +216,9 @@ function refreshList () {
                 container = hui.g('label_list');
                 hui.Control.disposeList(hui.Control.findAllControl(container));
                 hui.Control.init(hui.util.setInnerHTML(container, html));
+                if (form.labellist) {
+                    form.setValueByTree({'label': form.labellist});
+                }
                 //hui.Control.init(hui.g('subject_list'));
             };
             
