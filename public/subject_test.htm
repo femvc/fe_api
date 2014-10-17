@@ -46,9 +46,10 @@ window.onload = function(){
 
                     form.getByFormName('content').disposeChild();
                     //var content = form.getByFormName('content').getMain();
-                    for (var i in data.content) {
-                        data.content[i].index = i;
-                        form.addOption(data.content[i]);
+                    var list = data.options;
+                    for (var i in list) {
+                        list[i].index = i;
+                        form.addOption(list[i]);
                     }
                 }
                 else {
@@ -147,7 +148,7 @@ window.onload = function(){
     
 
     form.initSubject();
-    //form.show();
+    form.show();
 
 
     var result = hui.Control.getByFormName('result');
@@ -170,7 +171,7 @@ window.onload = function(){
         }
     });
 
-    hui.Control.getByFormName('report').show();
+    // hui.Control.getByFormName('report').show();
 
 };
 //-->
