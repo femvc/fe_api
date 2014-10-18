@@ -7872,6 +7872,11 @@ hui.define('hui_mask', ['hui@0.0.1'], function () {
         }
     };
 
+    hui.util.importCssString(
+        '.hj001_mask{background:#000;opacity:0.2;filter:alpha(opacity=20);width:100%;height:100%;position:absolute;top:0;left:0;z-index:50000}' +
+        '.hj001_mask.hide{display: none;}'
+    );
+
 });
 
 'use strict';
@@ -8075,7 +8080,7 @@ hui.define('hui_boxpanel', ['hui'], function () {
     hui.util.importCssString(
         '.hui_boxpanel_html{background-image: url("about:blank");background-attachment: fixed;}' +
         '.hui_boxpanel{z-index: 9000000;position: fixed; _position: absolute; _top: expression(document.documentElement.scrollTop + Math.max(0, (document.documentElement.clientHeight - 500)*0.3) + "px"); background-color:white;border: 5px solid #c6c6c6;border-color: rgba(0,0,0,0.3); border-color: #c6c6c6\\0;*border-color: #c6c6c6; border-radius: 5px; display: none;}' +
-        '.hui_boxpanel_close{background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;right: -16px;top: -16px;width: 22px;}' +
+        '.hui_boxpanel_close{background-color: #8A8A8A;border-radius: 16px;color: #FFFFFF;display: block;font-family: Simsun;font-size: 14px;height: 24px;overflow: hidden;padding: 8px 0 0 10px;position: absolute;z-index:9999;right: -16px;top: -16px;width: 22px;}' +
         '.hui_boxpanel_close:hover{background-color: #f62626;color: #fff; }'
     );
 
