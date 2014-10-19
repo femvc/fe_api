@@ -28,6 +28,13 @@ function showTestResult() {
 }
 
 window.onload = function(){
+    Requester.get('/ue_api/account/get_uid?rand='+Math.random(), {
+        onsuccess: function (result) {
+            if (result && !result[0] && result[1]) {
+                hui.g('uid').innerHTML = result[1];
+            }
+        }
+    });
 };
 function startTest(){
     // subject_add
@@ -165,13 +172,7 @@ function startTest(){
         hui.Control.getByFormName('report').show();
     };
 
-    Requester.get('/ue_api/account/get_uid?rand='+Math.random(), {
-        onsuccess: function (result) {
-            if (result && !result[0] && result[1]) {
-                hui.g('uid').innerHTML = result[1];
-            }
-        }
-    });
+
 
     // hui.Control.getByFormName('report').show();
 
@@ -196,7 +197,7 @@ function startTest(){
         <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
         <div class="test_btn" onclick="startTest()">立即测试</div>
     </div>
-    <div class="page_foot">&copy; FECampus 2014</div>
+    <div class="page_foot">&nbsp;&copy; FECampus 2014</div>
 
     <div id="subject_add" class="subject_test">
         <div class="subject_box" ui="type:'BoxPanel',formName:'form'" style="display:none">
@@ -225,7 +226,7 @@ function startTest(){
                 <div class="result_correct">答对 <b class="correct" id="correct">40</b> 题</div>
                 <div class="result_time">耗时 <b class="time" id="time">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
-                <div class="result_rate">您打败了<b class="rate" id="rate">64%</b>的竞争对手!</div>
+                <div class="result_rate">您打败了<b class="rate" id="rate">64%</b>的挑战者!</div>
                 <div class="result_tip">点击“下一步”查看您的薪资提升空间!</div>
                 <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
             </div>
@@ -307,8 +308,7 @@ function startTest(){
                 </div>    
 
                 
-                <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过前端训练营的 <b class="b">前端架构师特训</b>， 您在前端方面的技术能力将会大幅度提升，同时您的收入也会得到相应提高。
-                    预计您的收入能提高至 <b class="b">26~34</b>万/年以上&nbsp;&nbsp; <br/>预约电话：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> </div>
+                <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b>前端训练营</b> 的 <b class="b">前端架构师特训</b>， 您在前端方面的能力将会大幅度提升，同时您的收入能提高至 <b class="b">26~34</b>万/年以上。&nbsp;&nbsp; <br/>预约电话：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> </div>
             
 
             </div>
