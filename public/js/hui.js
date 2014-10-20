@@ -8059,7 +8059,7 @@ hui.define('hui_boxpanel', ['hui'], function () {
             var me = this,
                 main = me.getMain(),
                 btn_close = document.createElement('A');
-            btn_close.href = '###';
+            btn_close.href = 'javascript:';
             btn_close.innerHTML = '╳';
             btn_close.className = me.getClass('close');
             main.insertBefore(btn_close, main.firstChild);

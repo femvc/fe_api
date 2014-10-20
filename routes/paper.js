@@ -74,8 +74,8 @@ function getNextQuestionCallback(req, res, next) {
             return response.err(req, res, 'INDEX_OUT_RANGE');
         }
 
-        if (req.paramlist.answer != 'yes' && doc && doc.content) {
-            var list = doc.content;
+        if (req.paramlist.answer != 'yes' && doc && doc.options) {
+            var list = doc.options;
             for (var i in list) {
                 delete list[i].correct;
             }
