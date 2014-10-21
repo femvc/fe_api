@@ -92,7 +92,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .result_box .result_correct{padding:10px 0px;}
 .result_box .result_time{padding:10px 0px 25px;}
 .result_box .result_chart_bg{background-image:url(img/rate3.png?456);background-repeat:no-repeat;background-position:0px -50px;height:39px;width:400px;padding:0px 0px;}
-.result_box .result_chart{background-image:url(img/rate3.png?123);background-repeat:no-repeat;background-position:0px 0px;height:39px;width:220px;padding:0px 0px;}
+.result_box .result_chart{background-image:url(img/rate3.png?123);background-repeat:no-repeat;background-position:0px 0px;height:39px;width: 270px;padding:0px 0px;}
 .result_box .result_rate{padding:20px 0px 10px;}
 .result_box .result_rate .rate{color:#168de2;padding:0px 10px;}
 .result_box .result_tip{padding:20px 0px 30px;}

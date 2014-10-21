@@ -62,34 +62,46 @@ function getNextQuestionCallback(req, res, next) {
     if (!req.sessionStore.questionIndex[uid]) {
         req.sessionStore.questionIndex[uid] = 1;
     }
+    if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
+        req.sessionStore.paper[uid] = null;
+        req.sessionStore.paperContent[uid] = null;
+        req.sessionStore.questionIndex[uid] = 0;
 
-    questionModel.getItem({
-        atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
-    }, function (err, doc) {
-        if (err) {
-            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        if (!doc) {
-            req.sessionStore.questionIndex[uid] = 1;
-            return response.err(req, res, 'INDEX_OUT_RANGE');
-        }
-
-        if (req.paramlist.answer != 'yes' && doc && doc.options) {
-            var list = doc.options;
-            for (var i in list) {
-                delete list[i].correct;
+        response.ok(req, res, {
+            score: 96,
+            correct: 30,
+            time: 50,
+            rank: 1000,
+            amount: 10000
+        });
+    }
+    else {
+        questionModel.getItem({
+            atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
+        }, function (err, doc) {
+            if (err) {
+                return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
             }
-        }
+            if (!doc) {
+                req.sessionStore.questionIndex[uid] = 1;
+                return response.err(req, res, 'INDEX_OUT_RANGE');
+            }
 
-        var data = JSON.parse(JSON.stringify(doc));
-        data.index = req.sessionStore.questionIndex[uid];
-        data.sessionID = req.sessionID;
-        data.sum = paperContent.length;
-        data.test_id = test_id;
-        response.ok(req, res, data);
-    });
+            if (req.paramlist.answer != 'yes' && doc && doc.options) {
+                var list = doc.options;
+                for (var i in list) {
+                    delete list[i].correct;
+                }
+            }
 
-
+            var data = JSON.parse(JSON.stringify(doc));
+            data.index = req.sessionStore.questionIndex[uid];
+            data.sessionID = req.sessionID;
+            data.sum = paperContent.length;
+            data.test_id = test_id;
+            response.ok(req, res, data);
+        });
+    }
 }
 
 exports.createQuestionList = createQuestionList;

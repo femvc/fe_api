@@ -335,7 +335,7 @@ hui.define('hui_util', ['hui'], function () {
                 break;
             }
             // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
-            else if (~'html,body'.indexOf(String(parentElement.tagName).toLowerCase())) {
+            else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                 break;
             }
             parentElement = parentElement.parentNode;
@@ -1450,6 +1450,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 // 如果确定value是num或str可以在子类中覆盖setValue/getValue！！
                 me.getMain().value = paramMap;
             }
+            return me;
         },
         /**
          * @name 给控件树一次性赋值
@@ -1492,6 +1493,8 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     }
                 }
             }
+
+            return me;
         },
         getValue: function () {
             var me = this,
@@ -1789,7 +1792,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                     break;
                 }
                 // 未找到直接父控件则将control从hui.window.controlMap移动到action.controlMap中
-                else if (~'html,body'.indexOf(String(parentElement.tagName).toLowerCase())) {
+                else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                     hui.Control.appendControl(null, uiObj);
                     break;
                 }
@@ -1960,7 +1963,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
         // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
         while (elem && elem.tagName && elem.parentNode) {
             elem = elem.parentNode;
-            if (~'html,body'.indexOf(String(elem.tagName).toLowerCase()) == -1) break;
+            if (~',html,body,'.indexOf(',' + String(elem.tagName).toLowerCase() + ',') == -1) break;
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i] == elem) {
                     result = true;
@@ -2328,7 +2331,7 @@ hui.define('hui_control', ['hui@0.0.1', 'hui_eventdispatcher@0.0.1'], function (
                 control = hui.Control.getById(parentElement.getAttribute('control'));
                 break;
             }
-            else if (~'html,body'.indexOf(String(parentElement.tagName).toLowerCase())) {
+            else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                 break;
             }
             parentElement = parentElement.parentNode;
@@ -9346,7 +9349,7 @@ hui.define('hui_checklabel', ['hui@0.0.1'], function () {
                     textarea.setAttribute('old', value);
                     hui.removeClass(main, me.getClass('edit'));
 
-                    //hui.Mockup.setRule(me.getUrlSave(), []);
+                    // hui.Mockup.setRule(me.getUrlSave(), []);
                     window.Requester.get(me.getUrlSave(), {
                         data: {
                             value: label_id,

@@ -17,12 +17,13 @@
 'use strict';
 var form;
 
-function showTestResult() {
+function showTestResult(data) {
     hui.Control.getByFormName('form').hide();
     
     hui.g('subject_index').innerHTML = '1';
-
-    hui.Control.getByFormName('result').show();
+    data.rate = Math.round(100-100*data.rank/data.amount);
+    var result = hui.Control.getByFormName('result');
+    result.setValueByTree(data).show();
     
     
 }
@@ -45,25 +46,29 @@ function startTest(){
             onsuccess: function (result) {
                 if (result && !result[0] && result[1]) {
                     var data = result[1];
-                    data.atcid = data.atcid;
-                    data.index2 = data.index1 = data.index;
-                    if (data.test_id) {
-                        hui.util.setCookie('test_id', data.test_id);
+                    if (data.atcid) {
+                        data.atcid = data.atcid;
+                        data.index2 = data.index1 = data.index;
+                        if (data.test_id) {
+                            hui.util.setCookie('test_id', data.test_id);
+                        }
+                        
+                        form.setValueByTree(data);
+
+                        form.getByFormName('content').disposeChild();
+                        //var content = form.getByFormName('content').getMain();
+                        var list = data.options;
+                        for (var i in list) {
+                            list[i].index = i;
+                            form.addOption(list[i]);
+                        }    
+                    }
+                    else {
+                        showTestResult(data);
                     }
                     
-                    form.setValueByTree(data);
-
-                    form.getByFormName('content').disposeChild();
-                    //var content = form.getByFormName('content').getMain();
-                    var list = data.options;
-                    for (var i in list) {
-                        list[i].index = i;
-                        form.addOption(list[i]);
-                    }
                 }
-                else {
-                    showTestResult();
-                }
+                
             }
         });
 
@@ -222,11 +227,11 @@ function startTest(){
 
         <div class="result_box" ui="type:'BoxPanel',formName:'result'" style="display:none">
             <div class="box_content">
-                <div class="result_score">成绩 <b class="score" id="score">84</b> <span class="">分</span></div>
-                <div class="result_correct">答对 <b class="correct" id="correct">40</b> 题</div>
-                <div class="result_time">耗时 <b class="time" id="time">40</b> 分钟</div>
+                <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
+                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题</div>
+                <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
-                <div class="result_rate">您打败了<b class="rate" id="rate">64%</b>的挑战者!</div>
+                <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
                 <div class="result_tip">点击“下一步”查看您的薪资提升空间!</div>
                 <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
             </div>
