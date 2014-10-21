@@ -1,6 +1,6 @@
 window.admin = {};
 window.admin.init = function () {
-
+    $('#subject_add').show();
     window.listTable = [{
         width: 296,
         title: 'n1',
