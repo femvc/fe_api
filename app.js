@@ -1,6 +1,6 @@
 'use strict';
 
-require('./global').run(function(){
+require('./global').run(function () {
     console.log('start');
 
     /**
@@ -8,7 +8,7 @@ require('./global').run(function(){
      */
     var path = require('path');
     var express = require('express');
-    
+
     var app = express();
 
     // all environments
@@ -17,11 +17,12 @@ require('./global').run(function(){
     app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
+    app.use(express.compress());
     app.use(express.urlencoded())
     app.use(express.json())
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
-    
+
     var session = require('express-session')
     var RedisStore = require('connect-redis')(session);
 
@@ -33,8 +34,8 @@ require('./global').run(function(){
         }),
         secret: config.session.secret
     }));
-    
-    app.use(function(req, res, next){
+
+    app.use(function (req, res, next) {
         req.paramlist = req.paramlist || {};
         if (req.body) {
             for (var i in req.body) {
@@ -53,20 +54,20 @@ require('./global').run(function(){
 
         next();
     });
-    
+
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
     // development only
     if ('development' == app.get('env')) {
-      app.use(express.errorHandler());
+        app.use(express.errorHandler());
     }
-    
+
     global.app = app;
     require('./routes');
 
-    app.listen(app.get('port'), function(){
-    	console.log('listening port ' + app.get('port'));
+    app.listen(app.get('port'), function () {
+        console.log('listening port ' + app.get('port'));
     });
 
 });
