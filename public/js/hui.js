@@ -480,7 +480,7 @@ hui.define('hui_util', ['hui'], function () {
         if (id) {
             style.id = id;
         }
-        var head = doc.body || doc.head || doc.documentElement;
+        var head = doc.head || doc.body || doc.documentElement;
         head.insertBefore(style, head.lastChild);
         if (head !== doc.documentElement && style.nextSibling) {
             head.insertBefore(style.nextSibling, style);
