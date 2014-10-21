@@ -5,19 +5,10 @@
 <meta charset="UTF-8">
 <title>Ebbinghaus Intelligent Remember [v1.0]</title>
 <link rel="stylesheet" type="text/css" href="main.css">
-<script type="text/javascript">
-'use strict';
-
-window.onload = function(){
-    window.admin.init();
-};
-
-//-->
-</script>
 
 </head>
 
-<body class="page" style="background:none; padding: 20px;">
+<body class="page" style="background:none; padding: 20px;" onload="window.admin.init();">
 <a href="subject_test.htm">subject_test</a> uid: <span id="uid"></span>
 <!--target:test-->
 <div id="subject_add" class="subject_add">
@@ -79,10 +70,10 @@ window.onload = function(){
     <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
 </div>
 
-<script type="text/javascript" src="js/jquery1.11.1.js"></script>
-<script type="text/javascript" src="js/hui.js"></script>
-<script type="text/javascript" src="js/hui.table.js"></script>
-<script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" defer="defer" src="js/jquery1.11.1.js"></script>
+<script type="text/javascript" defer="defer" src="js/hui.js"></script>
+<script type="text/javascript" defer="defer" src="js/hui.table.js"></script>
+<script type="text/javascript" defer="defer" src="js/admin.js"></script>
 
 </body>
 
