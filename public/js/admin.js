@@ -181,7 +181,7 @@ window.admin.init = function () {
 };
 
 window.admin.refreshList = function () {
-    Requester.get('/ue_api/internal/get_cloudlabels', {
+    Requester.get('/ue_api/internal/get_cloudlabels?rand=' + Math.random(), {
         onsuccess: function (result) {
             var data = result[1],
                 item,
