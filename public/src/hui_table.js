@@ -1,5 +1,5 @@
 /**
- * @name 按钮控件
+ * @name 表格控件
  * @public
  * @author wanghaiyang
  * @date 2014/05/05
