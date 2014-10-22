@@ -135,6 +135,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
     padding-left: 25px;
     color: white;
     opacity: 0.88;
+    width: 200px;
 }
 .page_head .link {float:right;padding: 18px 10px;}
 .page_body {

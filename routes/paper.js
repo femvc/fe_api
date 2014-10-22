@@ -32,6 +32,9 @@ function createQuestionList(req, res, next) {
         paper.test_id = req.sessionStore.paper[uid];
         paper.question = req.sessionStore.paperContent[uid];
         paper.sessionID = req.sessionID;
+        var now = new Date();
+        var date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
+        paper.update_time = date;
 
         paperModel.insert(paper, function (err, doc) {
             if (err) {
@@ -55,6 +58,84 @@ function getNextQuestion(req, res, next) {
     }
 }
 
+function getPaperResult(test_id) {
+    var paper,
+        answer = {},
+        result = {},
+        list,
+        item,
+        fail,
+        sum = 0,
+        time_start = null,
+        time_end = null;
+    paperModel.getItem({
+        test_id: test_id
+    }, function (err, doc) {
+        if (err) {
+            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        paper = doc;
+        list = doc.question;
+        questionModel.getItems({
+            atcid: {
+                $in: list
+            }
+        }, {}, 1, 1000, function (err, doc) {
+            if (err) {
+                response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+            }
+            for (var i = 0, len = doc.length; i < len; i++) {
+                item = doc[i];
+                answer[item.atcid] = item.options;
+            }
+            resultModel.getItems({
+                atcid: {
+                    $in: doc.question
+                }
+            }, {}, 1, 1000, function (err, doc) {
+                if (err) {
+                    response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+                }
+
+                for (var i = 0, len = doc.length; i < len; i++) {
+                    item = doc[i];
+                    result[item.atcid] = item.content;
+                    if (!time_start) {
+                        time_start = time_end = item.update_time;
+                    }
+                    if (item.update_time < time_start) {
+                        time_start = item.update_time;
+                    }
+                    if (item.update_time > time_end) {
+                        time_end = item.update_time;
+                    }
+                }
+
+                for (var i = 0, len = list.length; i < len; i++) {
+                    item = list[i];
+                    fail = false;
+                    for (var j in answer[item]) {
+                        if (answer[item][j].correct !== result[item][j].correct) {
+                            fail = true;
+                            break;
+                        }
+                    }
+                    sum += fail ? 0 : 1;
+                }
+                response.ok(req, res, {
+                    amount: list.length,
+                    correct: sum,
+                    time_start: time_start,
+                    time_end: time_end,
+                    rank: 1000,
+                    amount: 10000
+                });
+            });
+        });
+    });
+
+}
+
 function getNextQuestionCallback(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
     var test_id = req.sessionStore.paper[uid];
@@ -67,13 +148,7 @@ function getNextQuestionCallback(req, res, next) {
         req.sessionStore.paperContent[uid] = null;
         req.sessionStore.questionIndex[uid] = 0;
 
-        response.ok(req, res, {
-            score: 96,
-            correct: 30,
-            time: 50,
-            rank: 1000,
-            amount: 10000
-        });
+        getPaperResult(test_id);
     }
     else {
         questionModel.getItem({

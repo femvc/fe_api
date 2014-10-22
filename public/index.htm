@@ -156,12 +156,6 @@ function startTest(){
         });
     };
 
-    
-
-    form.initSubject();
-    form.show();
-
-
     var result = hui.Control.getByFormName('result');
     result.getByFormName('result_nxt').onclick = function () {
         hui.Control.getByFormName('result').hide();
@@ -186,18 +180,22 @@ function startTest(){
 
 </head>
 
-<body style="">
+<body style="" onload="startTest()">
 <!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
 <div class="page">
     <div class="page_head">
-        <div class="link"><a href="subject_list.htm">subject_list</a>  uid: <span id="uid"></span></div>
+        <div class="link">
+            <a target="_blank" href="/ue_api/internal/get_papers">/ue_api/internal/get_papers</a> 
+            <a target="_blank" href="/ue_api/internal/get_results">/ue_api/internal/get_results</a> 
+            <a href="admin.htm">Dashboard</a>  uid: <span id="uid"></span>
+        </div>
         <div class="logo">UED</div>
     </div>
     <div class="page_body">
         <div class="page_body_padding">&nbsp;</div>
         <h1 class="test_title"><span style="display:none">你想知道自己前端技术实力排名吗？</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%" /></h1>
         <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
-        <div class="test_btn" onclick="startTest()">立即测试</div>
+        <div class="test_btn" onclick="form.show();form.initSubject();">立即测试</div>
     </div>
     <div class="page_foot">&nbsp;&copy; FECampus 2014</div>
 
