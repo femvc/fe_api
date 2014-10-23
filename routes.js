@@ -2,6 +2,7 @@ var account = require('./routes/account');
 var question = require('./routes/question');
 var paper = require('./routes/paper');
 var result = require('./routes/result');
+var rank = require('./routes/rank');
 var cloudlabel = require('./routes/cloudlabel');
 
 /*
@@ -43,9 +44,14 @@ app.get('/ue_api/internal/remove_question', account.auth, question.removeQuestio
 app.all('/ue_api/internal/get_next_question', account.auth, paper.getNextQuestion);
 app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuestion);
 app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
+app.all('/ue_api/internal/get_paper_result', account.auth, paper.getPaperResult);
 
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);
+
+app.all('/ue_api/internal/get_rank', account.auth, rank.getRank);
+app.all('/ue_api/internal/get_ranks', account.auth, rank.getRanks);
+app.all('/ue_api/internal/save_rank', account.auth, rank.saveRank);
 
 app.all('/ue_api/internal/save_cloudlabel', account.auth, cloudlabel.saveCloudlabel);
 app.all('/ue_api/internal/get_cloudlabels', account.auth, cloudlabel.getCloudlabels);

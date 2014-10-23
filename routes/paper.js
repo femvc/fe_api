@@ -2,6 +2,7 @@
 var questionModel = require('../models/question').createNew();
 var paperModel = require('../models/paper').createNew();
 var resultModel = require('../models/result').createNew();
+var rankRoute = require('./rank');
 
 function createQuestionList(req, res, next) {
     var current = 1,
@@ -58,8 +59,12 @@ function getNextQuestion(req, res, next) {
     }
 }
 
-function getPaperResult(test_id) {
-    var paper,
+function getPaperResult(req, res, next) {
+    if (!req.paramlist.test_id) {
+        return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
+    }
+    var test_id = req.paramlist.test_id,
+        paper,
         answer = {},
         result = {},
         list,
@@ -68,14 +73,19 @@ function getPaperResult(test_id) {
         sum = 0,
         time_start = null,
         time_end = null;
+
     paperModel.getItem({
         test_id: test_id
     }, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+        if (!doc || !doc.question) {
+            return response.err(req, res, 'INTERNAL_DB_RECORD_NOT_EXIST');
+        }
         paper = doc;
         list = doc.question;
+
         questionModel.getItems({
             atcid: {
                 $in: list
@@ -88,9 +98,10 @@ function getPaperResult(test_id) {
                 item = doc[i];
                 answer[item.atcid] = item.options;
             }
+
             resultModel.getItems({
                 atcid: {
-                    $in: doc.question
+                    $in: list
                 }
             }, {}, 1, 1000, function (err, doc) {
                 if (err) {
@@ -122,18 +133,26 @@ function getPaperResult(test_id) {
                     }
                     sum += fail ? 0 : 1;
                 }
-                response.ok(req, res, {
-                    amount: list.length,
-                    correct: sum,
-                    time_start: time_start,
-                    time_end: time_end,
-                    rank: 1000,
-                    amount: 10000
-                });
+
+                var uid = req.sessionStore.user[req.sessionID];
+                var score = Math.round(100 * sum / list.length);
+                var rank = {};
+                rank.test_id = test_id;
+                var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+                rank.update_time = update_time;
+                rank.score = score;
+                rank.time_start = time_start;
+                rank.time_end = time_end;
+
+                req.paramlist.rank = rank;
+
+                next = req.paramlist.internal ? next : response.ok;
+                next(req, res, rank);
             });
+
+
         });
     });
-
 }
 
 function getNextQuestionCallback(req, res, next) {
@@ -144,11 +163,20 @@ function getNextQuestionCallback(req, res, next) {
         req.sessionStore.questionIndex[uid] = 1;
     }
     if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
-        req.sessionStore.paper[uid] = null;
-        req.sessionStore.paperContent[uid] = null;
-        req.sessionStore.questionIndex[uid] = 0;
+        req.paramlist.test_id = test_id;
+        req.paramlist.internal = true;
+        getPaperResult(req, res, function (req, res, rank) {
+            rankRoute.saveRank(req, res, function (err, resp) {
+                req.sessionStore.paper[uid] = null;
+                req.sessionStore.paperContent[uid] = null;
+                req.sessionStore.questionIndex[uid] = 0;
 
-        getPaperResult(test_id);
+                req.paramlist.filter = rank;
+
+                rankRoute.getRanks(req, res);
+            });
+        });
+
     }
     else {
         questionModel.getItem({
@@ -181,6 +209,7 @@ function getNextQuestionCallback(req, res, next) {
 
 exports.createQuestionList = createQuestionList;
 exports.getNextQuestion = getNextQuestion;
+exports.getPaperResult = getPaperResult;
 
 exports.saveNextQuestion = function (req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
