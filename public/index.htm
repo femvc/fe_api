@@ -20,12 +20,9 @@ function showTestResult(data) {
     data.rate = Math.round(100-100*data.rank/data.amount);
     var result = hui.Control.getByFormName('result');
     result.setValueByTree(data).show();
-    
-    
 }
 
 window.onload = function(){
-    
     Requester.get('/ue_api/account/get_uid?rand='+Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
@@ -60,12 +57,7 @@ function startTest(){
                             form.addOption(list[i]);
                         }    
                     }
-                    else {
-                        showTestResult(data);
-                    }
-                    
                 }
-                
             }
         });
 
@@ -115,7 +107,6 @@ function startTest(){
         main.index = 0;
     };
     
-
     var submit = form.getByFormName('subject_nxt');
     submit.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
@@ -128,33 +119,46 @@ function startTest(){
             subject_skip.onclick();
         }
     };
-
-    var subject_pre = form.getByFormName('subject_pre');
-    subject_pre.onclick = function () {
-        var data = {};
-        data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
-        Requester.get('/ue_api/internal/save_next_question', {
-            data: data,
-            onsuccess: function (err, result) {
-                // form.getByFormName('subject_nxt').setDisabled(false);
-                form.initSubject();
-            }
-        });
-    };
-
     var subject_skip = form.getByFormName('subject_skip');
     subject_skip.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
         data.test_id = hui.util.getCookie('test_id');
         
+        saveTestResult(data);
+    };
+
+    var subject_pre = form.getByFormName('subject_pre');
+    subject_pre.onclick = function () {
+        var data = {};
+        data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
+        
+        saveTestResult(data);
+    };
+
+    
+    function saveTestResult (data){
         Requester.get('/ue_api/internal/save_next_question', {
             data: data,
-            onsuccess: function (err, result) {
-                form.initSubject();
+            onsuccess: function (result) {
+                // form.getByFormName('subject_nxt').setDisabled(false);
+                if (result && result[1] && result[1][0] && result[1][0].index) {
+                    form.initSubject();
+                }
+                else {
+                    Requester.get('/ue_api/internal/get_rank', {
+                        data: {test_id: hui.util.getCookie('test_id')},
+                        onsuccess: function (result) {
+                            // form.getByFormName('subject_nxt').setDisabled(false);
+                            if (result && result[1]) {
+                                showTestResult(result[1]);
+                            }                          
+                        }
+                    });
+                }
             }
         });
-    };
+    }
 
     var result = hui.Control.getByFormName('result');
     result.getByFormName('result_nxt').onclick = function () {

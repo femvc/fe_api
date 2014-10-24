@@ -7,7 +7,7 @@ exports.getRank = function (req, res, next) {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
     }
 
-    paperModel.getItem({
+    rankModel.getItem({
         test_id: req.paramlist.test_id
     }, function (err, resp) {
         if (err) {
@@ -56,12 +56,12 @@ exports.saveRank = function (req, res, next) {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
     }
     var rank = req.paramlist.rank;
-    if (req.paramlist.rank && !req.paramlist.rank.update_time) {
+    if (req.paramlist.rank && !req.paramlist.rank.time_end) {
         rank = JSON.parse(decodeURIComponent(req.paramlist.rank));
     }
     var uid = req.sessionStore.user[req.sessionID];
-    var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
     rank.uid = uid;
+    var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
     rank.update_time = update_time;
 
     rankModel.insert(rank, function (err, resp) {

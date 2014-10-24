@@ -67,7 +67,7 @@ function getPaperResult(req, res, next) {
         paper,
         answer = {},
         result = {},
-        list,
+        question,
         item,
         fail,
         sum = 0,
@@ -84,11 +84,11 @@ function getPaperResult(req, res, next) {
             return response.err(req, res, 'INTERNAL_DB_RECORD_NOT_EXIST');
         }
         paper = doc;
-        list = doc.question;
+        question = doc.question;
 
         questionModel.getItems({
             atcid: {
-                $in: list
+                $in: question
             }
         }, {}, 1, 1000, function (err, doc) {
             if (err) {
@@ -101,7 +101,7 @@ function getPaperResult(req, res, next) {
 
             resultModel.getItems({
                 atcid: {
-                    $in: list
+                    $in: question
                 }
             }, {}, 1, 1000, function (err, doc) {
                 if (err) {
@@ -122,11 +122,11 @@ function getPaperResult(req, res, next) {
                     }
                 }
 
-                for (var i = 0, len = list.length; i < len; i++) {
-                    item = list[i];
+                for (var i = 0, len = question.length; i < len; i++) {
+                    item = question[i];
                     fail = false;
                     for (var j in answer[item]) {
-                        if (answer[item][j].correct !== result[item][j].correct) {
+                        if (result[item] && result[item][j] && result[item][j].correct !== answer[item][j].correct) {
                             fail = true;
                             break;
                         }
@@ -135,12 +135,12 @@ function getPaperResult(req, res, next) {
                 }
 
                 var uid = req.sessionStore.user[req.sessionID];
-                var score = Math.round(100 * sum / list.length);
+                var score = Math.round(100 * sum / question.length);
                 var rank = {};
                 rank.test_id = test_id;
-                var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
-                rank.update_time = update_time;
                 rank.score = score;
+                rank.correct = sum;
+                rank.question = question.length;
                 rank.time_start = time_start;
                 rank.time_end = time_end;
 
@@ -162,49 +162,32 @@ function getNextQuestionCallback(req, res, next) {
     if (!req.sessionStore.questionIndex[uid]) {
         req.sessionStore.questionIndex[uid] = 1;
     }
-    if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
-        req.paramlist.test_id = test_id;
-        req.paramlist.internal = true;
-        getPaperResult(req, res, function (req, res, rank) {
-            rankRoute.saveRank(req, res, function (err, resp) {
-                req.sessionStore.paper[uid] = null;
-                req.sessionStore.paperContent[uid] = null;
-                req.sessionStore.questionIndex[uid] = 0;
 
-                req.paramlist.filter = rank;
+    questionModel.getItem({
+        atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
+    }, function (err, doc) {
+        if (err) {
+            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        if (!doc) {
+            req.sessionStore.questionIndex[uid] = 1;
+            return response.err(req, res, 'INDEX_OUT_RANGE');
+        }
 
-                rankRoute.getRanks(req, res);
-            });
-        });
-
-    }
-    else {
-        questionModel.getItem({
-            atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
-        }, function (err, doc) {
-            if (err) {
-                return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        if (req.paramlist.answer != 'yes' && doc && doc.options) {
+            var list = doc.options;
+            for (var i in list) {
+                delete list[i].correct;
             }
-            if (!doc) {
-                req.sessionStore.questionIndex[uid] = 1;
-                return response.err(req, res, 'INDEX_OUT_RANGE');
-            }
+        }
 
-            if (req.paramlist.answer != 'yes' && doc && doc.options) {
-                var list = doc.options;
-                for (var i in list) {
-                    delete list[i].correct;
-                }
-            }
-
-            var data = JSON.parse(JSON.stringify(doc));
-            data.index = req.sessionStore.questionIndex[uid];
-            data.sessionID = req.sessionID;
-            data.sum = paperContent.length;
-            data.test_id = test_id;
-            response.ok(req, res, data);
-        });
-    }
+        var data = JSON.parse(JSON.stringify(doc));
+        data.index = req.sessionStore.questionIndex[uid];
+        data.sessionID = req.sessionID;
+        data.sum = paperContent.length;
+        data.test_id = test_id;
+        response.ok(req, res, data);
+    });
 }
 
 exports.createQuestionList = createQuestionList;
@@ -244,7 +227,24 @@ exports.saveNextQuestion = function (req, res, next) {
         doc[0].index = req.sessionStore.questionIndex[uid];
         doc[0].sessionID = req.sessionID;
 
-        response.ok(req, res, JSON.parse(JSON.stringify(doc)));
+        // test finished
+        if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
+            req.paramlist.internal = true;
+            getPaperResult(req, res, function (req, res, rank) {
+                rankRoute.saveRank(req, res, function (err, resp) {
+                    /*req.sessionStore.paper[uid] = null;
+                    req.sessionStore.paperContent[uid] = null;
+                    req.sessionStore.questionIndex[uid] = 0;*/
+
+                    req.paramlist.filter = rank;
+
+                    rankRoute.getRanks(req, res);
+                });
+            });
+        }
+        else {
+            response.ok(req, res, JSON.parse(JSON.stringify(doc)));
+        }
     };
 
     try {
