@@ -13,16 +13,16 @@ exports.getRank = function (req, res, next) {
         if (err) {
             return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-
-        response.ok(req, res, resp);
+        req.paramlist.filter = resp;
+        getRanks(req, res, next);
     });
 };
 
-exports.getRanks = function (req, res, next) {
+function getRanks(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
     var filter = req.paramlist.filter || {
-        update_time: global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+        update_time: global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss'),
         score: 101
     };
     if (req.paramlist.filter && !req.paramlist.filter.update_time) {
@@ -44,6 +44,7 @@ exports.getRanks = function (req, res, next) {
                 index++;
             }
         }
+        filter.index = index;
 
         response.ok(req, res, [filter, resp]);
     });
@@ -61,14 +62,20 @@ exports.saveRank = function (req, res, next) {
     }
     var uid = req.sessionStore.user[req.sessionID];
     rank.uid = uid;
-    var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+    var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
     rank.update_time = update_time;
 
     rankModel.insert(rank, function (err, resp) {
         if (err) {
             return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
+        req.sessionStore.paper[uid] = null;
+        req.sessionStore.paperContent[uid] = null;
+        req.sessionStore.questionIndex[uid] = 0;
+
         next = next || response.ok;
         next(req, res, resp);
     });
 };
+
+exports.getRanks = getRanks;

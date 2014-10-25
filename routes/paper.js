@@ -26,15 +26,16 @@ function createQuestionList(req, res, next) {
         var length = 3;
         var uid = req.sessionStore.user[req.sessionID];
         var now = new Date();
-        req.sessionStore.paper[uid] = uid + '_' + global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        var test_id = uid + '_' + global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        req.sessionStore.paper[uid] = test_id;
         req.sessionStore.paperContent[uid] = global.common.randomOrder(question).splice(0, length);
 
         // Test id & question list
-        paper.test_id = req.sessionStore.paper[uid];
+        paper.test_id = test_id;
         paper.question = req.sessionStore.paperContent[uid];
         paper.sessionID = req.sessionID;
         var now = new Date();
-        var date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
+        var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
         paper.update_time = date;
 
         paperModel.insert(paper, function (err, doc) {
@@ -100,6 +101,7 @@ function getPaperResult(req, res, next) {
             }
 
             resultModel.getItems({
+                test_id: test_id,
                 atcid: {
                     $in: question
                 }
@@ -112,7 +114,8 @@ function getPaperResult(req, res, next) {
                     item = doc[i];
                     result[item.atcid] = item.content;
                     if (!time_start) {
-                        time_start = time_end = item.update_time;
+                        time_start = item.update_time;
+                        time_end = item.update_time;
                     }
                     if (item.update_time < time_start) {
                         time_start = item.update_time;
@@ -232,13 +235,9 @@ exports.saveNextQuestion = function (req, res, next) {
             req.paramlist.internal = true;
             getPaperResult(req, res, function (req, res, rank) {
                 rankRoute.saveRank(req, res, function (err, resp) {
-                    /*req.sessionStore.paper[uid] = null;
-                    req.sessionStore.paperContent[uid] = null;
-                    req.sessionStore.questionIndex[uid] = 0;*/
-
-                    req.paramlist.filter = rank;
-
-                    rankRoute.getRanks(req, res);
+                    response.ok(req, res, {
+                        finish: true
+                    });
                 });
             });
         }
@@ -252,10 +251,11 @@ exports.saveNextQuestion = function (req, res, next) {
     }
     catch (e) {}
 
-    question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+    question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
     question.uid = uid;
     question.atcid = id;
     question.test_id = req.paramlist.test_id;
+    question.title = req.paramlist.title;
     question.index = req.paramlist.index;
 
     if (!req.paramlist.reset_index) {

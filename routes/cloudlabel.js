@@ -29,7 +29,7 @@ exports.saveCloudlabel = function (req, res, next) {
     };
 
     var now = new Date();
-    date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
+    date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
 
     if (opt === 'remove') {
         if (String(value).indexOf('-') === 0) {
@@ -43,7 +43,7 @@ exports.saveCloudlabel = function (req, res, next) {
     }
     else if (String(value).indexOf('-') === 0) {
         cloudlabel.update_time = date;
-        cloudlabel.value = global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        cloudlabel.value = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         cloudlabelModel.insert(cloudlabel, callback);
     }
     else {

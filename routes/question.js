@@ -48,7 +48,7 @@ exports.saveQuestion = function (req, res, next) {
     };
 
     var now = new Date();
-    date = global.common.formatDate(now, 'yyyy-MM-dd hh:mm:ss');
+    date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
     if (atcid) {
         question.update_time = date;
         question.atcid = atcid;
@@ -60,7 +60,7 @@ exports.saveQuestion = function (req, res, next) {
     }
     else {
         question.update_time = date;
-        question.atcid = global.common.formatDate(now, 'yyyyMMddhhmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        question.atcid = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         questionModel.insert(question, callback);
     }
 };

@@ -13,13 +13,24 @@
 'use strict';
 var form;
 
-function showTestResult(data) {
-    hui.Control.getByFormName('form').hide();
-    
-    hui.g('subject_index').innerHTML = '1';
-    data.rate = Math.round(100-100*data.rank/data.amount);
-    var result = hui.Control.getByFormName('result');
-    result.setValueByTree(data).show();
+function showTestResult() {
+    Requester.get('/ue_api/internal/get_rank', {
+        data: {test_id: hui.util.getCookie('test_id')},
+        onsuccess: function (result) {
+            // form.getByFormName('subject_nxt').setDisabled(false);
+            if (result && result[1]) {
+                var data = result[1][0];
+                
+                hui.g('subject_index').innerHTML = '1';
+                data.rate = Math.round(100*data.index/(result[1][1].length+0.001));
+                data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime())/60000);
+                var result = hui.Control.getByFormName('result');
+                hui.g('result_chart').style.width = data.rate*4+'px';
+                result.setValueByTree(data).show();
+            }
+        }
+    });
+
 }
 
 window.onload = function(){
@@ -30,6 +41,7 @@ window.onload = function(){
             }
         }
     });
+    hui.g('tid').innerHTML = hui.util.getCookie('test_id');
 };
 function startTest(){
     // subject_add
@@ -43,8 +55,10 @@ function startTest(){
                     if (data.atcid) {
                         data.atcid = data.atcid;
                         data.index2 = data.index1 = data.index;
+                        data.title1 = data.title;
                         if (data.test_id) {
                             hui.util.setCookie('test_id', data.test_id);
+                            hui.g('tid').innerHTML = data.test_id;
                         }
                         
                         form.setValueByTree(data);
@@ -146,15 +160,8 @@ function startTest(){
                     form.initSubject();
                 }
                 else {
-                    Requester.get('/ue_api/internal/get_rank', {
-                        data: {test_id: hui.util.getCookie('test_id')},
-                        onsuccess: function (result) {
-                            // form.getByFormName('subject_nxt').setDisabled(false);
-                            if (result && result[1]) {
-                                showTestResult(result[1]);
-                            }                          
-                        }
-                    });
+                    hui.Control.getByFormName('form').hide();
+                    showTestResult();
                 }
             }
         });
@@ -188,10 +195,10 @@ function startTest(){
 <!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
 <div class="page">
     <div class="page_head">
-        <div class="link">
+        <div class="link" style="text-align:right;">
             <a target="_blank" href="/ue_api/internal/get_papers">/ue_api/internal/get_papers</a> 
             <a target="_blank" href="/ue_api/internal/get_results">/ue_api/internal/get_results</a> 
-            <a href="admin.htm">Dashboard</a>  uid: <span id="uid"></span>
+            <a href="admin.htm">Dashboard</a>  uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
         </div>
         <div class="logo">UED</div>
     </div>
@@ -207,6 +214,7 @@ function startTest(){
         <div class="subject_box" ui="type:'BoxPanel',formName:'form'" style="display:none">
             <div class="subject_action">
                 <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+                <input type="hidden" ui="type:'TextInput',formName:'title'" />
                 <input type="hidden" ui="type:'TextInput',formName:'index'" />
                 <a href="javascript:" class="subject_end" ui="type:'Button',formName:'subject_end'">结束测试</a>
                 <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
@@ -215,7 +223,7 @@ function startTest(){
             <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
             <div class="form_content">
                 <div class="subject_title">
-                    <span ui="type:'Label',formName:'index2'">1</span>、<span ui="type:'Label',formName:'title'"></span>
+                    <span ui="type:'Label',formName:'index2'">1</span>、<span ui="type:'Label',formName:'title1'"></span>
                 </div>
                 <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
                 </ol>
@@ -227,7 +235,7 @@ function startTest(){
         <div class="result_box" ui="type:'BoxPanel',formName:'result'" style="display:none">
             <div class="box_content">
                 <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
-                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题</div>
+                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question'">40</b> 题） </div>
                 <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
                 <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
