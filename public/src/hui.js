@@ -10257,7 +10257,19 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
     hui.inherits(hui.Table, hui.Control);
 
     hui.util.importCssString(
-
+        '.hui_table{}' +
+        '.hui_table_head{}' +
+        '.hui_table_head .hui_table_row{}' +
+        '.hui_table_head .hui_table_row .hui_table_thsel{}' +
+        '.hui_table_head .hui_table_row .hui_table_thcntr{text-align:left;cursor:pointer;}' +
+        '.hui_table_head .hui_table_row .hui_table_thtext{float:left}' +
+        '.hui_table_head .hui_table_row .hui_table_thsort{height:0;width:0;border:10px solid #9c9c9c;border-color:transparent;border-width:10px 5px;float:right;margin-top:-5px;margin-bottom:-10px;margin-right:0px}' +
+        '.hui_table_head .hui_table_thasc  .hui_table_thsort{border-bottom-color:#9c9c9c;border-top:0px;margin-top:10px;display:inline}' +
+        '.hui_table_head .hui_table_thdesc .hui_table_thsort{border-top-color:#9c9c9c;border-bottom:0px;margin-top:10px;display:inline}' +
+        '.hui_table_body{}' +
+        '.hui_table_body .hui_table_row{}' +
+        '.hui_table_body .hui_table_row .hui_table_tdsel{}' +
+        '.hui_table_body .hui_table_row .hui_table_tdcntr{display:inline-block}'
     );
 
 });

@@ -53,14 +53,14 @@ function showEvaluateReport() {
                     
                     var skill_list = hui.Control.getByFormName('skill_list');
                     var datasource = [
-                        {'skill': 'HTML',      'correct': 22,'score': 22},
-                        {'skill': 'CSS',       'correct': 22,'score': 22},
-                        {'skill': 'JS',        'correct': 22,'score': 22},
-                        {'skill': 'DOM',       'correct': 22,'score': 22},
-                        {'skill': 'HTML5/CSS3','correct': 22,'score': 22},
-                        {'skill': 'jQuery',    'correct': 22,'score': 22},
-                        {'skill': 'PS',        'correct': 22,'score': 22},
-                        {'skill': 'Backend',   'correct': 22,'score': 22}
+                        {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                        {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                        {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
+                        {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                        {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
+                        {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
+                        {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                        {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
                     ];
                     skill_list.datasource = datasource;
                     var score = [];
@@ -91,12 +91,12 @@ function showResultChart(data){
         },
 
         pane: {
-            size: '80%',
+            size: '78%',
             center: ['62%', '50%']
         },
 
         xAxis: {
-            categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'jQuery', 'PS', 'Backend'],
+            categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
             tickmarkPlacement: 'on',
             lineWidth: 0
         },
@@ -122,19 +122,19 @@ function showResultChart(data){
 
         series: [{
             name: '中级水平',
-            data: [70, 70, 60, 65, 40, 60, 60, 20],
+            data: [70, 70, 60, 65, 40, 20, 60, 60],
             pointPlacement: 'off'
         }, {
             name: '高级水平',
-            data: [80, 80, 75, 80, 65, 70, 75, 50],
+            data: [80, 80, 75, 80, 65, 50, 70, 75],
             pointPlacement: 'off'
         }, {
-            name: '架构师',
-            data: [95, 95, 95, 95, 80, 85, 80, 80],
+            name: '架构师　',
+            data: [95, 95, 95, 95, 80, 80, 85, 80],
             pointPlacement: 'off'
         }, {
             name: '目前级别',
-            data: data ? data : [43, 19, 60, 35, 17, 10, 17, 10],
+            data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
             pointPlacement: 'off'
         }]
 
@@ -158,7 +158,7 @@ function startTest() {
         width: 100,
         title: '技能',
         sortable: true,
-        field: 'skill',
+        field: 'index',
         content: function (item) {
             return item['skill'];
         }
