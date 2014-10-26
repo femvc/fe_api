@@ -122,6 +122,9 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .report_box .result_title {margin-top: 20px;
 border-top: 1px dashed #ccc;
 padding-top: 5px;}
+.report_box .hui_table {}
+.report_box .hui_table .hui_table_thtext,
+.report_box .hui_table .hui_table_tdcntr {padding: 5px 0px 5px 5px;}
 
 .page { }
 .page_head {

@@ -50,8 +50,25 @@ function showEvaluateReport() {
                 if (data.question) {
                     hui.Control.getByFormName('candidate').hide();
                     hui.Control.getByFormName('report').setValueByTree(data).show();
-
-                    showResultChart();
+                    
+                    var skill_list = hui.Control.getByFormName('skill_list');
+                    var datasource = [
+                        {'skill': 'HTML',      'correct': 22,'score': 22},
+                        {'skill': 'CSS',       'correct': 22,'score': 22},
+                        {'skill': 'JS',        'correct': 22,'score': 22},
+                        {'skill': 'DOM',       'correct': 22,'score': 22},
+                        {'skill': 'HTML5/CSS3','correct': 22,'score': 22},
+                        {'skill': 'jQuery',    'correct': 22,'score': 22},
+                        {'skill': 'PS',        'correct': 22,'score': 22},
+                        {'skill': 'Backend',   'correct': 22,'score': 22}
+                    ];
+                    skill_list.datasource = datasource;
+                    var score = [];
+                    for (var i=0,len=datasource.length; i<len; i++) {
+                        score.push(datasource[i].score);
+                    }
+                    skill_list.renderBody();
+                    showResultChart(score);
                 }
                 else {
                     console.log('Warning: Test not finish')
@@ -136,6 +153,42 @@ window.onload = function () {
 };
 
 function startTest() {
+    
+    window.listTable = [{
+        width: 100,
+        title: '技能',
+        sortable: true,
+        field: 'skill',
+        content: function (item) {
+            return item['skill'];
+        }
+    }, {
+        width: 40,
+        title: '答对',
+        sortable: true,
+        field: 'correct',
+        content: function (item) {
+            return item['correct'];
+        }
+    }, {
+        width: 40,
+        title: '得分',
+        sortable: true,
+        field: 'score',
+        content: function (item) {
+            return item['score'];
+        }
+    }];
+    window.listData = [{
+        'skill': 'html',
+        'correct': 2,
+        'score': 40
+    }, {
+        'skill': 'css',
+        'correct': 2,
+        'score': 40
+    }];
+
     // subject_add
     hui.Control.init(hui.g('subject_add'));
     form = hui.Control.getByFormName('form');
@@ -400,29 +453,10 @@ function startTest() {
                 <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong">前端架构师特训</b>，您的能力<br/>能够达到 <b class="strong" id="level_nxt">前端架构师</b> 级别，薪资可以提高 <b class="b">6~12</b>万，达到 <b class="b">26~34</b>万/年以上。 </div>
                 <div class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>campus</b></div>
   
-                <div class="result_title"> 详细分析报告：</div>
+                <div class="result_title"> 详细测评报告：</div>
                 <div class="result_detail">
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 200px;"></div>
-                    <table cellpadding="4" cellspacing="0"><tr>
-                        <th align="left" width="100">技能</th><th width="40" align="left">答对</th><th width="40" align="left">得分</th>
-                    </tr><tr>
-                        <td>HTML</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>CSS</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>JS</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>DOM</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>jQuery</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>PS</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>HTML5/CSS3</td><td>8</td><td>8</td>
-                    </tr><tr>
-                        <td>Backend</td><td>8</td><td>8</td>
-                    </tr></table>
-                    
+                    <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
                 </div>    
 
             </div>

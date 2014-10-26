@@ -9581,6 +9581,9 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
             parent.appendChild(rulerDiv);
             width = rulerDiv.offsetWidth;
             parent.removeChild(rulerDiv);
+            if (!width) {
+                width = me.size && me.size.width ? me.size.width : 200;
+            }
 
             return width;
         },
