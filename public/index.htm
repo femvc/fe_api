@@ -48,6 +48,29 @@ function showEvaluateReport() {
             if (result && result[1]) {
                 var data = result[1];
                 if (data.question) {
+                    var grade = [{level:'初级前端工程师', score:0, min:3,  max:10},
+                                {level:'中级前端工程师', score:34, min:10, max:18},
+                                {level:'高级前端工程师', score:55, min:18, max:26},
+                                {level:'前端架构师    ', score:70, min:28, max:36},
+                                {level:'前端专家      ', score:85, min:36, max:99},
+                                {level:'前端专家      ', score:101, min:40, max:99}];
+                    var level = 0;
+                    for (var i=0,len=grade.length; i<len; i++) {
+                        if (data.score > grade[i].score) {
+                            level = i;
+                        }
+                    }
+
+                    data.annual = data.annual || (grade[level].min+grade[level].max)/2;
+                    data.cur  = grade[level].level;
+                    data.nxt  = grade[level+1].level.replace('工程师', '');
+                    data.nxt2 = grade[level+1].level;
+                    
+                    data.increase = grade[level+1].min - data.annual;
+                    data.increase = data.increase < 0 ? 0 : data.increase;
+                    
+                    data.target = grade[level+1].min + '~' + grade[level+1].max;
+                    
                     hui.Control.getByFormName('candidate').hide();
                     hui.Control.getByFormName('report').setValueByTree(data).show();
                     
@@ -443,14 +466,14 @@ function startTest() {
         <div class="report_box" ui="type:'BoxPanel',formName:'report',size:{width:'530px'}" style="display:none">    
             <div class="box_content">
                 <div class="fe_level" style="display:none;">
-                初级前端工程师 0-35        1000 <br/>
-                中级前端工程师 35-55       200 <br/>
-                高级前端工程师 50-70       300 <br/>
-                前端架构师     65-85       10 <br/>
-                资深前端架构师 80-100      1  <br/>  
+                初级前端工程师 0-33    5~10W   1000人 <br/>
+                中级前端工程师 34-55   8~20W   200 <br/>
+                高级前端工程师 50-70  18~26W   300 <br/>
+                前端架构师     65-85  22~36W   10 <br/>
+                前端专家       80-100 34~99W   1  <br/>  
                 </div>                  
-                <div class="result_level">目前级别 <b class="strong" id="level">高级前端工程师</b> <b class="b">&nbsp;</b>目前年薪 <b class="b">20万</b></div>
-                <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong">前端架构师特训</b>，您的能力<br/>能够达到 <b class="strong" id="level_nxt">前端架构师</b> 级别，薪资可以提高 <b class="b">6~12</b>万，达到 <b class="b">26~34</b>万/年以上。 </div>
+                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <b class="b">&nbsp;</b>目前年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></div>
+                <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
                 <div class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>campus</b></div>
   
                 <div class="result_title"> 详细测评报告：</div>
