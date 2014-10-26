@@ -2,7 +2,7 @@
 var rankModel = require('../models/rank').createNew();
 
 exports.getRank = function (req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
+    //var uid = req.sessionStore.user[req.sessionID];
     if (!req.paramlist.test_id) {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
     }
@@ -19,7 +19,7 @@ exports.getRank = function (req, res, next) {
 };
 
 function getRanks(req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
+    //var uid = req.sessionStore.user[req.sessionID];
 
     var filter = req.paramlist.filter || {
         update_time: global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss'),
@@ -45,11 +45,12 @@ function getRanks(req, res, next) {
             }
         }
         filter.index = index;
-
-        response.ok(req, res, [filter, resp]);
+        filter.sum = resp.length;
+        // response.ok(req, res, [filter, resp]); // Data ‘resp’ is HUGE！
+        response.ok(req, res, filter);
     });
 
-};
+}
 
 exports.saveRank = function (req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
@@ -73,9 +74,38 @@ exports.saveRank = function (req, res, next) {
         req.sessionStore.paperContent[uid] = null;
         req.sessionStore.questionIndex[uid] = 0;
 
-        next = next || response.ok;
+        next = req.paramlist.internal ? next : response.ok;
         next(req, res, resp);
     });
 };
+
+exports.updateRank = function (req, res, next) {
+    //var uid = req.sessionStore.user[req.sessionID];
+    if (!req.paramlist.test_id || !req.paramlist.annual || !req.paramlist.career) {
+        return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
+    }
+
+    var update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    rankModel.update({
+        test_id: req.paramlist.test_id
+    }, {
+        $set: {
+            annual: req.paramlist.annual,
+            career: req.paramlist.career,
+            update_time: update_time
+        }
+    }, {
+        upsert: true,
+        multi: false
+    }, function (err, resp) {
+        if (err) {
+            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+
+        next = req.paramlist.internal ? next : response.ok;
+        next(req, res, resp);
+    });
+};
+
 
 exports.getRanks = getRanks;

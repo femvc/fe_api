@@ -70,7 +70,6 @@ function getPaperResult(req, res, next) {
         result = {},
         question,
         item,
-        fail,
         sum = 0,
         time_start = null,
         time_end = null;
@@ -97,7 +96,7 @@ function getPaperResult(req, res, next) {
             }
             for (var i = 0, len = doc.length; i < len; i++) {
                 item = doc[i];
-                answer[item.atcid] = item.options;
+                answer[item.atcid] = item;
             }
 
             resultModel.getItems({
@@ -105,7 +104,9 @@ function getPaperResult(req, res, next) {
                 atcid: {
                     $in: question
                 }
-            }, {}, 1, 1000, function (err, doc) {
+            }, {
+                update_time: 1
+            }, 1, 1000, function (err, doc) {
                 if (err) {
                     response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
                 }
@@ -127,14 +128,17 @@ function getPaperResult(req, res, next) {
 
                 for (var i = 0, len = question.length; i < len; i++) {
                     item = question[i];
-                    fail = false;
-                    for (var j in answer[item]) {
-                        if (result[item] && result[item][j] && result[item][j].correct !== answer[item][j].correct) {
-                            fail = true;
-                            break;
+                    answer[item].correct = true;
+                    answer[item].result = result[item];
+                    for (var j in answer[item].options) {
+                        if (result[item]) {
+                            if (result[item][j] && result[item][j].correct !== answer[item].options[j].correct) {
+                                answer[item].correct = false;
+                                break;
+                            }
                         }
                     }
-                    sum += fail ? 0 : 1;
+                    sum += answer[item].correct ? 1 : 0;
                 }
 
                 var uid = req.sessionStore.user[req.sessionID];
@@ -143,7 +147,8 @@ function getPaperResult(req, res, next) {
                 rank.test_id = test_id;
                 rank.score = score;
                 rank.correct = sum;
-                rank.question = question.length;
+                rank.question = question;
+                rank.detail = answer;
                 rank.time_start = time_start;
                 rank.time_end = time_end;
 

@@ -86,7 +86,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .subject_test .subject_box .tr_row .subject_end{}
 .result_box{background-position:-144px -137px;background-repeat:no-repeat;color: #333;font-size:19px;}
 .result_box b{font-weight:normal;}
-.result_box .box_content{padding:20px 20px 30px;}
+.result_box .box_content{padding:20px 20px 40px;}
 .result_box .result_score{padding-bottom:20px;font-size:28px;color: #333;}
 .result_box .result_score .score{color:#168de2;font-size:31px;font-weight:normal;padding:0px 5px;}
 .result_box .result_correct{padding:10px 0px;}
@@ -99,23 +99,29 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .result_box .result_nxt{background-color: #00aaef;border:0px;color:white;padding: 6px 30px;border-radius: 30px;font-size:18px;cursor: pointer;}
 .candidate_box{font-size:19px;color: #333;}
 .candidate_box .box_content{padding:20px 20px 30px;}
-.candidate_box .row_package{padding-bottom:10px;padding-top:5px;}
+.candidate_box .row_package{padding-bottom:30px;height: 75px;}
 .candidate_box .row_item{}
 .candidate_box .row_item .title{clear:both;padding-bottom:10px;}
-.candidate_box .row_career{padding-bottom:50px;}
+.candidate_box .row_career{padding-bottom:10px;padding-top:5px;height: 75px;}
+.candidate_box .validate_text {padding-top: 7px;}
 .candidate_box .candidate_nxt{background-color: #00aaef;border:0px;color:white;padding: 6px 30px;border-radius: 30px;font-size:18px;cursor: pointer;}
+.candidate_box .candidate_tip {padding:20px 0px 30px;}
+.candidate_box .candidate_tip .strong {color: #168de2;}
 .report_box{font-size:19px;color: #333;}
 .report_box .box_content{padding:20px 20px 30px;line-height:2em;}
 .report_box .result_detail{padding: 10px 0px 15px;font-size: 14px;line-height: 20px;}
 .report_box .result_detail table{border-collapse:collapse;}
 .report_box .result_detail th{border-bottom:1px solid #eee;color: #999;}
 .report_box .result_detail td{border-bottom:1px solid #eee;}
-.report_box .effect .b{color: #00aaef;}
 .report_box .tel{color: #333;}
 .report_box .tel .spam{}
 .report_box .result_level{}
-.report_box .result_level .level{color: #00aaef;padding-left:10px;}
+.report_box .b{padding-left:10px;padding-right: 5px;}
+.report_box .strong{color: #00aaef;padding-left:10px;padding-right: 5px;}
 .report_box .effect{padding-top:10px;}
+.report_box .result_title {margin-top: 20px;
+border-top: 1px dashed #ccc;
+padding-top: 5px;}
 
 .page { }
 .page_head {

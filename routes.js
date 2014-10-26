@@ -52,6 +52,7 @@ app.all('/ue_api/internal/get_results', account.auth, result.getResults);
 app.all('/ue_api/internal/get_rank', account.auth, rank.getRank);
 app.all('/ue_api/internal/get_ranks', account.auth, rank.getRanks);
 app.all('/ue_api/internal/save_rank', account.auth, rank.saveRank);
+app.all('/ue_api/internal/update_rank', account.auth, rank.updateRank);
 
 app.all('/ue_api/internal/save_cloudlabel', account.auth, cloudlabel.saveCloudlabel);
 app.all('/ue_api/internal/get_cloudlabels', account.auth, cloudlabel.getCloudlabels);

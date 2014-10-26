@@ -3036,18 +3036,6 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
             }
         },
 
-        'not_empty': {
-            'validate': function (text) {
-                if (text === null || text === undefined || text === '') {
-                    return 1;
-                }
-
-                return 0;
-            },
-            'noticeText': {
-                1: '不能为空'
-            }
-        },
         'backend_error': {
             validate: function (text, control) {
                 return ['ERROR_BACKEND', control.errorMessage];
@@ -3076,6 +3064,22 @@ hui.define('hui_validator', ['hui@0.0.1'], function () {
     hui.Validator.getRule = function (ruleName) {
         return hui.Validator.ruleMap[ruleName];
     };
+
+    hui.Validator.setRule('not_empty', {
+        'validate': function (text) {
+            if (text === null || text === undefined || text === '') {
+                return 1;
+            }
+            return 0;
+        },
+        'noticeText': {
+            1: '不能为空'
+        }
+    }, 'force');
+
+    hui.util.importCssString(
+        '.validate_text {color: red;}'
+    );
 
 });
 
@@ -8598,6 +8602,9 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
         this.data_value = this.data_value || 'value';
         this.data_text = this.data_text || 'text';
 
+        this.autoHideError = this.autoHideError === undefined ? false : this.autoHideError;
+        this.autoValidate = this.autoValidate === undefined ? false : this.autoValidate;
+
         //进入控件处理主流程!
         if (pending != 'pending') {
             this.enterControl();
@@ -8821,6 +8828,12 @@ hui.define('hui_dropdown', ['hui@0.0.1'], function () {
                     if (value !== me.value) {
                         c = me.getMain().value;
                         me.getMain().value = value;
+                        if (me.autoHideError) {
+                            me.hideError();
+                        }
+                        if (me.autoValidate) {
+                            me.validate();
+                        }
                         me.onchange(value, c);
                     }
                     break;

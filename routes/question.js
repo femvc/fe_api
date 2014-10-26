@@ -56,7 +56,7 @@ exports.saveQuestion = function (req, res, next) {
             atcid: atcid
         }, {
             $set: question
-        }, true, false, callback);
+        }, {upsert: true, multi: false}, callback);
     }
     else {
         question.update_time = date;

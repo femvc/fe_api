@@ -53,7 +53,7 @@ exports.saveCloudlabel = function (req, res, next) {
             value: value
         }, {
             $set: cloudlabel
-        }, true, false, callback);
+        }, {upsert: true, multi: false}, callback);
     }
 
 };

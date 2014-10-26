@@ -166,7 +166,7 @@ module.exports = {
 		});
 		};*/
 		//http://docs.mongodb.org/manual/reference/method/db.collection.update/#update-parameter
-		model.update = function (query, update, upsert, multi, next) {
+		model.update = function (query, update, opt, next) {
 			flow.exec(function () {
 				mongo.collection(collection_name, this);
 			},
@@ -175,7 +175,7 @@ module.exports = {
 					console.log(err);
 					return next(err, null);
 				}
-				collection.update(query, update, {upsert: upsert, multi: multi}, this);
+				collection.update(query, update, opt, this);
 			},
 			function (err, resp) {
 				if (err) {
@@ -187,7 +187,7 @@ module.exports = {
 		};
 		model.updateById = function (_id, update, next) {
 			var objId = (typeof _id == 'string') ? ObjectID(_id) : _id;
-			this.update({ _id: objId }, update, false, false, next);
+			this.update({ _id: objId }, update, {upsert: false, multi: false}, next);
 		};
 
 
