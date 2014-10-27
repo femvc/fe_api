@@ -48,12 +48,12 @@ function showEvaluateReport() {
             if (result && result[1]) {
                 var data = result[1];
                 if (data.question) {
-                    var grade = [{level:'初级前端工程师', score:0, min:3,  max:10},
-                                {level:'中级前端工程师', score:34, min:10, max:18},
-                                {level:'高级前端工程师', score:55, min:18, max:26},
-                                {level:'前端架构师    ', score:70, min:28, max:36},
-                                {level:'前端专家      ', score:85, min:36, max:99},
-                                {level:'前端专家      ', score:101, min:40, max:99}];
+                    var grade = [{level:'初级前端工程师', score:0, annual:6,  min:4, max:8},
+                                {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
+                                {level:'高级前端工程师', score:55, annual:18, min:7, max:14},
+                                {level:'前端架构师    ', score:70, annual:26, min:8, max:16},
+                                {level:'前端专家      ', score:85, annual:35, min:0, max:10},
+                                {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
                     var level = 0;
                     for (var i=0,len=grade.length; i<len; i++) {
                         if (data.score > grade[i].score) {
@@ -61,15 +61,14 @@ function showEvaluateReport() {
                         }
                     }
 
-                    data.annual = data.annual || (grade[level].min+grade[level].max)/2;
                     data.cur  = grade[level].level;
                     data.nxt  = grade[level+1].level.replace('工程师', '');
                     data.nxt2 = grade[level+1].level;
                     
-                    data.increase = grade[level+1].min - data.annual;
-                    data.increase = data.increase < 0 ? 0 : data.increase;
+                    data.annual = grade[level].annual;
+                    data.increase = grade[level].min + '~' + grade[level].max;
                     
-                    data.target = grade[level+1].min + '~' + grade[level+1].max;
+                    data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
                     
                     hui.Control.getByFormName('candidate').hide();
                     hui.Control.getByFormName('report').setValueByTree(data).show();
@@ -341,9 +340,11 @@ function startTest() {
 
     var candidate = hui.Control.getByFormName('candidate');
     candidate.getByFormName('candidate_nxt').onclick = function () {
-        if (candidate.validate()) {
-            var data = candidate.getParamMap();
+        var data = candidate.getParamMap();
+        if (data.annual.join('') && data.career.join('')) {
             data.test_id = hui.util.getCookie('test_id');
+            data.annual = data.annual.join('');
+            data.career = data.career.join('');
             Requester.get('/ue_api/internal/update_rank', {
                 data: data,
                 onsuccess: function (result) {
@@ -353,6 +354,14 @@ function startTest() {
                     }
                 }
             });
+        }
+        else {
+            if (!data.annual.join('')) {
+                hui.g('annual_msg').innerHTML = '不能为空';
+            }
+            if (!data.career.join('')) {
+                hui.g('career_msg').innerHTML = '不能为空';
+            }
         }
     };
     // hui.Control.getByFormName('report').show();
@@ -394,7 +403,7 @@ function startTest() {
             <a target="_blank" href="/ue_api/internal/get_results">/ue_api/internal/get_results</a> 
             <a href="admin.htm">Dashboard</a>  uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
         </div>
-        <div class="logo">UED</div>
+        <div class="logo" onclick="showEvaluateReport()">UED</div>
     </div>
     <div class="page_body">
         <div class="page_body_padding">&nbsp;</div>
@@ -440,22 +449,83 @@ function startTest() {
         <div class="candidate_box" ui="type:'BoxPanel',formName:'candidate',size:{width:'440px',height: '400px'}" style="display:none">
             <div class="box_content">
                 <div class="row_item row_career">
-                    <div class="title">请选择您的工作年限：</div>
-                    <div ui="type:'Dropdown',formName:'career',placeholder:'--请选择--',rule:'not_empty',autoHideError:true,options:[
-                        {value:'1',text:'1年'},{value:'2',text:'2年'},{value:'3',text:'3年'},{value:'4',text:'4年'},
-                        {value:'5',text:'5年'},{value:'6',text:'6年'},{value:'7',text:'7年'},{value:'8',text:'8年'},
-                        {value:'9',text:'9年'},{value:'10+',text:'10+'}],size:{width:230}"></div>
+                    <div class="title">请选择您的工作年限：<span class="validate_text" id="career_msg"></span></div>
+                    <label ui="type:'RadioInput',formName:'career',value:'1'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">1年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'2'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">2年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'3'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">3年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'4'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">4年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'5'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">5年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'6'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">6年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'7'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">7年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'8'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">8年</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'career',value:'9'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">9+年</span>
+                    </label>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
-                    <div class="title">请选择您目前年薪档位：</div>
-                    <div ui="type:'Dropdown',formName:'annual',placeholder:'--请选择--',rule:'not_empty',autoHideError:true,options:[
-                        {value:'5',text:'  &nbsp;5万'},{value:'10',text:' 10万'},{value:'15',text:' 15万'},
-                        {value:'20',text:' 20万'},{value:'25',text:' 25万'},{value:'30',text:' 30万'},
-                        {value:'35',text:' 35万'},{value:'40',text:' 40万'},{value:'45',text:' 45万'},
-                        {value:'50',text:' 50万'},{value:'55',text:' 55万'},{value:'60',text:' 60万'},
-                        {value:'75',text:' 75万'},{value:'80',text:' 80万'},{value:'85',text:' 85万'},
-                        {value:'90',text:' 90万'},{value:'100+',text:'100+'}],size:{width:230}"></div>
+                    <div class="title">请选择您目前年薪档位：<span class="validate_text" id="annual_msg"></span></div>
+                    <label ui="type:'RadioInput',formName:'annual',value:'5'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">5万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'10'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">10万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'15'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">15万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'20'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">20万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'25'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">25万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'30'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">30万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'40'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">40万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'50'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">50万</span>
+                    </label>
+                    <label ui="type:'RadioInput',formName:'annual',value:'60'">
+                        <input type="radio" class="hui_radioinput_input" />
+                        <span class="hui_radioinput_label">60+万</span>
+                    </label>
                 </div>
                 <hr class="clearfix" />
                 <div class="candidate_tip">点击“下一步”查看您的 <b class="strong">薪资收入</b> 提升空间!</div>
@@ -472,7 +542,7 @@ function startTest() {
                 前端架构师     65-85  22~36W   10 <br/>
                 前端专家       80-100 34~99W   1  <br/>  
                 </div>                  
-                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <b class="b">&nbsp;</b>目前年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></div>
+                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <b class="b">&nbsp;</b>薪酬平均值 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></div>
                 <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
                 <div class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>campus</b></div>
   
