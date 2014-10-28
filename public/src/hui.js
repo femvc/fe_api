@@ -8412,8 +8412,8 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
         '.hui_radioinput{float:left;padding-right:23px;cursor:pointer;width:100px;}' +
         '.hui_radioinput .hui_radioinput_input{display:none;}' +
         '.hui_radioinput .hui_radioinput_icon{float:left;display:inline-block;width:30px;height:20px;padding-top:0px;}' +
-        '.hui_radioinput .hui_radioinput_point{font-size:15px;color:transparent;width:13px;height:20px;line-height:21px;*line-height:20px;position:absolute;z-index:2;text-align:center;vertical-align:middle;margin-left:0px;font-family:microsoft;margin-top:0px;margin-left:4px;}' +
-        '.hui_radioinput .hui_radioinput_dot{font-size:16px;color:#ccc;width:20px;height:20px;line-height:20px;position:absolute;z-index:1;text-align:center;vertical-align:middle;margin-top:0px;font-family:microsoft yahei;}' +
+        '.hui_radioinput .hui_radioinput_point{font-size:15px;color:transparent;width:14px;height:20px;line-height:18px;*line-height:20px;line-height:20px\\9;position:absolute;z-index:2;text-align:center;vertical-align:middle;margin-left:0px;font-family:\'microsoft yahei\';margin-top:0px;margin-left:4px;}' +
+        '.hui_radioinput .hui_radioinput_dot{font-size:16px;color:#ccc;width:20px;height:20px;line-height:20px;position:absolute;z-index:1;text-align:center;vertical-align:middle;margin-top:0px;font-family:\'microsoft yahei\';}' +
         '.hui_radioinput .hui_radioinput_icon li{float:left;padding:1px;margin:1px;height:33px;}' +
         '.hui_radioinput .hui_radioinput_text{float:left;}' +
         '.hui_radioinput_checked .hui_radioinput_icon{}' +

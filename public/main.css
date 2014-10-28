@@ -3,7 +3,7 @@ html,body {height: 100%;padding: 0;margin:0;}
 .clearfix:after{display:table;content:" ";clear:both;}
 hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;border:0px;padding:0px;margin:-1px 0px 0px 0px;list-style:none;border-style:none;background:none;visibility:hidden;}
 
-.page{font-family:microsoft yahei;font-size:14px;/* padding-left:15px; *//* padding-top:5px; */ background-image: url(img/page_bg.jpg); background-size: 100% 100%;height: 100%;}
+.page{font-family:'microsoft yahei';font-size:14px;/* padding-left:15px; *//* padding-top:5px; */ background-image: url(img/page_bg.jpg); background-size: 100% 100%;height: 100%;}
 .page a{color:green;text-decoration:none}
 .page a:hover{color:#ff6500;text-decoration:underline}
 .page .form_title{font-size:16px}
@@ -67,7 +67,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .subject_test .subject_box .tr_row .td_index{display:none}
 .subject_test .subject_box .tr_row .hui_label{color:#363636;font-size:19px;line-height:1.2em;padding-left:15px;vertical-align:top;padding-top:9px;display:inline-block;*display:block}
 .subject_test .hui_checkbox{margin-top:11px}
-.subject_test .hui_btn{font-family:microsoft yahei;}
+.subject_test .hui_btn{font-family:'microsoft yahei';}
 .subject_test .subject_box .tr_row .subject_nxt{}
 .subject_test .hui_btn_label{}
 .subject_test .subject_box .tr_row .subject_pre{}
@@ -126,7 +126,7 @@ padding-top: 5px;}
 .page_head .logo {
     font-size: 30px;
  
-    font-family: microsoft yahei;
+    font-family: 'microsoft yahei';
     font-weight: normal;
     padding-top: 14px;
     padding-left: 25px;
