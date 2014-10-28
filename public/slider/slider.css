@@ -1,0 +1,63 @@
+.hui_slide { }
+.hui_slide .hui_slide_min {
+    position: absolute;
+ 
+    z-index: 1;
+    right: 100%;
+    padding-right: 5px;
+}
+.hui_slide .hui_slide_max {
+    position: absolute;
+ 
+    z-index: 1;
+    left: 100%;
+    padding-left: 5px;
+}
+.hui_slide .hui_slide_layer {
+    position: relative;
+ 
+    z-index: 1;
+    width: 300px;
+}
+.hui_slide .hui_slide_scrollbar {
+ 
+    border: 1px solid green;
+    position: relative;
+    z-index: 1;
+}
+.hui_slide .hui_slide_inner {
+    width: 100%;
+ 
+    background-color: #ececec;
+}
+.hui_slide .hui_slide_handle {
+ 
+    height: 30px;
+    width: 30px;
+    background-color: #cecece;
+    position: absolute;
+    z-index: 1;
+    left: 190px;
+    top: -5px;
+}
+.hui_slide .hui_slide_percent {}
+.hui_slide .hui_slide_ticks {
+ 
+    height: 40px;
+}
+.hui_slide .hui_slide_ticks .hui_slide_unit {
+    position: absolute;
+ 
+    z-index: 1;
+}
+.hui_slide .hui_slide_ticks .hui_slide_line {
+    display: block;
+ 
+    color: transparent;
+    border-left: 1px solid #999;
+}
+.hui_slide .hui_slide_ticks .hui_slide_num {
+    display: block;
+ 
+    margin-left: -3px;
+}
