@@ -39,64 +39,20 @@
 <div id="log"></div>
 
 <script>
-window.onload1 = function() {
-    var oWin = document.getElementById('win');
-    var bDrag = false;
-    var disX = disY = 0;
-    oWin.onmousedown = function(event) {
-        var event = event || window.event;
-        bDrag = true;
-        disX = event.clientX - oWin.offsetLeft;
-        this.setCapture && this.setCapture();
-        return false
-    };
-    oWin.onmousemove = function(event) {
-        if (!bDrag) return;
-        var event = event || window.event;
-        var iL = event.clientX - disX;
-        var maxL = document.getElementById('hkbg').clientWidth;
-        iL = iL < 0 ? 0 : iL;
-        iL = iL > maxL ? maxL : iL;
-        oWin.style.marginTop = oWin.style.marginLeft = 0;
-        oWin.style.left = iL + 'px'; //滑块距离左边的位置
-        document.getElementById('hkline').style.width = iL; //滑块左边绿色条目的宽度
-        return false
-    };
-    document.onmouseup = window.onblur = oWin.onlosecapture = function() {
-        bDrag = false;
-        oWin.releaseCapture && oWin.releaseCapture();
-    };
-};
-
 window.onload = function(){
      Draggable('win', {
         preventDefault: true,
-        start: function(){
-            var me = this;
-            me.startTime = new Date();
-        },
         move: function(){
             if (this.moving) {return;}
             this.moving = true;
-            //alert('move');
-            //this.elem.style.left = this.oldPoint.left+'px';
-            //this.elem.style.top = this.oldPoint.left +'px';
-            document.getElementById('log').innerHTML = this.oldPoint.left;
+            var dx = this.nowPoint.x-this.startPoint.x;
+            var left = this.oldPoint.left + dx;
+            left = left < 0 ? 0 : (left > 282 ? 282 : left);
+            document.getElementById('log').innerHTML = parseInt(left*100/282, 10);
+            this.elem.style.left = left + 'px';
+            document.getElementById('hkline').style.width = left + 'px';
             
             this.moving = false;
-        },
-        end:function(){
-            //alert('end');
-            var dx = this.nowPoint.x-this.startPoint.x;
-            var dy = this.nowPoint.y-this.startPoint.y;
-            if (dx > 30){
-                //alert('right');
-                //me.renderApplist('pre');
-            }
-            if (dx < -30){
-                //alert('left');
-                //me.renderApplist('next');
-            }
         },
         revert: false
     });
