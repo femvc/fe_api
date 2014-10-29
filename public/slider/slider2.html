@@ -1,6 +1,6 @@
 ﻿<script src="../src/hui.js"></script>
 <script>
-    'use strict';
+'use strict';
 //   __  __   __  __    _____   ______   ______   __  __   _____     
 //  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
 //  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
@@ -18,16 +18,17 @@
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
  */
-hui.define('hui_slide', ['hui@0.0.1', 'hui_draggable'], function () {
+hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
 
-    hui.Slide = function (options, pending) {
-        hui.Slide.superClass.call(this, options, 'pending');
+    hui.Slider = function (options, pending) {
+        hui.Slider.superClass.call(this, options, 'pending');
 
         // 类型声明，用于生成控件子dom的id和class
-        this.type = 'slide';
+        this.type = 'slider';
         this.minValue = this.minValue === undefined ? 0   : Number(this.minValue);
         this.maxValue = this.maxValue === undefined ? 100 : Number(this.maxValue);
         this.tickStep = this.tickStep === undefined ? 1   : Number(this.tickStep);
+        this.width    = this.width    === undefined ? 300 : Number(this.width);
 
         //进入控件处理主流程!
         if (pending != 'pending') {
@@ -35,59 +36,50 @@ hui.define('hui_slide', ['hui@0.0.1', 'hui_draggable'], function () {
         }
     };
 
-    hui.Slide.prototype = {
+    hui.Slider.prototype = {
         getMainTpl: function(){
             var tpl = 
-                '<div class="hui_slide_layer">' +
-                '    <div class="hui_slide_min">0</div>' +
-                '    <div class="hui_slide_max">20</div>' +
-                '    <div class="hui_slide_scrollbar">' +
-                '        <div class="hui_slide_inner">&nbsp;</div>' +
+                '<div class="hui_slider_layer">' +
+                '    <div class="hui_slider_min" style="display:none;">0</div>' +
+                '    <div class="hui_slider_max" style="display:none;">20</div>' +
+                '    <div class="hui_slider_scrollbar">' +
+                '        <div class="hui_slider_inner">&nbsp;</div>' +
                 '    </div>' +
-                '    <div class="hui_slide_ticks"></div>' +
-                '    <div class="hui_slide_percent"></div>' +
-                '    <div class="hui_slide_handle"></div>' +
+                '    <div class="hui_slider_ticks"></div>' +
+                '    <div class="hui_slider_percent"></div>' +
+                '    <div class="hui_slider_handle"></div>' +
                 '</div>' +
                 '<div style="clear:both; overflow:hidden; font-size:0px;line-height:0px;height:1px;">&nbsp;</div>';
                 return tpl;
         },
         getTickTpl: function(){
             var tpl = 
-                '<div class="hui_slide_unit" style="left:#{1};">' +
-                '    <span class="hui_slide_line">|</span>' +
-                '    <span class="hui_slide_num">#{0}</span>' +
+                '<div class="hui_slider_unit" style="left:#{1}px;">' +
+                '    <span class="hui_slider_line">|</span>' +
+                '    <span class="hui_slider_num">#{0}</span>' +
                 '</div>';
             return tpl;
+        },
+        getTickWidth: function(){
+
         },
         /**
          * @name 渲染控件
          * @public
          */
         render: function () {
-            hui.Slide.superClass.prototype.render.call(this);
+            hui.Slider.superClass.prototype.render.call(this);
             var me = this,
-                main = me.getMain(),
-                tickTpl,
-                tickList,
-                width;
-
+                main = me.getMain();
 
             me.setInnerHTML(me, me.getMainTpl());
-            if (me.ticks) {
-                tickTpl = me.getTickTpl();
-                tickList = [];
-                for (var i=me.minValue; i<=me.maxValue; i+=me.tickStep) {
-                    tickList.push(i);
-                }
+            
+            hui.cc('hui_slider_layer', main).style.width = me.width+'px';
+            
+            me.showTicks();
+            me.showLabels();
 
-                width = hui.cc('hui_slide_layer', main).offsetWidth;
-
-
-
-                for (var i=0,len=list.length; i<len; i++) {
-                    
-                }
-            }
+            
 
             // 设置disabled
             me.setDisabled(!!me.disabled);
@@ -96,44 +88,74 @@ hui.define('hui_slide', ['hui@0.0.1', 'hui_draggable'], function () {
             var me = this,
                 main = me.getMain();
             
-            hui.Draggable(hui.cc('hui_slide_handle', main), {
+            hui.Draggable(hui.cc('hui_slider_handle', main), {
                 preventDefault: true,
                 move: function(){
                     if (this.moving) {return;}
                     this.moving = true;
                     var dx = this.nowPoint.x-this.startPoint.x;
                     var left = this.oldPoint.left + dx;
-                    left = left < 0 ? 0 : (left > 282 ? 282 : left);
-                    document.getElementById('log').innerHTML = parseInt(left*100/282, 10);
+                    left = left < 0 ? 0 : (left > me.width ? me.width : left);
+                    me.value = parseInt(left*100/me.width, 10);
+                    document.getElementById('log').innerHTML = me.minValue + (me.maxValue - me.minValue) * me.value / 100;
                     this.elem.style.left = left + 'px';
-                    hui.cc('hui_slide_inner', main).style.width = left + 'px';
+                    hui.cc('hui_slider_inner', main).style.width = left + 'px';
                     
                     this.moving = false;
                 },
                 revert: false
             });
         },
+        showTicks: function(){
+            if (this.ticks) {
+                var me = this,
+                    main = me.getMain(),
+                    tickTpl = me.getTickTpl();
+                
+                var minValue = me.minValue,
+                    maxValue = me.maxValue,
+                    tickStep = me.tickStep,
+                    width = hui.cc('hui_slider_layer', main).offsetWidth - 1,
+                    tickHTML = '';
+
+                for (var i = minValue - minValue%tickStep; i <= maxValue; i += tickStep) {
+                    tickHTML += hui.format(tickTpl, i, (i - minValue) * width/(me.maxValue-me.minValue));
+                }
+
+                me.setInnerHTML(hui.cc('hui_slider_ticks', main), tickHTML);
+            }
+        },
+        showLabels: function(){
+            var me = this,
+                main = me.getMain();
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'left') {
+                hui.cc('hui_slider_min', main).style.display = 'block';
+            }
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'right') {
+                hui.cc('hui_slider_max', main).style.display = 'block';
+            }
+        },
         // onmove事件
         onmove: new Function()
         
     };
 
-    // hui.Slide 继承了 hui.Control 
-    hui.inherits(hui.Slide, hui.Control);
+    // hui.Slider 继承了 hui.Control 
+    hui.inherits(hui.Slider, hui.Control);
 
     hui.util.importCssString(
-        '.hui_slide {padding-left: 20px;}' +
-        '.hui_slide .hui_slide_min{position:absolute;z-index:1;right:100%;padding-right:6px;margin-top:-6px;}' +
-        '.hui_slide .hui_slide_max{position:absolute;z-index:1;left:100%;padding-left:6px;margin-top:-6px;}' +
-        '.hui_slide .hui_slide_layer{position:relative;z-index:1;width:300px;}' +
-        '.hui_slide .hui_slide_scrollbar{border:1px solid #bbb;background-color:#d9d7cb;border-radius:3px;position:relative;z-index:1;}' +
-        '.hui_slide .hui_slide_inner{width:100%;height:5px;background-color:#fe6502;border-radius:3px;}' +
-        '.hui_slide .hui_slide_handle{height:16px;width:16px;position:absolute;z-index:1;left:190px;top:-5px;cursor:pointer;border:1px solid #99968f;background-color:#efefe7;border-radius:5px;}' +
-        '.hui_slide .hui_slide_percent{}' +
-        '.hui_slide .hui_slide_ticks{height:40px;}' +
-        '.hui_slide .hui_slide_ticks .hui_slide_unit{position:absolute;z-index:1;}' +
-        '.hui_slide .hui_slide_ticks .hui_slide_line{display:block;color:transparent;border-left:1px solid #999;height:9px;}' +
-        '.hui_slide .hui_slide_ticks .hui_slide_num{display:block;margin-left:-3px;}'
+        '.hui_slider {padding-left: 20px;}' +
+        '.hui_slider .hui_slider_min{position:absolute;z-index:1;right:100%;padding-right:10px;margin-top:-6px;}' +
+        '.hui_slider .hui_slider_max{position:absolute;z-index:1;left:100%;padding-left:10px;margin-top:-6px;}' +
+        '.hui_slider .hui_slider_layer{position:relative;z-index:1;}' +
+        '.hui_slider .hui_slider_scrollbar{border:1px solid #bbb;background-color:#f3f3f9;border-radius:3px;position:relative;z-index:1;}' +
+        '.hui_slider .hui_slider_inner{width:0px;height:5px;background-color:#fe6502;border-radius:3px;}' +
+        '.hui_slider .hui_slider_handle{height:16px;width:16px;position:absolute;z-index:1;left:0px;top:-5px;margin-left:-9px;cursor:pointer;border:1px solid #99968f;background-color:#fff;border-radius:5px;}' +
+        '.hui_slider .hui_slider_percent{}' +
+        '.hui_slider .hui_slider_ticks{height:40px;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_unit{position:absolute;z-index:1;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_line{display:block;color:transparent;border-left:1px solid #999;height:9px;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_num{display:block;margin-left:-3px;}'
     );
 
 });
@@ -143,16 +165,15 @@ hui.define('hui_slide', ['hui@0.0.1', 'hui_draggable'], function () {
 
 
 
-<div id="slide">
-    <div ui="type:'Slide',id:'sss'"></div>
+<div id="slider">
+    <div ui="type:'Slider',id:'sss',ticks:true,tickStep:10,minValue:20,maxValue:60,width:500,labels:false,smallChange:1,rangeSelection:false"></div>
 </div>
 <div id="log"></div>
 
 <script>
+'use strict';
 window.onload = function(){
-     
-
-     hui.Control.init(hui.g('slide'));
+     hui.Control.init(hui.g('slider'));
 };
 
 
