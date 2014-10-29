@@ -60,8 +60,34 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
                 '</div>';
             return tpl;
         },
-        getTickWidth: function(){
+        showTicks: function(){
+            if (this.ticks) {
+                var me = this,
+                    main = me.getMain(),
+                    tickTpl = me.getTickTpl();
+                
+                var minValue = me.minValue,
+                    maxValue = me.maxValue,
+                    tickStep = me.tickStep,
+                    width = hui.cc('hui_slider_layer', main).offsetWidth - 1,
+                    tickHTML = '';
 
+                for (var i = minValue - minValue % tickStep + (minValue % tickStep === 0 ? 0 : tickStep); i <= maxValue; i += tickStep) {
+                    tickHTML += hui.format(tickTpl, i, (i - minValue) * width/(me.maxValue-me.minValue));
+                }
+
+                me.setInnerHTML(hui.cc('hui_slider_ticks', main), tickHTML);
+            }
+        },
+        showLabels: function(){
+            var me = this,
+                main = me.getMain();
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'left') {
+                hui.cc('hui_slider_min', main).style.display = 'block';
+            }
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'right') {
+                hui.cc('hui_slider_max', main).style.display = 'block';
+            }
         },
         /**
          * @name 渲染控件
@@ -79,16 +105,13 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
             me.showTicks();
             me.showLabels();
 
-            
-
             // 设置disabled
             me.setDisabled(!!me.disabled);
         },
         initBehavior: function(){
             var me = this,
                 main = me.getMain();
-            
-            hui.Draggable(hui.cc('hui_slider_handle', main), {
+            me.handler = hui.Draggable(hui.cc('hui_slider_handle', main), {
                 preventDefault: true,
                 move: function(){
                     if (this.moving) {return;}
@@ -96,47 +119,39 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
                     var dx = this.nowPoint.x-this.startPoint.x;
                     var left = this.oldPoint.left + dx;
                     left = left < 0 ? 0 : (left > me.width ? me.width : left);
-                    me.value = parseInt(left*100/me.width, 10);
-                    document.getElementById('log').innerHTML = me.minValue + (me.maxValue - me.minValue) * me.value / 100;
-                    this.elem.style.left = left + 'px';
-                    hui.cc('hui_slider_inner', main).style.width = left + 'px';
                     
+                    me.setValue(me.minValue + (me.maxValue - me.minValue) * left/me.width);
+                    
+                    me.onmove();
                     this.moving = false;
                 },
                 revert: false
             });
-        },
-        showTicks: function(){
-            if (this.ticks) {
-                var me = this,
-                    main = me.getMain(),
-                    tickTpl = me.getTickTpl();
-                
-                var minValue = me.minValue,
-                    maxValue = me.maxValue,
-                    tickStep = me.tickStep,
-                    width = hui.cc('hui_slider_layer', main).offsetWidth - 1,
-                    tickHTML = '';
 
-                for (var i = minValue - minValue%tickStep; i <= maxValue; i += tickStep) {
-                    tickHTML += hui.format(tickTpl, i, (i - minValue) * width/(me.maxValue-me.minValue));
-                }
-
-                me.setInnerHTML(hui.cc('hui_slider_ticks', main), tickHTML);
+            if (me.value) {
+                me.setValue(me.value);
             }
-        },
-        showLabels: function(){
-            var me = this,
-                main = me.getMain();
-            if (me.labels === undefined || me.labels === 'both' || me.labels === 'left') {
-                hui.cc('hui_slider_min', main).style.display = 'block';
-            }
-            if (me.labels === undefined || me.labels === 'both' || me.labels === 'right') {
-                hui.cc('hui_slider_max', main).style.display = 'block';
+            else {
+                me.setValue(me.minValue);
             }
         },
         // onmove事件
-        onmove: new Function()
+        onmove: new Function(),
+        getPercent: function () {
+            return this.getMain().percent;
+        },
+        getValue: function () {
+            var me = this;
+            return me.minValue + (me.maxValue - me.minValue) * me.getPercent();
+        },
+        setValue: function (value) {
+            var me = this,
+                main = me.getMain();
+            value = value < me.minValue ? me.minValue : value > me.maxValue ? me.maxValue : Number(value);
+            main.percent = (value - me.minValue)/(me.maxValue - me.minValue);
+            me.handler.elem.style.left = (me.width * main.percent) + 'px';
+            hui.cc('hui_slider_inner', main).style.width = (me.width * main.percent) + 'px';
+        }
         
     };
 
@@ -154,7 +169,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
         '.hui_slider .hui_slider_percent{}' +
         '.hui_slider .hui_slider_ticks{height:40px;}' +
         '.hui_slider .hui_slider_ticks .hui_slider_unit{position:absolute;z-index:1;}' +
-        '.hui_slider .hui_slider_ticks .hui_slider_line{display:block;color:transparent;border-left:1px solid #999;height:9px;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_line{display:block;color:transparent;border-left:1px solid #999;height:8px;}' +
         '.hui_slider .hui_slider_ticks .hui_slider_num{display:block;margin-left:-3px;}'
     );
 
@@ -166,7 +181,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
 
 
 <div id="slider">
-    <div ui="type:'Slider',id:'sss',ticks:true,tickStep:10,minValue:20,maxValue:60,width:500,labels:false,smallChange:1,rangeSelection:false"></div>
+    <div ui="type:'Slider',id:'a',ticks:true,tickStep:4,minValue:25,maxValue:65,width:500,labels:false,smallChange:1,rangeSelection:false"></div>
 </div>
 <div id="log"></div>
 
@@ -174,6 +189,10 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
 'use strict';
 window.onload = function(){
      hui.Control.init(hui.g('slider'));
+     hui.Control.getById('a').onmove = function () {
+         var me = this;
+         document.getElementById('log').innerHTML = parseInt(me.getValue(), 10);
+     };
 };
 
 
