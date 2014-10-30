@@ -341,7 +341,7 @@ function startTest() {
     var candidate = hui.Control.getByFormName('candidate');
     candidate.getByFormName('candidate_nxt').onclick = function () {
         var data = candidate.getParamMap();
-        if (data.annual.join('') && data.career.join('')) {
+        if (data.annual !== '0' && data.career !== '0') {
             data.test_id = hui.util.getCookie('test_id');
             data.annual = data.annual.join('');
             data.career = data.career.join('');
@@ -356,13 +356,20 @@ function startTest() {
             });
         }
         else {
-            if (!data.annual.join('')) {
+            if (data.annual === '0') {
                 hui.g('annual_msg').innerHTML = '不能为空';
             }
-            if (!data.career.join('')) {
+            if (data.career === '0') {
                 hui.g('career_msg').innerHTML = '不能为空';
             }
         }
+    };
+
+    candidate.getByFormName('career').onmove = function () {
+        hui.g('career_msg').innerHTML = '';
+    };
+    candidate.getByFormName('annual').onmove = function () {
+        hui.g('annual_msg').innerHTML = '';
     };
     // hui.Control.getByFormName('report').show();
 
@@ -451,12 +458,12 @@ function startTest() {
             <div class="box_content">
                 <div class="row_item row_career">
                     <div class="title">请选择您的工作年限：<span class="validate_text" id="career_msg"></span></div>
-                    <div ui="type:'Slider',formName:'career',ticks:true,tickStep:1,minValue:0,maxValue:10,width:200"></div>
+                    <div ui="type:'Slider',formName:'career',input:'left',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
                     <div class="title">请选择您目前年薪档位：<span class="validate_text" id="annual_msg"></span></div>
-                    <div ui="type:'Slider',formName:'annual',ticks:true,tickStep:5,minValue:0,maxValue:60,width:200"></div>
+                    <div ui="type:'Slider',formName:'annual',input:'left',labels:true,ticks:true,tickStep:5,minValue:0,maxValue:80,width:320"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="candidate_tip">点击“下一步”查看您的 <b class="strong">薪资收入</b> 提升空间!</div>

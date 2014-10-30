@@ -10541,8 +10541,11 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
         getMainTpl: function () {
             var tpl =
                 '<div class="hui_slider_layer">' +
-                '    <div class="hui_slider_min" style="display:none;">0</div>' +
-                '    <div class="hui_slider_max" style="display:none;">20</div>' +
+                '    <div class="hui_slider_left">' +
+                '        <input type="text" class="hui_slider_input" onblur="hui.Control.getById(\'#{0}\').setValue(this.value)" />' +
+                '        <span class="hui_slider_min" style="display:none;">0</span>' +
+                '    </div>' +
+                '    <div class="hui_slider_right"><span class="hui_slider_max" style="display:none;">20</span></div>' +
                 '    <div class="hui_slider_scrollbar">' +
                 '        <div class="hui_slider_inner">&nbsp;</div>' +
                 '    </div>' +
@@ -10605,7 +10608,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
             var me = this,
                 main = me.getMain();
 
-            me.setInnerHTML(me, me.getMainTpl());
+            me.setInnerHTML(me, hui.format(me.getMainTpl(), me.getId()));
 
             hui.cc('hui_slider_layer', main).style.width = me.width + 'px';
 
@@ -10630,6 +10633,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
                     left = left < 0 ? 0 : (left > me.width ? me.width : left);
 
                     main.percent = left / me.width;
+                    me.setInputValue(me.minValue + (me.maxValue - me.minValue) * main.percent);
                     me.updateStatus();
 
                     me.onmove();
@@ -10644,6 +10648,8 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
             else {
                 me.setValue(me.minValue);
             }
+
+
         },
         // onmove事件
         onmove: new Function(),
@@ -10651,14 +10657,25 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
             return this.getMain().percent;
         },
         getValue: function () {
+            // var me = this,
+            //     dv = (me.maxValue - me.minValue) * me.getPercent(),
+            //     value = me.minValue + (dv - dv % me.smallChange);
+            // return value;
             var me = this,
-                dv = (me.maxValue - me.minValue) * me.getPercent(),
-                value = me.minValue + (dv - dv % me.smallChange);
+                main = me.getMain(),
+                value = hui.cc('hui_slider_input', main).value;
             return value;
+
+        },
+        setInputValue: function (value) {
+            var me = this,
+                main = me.getMain();
+            hui.cc('hui_slider_input', main).value = value - value % me.smallChange;
         },
         setValue: function (value) {
             var me = this,
                 main = me.getMain();
+            me.setInputValue(value);
             value = value < me.minValue ? me.minValue : value > me.maxValue ? me.maxValue : Number(value);
             main.percent = (value - me.minValue) / (me.maxValue - me.minValue);
 
@@ -10677,16 +10694,17 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
     hui.inherits(hui.Slider, hui.Control);
 
     hui.util.importCssString(
-        '.hui_slider {padding-left: 20px;}' +
-        '.hui_slider .hui_slider_min{position:absolute;z-index:1;right:100%;padding-right:10px;margin-top:-6px;}' +
-        '.hui_slider .hui_slider_max{position:absolute;z-index:1;left:100%;padding-left:10px;margin-top:-6px;}' +
+        '.hui_slider {padding-left: 42px;font-size:14px;}' +
+        '.hui_slider .hui_slider_input{width: 22px;padding: 2px 2px 0px;font-size: 16px;text-align: right;}' +
+        '.hui_slider .hui_slider_left{position:absolute;z-index:1;right:100%;padding-right:10px;margin-top:-6px;text-align:right;white-space:nowrap;}' +
+        '.hui_slider .hui_slider_right{position:absolute;z-index:1;left:100%;padding-left:10px;margin-top:-6px;text-align:left;white-space:nowrap;}' +
         '.hui_slider .hui_slider_layer{position:relative;z-index:1;}' +
         '.hui_slider .hui_slider_scrollbar{border:1px solid #bbb;background-color:#f3f3f9;border-radius:3px;position:relative;z-index:1;}' +
         '.hui_slider .hui_slider_inner{width:0px;height:5px;background-color:#fe6502;border-radius:3px;}' +
         '.hui_slider .hui_slider_handle{height:16px;width:16px;position:absolute;z-index:1;left:0px;top:-5px;margin-left:-9px;cursor:pointer;border:1px solid #99968f;background-color:#fff;border-radius:5px;}' +
         '.hui_slider .hui_slider_percent{}' +
         '.hui_slider .hui_slider_ticks{height:40px;}' +
-        '.hui_slider .hui_slider_ticks .hui_slider_unit{position:absolute;z-index:1;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_unit{position:absolute;z-index:1;font-size:13px;}' +
         '.hui_slider .hui_slider_ticks .hui_slider_line{display:block;color:transparent;border-left:1px solid #999;height:8px;}' +
         '.hui_slider .hui_slider_ticks .hui_slider_num{display:block;margin-left:-3px;}'
     );
