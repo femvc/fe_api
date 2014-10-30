@@ -451,82 +451,12 @@ function startTest() {
             <div class="box_content">
                 <div class="row_item row_career">
                     <div class="title">请选择您的工作年限：<span class="validate_text" id="career_msg"></span></div>
-                    <label ui="type:'RadioInput',formName:'career',value:'1'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">1年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'2'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">2年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'3'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">3年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'4'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">4年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'5'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">5年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'6'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">6年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'7'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">7年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'8'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">8年</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'career',value:'9'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">9+年</span>
-                    </label>
+                    <div ui="type:'Slider',formName:'career',ticks:true,tickStep:1,minValue:0,maxValue:10,width:200"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
                     <div class="title">请选择您目前年薪档位：<span class="validate_text" id="annual_msg"></span></div>
-                    <label ui="type:'RadioInput',formName:'annual',value:'5'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">5万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'10'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">10万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'15'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">15万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'20'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">20万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'25'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">25万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'30'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">30万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'40'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">40万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'50'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">50万</span>
-                    </label>
-                    <label ui="type:'RadioInput',formName:'annual',value:'60'">
-                        <input type="radio" class="hui_radioinput_input" />
-                        <span class="hui_radioinput_label">60+万</span>
-                    </label>
+                    <div ui="type:'Slider',formName:'annual',ticks:true,tickStep:5,minValue:0,maxValue:60,width:200"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="candidate_tip">点击“下一步”查看您的 <b class="strong">薪资收入</b> 提升空间!</div>

@@ -10498,4 +10498,200 @@ hui.define('hui_draggable', ['hui@0.0.1'], function () {
     })();
 });
 
+'use strict';
+//   __  __   __  __    _____   ______   ______   __  __   _____     
+//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
+//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
+//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
+//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
+//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
+//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//                                                                   
+//                                                                   
+
+/**
+ * @name 滑块控件
+ * @public
+ * @author wanghaiyang
+ * @date 2014/05/05
+ * @param {Object} options 控件初始化参数.
+ * @example 
+ <div ui="type:'Slider',id:'a',labels:'both',ticks:true,tickStep:4,minValue:25,maxValue:65,width:300,smallChange:1,rangeSelection:false"></div>
+ */
+hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
+
+    hui.Slider = function (options, pending) {
+        hui.Slider.superClass.call(this, options, 'pending');
+
+        // 类型声明，用于生成控件子dom的id和class
+        this.type = 'slider';
+        this.minValue = this.minValue === undefined ? 0 : Number(this.minValue);
+        this.maxValue = this.maxValue === undefined ? 100 : Number(this.maxValue);
+        this.tickStep = this.tickStep === undefined ? 1 : Number(this.tickStep);
+        this.width = this.width === undefined ? 300 : Number(this.width);
+        this.smallChange = this.smallChange === undefined ? 1 : Number(this.smallChange);
+
+        //进入控件处理主流程!
+        if (pending != 'pending') {
+            this.enterControl();
+        }
+    };
+
+    hui.Slider.prototype = {
+        getMainTpl: function () {
+            var tpl =
+                '<div class="hui_slider_layer">' +
+                '    <div class="hui_slider_min" style="display:none;">0</div>' +
+                '    <div class="hui_slider_max" style="display:none;">20</div>' +
+                '    <div class="hui_slider_scrollbar">' +
+                '        <div class="hui_slider_inner">&nbsp;</div>' +
+                '    </div>' +
+                '    <div class="hui_slider_ticks"></div>' +
+                '    <div class="hui_slider_percent"></div>' +
+                '    <div class="hui_slider_handle"></div>' +
+                '</div>' +
+                '<div style="clear:both; overflow:hidden; font-size:0px;line-height:0px;height:1px;">&nbsp;</div>';
+            return tpl;
+        },
+        getTickTpl: function () {
+            var tpl =
+                '<div class="hui_slider_unit" style="left:#{1}px;">' +
+                '    <span class="hui_slider_line">|</span>' +
+                '    <span class="hui_slider_num">#{0}</span>' +
+                '</div>';
+            return tpl;
+        },
+        showTicks: function () {
+            if (this.ticks) {
+                var me = this,
+                    main = me.getMain(),
+                    tickTpl = me.getTickTpl();
+
+                var minValue = me.minValue,
+                    maxValue = me.maxValue,
+                    tickStep = me.tickStep,
+                    width = hui.cc('hui_slider_layer', main).offsetWidth - 1,
+                    tickHTML = '';
+
+                for (var i = minValue - minValue % tickStep + (minValue % tickStep === 0 ? 0 : tickStep); i <= maxValue; i += tickStep) {
+                    tickHTML += hui.format(tickTpl, i, (i - minValue) * width / (me.maxValue - me.minValue));
+                }
+
+                me.setInnerHTML(hui.cc('hui_slider_ticks', main), tickHTML);
+            }
+        },
+        showLabels: function () {
+            var me = this,
+                main = me.getMain(),
+                min,
+                max;
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'left') {
+                min = hui.cc('hui_slider_min', main);
+                me.setInnerHTML(min, me.minValue);
+                min.style.display = 'block';
+            }
+            if (me.labels === undefined || me.labels === 'both' || me.labels === 'right') {
+                max = hui.cc('hui_slider_max', main);
+                me.setInnerHTML(max, me.maxValue);
+                max.style.display = 'block';
+            }
+        },
+        /**
+         * @name 渲染控件
+         * @public
+         */
+        render: function () {
+            hui.Slider.superClass.prototype.render.call(this);
+            var me = this,
+                main = me.getMain();
+
+            me.setInnerHTML(me, me.getMainTpl());
+
+            hui.cc('hui_slider_layer', main).style.width = me.width + 'px';
+
+            me.showTicks();
+            me.showLabels();
+
+            // 设置disabled
+            me.setDisabled(!!me.disabled);
+        },
+        initBehavior: function () {
+            var me = this,
+                main = me.getMain();
+            me.handler = hui.Draggable(hui.cc('hui_slider_handle', main), {
+                preventDefault: true,
+                move: function () {
+                    if (this.moving) {
+                        return;
+                    }
+                    this.moving = true;
+                    var dx = this.nowPoint.x - this.startPoint.x;
+                    var left = this.oldPoint.left + dx;
+                    left = left < 0 ? 0 : (left > me.width ? me.width : left);
+
+                    main.percent = left / me.width;
+                    me.updateStatus();
+
+                    me.onmove();
+                    this.moving = false;
+                },
+                revert: false
+            });
+
+            if (me.value) {
+                me.setValue(me.value);
+            }
+            else {
+                me.setValue(me.minValue);
+            }
+        },
+        // onmove事件
+        onmove: new Function(),
+        getPercent: function () {
+            return this.getMain().percent;
+        },
+        getValue: function () {
+            var me = this,
+                dv = (me.maxValue - me.minValue) * me.getPercent(),
+                value = me.minValue + (dv - dv % me.smallChange);
+            return value;
+        },
+        setValue: function (value) {
+            var me = this,
+                main = me.getMain();
+            value = value < me.minValue ? me.minValue : value > me.maxValue ? me.maxValue : Number(value);
+            main.percent = (value - me.minValue) / (me.maxValue - me.minValue);
+
+            me.updateStatus();
+        },
+        updateStatus: function () {
+            var me = this,
+                main = me.getMain();
+            me.handler.elem.style.left = (me.width * main.percent) + 'px';
+            hui.cc('hui_slider_inner', main).style.width = (me.width * main.percent) + 'px';
+        }
+
+    };
+
+    // hui.Slider 继承了 hui.Control 
+    hui.inherits(hui.Slider, hui.Control);
+
+    hui.util.importCssString(
+        '.hui_slider {padding-left: 20px;}' +
+        '.hui_slider .hui_slider_min{position:absolute;z-index:1;right:100%;padding-right:10px;margin-top:-6px;}' +
+        '.hui_slider .hui_slider_max{position:absolute;z-index:1;left:100%;padding-left:10px;margin-top:-6px;}' +
+        '.hui_slider .hui_slider_layer{position:relative;z-index:1;}' +
+        '.hui_slider .hui_slider_scrollbar{border:1px solid #bbb;background-color:#f3f3f9;border-radius:3px;position:relative;z-index:1;}' +
+        '.hui_slider .hui_slider_inner{width:0px;height:5px;background-color:#fe6502;border-radius:3px;}' +
+        '.hui_slider .hui_slider_handle{height:16px;width:16px;position:absolute;z-index:1;left:0px;top:-5px;margin-left:-9px;cursor:pointer;border:1px solid #99968f;background-color:#fff;border-radius:5px;}' +
+        '.hui_slider .hui_slider_percent{}' +
+        '.hui_slider .hui_slider_ticks{height:40px;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_unit{position:absolute;z-index:1;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_line{display:block;color:transparent;border-left:1px solid #999;height:8px;}' +
+        '.hui_slider .hui_slider_ticks .hui_slider_num{display:block;margin-left:-3px;}'
+    );
+
+});
+
+
 hui.util.importCssString('html {}');
