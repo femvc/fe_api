@@ -10,8 +10,8 @@ global.dbopt = require('./models/dbopt');
 global.response = require('./helpers/response');
 global.common = require('./helpers/common');
 
-exports.run = function(callback) {
-    mongo.onReady(function() {
+exports.run = function (callback) {
+    mongo.onReady(function () {
         callback();
     });
 };
