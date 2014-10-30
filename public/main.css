@@ -93,8 +93,11 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .candidate_box .row_career{padding-bottom:10px;padding-top:5px;height: 75px;}
 .candidate_box .validate_text {padding-top: 7px;}
 .candidate_box .candidate_nxt{background-color: #00aaef;border:0px;color:white;padding: 6px 30px;border-radius: 30px;font-size:18px;cursor: pointer;}
-.candidate_box .candidate_tip {padding:20px 0px 30px;}
+.candidate_box .candidate_tip {padding:0px 0px 35px;}
 .candidate_box .candidate_tip .strong {color: #168de2;}
+.candidate_box .hui_slider .hui_slider_rightside {left: inherit;right: 100%;margin-right: 10px;}
+.candidate_box .hui_slider .hui_slider_rightinput {text-align: right;}
+.candidate_box .hui_btn_disabled {background-color: #ccc;}
 .report_box{font-size:19px;color: #333;}
 .report_box .box_content{padding:20px 20px 30px;line-height:2em;}
 .report_box .result_detail{padding: 10px 0px 15px;font-size: 14px;line-height: 20px;}

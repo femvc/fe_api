@@ -10671,7 +10671,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
                 hui.cc('hui_slider_leftinput', main).style.display = 'none';
             }
 
-            if (me.value) {
+            if (me.value !== undefined) {
                 me.setValue(me.value);
             }
             else {

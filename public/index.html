@@ -50,8 +50,8 @@ function showEvaluateReport() {
                 if (data.question) {
                     var grade = [{level:'初级前端工程师', score:0, annual:6,  min:4, max:8},
                                 {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
-                                {level:'高级前端工程师', score:55, annual:18, min:7, max:14},
-                                {level:'前端架构师    ', score:70, annual:26, min:8, max:16},
+                                {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
+                                {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
                                 {level:'前端专家      ', score:85, annual:35, min:0, max:10},
                                 {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
                     var level = 0;
@@ -355,19 +355,33 @@ function startTest() {
         }
         else {
             if (data.annual === '0') {
-                hui.g('annual_msg').innerHTML = '不能为空';
+                hui.g('annual_msg').innerHTML = '请选择！';
             }
             if (data.career === '0') {
-                hui.g('career_msg').innerHTML = '不能为空';
+                hui.g('career_msg').innerHTML = '请选择！';
             }
         }
     };
 
     candidate.getByFormName('career').onmove = function () {
         hui.g('career_msg').innerHTML = '';
+        // if (candidate.getByFormName('career').getValue() !== '0' &&
+        //     candidate.getByFormName('annual').getValue() !== '0') {
+        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // }
+        // else {
+        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        // }
     };
     candidate.getByFormName('annual').onmove = function () {
         hui.g('annual_msg').innerHTML = '';
+        // if (candidate.getByFormName('career').getValue() !== '0' &&
+        //     candidate.getByFormName('annual').getValue() !== '0') {
+        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // }
+        // else {
+        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        // }
     };
     // hui.Control.getByFormName('report').show();
 
@@ -448,24 +462,24 @@ function startTest() {
                 <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
                 <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
-                <div class="result_tip">点击“下一步”继续进行评估</div>
+                <div class="result_tip">点击“下一步”继续进行评估。</div>
                 <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
             </div>
         </div>
         <div class="candidate_box" ui="type:'BoxPanel',formName:'candidate',size:{width:'440px',height: '400px'}" style="display:none">
             <div class="box_content">
                 <div class="row_item row_career">
-                    <div class="title">请选择您的工作年限：<span class="validate_text" id="career_msg"></span></div>
-                    <div ui="type:'Slider',formName:'career',input:'left',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,smallChange:0.1,width:320"></div>
+                    <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
+                    <div ui="type:'Slider',formName:'career',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320,smallChange:0.1,value:0"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
-                    <div class="title">请选择您目前年薪档位：<span class="validate_text" id="annual_msg"></span></div>
-                    <div ui="type:'Slider',formName:'annual',input:'left',labels:true,ticks:true,tickStep:5,minValue:0,maxValue:80,width:320"></div>
+                    <div class="title">目前年薪档位（万）：<span class="validate_text" id="annual_msg"></span></div>
+                    <div ui="type:'Slider',formName:'annual',labels:false,ticks:true,tickStep:5,minValue:0,maxValue:40,width:320,smallChange:1,value:0"></div>
                 </div>
                 <hr class="clearfix" />
-                <div class="candidate_tip">点击“下一步”查看您的 <b class="strong">薪资收入</b> 提升空间!</div>
-                <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt'" tabindex="100">下一步</button>
+                <div class="candidate_tip">点击“下一步”会根据您目前的 <b>工作经验</b>、<b>年薪档位</b> 及 <b>测试结果</b> 准确计算出您的 <b class="strong">薪资收入</b> 提升空间!</div>
+                <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt',disabled:false" tabindex="100">下一步</button>
             </div>
             
         </div>
@@ -478,7 +492,7 @@ function startTest() {
                 前端架构师     65-85  22~36W   10 <br/>
                 前端专家       80-100 34~99W   1  <br/>  
                 </div>                  
-                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <b class="b">&nbsp;</b>薪酬平均值 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></div>
+                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></div>
                 <div class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
                 <div class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>campus</b></div>
   
