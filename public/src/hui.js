@@ -10570,7 +10570,7 @@ hui.define('hui_slider', ['hui@0.0.1', 'hui_draggable'], function () {
                 var minValue = me.minValue,
                     maxValue = me.maxValue,
                     tickStep = me.tickStep,
-                    width = hui.cc('hui_slider_layer', main).offsetWidth - 1,
+                    width = me.width - 1,
                     tickHTML = '';
 
                 for (var i = minValue - minValue % tickStep + (minValue % tickStep === 0 ? 0 : tickStep); i <= maxValue; i += tickStep) {
