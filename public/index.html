@@ -343,8 +343,6 @@ function startTest() {
         var data = candidate.getParamMap();
         if (data.annual !== '0' && data.career !== '0') {
             data.test_id = hui.util.getCookie('test_id');
-            data.annual = data.annual.join('');
-            data.career = data.career.join('');
             Requester.get('/ue_api/internal/update_rank', {
                 data: data,
                 onsuccess: function (result) {
@@ -458,7 +456,7 @@ function startTest() {
             <div class="box_content">
                 <div class="row_item row_career">
                     <div class="title">请选择您的工作年限：<span class="validate_text" id="career_msg"></span></div>
-                    <div ui="type:'Slider',formName:'career',input:'left',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320"></div>
+                    <div ui="type:'Slider',formName:'career',input:'left',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,smallChange:0.1,width:320"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
