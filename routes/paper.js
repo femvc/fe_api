@@ -116,7 +116,7 @@ function getPaperResult(req, res, next) {
                     result[item.atcid] = item.content;
                     if (!time_start) {
                         time_start = item.update_time;
-                        time_end = item.update_time;
+                        time_end = global.common.formatDate(global.common.parseDate(global.common.parseDate(item.update_time).getTime() + 1000), 'yyyy-MM-dd HH:mm:ss');
                     }
                     if (item.update_time < time_start) {
                         time_start = item.update_time;

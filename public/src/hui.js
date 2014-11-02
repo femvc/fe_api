@@ -1,3 +1,4 @@
+/* jshint strict: false */
 //   __  __   __  __    _____   ______   ______   __  __   _____     
 //  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
 //  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
@@ -953,7 +954,7 @@ hui.define('hui_util', ['hui'], function () {
 
         //20110608 1010 
         results = str.match(/^ *(\d{4})(\d{2})(\d{2}) +(\d{2})(\d{2}) *$/);
-        if (results && results.length > 6)
+        if (results && results.length > 5)
             return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]));
 
         //2011-06-08 
@@ -963,10 +964,10 @@ hui.define('hui_util', ['hui'], function () {
 
         //2011-06-08 10:10 
         results = str.match(/^ *(\d{4})[\._\-\/\\](\d{1,2})[\._\-\/\\](\d{1,2}) +(\d{1,2}):(\d{1,2}) *$/);
-        if (results && results.length > 6)
+        if (results && results.length > 5)
             return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]));
 
-        //2011-06-08 10:10:10 
+        //2011/06\\08 10:10:10 
         results = str.match(/^ *(\d{4})[\._\-\/\\](\d{1,2})[\._\-\/\\](\d{1,2}) +(\d{1,2}):(\d{1,2}):(\d{1,2}) *$/);
         if (results && results.length > 6)
             return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]), parseInt(results[6]));

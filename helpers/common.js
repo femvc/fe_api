@@ -1,11 +1,10 @@
+'use strict';
 /**
  * Created with JetBrains WebStorm.
  * To change this template use File | Settings | File Templates.
  * Desc: 该模块包含了一系列的函数，每个函数实现一个特定的工具功能。
  */
-
-'use strict';
-var flow = require("flow");
+var flow = require('flow');
 var request = require('request');
 var Util = {
     /**
@@ -19,7 +18,7 @@ var Util = {
     packer: function (items, page, count, next) {
         page = Number(page);
         count = Number(count);
-        if (count == 0) {
+        if (count === 0) {
             var result = {
                 num_items: items.length
             };
@@ -53,7 +52,8 @@ var Util = {
                 obj[key] = Util.switchObjValueToString(obj[key]);
             }
             return obj;
-        } else {
+        }
+        else {
             return String(obj);
         }
     },
@@ -88,7 +88,7 @@ var Util = {
             else if (a[key] > b[key]) {
                 return 1 * sortBy;
             }
-        };
+        }
         array.sort(compara);
         return array;
     },
@@ -119,7 +119,7 @@ var Util = {
                     }
                 }
                 return (order == 'desc' ? n - m : m - n);
-            })
+            });
         }
         return list;
     },
@@ -149,7 +149,7 @@ var Util = {
         }
         return str.replace(/([^\u0000-\u00FF])/g, function ($0) {
             var tmp = escape($0);
-            return tmp.replace(/(%u)(\w{4})/gi, "\\u$2");
+            return tmp.replace(/(%u)(\w{4})/gi, '\\u$2');
         });
     },
     /**
@@ -184,7 +184,7 @@ var Util = {
         );
     },
     regEscape: function (raw) {
-        return raw.replace(/([\/()[\]?{}|*+-.$^])/g, "\\$1")
+        return raw.replace(/([\/()[\]?{}|*+-.$^])/g, '\\$1');
     },
     md5withSalt: function (rawPwd, salt) {
         //return rawPwd + '{'+ salt+'}';
@@ -192,7 +192,7 @@ var Util = {
         return rawPwd;
     },
     likeWith: function (cond) {
-        return new RegExp("^.*" + Util.regEscape(cond) + ".*$");
+        return new RegExp('^.*' + Util.regEscape(cond) + '.*$');
     },
     formatDate: function (date, fmt) {
         if (!date) date = new Date();
@@ -229,6 +229,47 @@ var Util = {
         }
         return fmt;
     },
+    parseDate: function (str) {
+        str = String(str).replace(/^[\s\xa0]+|[\s\xa0]+$/ig, '');
+        var results = null;
+
+        //秒数 #9744242680 
+        results = str.match(/^ *(\d{10}) *$/);
+        if (results && results.length > 0)
+            return new Date(parseInt(str) * 1000);
+
+        //毫秒数 #9744242682765 
+        results = str.match(/^ *(\d{13}) *$/);
+        if (results && results.length > 0)
+            return new Date(parseInt(str));
+
+        //20110608 
+        results = str.match(/^ *(\d{4})(\d{2})(\d{2}) *$/);
+        if (results && results.length > 3)
+            return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]));
+
+        //20110608 1010 
+        results = str.match(/^ *(\d{4})(\d{2})(\d{2}) +(\d{2})(\d{2}) *$/);
+        if (results && results.length > 5)
+            return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]));
+
+        //2011-06-08 
+        results = str.match(/^ *(\d{4})[\._\-\/\\](\d{1,2})[\._\-\/\\](\d{1,2}) *$/);
+        if (results && results.length > 3)
+            return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]));
+
+        //2011-06-08 10:10 
+        results = str.match(/^ *(\d{4})[\._\-\/\\](\d{1,2})[\._\-\/\\](\d{1,2}) +(\d{1,2}):(\d{1,2}) *$/);
+        if (results && results.length > 5)
+            return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]));
+
+        //2011/06\\08 10:10:10 
+        results = str.match(/^ *(\d{4})[\._\-\/\\](\d{1,2})[\._\-\/\\](\d{1,2}) +(\d{1,2}):(\d{1,2}):(\d{1,2}) *$/);
+        if (results && results.length > 6)
+            return new Date(parseInt(results[1]), parseInt(results[2]) - 1, parseInt(results[3]), parseInt(results[4]), parseInt(results[5]), parseInt(results[6]));
+
+        return (new Date(str));
+    },
     randomOrder: function (countNum, min, max, seed) {
         //todo
         min = min === undefined ? 0 : Number(min);
@@ -249,7 +290,7 @@ var Util = {
             list = countNum;
         }
         list.sort(function (m, n) {
-            return Math.random() > 0.5
+            return Math.random() > 0.5;
         });
 
         var count = list;
@@ -304,9 +345,7 @@ var Util = {
 
         return list;
     }
-}
-
-
+};
 
 exports.packer = Util.packer;
 exports.switchObjValueToString = Util.switchObjValueToString;
@@ -320,4 +359,5 @@ exports.regEscape = Util.regEscape;
 exports.md5withSalt = Util.md5withSalt;
 exports.likeWith = Util.likeWith;
 exports.formatDate = Util.formatDate;
+exports.parseDate = Util.parseDate;
 exports.randomOrder = Util.randomOrder;
