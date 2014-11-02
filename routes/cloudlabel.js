@@ -43,7 +43,7 @@ exports.saveCloudlabel = function (req, res, next) {
     }
     else if (String(value).indexOf('-') === 0) {
         cloudlabel.update_time = date;
-        cloudlabel.value = global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        cloudlabel.value = label; // global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         cloudlabelModel.insert(cloudlabel, callback);
     }
     else {
@@ -53,7 +53,10 @@ exports.saveCloudlabel = function (req, res, next) {
             value: value
         }, {
             $set: cloudlabel
-        }, {upsert: true, multi: false}, callback);
+        }, {
+            upsert: true,
+            multi: false
+        }, callback);
     }
 
 };

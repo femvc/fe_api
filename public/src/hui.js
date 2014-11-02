@@ -9693,7 +9693,6 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
         selectMulti: function (index) {
             var me = this,
                 inputs = me.getBody().getElementsByTagName('input'),
-                i = 0,
                 currentIndex = 0,
                 allChecked = me,
                 len = inputs.length,
@@ -9704,7 +9703,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 input, inputId, row,
                 updateAll = !index;
 
-            for (; i < len; i++) {
+            for (var i = 0; i < len; i++) {
                 input = inputs[i];
                 inputId = input.id;
                 if (input.getAttribute('type') == 'checkbox' && inputId && inputId.indexOf(cbIdPrefix) >= 0) {
@@ -9732,8 +9731,8 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                 }
             }
 
-
-            this.onselect(selected);
+            me.selected = selected;
+            me.onselect(selected);
             if (!updateAll) {
                 row = me.getRow(index);
                 input = hui.g(cbIdPrefix + index);
@@ -9752,16 +9751,17 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
          * @param {number} index 选取的序号.
          */
         selectSingle: function (index) {
-            var selectedClass = this.getClass('row-selected'),
-                selectedIndex = this.selectedIndex;
+            var me = this,
+                selectedClass = me.getClass('row-selected'),
+                selectedIndex = me.selected[0];
 
-            if (this.onselect(index) !== false) {
+            if (me.onselect(index) !== false) {
                 if ('number' == typeof selectedIndex) {
-                    hui.Control.removeClass(this.getRow(selectedIndex), selectedClass);
+                    hui.Control.removeClass(me.getRow(selectedIndex), selectedClass);
                 }
 
-                this.selectedIndex = index;
-                hui.Control.addClass(this.getRow(index), selectedClass);
+                me.selected = [index];
+                hui.Control.addClass(me.getRow(index), selectedClass);
             }
         },
         /**
@@ -9802,8 +9802,18 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
                     index++;
                 }
             }
-
+            this.selected = selected;
             this.onselect(selected);
+        },
+        getSelected: function () {
+            var me = this,
+                selected = me.selected,
+                datasource = me.datasource,
+                result = [];
+            for (var i = 0, len = selected.length; i < len; i++) {
+                result[i] = datasource[selected[i]];
+            }
+            return result;
         },
         /**
          * @name 绘制表格头
@@ -9835,7 +9845,7 @@ hui.define('hui_table', ['hui@0.0.1', 'hui_control@0.0.1'], function () {
          */
         getHeadHtml: function () {
             var me = this,
-                fields = this._fields,
+                fields = me._fields,
                 len = fields.length,
                 html = [],
                 i, field, title,

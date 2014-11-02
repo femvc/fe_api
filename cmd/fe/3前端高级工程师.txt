@@ -1,0 +1,75 @@
+前端高级工程师
+	前端UI库
+		jQuery UI
+		ExtJS
+	前端基础库
+		jQuery
+		Browser
+		underscore
+		Zepto
+	前端框架
+		knockout
+		JQuery MVC
+	模板技术
+		velocity
+		dot
+	PS
+		png24
+		png
+		jpg
+		gif
+		快捷键
+		GIF动画
+	HTML
+		HTML4.0.1
+		XHTML
+		XML
+		HTML5
+	Javascript
+		DOM操作
+		BOM操作
+		面向过程
+		封装函数
+		封装方法
+		OOP封装对象
+	CSS
+		选择符优先级
+		盒模型
+		less
+		sass
+		CSS_hack
+		styler
+	前端调试
+		alert
+		Firebug
+		Chrome debug
+		瀑布图
+		Fiddler
+		Weinre
+	前端工程化
+		grunt
+		gulp
+		yui compress
+	后端语言
+		.NET
+		PHP
+		Nodejs
+	浏览器兼容性
+		IE7,8,9,10
+		Chrome
+		360
+		UC
+		CSS/JS
+		Browser bug
+	Server
+		express
+		Nginx
+		IIS
+		quickweb
+		linux
+	开发规范
+		编码规范
+	性能优化
+		pagespeed
+		yslow
+		Webpagtest

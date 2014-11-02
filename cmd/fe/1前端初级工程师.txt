@@ -1,0 +1,31 @@
+初级前端工程师
+	前端UI库
+		jQuery UI
+	前端基础库
+		jQuery
+	PS
+		png24
+		png
+		jpg
+		gif
+	HTML
+		HTML4.0.1
+		XHTML
+		XML
+	Javascript
+		DOM操作
+		BOM操作
+		面向过程
+	CSS
+		选择符优先级
+		盒模型
+	前端调试
+		alert
+		Firebug
+		Chrome debug
+		瀑布图
+	浏览器兼容性
+		IE7,8,9,10
+		Chrome
+		360
+		UC
