@@ -1025,7 +1025,7 @@ hui.define('hui_util', ['hui'], function () {
     hui.hasClass = hui.util.hasClass;
     hui.addClass = hui.util.addClass;
     hui.removeClass = hui.util.removeClass;
-    hui.format = hui.util.format;
+    // hui.format = hui.util.format;
     hui.sortBy = hui.util.sortBy;
     hui.on = hui.util.on;
     hui.off = hui.util.off;
@@ -5697,6 +5697,8 @@ hui.define('hui_template', ['hui'], function () {
             return String('tpl_' + guid++);
         };
     })();
+
+    hui.format = hui.Template.format;
 });
 
 'use strict';
@@ -8253,17 +8255,17 @@ hui.define('hui_button', ['hui@0.0.1'], function () {
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
  * @example 
-    <label ui="type:'RadioInput',formName:'gender',targetForm:'result',value:'male'">
-        <input type="radio" class="hui_radioinput_input" />
-        <span class="hui_radioinput_label">男</span>
+    <label ui="type:'Radiobox',formName:'gender',targetForm:'result',value:'male'">
+        <input type="radio" class="hui_radiobox_input" />
+        <span class="hui_radiobox_label">男</span>
     </label>
  */
-hui.define('hui_radioinput', ['hui@0.0.1'], function () {
+hui.define('hui_radiobox', ['hui@0.0.1'], function () {
 
-    hui.RadioInput = function (options, pending) {
-        hui.RadioInput.superClass.call(this, options, 'pending');
+    hui.Radiobox = function (options, pending) {
+        hui.Radiobox.superClass.call(this, options, 'pending');
 
-        this.type = 'radioinput';
+        this.type = 'radiobox';
 
         //进入控件处理主流程!
         if (pending != 'pending') {
@@ -8271,7 +8273,7 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
         }
     };
 
-    hui.RadioInput.prototype = {
+    hui.Radiobox.prototype = {
         getInput: function () {
             var me = this,
                 main = me.getMain(),
@@ -8311,7 +8313,7 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
          * @param {Object} main 控件挂载的DOM.
          */
         render: function () {
-            hui.RadioInput.superClass.prototype.render.call(this);
+            hui.Radiobox.superClass.prototype.render.call(this);
             var me = this,
                 main = me.getMain();
             // 绘制宽度和高度
@@ -8404,20 +8406,20 @@ hui.define('hui_radioinput', ['hui@0.0.1'], function () {
 
     };
 
-    /* hui.RadioInput 继承了 hui.Control */
-    hui.inherits(hui.RadioInput, hui.Control);
+    /* hui.Radiobox 继承了 hui.Control */
+    hui.inherits(hui.Radiobox, hui.Control);
 
     hui.util.importCssString(
-        '.hui_radioinput{float:left;padding-right:23px;cursor:pointer;width:100px;}' +
-        '.hui_radioinput .hui_radioinput_input{display:none;}' +
-        '.hui_radioinput .hui_radioinput_icon{float:left;display:inline-block;width:30px;height:20px;padding-top:0px;}' +
-        '.hui_radioinput .hui_radioinput_point{font-size:15px;color:transparent;width:14px;height:20px;line-height:18px;*line-height:20px;line-height:20px\\9;position:absolute;z-index:2;text-align:center;vertical-align:middle;margin-left:0px;font-family:\'microsoft yahei\';margin-top:0px;margin-left:4px;}' +
-        '.hui_radioinput .hui_radioinput_dot{font-size:16px;color:#ccc;width:20px;height:20px;line-height:20px;position:absolute;z-index:1;text-align:center;vertical-align:middle;margin-top:0px;font-family:\'microsoft yahei\';}' +
-        '.hui_radioinput .hui_radioinput_icon li{float:left;padding:1px;margin:1px;height:33px;}' +
-        '.hui_radioinput .hui_radioinput_text{float:left;}' +
-        '.hui_radioinput_checked .hui_radioinput_icon{}' +
-        '.hui_radioinput_checked .hui_radioinput_point{color:#68bf4a;}' +
-        '.hui_radioinput_checked .hui_radioinput_dot{}'
+        '.hui_radiobox{float:left;cursor:pointer;}' +
+        '.hui_radiobox .hui_radiobox_input{display:none;}' +
+        '.hui_radiobox .hui_radiobox_icon{float:left;display:inline-block;width:30px;height:20px;padding-top:0px;}' +
+        '.hui_radiobox .hui_radiobox_point{font-size:15px;color:transparent;width:14px;height:20px;line-height:18px;*line-height:20px;line-height:20px\\9;position:absolute;z-index:2;text-align:center;vertical-align:middle;margin-left:0px;font-family:\'microsoft yahei\';margin-top:0px;margin-left:4px;}' +
+        '.hui_radiobox .hui_radiobox_dot{font-size:16px;color:#ccc;width:20px;height:20px;line-height:20px;position:absolute;z-index:1;text-align:center;vertical-align:middle;margin-top:0px;font-family:\'microsoft yahei\';}' +
+        '.hui_radiobox .hui_radiobox_icon li{float:left;padding:1px;margin:1px;height:33px;}' +
+        '.hui_radiobox .hui_radiobox_text{float:left;}' +
+        '.hui_radiobox_checked .hui_radiobox_icon{}' +
+        '.hui_radiobox_checked .hui_radiobox_point{color:#68bf4a;}' +
+        '.hui_radiobox_checked .hui_radiobox_dot{}'
     );
 
 });

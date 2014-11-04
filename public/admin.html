@@ -60,7 +60,7 @@ window.admin.init = function () {
                     field: 'title',
                     content: function (item) {
                         var html = '',
-                            tpl = '<li class="#{correct}"><div class="txt">#{index} #{content} </div></li>';
+                            tpl = '<li class="#{correct}"><div class="txt">#{index} #{window.escape(content)} </div></li>';
                         for (var i in item['options']) {
                             item['options'][i].index = i;
                             html += hui.format(tpl, item['options'][i])
@@ -112,7 +112,7 @@ window.admin.init = function () {
         }
         var tpl =
             '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\',targetForm:\'options\'"></div>' +
             '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\',value11:\'#{content}\'" tabindex="#{index}">#{content}</textarea>' +
             '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
