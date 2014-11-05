@@ -998,6 +998,26 @@ hui.define('hui_util', ['hui'], function () {
     hui.util.decode = function (str) {
         return this.encode(str, 'decode');
     };
+    hui.util.encodehtml = function (str, decode) {
+        str = String(str);
+        // encodeURIComponent not encode '
+        var fr = '&|<|>| |\'|"|\\'.split('|'),
+            to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+        if (decode == 'decode') {
+            for (var i = fr.length - 1; i > -1; i--) {
+                str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+            }
+        }
+        else {
+            for (var i = 0, l = fr.length; i < l; i++) {
+                str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+            }
+        }
+        return str;
+    };
+    hui.util.decodehtml = function (str) {
+        return this.encodehtml(str, 'decode');
+    };
 
     //setInnerHTML: function (elem, html){}
     hui.util.setInnerHTML = function (elem, html) {
