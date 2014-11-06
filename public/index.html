@@ -259,6 +259,7 @@ function startTest() {
                 }
             }
         }
+        obj.content = hui.util.encodehtml(obj.content);
         var tpl =
             '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
             '    <div ui="type:\'Label\',id:\'content#{index}\'">#{content}</div>' +
