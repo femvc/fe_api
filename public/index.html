@@ -436,7 +436,7 @@ function startTest() {
     <div class="page_foot">&nbsp;&copy; FECampus 2014</div>
 
     <div id="subject_add" class="subject_test">
-        <div class="subject_box" ui="type:'BoxPanel',formName:'form'" style="display:none">
+        <div class="subject_box" ui="type:'Boxpanel',formName:'form'" style="display:none">
             <div class="subject_action">
                 <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
                 <input type="hidden" ui="type:'TextInput',formName:'title'" />
@@ -457,7 +457,7 @@ function startTest() {
 
         </div>
 
-        <div class="result_box" ui="type:'BoxPanel',formName:'result'" style="display:none">
+        <div class="result_box" ui="type:'Boxpanel',formName:'result'" style="display:none">
             <div class="box_content">
                 <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
                 <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
@@ -468,7 +468,7 @@ function startTest() {
                 <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
             </div>
         </div>
-        <div class="candidate_box" ui="type:'BoxPanel',formName:'candidate',size:{width:'440px',height: '400px'}" style="display:none">
+        <div class="candidate_box" ui="type:'Boxpanel',formName:'candidate',size:{width:'440px',height: '400px'}" style="display:none">
             <div class="box_content">
                 <div class="row_item row_career">
                     <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
@@ -485,7 +485,7 @@ function startTest() {
             </div>
             
         </div>
-        <div class="report_box" ui="type:'BoxPanel',formName:'report',size:{width:'530px'}" style="display:none">    
+        <div class="report_box" ui="type:'Boxpanel',formName:'report',size:{width:'530px'}" style="display:none">    
             <div class="box_content">
                 <div class="fe_level" style="display:none;">
                 初级前端工程师 0-33    5~10W   1000人 <br/>
@@ -509,7 +509,11 @@ function startTest() {
     </div>
 </div>
 
-<script type="text/javascript" src="asset/asset.js"></script>
+// Only for highrchart!!
+<script type="text/javascript" src="src/jquery1.9.1.js         "></script>
+<script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script>
+<script type="text/javascript" src="src/highcharts.js          "></script>
+<script type="text/javascript" src="src/highcharts-more.js     "></script>
 </body>
 
 </html>

@@ -8,7 +8,8 @@
 <script type="text/javascript" defer="defer">
 window.admin = {};
 window.admin.init = function () {
-    $('#subject_add').show();
+    
+    hui.g('subject_add').style.display = 'block';
     window.listTable = [{
         width: 296,
         title: 'n1',
@@ -285,8 +286,7 @@ window.admin.refreshList = function () {
     <h3 class="form_title">题目列表 </h3>
     <div ui="type:'Table',id:'kj',fields:'&listTable',datasource:'&listData',select:'multi',sortable:true,size:{width:500}"></div>
 </div>
-
-<script type="text/javascript" src="asset/asset.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_checklabel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1?debug=true"></script>
 </body>
 
 </html>

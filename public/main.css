@@ -10,7 +10,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .page .row_head{padding-bottom:10px;height:31px;padding-top:10px}
 .page .subject_add .row_title{width:55px;padding-top:10px}
 .page .subject_add .hui_textinput{float:left;border:1px solid #cccccc}
-.page .subject_list{float:left;width:600px}
+.page .subject_list{width:600px;float: left;}
 .page .subject_list .form_title{margin:17px 0px}
 .page .subject_list .hui_table{}
 .page .subject_list .hui_table table{}
@@ -29,7 +29,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .page .subject_list .option_list{padding:0px 0px 0px 20px;list-style-type:circle;font-size:20px;line-height:16px;margin:0px}
 .page .subject_list .option_list .yes{list-style-type:square;color:green}
 .page .subject_list .option_list .txt{font-size:14px;line-height:18px;color:#333}
-.page .subject_add{width:530px;float:left}
+.page .subject_add{width:500px;float: left;}
 .page .subject_add .form_title{padding:0px;margin:0px;padding:24px 0px;text-align:left;font-size:22px}
 .page .subject_add .tr_row{clear:both;border-bottom:1px solid #ccc;padding:10px 0px;overflow:hidden;margin-top:-1px}
 .page .subject_add .tr_row .td_index{float:left;padding:5px 10px 0px;font-size:25px}
@@ -43,6 +43,7 @@ hr.clearfix{font-size:1px;line-height:1px;height:1px;overflow:hidden;clear:both;
 .page .hui_boxpanel_close{color:white}
 .page .hui_boxpanel_close:hover{color:#f5dcdc;text-decoration:none}
 .page .subject_box{background-color:#f7f8f8;background-repeat:no-repeat;width:920px}
+.page .hui_table_tdcntr nobr {    white-space: normal;}
 .subject_test .hui_boxpanel{}
 .subject_test .subject_box{}
 .subject_test .hui_boxpanel_close{}
