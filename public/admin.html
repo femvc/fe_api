@@ -53,7 +53,7 @@ window.admin.init = function () {
                     sortable: true,
                     field: 'title',
                     content: function (item) {
-                        return item['title'];
+                        return hui.util.encodehtml(item['title']);
                     }
                 }, {
                     width: 296,

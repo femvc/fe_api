@@ -221,6 +221,7 @@ function startTest() {
                 if (result && !result[0] && result[1]) {
                     var data = result[1];
                     if (data.atcid) {
+                        data.title = hui.util.encodehtml(data.title);
                         data.atcid = data.atcid;
                         data.index2 = data.index1 = data.index;
                         data.title1 = data.title;
