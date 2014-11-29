@@ -146,19 +146,23 @@ function showResultChart(data){
         series: [{
             name: '中级水平',
             data: [70, 70, 60, 65, 40, 20, 60, 60],
-            pointPlacement: 'off'
+            pointPlacement: 'off',
+            color: 'gray'
         }, {
             name: '高级水平',
             data: [80, 80, 75, 80, 65, 50, 70, 75],
-            pointPlacement: 'off'
+            pointPlacement: 'off',
+            color: 'orange'
         }, {
             name: '架构师　',
             data: [95, 95, 95, 95, 80, 80, 85, 80],
-            pointPlacement: 'off'
+            pointPlacement: 'off',
+            color: 'red'
         }, {
             name: '目前级别',
             data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
-            pointPlacement: 'off'
+            pointPlacement: 'off',
+            color: 'green'
         }]
 
     });
