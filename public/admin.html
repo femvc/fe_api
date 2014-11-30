@@ -248,7 +248,7 @@ window.admin.refreshList = function () {
         </div>
         <h3 class="form_title">
             <span id="title"> 增加题目</span> 
-            <a href="admin.html">add</a>  <a onclick="hui.g('atcid').value = ''">Save as New</a>
+            <a href="admin.html">add</a>  
         </h3>
 
         <div class="tr_row">
@@ -256,6 +256,7 @@ window.admin.refreshList = function () {
             <span class="row_title">题目：</span>
             <textarea cols="40" rows="2" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
             <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
+            <button onclick="hui.g('atcid').value = '';window.form.getByFormName('submit').onclick();">Save as New</button>
         </div>
         <div class="tr_row">
             <span class="row_title">级别：</span>
