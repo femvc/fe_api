@@ -224,7 +224,7 @@ function startTest() {
     hui.Control.init(hui.g('subject_add'));
     form = hui.Control.getByFormName('form');
     form.initSubject = function (newstart) {
-        Requester.get('/ue_api/internal/get_next_question' + , {
+        Requester.get('/ue_api/internal/get_next_question', {
             data: {
                 newstart: newstart, 
                 rand: Math.random()
