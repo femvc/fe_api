@@ -176,7 +176,11 @@ window.onload = function () {
             }
         }
     });
-    hui.g('tid').innerHTML = hui.util.getCookie('test_id');
+    var test_id = hui.util.getCookie('test_id');
+    hui.g('tid').innerHTML = test_id;
+    if (test_id) {
+        hui.cc('resume_btn').style.display = 'none';
+    }
 };
 
 function startTest() {
@@ -219,8 +223,12 @@ function startTest() {
     // subject_add
     hui.Control.init(hui.g('subject_add'));
     form = hui.Control.getByFormName('form');
-    form.initSubject = function () {
-        Requester.get('/ue_api/internal/get_next_question?rand=' + Math.random(), {
+    form.initSubject = function (newstart) {
+        Requester.get('/ue_api/internal/get_next_question' + , {
+            data: {
+                newstart: newstart, 
+                rand: Math.random()
+            },
             onsuccess: function (result) {
                 if (result && !result[0] && result[1]) {
                     var data = result[1];
@@ -437,7 +445,8 @@ function startTest() {
         <div class="page_body_padding">&nbsp;</div>
         <h1 class="test_title"><span style="display:none">你想知道自己前端技术实力排名吗？</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%" /></h1>
         <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
-        <div class="test_btn" onclick="form.show();form.initSubject();">立即测试</div>
+        <div class="test_btn" onclick="form.show();form.initSubject('newone');">立即测试</div>  
+        <div class="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
     </div>
     <div class="page_foot">&nbsp;&copy; 2014</div>
 

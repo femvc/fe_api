@@ -117,7 +117,7 @@ function createQuestionList(req, res, next) {
 function getNextQuestion(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
-    if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid]) {
+    if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
         createQuestionList(req, res, function () {
             getNextQuestionCallback(req, res, next);
         });
