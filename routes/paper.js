@@ -11,24 +11,91 @@ function createQuestionList(req, res, next) {
             'update_time': -1,
             'create_time': -1
         },
-        filter = {};
+        filter = {},
+        questionCount = {
+            'HTML': 5,
+            'CSS': 5,
+            'PS': 5,
+            'Server': 5,
+            'HTML5CSS3': 5,
+            'DOM': 5,
+            'jQuery': 5,
+            'Javascript': 15
+        },
+        questionList = {
+            'HTML': [],
+            'CSS': [],
+            'PS': [],
+            'Server': [],
+            'HTML5CSS3': [],
+            'DOM': [],
+            'jQuery': [],
+            'Javascript': []
+        };
 
     questionModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
         var question = [],
+            questionMap = {},
             paper = {};
         for (var i = 0, ilen = doc.length; i < ilen; i++) {
             question.push(doc[i].atcid);
+            questionMap[doc[i].atcid] = doc[i];
         }
 
-        var length = 5;
+        question = global.common.randomOrder(question);
+
+        for (var i = 0, len = question.length; i < len; i++) {
+            if (questionMap[question[i]].label.indexOf('HTML') !== -1 && questionCount['HTML']) {
+                questionList['HTML'].push(questionMap[question[i]].atcid);
+                questionCount['HTML']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('CSS') !== -1 && questionCount['CSS']) {
+                questionList['CSS'].push(questionMap[question[i]].atcid);
+                questionCount['CSS']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('PS') !== -1 && questionCount['PS']) {
+                questionList['PS'].push(questionMap[question[i]].atcid);
+                questionCount['PS']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('Server') !== -1 && questionCount['Server']) {
+                questionList['Server'].push(questionMap[question[i]].atcid);
+                questionCount['Server']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('HTML5CSS3') !== -1 && questionCount['HTML5CSS3']) {
+                questionList['HTML5CSS3'].push(questionMap[question[i]].atcid);
+                questionCount['HTML5CSS3']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('DOM') !== -1 && questionCount['DOM']) {
+                questionList['DOM'].push(questionMap[question[i]].atcid);
+                questionCount['DOM']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('jQuery') !== -1 && questionCount['jQuery']) {
+                questionList['jQuery'].push(questionMap[question[i]].atcid);
+                questionCount['jQuery']--;
+            }
+            else if (questionMap[question[i]].label.indexOf('Javascript') !== -1 && questionCount['Javascript']) {
+                questionList['Javascript'].push(questionMap[question[i]].atcid);
+                questionCount['Javascript']--;
+            }
+        }
+
+        // var length = 5;
         var uid = req.sessionStore.user[req.sessionID];
         var now = new Date();
         var test_id = uid + '_' + global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         req.sessionStore.paper[uid] = test_id;
-        req.sessionStore.paperContent[uid] = global.common.randomOrder(question).splice(0, length);
+        req.sessionStore.paperContent[uid] = questionList['HTML'].concat(
+            questionList['CSS'],
+            questionList['DOM'],
+            questionList['PS'],
+            questionList['jQuery'],
+            questionList['Server'],
+            questionList['HTML5CSS3'],
+            questionList['Javascript']
+        );
 
         // Test id & question list
         paper.test_id = test_id;
@@ -141,7 +208,7 @@ function getPaperResult(req, res, next) {
                     sum += answer[item].correct ? 1 : 0;
                 }
 
-                var uid = req.sessionStore.user[req.sessionID];
+                // var uid = req.sessionStore.user[req.sessionID];
                 var score = Math.round(100 * sum / question.length);
                 var rank = {};
                 rank.test_id = test_id;
