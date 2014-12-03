@@ -191,4 +191,6 @@ padding-top: 5px;}
 #content1 textarea {height: 100px;}
 .subject_title pre {
     margin: 0px; display: inline-block;;
+    vertical-align: top;
+    font-family: inherit;
 }
