@@ -465,16 +465,17 @@ function showPaperDetail(test_id) {
                 
                 for (var j=0,len2=list.length; j<len2; j++) {
                     item = referenceMap[list[j]];
-                    html += item.title;
+                    html += '<h4 class="title">' + item.title + '</h4>\n';
                     html += '<ul class="option_list">';
                     for (var i in item.options) {
                         item.options[i].index = i;
                         html += hui.format(tpl, item.options[i]);
                     }
-                    html += '</ul>';
+                    html += '</ul>\n';
                 }
-
-                console.log(html);
+                hui.g('detail_container').innerHTML = html;
+                hui.Control.getByFormName('detail').show();
+                // console.log(html);
                 
 
  
@@ -580,6 +581,13 @@ function showPaperDetail(test_id) {
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 200px;"></div>
                     <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
                 </div>    
+
+            </div>
+        </div>
+
+        <div class="report_box" ui="type:'Boxpanel',formName:'detail',size:{width:'530px'}" style="display:none">    
+            <div class="box_content" id="detail_container">
+                
 
             </div>
         </div>
