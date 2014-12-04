@@ -31,7 +31,8 @@ function showTestResult() {
                     hui.Control.getByFormName('result').setValueByTree(data).show();
                 }
                 else {
-                    console.log('Warning: Test not finish')
+                    // console.log('Warning: Test not finish')
+                    showPaperDetail(hui.getCookie('test_id'));
                 }
             }
         }
