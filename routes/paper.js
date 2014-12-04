@@ -5,7 +5,7 @@ var resultModel = require('../models/result').createNew();
 var rankRoute = require('./rank');
 
 function createQuestionList(req, res, next) {
-    req.sessionStore.questionIndex[uid] = undefined;
+    req.sessionStore.questionIndex[req.sessionStore.user[req.sessionID]] = undefined;
     var current = 1,
         count = 10000,
         sort = {
