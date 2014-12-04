@@ -431,7 +431,7 @@ function initForTest() {
 
 function showPaperDetail(test_id) {
 
-    Requester.get('/ue_api/internal/get_result?test_id=' + '6BrzGaHXqnqdEVKqxw5f7tRG_20141204072611_5010041622444987', {
+    Requester.get('/ue_api/internal/get_result?test_id=' + test_id, {
         onsuccess: function(result){
             if (result && !result[0] && result[1]) {
                 var data = result[1];
