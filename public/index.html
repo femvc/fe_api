@@ -466,7 +466,7 @@ function showPaperDetail(test_id) {
                 
                 for (var j=0,len2=list.length; j<len2; j++) {
                     item = referenceMap[list[j]];
-                    html += '<h4 class="title">' + hui.util.encodehtml(hui.util.decode(item.title)) + '</h4>\n';
+                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '</h4>\n';
                     html += '<ul class="option_list">';
                     for (var i in item.options) {
                         item.options[i].index = i;
