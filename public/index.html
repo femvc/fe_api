@@ -463,8 +463,8 @@ function showPaperDetail(test_id) {
                 var html = '',
                     tpl = '<li class="#{correct} #{answer}"><div class="txt">#{index} #{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
                 
-                for (var i=0,len=list.length; i<len; i++) {
-                    item = referenceMap[list[i]];
+                for (var j=0,len2=list.length; j<len2; j++) {
+                    item = referenceMap[list[j]];
                     html += item.title;
                     html += '<ul class="option_list">';
                     for (var i=0,len=item.options.length; i<len; i++) {
