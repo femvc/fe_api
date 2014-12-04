@@ -56,7 +56,10 @@ exports.saveQuestion = function (req, res, next) {
             atcid: atcid
         }, {
             $set: question
-        }, {upsert: true, multi: false}, callback);
+        }, {
+            upsert: true,
+            multi: false
+        }, callback);
     }
     else {
         question.update_time = date;
@@ -83,7 +86,7 @@ exports.removeQuestion = function (req, res, next) {
 exports.getQuestions = function (req, res, next) {
     var params = req.paramlist,
         current = params.current || 1,
-        count = params.count || 100,
+        count = params.count || 1000,
         sort = {
             'update_time': -1,
             'create_time': -1
