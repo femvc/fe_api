@@ -84,7 +84,7 @@ window.admin.init = function () {
                     }
                 }];
 
-                window.listData = data.items;
+                window.listData = hui.util.sortBy(data.items, 'update_time', 'asc');
 
                 hui.Control.init(hui.g('subject_list'));
 
