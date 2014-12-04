@@ -467,9 +467,9 @@ function showPaperDetail(test_id) {
                     item = referenceMap[list[i]];
                     html += item.title;
                     html += '<ul class="option_list">';
-                    for (var i=0,len=questionList.length; i<len; i++) {
-                        questionList[i].index = i;
-                        html += hui.format(tpl, questionList[i]);
+                    for (var i=0,len=item.options.length; i<len; i++) {
+                        item.options[i].index = i;
+                        html += hui.format(tpl, item.options[i]);
                     }
                     html += '</ul>';
                 }
