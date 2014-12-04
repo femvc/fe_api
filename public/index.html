@@ -169,6 +169,7 @@ function showResultChart(data){
 }
 
 window.onload = function () {
+    initForTest();
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
@@ -181,9 +182,10 @@ window.onload = function () {
     if (test_id) {
         hui.cc('resume_btn').style.display = 'block';
     }
+
 };
 
-function startTest() {
+function initForTest() {
     
     window.listTable = [{
         width: 100,
@@ -429,7 +431,7 @@ function startTest() {
 
 </head>
 
-<body style="" onload123="startTest()">
+<body style="" onload123="initForTest()">
 <!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
 <div class="page">
     <div class="page_head">
