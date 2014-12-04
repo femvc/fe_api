@@ -61,10 +61,10 @@ window.admin.init = function () {
                     field: 'title',
                     content: function (item) {
                         var html = '',
-                            tpl = '<li class="#{correct}"><div class="txt">#{index} #{hui.util.encodehtml(content)} </div></li>';
+                            tpl = '<li class="#{correct}"><div class="txt">#{index} #{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
                         for (var i in item['options']) {
                             item['options'][i].index = i;
-                            html += hui.format(tpl, hui.util.decode(item['options'][i]));
+                            html += hui.format(tpl, item['options'][i]);
                         }
                         return '<ul class="option_list">' + html + '</ul>';
                     }
