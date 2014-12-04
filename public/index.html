@@ -185,16 +185,16 @@ window.onload = function () {
     }
 
     hui.util.on(window, 'resize', function(){
-        var btn = hui.Control.getByFormName('subject_nxt2');
+        var btn = hui.Control.getByFormName('subject_skip');
         var main = btn ? btn.getMain() : undefined;
         if (main && main.offsetTop) {
             if (document.body.clientHeight < main.offsetTop + 30) {
                 hui.Control.getByFormName('subject_nxt').show();
-                btn.hide();
+                hui.Control.getByFormName('subject_nxt2').hide();
             }
             else {
                 hui.Control.getByFormName('subject_nxt').hide();
-                btn.show();
+                hui.Control.getByFormName('subject_nxt2').show();
             }
         }
     })
