@@ -189,12 +189,12 @@ window.onload = function () {
         var main = btn ? btn.getMain() : undefined;
         if (main && main.offsetTop) {
             if (document.body.clientHeight < main.offsetTop + 30) {
-                hui.Control.getByFormName('subject_nxt').show();
-                hui.Control.getByFormName('subject_nxt2').hide();
+                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
+                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
             }
             else {
-                hui.Control.getByFormName('subject_nxt').hide();
-                hui.Control.getByFormName('subject_nxt2').show();
+                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
+                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
             }
         }
     })
@@ -540,7 +540,7 @@ function showPaperDetail(test_id) {
                 <input type="hidden" ui="type:'TextInput',formName:'index'" />
                 <a href="javascript:" class="subject_end" onclick="form.hide();showTestResult()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
                 <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
-                <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="display:none;" tabindex="100">提 交</button>
+                <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
             </div>
             <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
             <div class="form_content">
