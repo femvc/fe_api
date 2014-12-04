@@ -67,7 +67,7 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .subject_test .subject_box .hui_panel { }
 .subject_test .subject_box .tr_row { color: #939393; line-height: 2em; font-size: 25px; padding: 15px 0px 10px 34px; list-style-position: inside; border-bottom: 1px solid #ddd }
 .subject_test .subject_box .tr_row .td_index { display: none }
-.subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; white-space: normal; width: 94%;word-break: break-word; display: inline-block; *display: block }
+.subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 94%;  white-space: normal; word-break: break-word; display: inline-block; *display: block }
 .subject_test .hui_checkbox { margin-top: 11px }
 .subject_test .hui_btn { font-family: 'microsoft yahei'; }
 .subject_test .subject_box .tr_row .subject_nxt { }
