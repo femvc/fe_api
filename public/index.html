@@ -306,7 +306,8 @@ function initForTest() {
     };
 
     var submit = form.getByFormName('subject_nxt');
-    submit.onclick = function () {
+    var submit2 = form.getByFormName('subject_nxt2');
+    submit.onclick = submit2.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
 
@@ -533,7 +534,7 @@ function showPaperDetail(test_id) {
                 </div>
                 <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
                 </ol>
-                <div style="text-align: right;"><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
+                <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formName:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
             </div>
 
         </div>
