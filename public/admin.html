@@ -114,7 +114,7 @@ window.admin.init = function () {
         var tpl =
             '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
             '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\',targetForm:\'options\'"></div>' +
-            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\',value11:\'#{content},valueEncode:true\'" tabindex="#{index}">#{content}</textarea>' +
+            '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\',valueEncode:true\'" tabindex="#{index}">#{content}</textarea>' +
             '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
         hui.util.appendHTML(content, hui.format(tpl, obj));
