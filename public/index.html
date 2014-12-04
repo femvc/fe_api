@@ -458,7 +458,7 @@ function initForTest() {
                 <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
                 <input type="hidden" ui="type:'TextInput',formName:'title'" />
                 <input type="hidden" ui="type:'TextInput',formName:'index'" />
-                <a href="javascript:" class="subject_end" ui="type:'Button',formName:'subject_end'">结束测试</a>
+                <a href="javascript:" class="subject_end" onclick="form.hide();showTestResult()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
                 <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
                 <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" tabindex="100">提 交</button>
             </div>
