@@ -226,7 +226,7 @@ function startTest() {
     form.initSubject = function (newstart) {
         Requester.get('/ue_api/internal/get_next_question', {
             data: {
-                newstart: newstart, 
+                newstart: !!newstart ? 'newone' : '', 
                 rand: Math.random()
             },
             onsuccess: function (result) {
