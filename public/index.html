@@ -541,6 +541,8 @@ function showPaperDetail(test_id) {
             <div class="box_content">
                 <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
                 <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
+                <div class="result_time" onclick="showPaperDetail(hui.getCookie('test_id'))" style="cursor:pointer;">查看参考答案</div>
+
                 <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
                 <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
