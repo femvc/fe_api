@@ -52,7 +52,7 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .subject_test .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
 .subject_test .subject_box .form_content { padding: 37px 45px 50px 50px }
 .subject_test .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
-.subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 34px; padding-bottom: 0px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
+.subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
 .subject_test .subject_box .subject_action { height: 110px; position: absolute; z-index: 1; width: 100% }
 .subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
 .subject_test .subject_box .subject_action .subject_nxt { margin-top: 20px;}
