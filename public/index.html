@@ -293,7 +293,7 @@ function initForTest() {
         obj.content = hui.util.encodehtml(obj.content);
         var tpl =
             '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
-            '    <div ui="type:\'Label\',id:\'content#{index}\'">#{content}</div>' +
+            '    <div ui="type:\'Label\',id:\'content#{index}\'">#{hui.util.encodehtml(hui.util.decode(content))}</div>' +
             '    <span class="td_index">#{index}</span>' +
             '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
             '</li>';
