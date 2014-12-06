@@ -258,9 +258,16 @@ function initForTest() {
                         if (data.test_id) {
                             if (hui.util.getCookie('test_id')) {
                                 var test_history = hui.util.getCookie('test_history') || '';
-                                if (test_history.indexOf(data.test_id) === -1) {
-                                    hui.util.setCookie('test_history', test_history + ',' + data.test_id);
+                                var uniq = {};
+                                var list = test_history.split(',');
+                                test_history = [];
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    if (list[i] && !uniq[list[i]]) {
+                                        uniq[list[i]] = list[i];
+                                        test_history.push(list[i]);
+                                    }
                                 }
+                                hui.util.setCookie('test_history', test_history.join(','));
                             }
                             hui.util.setCookie('test_id', data.test_id);
                             hui.g('tid').innerHTML = data.test_id;
