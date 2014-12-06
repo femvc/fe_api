@@ -13,7 +13,7 @@
 'use strict';
 var form;
 
-function showTestResult() {
+function showTestScore() {
     Requester.get('/ue_api/internal/get_rank', {
         data: {
             test_id: window.test_id
@@ -204,40 +204,44 @@ window.onload = function () {
 
 function initForTest() {
     
-    window.listTable = [{
-        width: 100,
-        title: '技能',
-        sortable: true,
-        field: 'index',
-        content: function (item) {
-            return item['skill'];
+    window.listTable = [
+        {
+            width: 100,
+            title: '技能',
+            sortable: true,
+            field: 'index',
+            content: function (item) {
+                return item['skill'];
+            }
+        }, {
+            width: 40,
+            title: '答对',
+            sortable: true,
+            field: 'correct',
+            content: function (item) {
+                return item['correct'];
+            }
+        }, {
+            width: 40,
+            title: '得分',
+            sortable: true,
+            field: 'score',
+            content: function (item) {
+                return item['score'];
+            }
         }
-    }, {
-        width: 40,
-        title: '答对',
-        sortable: true,
-        field: 'correct',
-        content: function (item) {
-            return item['correct'];
+    ];
+    window.listData = [
+        {
+            'skill': 'html',
+            'correct': 2,
+            'score': 40
+        }, {
+            'skill': 'css',
+            'correct': 2,
+            'score': 40
         }
-    }, {
-        width: 40,
-        title: '得分',
-        sortable: true,
-        field: 'score',
-        content: function (item) {
-            return item['score'];
-        }
-    }];
-    window.listData = [{
-        'skill': 'html',
-        'correct': 2,
-        'score': 40
-    }, {
-        'skill': 'css',
-        'correct': 2,
-        'score': 40
-    }];
+    ];
 
     // subject_add
     hui.Control.init(hui.g('subject_add'));
@@ -343,7 +347,7 @@ function initForTest() {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
         data.test_id = window.test_id;
-        saveTestResult(data);
+        saveTestScore(data);
         $('.subject_nxt').attr('disabled','disabled');
         $('.form_content').animate({opacity:0}, 500);
         // $('.form_mask').show();
@@ -354,25 +358,8 @@ function initForTest() {
         var data = {};
         data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
 
-        saveTestResult(data);
+        saveTestScore(data);
     };
-
-    function saveTestResult(data) {
-        Requester.get('/ue_api/internal/save_next_question', {
-            data: data,
-            onsuccess: function (result) {
-                // form.getByFormName('subject_nxt').setDisabled(false);
-                if (result && result[1] && result[1][0] && result[1][0].index) {
-                    form.initSubject();
-
-                }
-                else {
-                    hui.Control.getByFormName('form').hide();
-                    showTestResult();
-                }
-            }
-        });
-    }
 
     var result = hui.Control.getByFormName('result');
     result.getByFormName('result_nxt').onclick = function () {
@@ -452,6 +439,24 @@ function initForTest() {
     }, 'force'); //*/
 };
 
+function saveTestScore(data) {
+    Requester.get('/ue_api/internal/save_next_question', {
+        data: data,
+        onsuccess: function (result) {
+            // form.getByFormName('subject_nxt').setDisabled(false);
+            if (result && result[1] && result[1][0] && result[1][0].index) {
+                form.initSubject();
+
+            }
+            else {
+                hui.Control.getByFormName('form').hide();
+                showTestScore();
+                hui.util.setCookie(window.test_id, 'finish');
+            }
+        }
+    });
+}
+
 function showPaperDetail() {
 
     Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
@@ -502,15 +507,9 @@ function showPaperDetail() {
                 hui.g('detail_container').innerHTML = html;
                 hui.Control.getByFormName('detail').show();
                 // console.log(html);
-                
-
- 
             }
         }
     });
-
-
-    
 }
 
 function showTestHistory() {
@@ -535,10 +534,12 @@ function showTestHistory() {
 }
 
 function showTestButton() {
-    if (test_id) {
+    var test_id = hui.util.getCookie('test_id');
+    if (test_id && hui.util.getCookie(test_id) !== 'finish') {
         $('.resume_btn').show();
-        $('.test_btn').show();
     }
+    
+    $('.test_btn').show();
 }
 
 //-->
@@ -554,7 +555,7 @@ function showTestButton() {
             uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
         </div>
         <div class="logo" onclick="showEvaluateReport()">UED</div>
-        <div class="logo" onclick="showTestResult()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="logo" onclick="showTestScore()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div class="logo" onclick="showPaperDetail()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
     </div>
@@ -562,6 +563,7 @@ function showTestButton() {
         <div class="page_body_padding">&nbsp;</div>
         <h1 class="test_title"><span style="display:none">你想知道自己前端技术实力排名吗？</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%" /></h1>
         <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
+        <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
         <div class="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
         <div class="test_btn" onclick="form.show();form.initSubject('newone');" style="display:none;">立即测试</div>  
     </div>
@@ -573,7 +575,7 @@ function showTestButton() {
                 <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
                 <input type="hidden" ui="type:'TextInput',formName:'title'" />
                 <input type="hidden" ui="type:'TextInput',formName:'index'" />
-                <a href="javascript:" class="subject_end" onclick="form.hide();showTestResult()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
+                <a href="javascript:" class="subject_end" onclick="form.hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
                 <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
                 <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
             </div>
