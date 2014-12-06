@@ -338,8 +338,9 @@ function initForTest() {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
         data.test_id = hui.util.getCookie('test_id');
-
         saveTestResult(data);
+        $('.subject_nxt').attr('disabled','disabled');
+        $('.form_content').animate({opacity:0}, 500);
     };
 
     var subject_pre = form.getByFormName('subject_pre');
@@ -357,6 +358,8 @@ function initForTest() {
                 // form.getByFormName('subject_nxt').setDisabled(false);
                 if (result && result[1] && result[1][0] && result[1][0].index) {
                     form.initSubject();
+                    $('.subject_nxt').removeAttr('disabled');
+                    $('.form_content').animate({opacity:1}, 300);
                 }
                 else {
                     hui.Control.getByFormName('form').hide();
