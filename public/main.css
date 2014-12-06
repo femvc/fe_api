@@ -126,9 +126,9 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .page_body_padding { height: 30%; }
 .page_body .test_title { padding: 0px; margin: 0px; height: 60px; text-align: center; font-size: 39px; color: #1d3f63; opacity: 1; }
 .page_body .test_desc { width: 610px; margin: auto; text-align: center; line-height: 24px; padding-top: 5px; padding-bottom: 15px; color: #7e707d; font-size: 14px; }
-.page_body .test_btn { width: 166px; padding: 16px 0px; text-align: center; margin: auto; background-color: #00aaef; border-radius: 39px; color: white; opacity: 1; margin-top: 30px; font-size: 19px; cursor: pointer; }
+.page_body .test_btn { width: 166px; padding: 16px 0px; text-align: center; margin: auto; background-color: #00aaef; border-radius: 39px; color: white; opacity: 1; margin-top: 10px; font-size: 19px; cursor: pointer; }
 .page_body .test_btn:hover { background-color: #029BDA; }
-.page_body .resume_btn { width: 166px; padding: 16px 0px; text-align: center; margin: auto; background-color: #99aaef; border-radius: 39px; color: white; opacity: 1; margin-top: 30px; font-size: 19px; cursor: pointer; }
+.page_body .resume_btn { width: 166px; padding: 16px 0px; text-align: center; margin: auto; background-color: #99aaef; border-radius: 39px; color: white; opacity: 1; margin-top: 10px; font-size: 19px; cursor: pointer; }
 .page_body .resume_btn:hover { background-color: #929BDA; }
 .page_foot { position: absolute; bottom: 0; color: white; line-height: 3em; }
 #content1 textarea { height: 100px; }
