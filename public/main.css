@@ -44,6 +44,7 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .page .hui_boxpanel_close { color: white }
 .page .hui_boxpanel_close:hover { color: #f5dcdc; text-decoration: none }
 .page .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
+.page .form_mask {position: absolute;z-index: 10; width: 50%; height: 50%; padding: 50% 0 0 50%;}
 .page .hui_table_tdcntr nobr { white-space: normal; }
 .subject_test .hui_boxpanel { }
 .subject_test .subject_box { }
