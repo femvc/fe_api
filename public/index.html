@@ -259,7 +259,7 @@ function initForTest() {
                             if (hui.util.getCookie('test_id')) {
                                 var test_history = hui.util.getCookie('test_history') || '';
                                 var uniq = {};
-                                var list = test_history.split(',');
+                                var list = (test_history + ',' + data.test_id).split(',');
                                 test_history = [];
                                 for (var i=0,len=list.length; i<len; i++) {
                                     if (list[i] && !uniq[list[i]]) {
@@ -270,7 +270,7 @@ function initForTest() {
                                 hui.util.setCookie('test_history', test_history.join(','));
                             }
                             hui.util.setCookie('test_id', data.test_id);
-                            hui.g('tid').innerHTML = data.test_id;
+                            hui.g('tid').innerHTML = test_history.join(',');
                         }
 
                         form.setValueByTree(data);
