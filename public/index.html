@@ -270,7 +270,7 @@ function initForTest() {
                                 hui.util.setCookie('test_history', test_history.join(','));
                             }
                             hui.util.setCookie('test_id', data.test_id);
-                            hui.g('tid').innerHTML = test_history.join(',');
+                            hui.g('tid').innerHTML = test_history.join('<br />');
                         }
 
                         form.setValueByTree(data);
