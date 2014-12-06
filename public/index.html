@@ -75,7 +75,6 @@ function showEvaluateReport() {
                     hui.Control.getByFormName('candidate').hide();
                     hui.Control.getByFormName('report').setValueByTree(data).show();
                     
-                    var skill_list = hui.Control.getByFormName('skill_list');
                     var datasource = [
                         {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
                         {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
@@ -86,13 +85,18 @@ function showEvaluateReport() {
                         {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
                         {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
                     ];
-                    skill_list.datasource = datasource;
-                    var score = [];
-                    for (var i=0,len=datasource.length; i<len; i++) {
-                        score.push(datasource[i].score);
-                    }
-                    skill_list.renderBody();
-                    showResultChart(score);
+
+                    parseTestResult(function(datasource){
+                        var score = [];
+                        for (var i=0,len=datasource.length; i<len; i++) {
+                            score.push(datasource[i].score);
+                        }
+                        showResultChart(score);
+
+                        var skill_list = hui.Control.getByFormName('skill_list');
+                        skill_list.datasource = datasource;
+                        skill_list.renderBody();
+                    });
                 }
                 else {
                     console.log('Warning: Test not finish')
@@ -103,6 +107,7 @@ function showEvaluateReport() {
 }
 
 function showResultChart(data){
+
     $('#skill_chart').highcharts({
         chart: {
             polar: true,
@@ -496,7 +501,7 @@ function showPaperDetail() {
                 for (var j=0,len2=list.length; j<len2; j++) {
                     item = referenceMap[list[j]];
                     if (!item.answer) continue;
-                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '</h4>\n';
+                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
                     html += '<ul class="option_list">';
                     for (var i in item.options) {
                         item.options[i].index = i;
@@ -545,6 +550,91 @@ function showTestButton() {
     }
     
     $('.test_btn').show();
+}
+
+function parseTestResult(cb) {
+
+    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+        onsuccess: function(result){
+            if (result && !result[0] && result[1]) {
+                var data = result[1];
+                var referenceMap = {};
+                var list, atcid, item, key;
+                
+                list = data.reference_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    referenceMap[atcid] = list[i];
+                }
+                
+                list = data.your_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    if (referenceMap[atcid]) {
+                        referenceMap[atcid].answer = list[i].content;
+                    }
+                }
+
+                list = data.paper;
+                for (var i=0,len=list.length; i<len; i++) {
+                    item = referenceMap[list[i]];
+                    if (item.answer) {
+                        for (var j in item.options) {
+                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                        }
+                    }
+                }
+
+                var category = {};
+                var correct;
+                
+                for (var j=0,len2=list.length; j<len2; j++) {
+                    item = referenceMap[list[j]];
+                    if (!item.answer) continue;
+                    correct = true;
+                    for (var i in item.options) {
+                        if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                            (item.options[i].correct === '' && item.options[i].answer == '')){
+                            continue;
+                        }
+                        else {
+                            correct = false;
+                            break;
+                        }
+                    }
+
+                    for (var i in item.label) {
+                        var key = item.label[i];
+                        category[key] = category[key] || {};
+                        category[key].sum = category[key].sum || 0;
+                        category[key].sum += 1;
+                        category[key].right = category[key].right || 0;
+                        category[key].right += correct ? 1 : 0;
+                    }
+                }
+
+                console.log(category);
+                var datasource = [
+                    {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                    {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                    {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
+                    {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                    {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                    {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
+                    {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                    {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                ];
+                for (var i=0,len=datasource.length; i<len; i++) {
+                    item = datasource[i];
+                    key = category[item.skill];
+                    item.correct = key.right;
+                    item.score = Math.round(key.right*100/key.sum);
+                }
+
+                cb && cb(datasource);
+            }
+        }
+    });
 }
 
 //-->
