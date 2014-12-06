@@ -566,8 +566,7 @@ function showPaperDetail(test_id) {
             <div class="box_content">
                 <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
                 <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
-                <div class="result_time" onclick="showPaperDetail(hui.getCookie('test_id'))" style="cursor:pointer;">查看参考答案</div>
-
+                
                 <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
                 <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
@@ -605,7 +604,7 @@ function showPaperDetail(test_id) {
                 <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
                 <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
   
-                <div class="result_title"> 详细测评报告：</div>
+                <div class="result_title" onclick="showPaperDetail(hui.getCookie('test_id'))" style="cursor:pointer;"> 详细测评报告：</div>
                 <div class="result_detail">
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 200px;"></div>
                     <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
