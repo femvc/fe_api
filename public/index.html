@@ -625,7 +625,7 @@ function parseTestResult(cb) {
                     {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
                 ];
                 for (var i=0,len=datasource.length; i<len; i++) {
-                    if (datasource[i] && category[item.skill]) {
+                    if (datasource[i] && category[datasource[i].skill]) {
                         item = datasource[i];
                         key = category[item.skill];
                         item.correct = key.right;
