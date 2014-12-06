@@ -258,7 +258,9 @@ function initForTest() {
                         if (data.test_id) {
                             if (hui.util.getCookie('test_id')) {
                                 var test_history = hui.util.getCookie('test_history') || '';
-                                hui.util.setCookie('test_history', test_history + ',' + data.test_id);
+                                if (test_history.indexOf(',' + data.test_id) === -1) {
+                                    hui.util.setCookie('test_history', test_history + ',' + data.test_id);
+                                }
                             }
                             hui.util.setCookie('test_id', data.test_id);
                             hui.g('tid').innerHTML = data.test_id;
