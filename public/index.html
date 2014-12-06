@@ -16,7 +16,7 @@ var form;
 function showTestResult() {
     Requester.get('/ue_api/internal/get_rank', {
         data: {
-            test_id: hui.util.getCookie('test_id')
+            test_id: window.test_id
         },
         onsuccess: function (result) {
             // form.getByFormName('subject_nxt').setDisabled(false);
@@ -32,7 +32,7 @@ function showTestResult() {
                 }
                 else {
                     // console.log('Warning: Test not finish')
-                    showPaperDetail(hui.getCookie('test_id'));
+                    showPaperDetail();
                 }
             }
         }
@@ -42,7 +42,7 @@ function showTestResult() {
 function showEvaluateReport() {
     Requester.get('/ue_api/internal/get_rank', {
         data: {
-            test_id: hui.util.getCookie('test_id')
+            test_id: window.test_id)
         },
         onsuccess: function (result) {
             // form.getByFormName('subject_nxt').setDisabled(false);
@@ -183,6 +183,8 @@ window.onload = function () {
     if (test_id) {
         hui.cc('resume_btn').style.display = 'block';
     }
+
+    window.test_id = hui.util.getCookie('test_id');
 
     hui.util.on(window, 'resize', function(){
         var btn = hui.Control.getByFormName('subject_skip');
@@ -354,7 +356,7 @@ function initForTest() {
     subject_skip.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
-        data.test_id = hui.util.getCookie('test_id');
+        data.test_id = window.test_id;
         saveTestResult(data);
         $('.subject_nxt').attr('disabled','disabled');
         $('.form_content').animate({opacity:0}, 500);
@@ -397,7 +399,7 @@ function initForTest() {
     candidate.getByFormName('candidate_nxt').onclick = function () {
         var data = candidate.getParamMap();
         if (data.annual !== '0' && data.career !== '0') {
-            data.test_id = hui.util.getCookie('test_id');
+            data.test_id = window.test_id;
             Requester.get('/ue_api/internal/update_rank', {
                 data: data,
                 onsuccess: function (result) {
@@ -464,9 +466,9 @@ function initForTest() {
     }, 'force'); //*/
 };
 
-function showPaperDetail(test_id) {
+function showPaperDetail() {
 
-    Requester.get('/ue_api/internal/get_result?test_id=' + test_id, {
+    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
         onsuccess: function(result){
             if (result && !result[0] && result[1]) {
                 var data = result[1];
@@ -539,7 +541,7 @@ function showPaperDetail(test_id) {
         </div>
         <div class="logo" onclick="showEvaluateReport()">UED</div>
         <div class="logo" onclick="showTestResult()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div class="logo" onclick="showPaperDetail(hui.getCookie('test_id'))" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="logo" onclick="showPaperDetail()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
     </div>
     <div class="page_body">
@@ -616,7 +618,7 @@ function showPaperDetail(test_id) {
                 <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
                 <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
   
-                <div class="result_title" onclick="showPaperDetail(hui.getCookie('test_id'))" style="cursor:pointer;"> 详细测评报告：</div>
+                <div class="result_title" onclick="showPaperDetail()" style="cursor:pointer;"> 详细测评报告：</div>
                 <div class="result_detail">
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 360px;"></div>
                     <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:340}"></div>
