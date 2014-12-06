@@ -620,7 +620,7 @@ function parseTestResult(cb) {
                     {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
                     {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
                     {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                    {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
+                    {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
                     {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
                     {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
                 ];
@@ -629,7 +629,7 @@ function parseTestResult(cb) {
                         item = datasource[i];
                         key = category[item.skill];
                         item.correct = key.right;
-                        item.score = Math.round(key.right*100/key.sum);
+                        item.score = Math.floor(key.right*99/key.sum);
                     }
                 }
 
