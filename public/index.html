@@ -178,7 +178,7 @@ window.onload = function () {
             }
         }
     });
-    var test_id = hui.util.getCookie('test_id');
+    var test_id = hui.util.getCookie('test_history');
     hui.g('tid').innerHTML = test_id;
     if (test_id) {
         hui.cc('resume_btn').style.display = 'block';
@@ -256,6 +256,10 @@ function initForTest() {
                         data.index2 = data.index1 = data.index;
                         data.title1 = data.title;
                         if (data.test_id) {
+                            if (hui.util.getCookie('test_id')) {
+                                var test_history = hui.util.getCookie('test_history') || '';
+                                hui.util.setCookie('test_history', test_history + ',' + data.test_id);
+                            }
                             hui.util.setCookie('test_id', data.test_id);
                             hui.g('tid').innerHTML = data.test_id;
                         }
