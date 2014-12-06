@@ -178,7 +178,7 @@ window.onload = function () {
             }
         }
     });
-    var test_id = hui.util.getCookie('test_history');
+    var test_id = hui.util.getCookie('test_history').split(',').join('<br/>');
     hui.g('tid').innerHTML = test_id;
     if (test_id) {
         hui.cc('resume_btn').style.display = 'block';
