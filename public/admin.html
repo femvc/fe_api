@@ -166,6 +166,7 @@ window.admin.init = function () {
 
                 for (var i in data.options) {
                     data.options[i].index = i;
+                    data.options[i].content = hui.util.encodehtml(hui.util.decode(data.options[i].content));
                     window.form.addOption(data.options[i]);
                 }
             }
