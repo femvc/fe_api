@@ -490,7 +490,7 @@ function showPaperDetail() {
                     }
                 }
 
-                var html = '',
+                var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
                     tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
                 
                 for (var j=0,len2=list.length; j<len2; j++) {
