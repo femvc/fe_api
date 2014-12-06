@@ -134,9 +134,9 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 #content1 textarea { height: 100px; }
 .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word;width: 92%;}
 
-.detail_container .title {padding:0px;margin:0px;margin-top:20px;line-height:1.2em;white-space: normal; word-break: break-word;}
+.detail_container .title {padding:0px;margin:0px;margin-top:20px; margin-bottom: 8px; line-height:1.2em;white-space: normal; word-break: break-word;}
 .detail_container .your {border: 1px solid orange;}
-.detail_container .option_list { padding: 0px 0px 0px 20px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
+.detail_container .option_list { padding: 0px 0px 0px 65px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
 .detail_container .yes { list-style-type: square; color: green }
 .detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
 
