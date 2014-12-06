@@ -178,11 +178,10 @@ window.onload = function () {
             }
         }
     });
-    var test_id = hui.util.getCookie('test_history').split(',').join('<br/>');
-    hui.g('tid').innerHTML = test_id;
-    if (test_id) {
-        hui.cc('resume_btn').style.display = 'block';
-    }
+    
+    showTestHistory();
+    
+    showTestButton();
 
     window.test_id = hui.util.getCookie('test_id');
 
@@ -258,21 +257,8 @@ function initForTest() {
                         data.index2 = data.index1 = data.index;
                         data.title1 = data.title;
                         if (data.test_id) {
-                            if (hui.util.getCookie('test_id')) {
-                                var test_history = hui.util.getCookie('test_history') || '';
-                                var uniq = {};
-                                var list = (test_history + ',' + data.test_id).split(',');
-                                test_history = [];
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    if (list[i] && !uniq[list[i]]) {
-                                        uniq[list[i]] = list[i];
-                                        test_history.push(list[i]);
-                                    }
-                                }
-                                hui.util.setCookie('test_history', test_history.join(','));
-                            }
                             hui.util.setCookie('test_id', data.test_id);
-                            hui.g('tid').innerHTML = test_history.join('<br />');
+                            showTestHistory();
                         }
 
                         form.setValueByTree(data);
@@ -525,6 +511,33 @@ function showPaperDetail() {
 
 
     
+}
+
+function showTestHistory() {
+    var test_id = hui.util.getCookie('test_id');
+    var test_history = hui.util.getCookie('test_history') || '';
+    var uniq = {};
+    var list = (test_history + ',' + test_id).split(',');
+    test_history = [];
+    for (var i=0,len=list.length; i<len; i++) {
+        if (list[i] && !uniq[list[i]]) {
+            uniq[list[i]] = list[i];
+            test_history.push(list[i]);
+        }
+    }
+    hui.util.setCookie('test_history', test_history.join(','));
+    var tpl = '<a onclick="window.test_id=this.id" id="#{0}">#{0}</a><br />';
+    var html = '';
+    for (var i=0,len=test_history.length; i<len; i++) {
+        html += hui.util.format(tpl, test_history[i]);
+    }
+    hui.g('tid').innerHTML = html;
+}
+
+function showTestButton() {
+    if (test_id) {
+        hui.cc('resume_btn').style.display = 'block';
+    }
 }
 
 //-->
