@@ -269,6 +269,10 @@ function initForTest() {
                             list[i].index = i;
                             form.addOption(list[i]);
                         }
+
+                        $('.subject_nxt').removeAttr('disabled');
+                        $('.form_content').animate({opacity:1}, 400);
+                        $('.form_mask').hide();
                     }
                 }
             }
@@ -359,9 +363,7 @@ function initForTest() {
                 // form.getByFormName('subject_nxt').setDisabled(false);
                 if (result && result[1] && result[1][0] && result[1][0].index) {
                     form.initSubject();
-                    $('.subject_nxt').removeAttr('disabled');
-                    $('.form_content').animate({opacity:1}, 400);
-                    $('.form_mask').hide();
+
                 }
                 else {
                     hui.Control.getByFormName('form').hide();
