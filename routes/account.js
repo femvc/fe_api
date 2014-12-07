@@ -105,3 +105,7 @@ exports.foo = function (req, res, next) {
     });
     return response.ok(req, res, 'ok');
 };
+
+exports.sendSMS = function () {
+    //http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=1&t=18918126428&c=
+};
