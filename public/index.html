@@ -134,7 +134,7 @@ function showResultChart(data){
             gridLineInterpolation: 'polygon',
             lineWidth: 0,
             min: 0,
-            max: 100
+            max: 102
         },
 
         tooltip: {
@@ -631,7 +631,7 @@ function parseTestResult(cb) {
                         item = datasource[i];
                         key = category[item.skill];
                         item.correct = key.right;
-                        item.score = Math.floor(key.right*96/key.sum);
+                        item.score = Math.floor(key.right*100/key.sum);
                     }
                 }
 
