@@ -452,12 +452,12 @@ function saveTestScore(data) {
             // form.getByFormName('subject_nxt').setDisabled(false);
             if (result && result[1] && result[1][0] && result[1][0].index) {
                 form.initSubject();
-                hui.util.setCookie(hui.util.getCookie('test_id'), 'unfinish');
+                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
             }
             else {
                 hui.Control.getByFormName('form').hide();
                 showTestScore();
-                hui.util.setCookie(hui.util.getCookie('test_id'), 'finish');
+                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
             }
         }
     });
@@ -544,7 +544,7 @@ function showTestButton() {
     var test_id = window.test_id;
     $('#resume_btn').hide();
     $('#btn_report').hide();
-    if (test_id && hui.util.getCookie(test_id) === 'finish') {
+    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
         $('#btn_report').show();
     }
     else if (hui.util.getCookie('test_id')) {
