@@ -542,13 +542,13 @@ function showTestHistory() {
 
 function showTestButton() {
     var test_id = window.test_id;
+    $('#resume_btn').hide();
+    $('#btn_report').hide();
     if (test_id && hui.util.getCookie(test_id) === 'finish') {
-        $('#resume_btn').hide();
         $('#btn_report').show();
     }
-    else {
+    else if (hui.util.getCookie('test_id')) {
         $('#resume_btn').show();
-        $('#btn_report').hide();
     }
     
     $('.test_btn').show();
