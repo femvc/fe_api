@@ -188,10 +188,9 @@ window.onload = function () {
     
     showTestHistory();
     
-    showTestButton();
-
     window.test_id = hui.util.getCookie('test_id');
-
+    showTestButton();
+    
     hui.util.on(window, 'resize', function(){
         var btn = hui.Control.getByFormName('subject_skip');
         var main = btn ? btn.getMain() : undefined;
