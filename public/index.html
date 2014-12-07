@@ -520,7 +520,7 @@ function showPaperDetail() {
 }
 
 function showTestHistory() {
-    var test_id = hui.util.getCookie('test_id');
+    var test_id = hui.util.getCookie('test_id') || '';
     var test_history = hui.util.getCookie('test_history') || '';
     var uniq = {};
     var list = (test_history + ',' + test_id).split(',');
