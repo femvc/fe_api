@@ -649,7 +649,7 @@ function initSendSMS() {
     var send = send_sms.getByFormName('send');
     send.onclick = function () {
         var data = hui.Control.getByFormName('send_sms').getParamMap();
-        Requester.get('/ue_api/internal/send_sms', {
+        Requester.get('/ue_api/account/send_sms', {
             data: data,
             onsuccess: function (result) {
                 // form.getByFormName('subject_nxt').setDisabled(false);
@@ -769,7 +769,7 @@ function initSendSMS() {
         </div>
 
         <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'640px',height: '400px'}" style="display:none">
-            <div class="box_content">
+            <div class="box_content" style="padding: 30px;">
                 Mobile: <input type="text" ui="type:'TextInput',formName:'mobile'" /> <br/>
                 Randcode: <input type="text" ui="type:'TextInput',formName:'randcode'" /> <br/>
                 <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">发 送</button>
