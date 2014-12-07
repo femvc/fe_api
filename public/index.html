@@ -656,6 +656,12 @@ function initSendSMS() {
                 if (result && result[1]) {
                     send.showError('Send success.');
                 }
+                else if (result && result.err_msg) {
+                    send.showError(result.err_msg);
+                }
+                else {
+                    send.showError('Send fail.');
+                }
             }
         });
     };
