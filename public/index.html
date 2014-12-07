@@ -452,12 +452,12 @@ function saveTestScore(data) {
             // form.getByFormName('subject_nxt').setDisabled(false);
             if (result && result[1] && result[1][0] && result[1][0].index) {
                 form.initSubject();
-
+                hui.util.setCookie(hui.util.getCookie('test_id'), 'unfinish');
             }
             else {
                 hui.Control.getByFormName('form').hide();
                 showTestScore();
-                hui.util.setCookie(window.test_id, 'finish');
+                hui.util.setCookie(hui.util.getCookie('test_id'), 'finish');
             }
         }
     });
