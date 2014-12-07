@@ -112,9 +112,10 @@ exports.sendSMS = function (req, res, next) {
         //return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER', 'mobile');
         req.paramlist.mobile = '13248001636';
     }
+    req.paramlist.randcode = req.paramlist.randcode || '2095';
 
     var mobile = req.paramlist.mobile;
-    var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=1&t=' + mobile + '&c=推立方测试：验证码 ' + Math.random() + ' 序号16[前端训练营]';
+    var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=3&t=' + mobile + '&c=' + req.paramlist.randcode;
     request(url, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             res.send(body);
