@@ -33,6 +33,7 @@ app.all('/ue_api/account/login', account.login);
 app.all('/ue_api/account/logout', account.logout);
 app.get('/ue_api/account/get_detail', account.auth, account.getDetail);
 app.get('/ue_api/account/get_uid', account.auth, account.getUid);
+app.get('/ue_api/account/send_sms', account.sendSMS);
 
 //question
 // internal 

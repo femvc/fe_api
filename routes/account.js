@@ -1,6 +1,7 @@
 'use strict';
 var userLogic = require('../helpers/user');
 var userModel = require('../models/user').createNew();
+var request = require('request');
 
 exports.login = function (req, res, next) {
     if (!req.paramlist.username) {
@@ -106,6 +107,17 @@ exports.foo = function (req, res, next) {
     return response.ok(req, res, 'ok');
 };
 
-exports.sendSMS = function () {
-    //http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=1&t=18918126428&c=
+exports.sendSMS = function (req, res, next) {
+    if (req.paramlist.mobile !== '18918126428') {
+        //return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER', 'mobile');
+        req.paramlist.mobile = '13248001636';
+    }
+
+    var mobile = req.paramlist.mobile;
+    var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=1&t=' + mobile + '&c=测试验证码' + Math.random();
+    request(url, function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.send(body);
+        }
+    })
 };
