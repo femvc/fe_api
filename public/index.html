@@ -549,7 +549,7 @@ function showTestButton() {
     if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
         $('#btn_report').show();
     }
-    else if (hui.util.getCookie('test_id')) {
+    else if (test_id && String(test_id).length > 20) {
         $('#resume_btn').show();
     }
     
