@@ -51,3 +51,76 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .test_history .item_row .t_time { float: left; width: 80px; margin-top: 5px; padding-left: 40px; color: #666; }
 .page_middle .test_history .item_row .t_score { float: left; width: 21px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
 .page_foot { padding-top: 20px; text-align: center; font-size: 13px; height: 52px; background-color: rgb(34, 34, 34); color: rgb(134, 134, 134); }
+
+.subject_test .hui_boxpanel { }
+.subject_test .subject_box { }
+.subject_test .hui_boxpanel_close { }
+.subject_test .subject_box .form_title { background-color: #5885c0; color: white; line-height: 1.2em; font-size: 24px; font-weight: normal; text-align: center; padding: 22px 0px 29px 0px; margin: 0px }
+.subject_test .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
+.subject_test .subject_box .form_content { padding: 37px 45px 50px 50px; position: relative; z-index: 1; }
+.subject_test .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
+.subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
+.subject_test .subject_box .subject_action { height: 110px; position: absolute; z-index: 1; width: 100% }
+.subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
+.subject_test .subject_box .subject_action .subject_nxt { margin-top: 20px; background-color: #BDA97E; }
+.subject_test .subject_box .subject_nxt { float: left; border-radius: 3px; font-size: 19px; line-height: 1.2em; padding: 10px 40px; border-width: 0px; margin-left: 20px; background-color: #00aaef; color: white; cursor: pointer; border-radius: 30px; }
+.subject_test .subject_box .subject_nxt:hover { background-color: #BDA97E; border: 1px solid rgb(167, 154, 104); padding: 9px 39px }
+.subject_test .subject_box .subject_action .hui_btn_disabled,
+.subject_test .subject_box .subject_action .hui_btn_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
+.subject_test .subject_box .subject_action .subject_pre { float: left; padding-left: 20px; padding-right: 5px; color: #fff; line-height: 1.2em; font-size: 18px; padding-bottom: 5px; margin-top: 10px; padding-top: 21px; margin-left: 0px }
+.subject_test .subject_box .subject_action .subject_end { float: right; background-image: url(img/icon_exit.png); background-repeat: no-repeat; background-position: 0px 9px; padding-left: 27px; color: #fff; line-height: 1.2em; font-size: 16px; padding-bottom: 5px; margin-top: 21px; padding-top: 10px; margin-right: 40px }
+.subject_test .subject_box .subject_skip { margin-top: 15px; display: inline-block }
+.subject_test .subject_box { }
+.subject_test .subject_box { }
+.subject_test .subject_box .hui_panel { }
+.subject_test .subject_box .tr_row { color: #939393; line-height: 2em; font-size: 25px; padding: 15px 0px 10px 34px; list-style-position: inside; border-bottom: 1px solid #ddd }
+.subject_test .subject_box .tr_row .td_index { display: none }
+.subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
+.subject_test .hui_checkbox { margin-top: 11px }
+.subject_test .hui_btn { font-family: 'microsoft yahei'; }
+.subject_test .subject_box .tr_row .subject_nxt { }
+.subject_test .hui_btn_label { }
+.subject_test .subject_box .tr_row .subject_pre { }
+.subject_test .subject_box .tr_row .subject_end { }
+.result_box { background-position: -144px -137px; background-repeat: no-repeat; color: #333; font-size: 19px; }
+.result_box b { font-weight: normal; }
+.result_box .box_content { padding: 30px 50px 60px; }
+.result_box .result_score { padding-bottom: 20px; font-size: 28px; color: #333; }
+.result_box .result_score .score { color: #168de2; font-size: 31px; font-weight: normal; padding: 0px 5px; }
+.result_box .result_correct { padding: 10px 0px; }
+.result_box .result_time { padding: 10px 0px 25px; }
+.result_box .result_chart_bg { background-image: url(img/rate3.png?456); background-repeat: no-repeat; background-position: 0px -50px; height: 39px; width: 400px; padding: 0px 0px; }
+.result_box .result_chart { background-image: url(img/rate3.png?123); background-repeat: no-repeat; background-position: 0px 0px; height: 39px; width: 270px; padding: 0px 0px; }
+.result_box .result_rate { padding: 20px 0px 10px; }
+.result_box .result_rate .rate { color: #168de2; padding: 0px 10px; }
+.result_box .result_tip { padding: 20px 0px 30px; }
+.result_box .result_nxt { background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
+.candidate_box { font-size: 19px; color: #333; }
+.candidate_box .box_content { padding: 20px 20px 30px; }
+.candidate_box .row_package { padding-bottom: 30px; height: 75px; }
+.candidate_box .row_item { }
+.candidate_box .row_item .title { clear: both; padding-bottom: 10px; }
+.candidate_box .row_career { padding-bottom: 10px; padding-top: 5px; height: 75px; }
+.candidate_box .validate_text { padding-top: 7px; }
+.candidate_box .candidate_nxt { background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
+.candidate_box .candidate_tip { padding: 0px 0px 35px; }
+.candidate_box .candidate_tip .strong { color: #168de2; }
+.candidate_box .hui_slider .hui_slider_rightside { left: inherit; right: 100%; margin-right: 10px; }
+.candidate_box .hui_slider .hui_slider_rightinput { text-align: right; }
+.candidate_box .hui_btn_disabled { background-color: #ccc; }
+.report_box { font-size: 19px; color: #333; }
+.report_box .box_content { padding: 20px 20px 30px; line-height: 2em; }
+.report_box .result_detail { padding: 10px 0px 15px; font-size: 14px; line-height: 20px; }
+.report_box .result_detail table { border-collapse: collapse; }
+.report_box .result_detail th { border-bottom: 1px solid #eee; color: #999; }
+.report_box .result_detail td { border-bottom: 1px solid #eee; }
+.report_box .tel { color: #333; }
+.report_box .tel .spam { }
+.report_box .result_level { }
+.report_box .b { padding-left: 10px; padding-right: 5px; }
+.report_box .strong { color: #00aaef; padding-left: 10px; padding-right: 5px; }
+.report_box .effect { padding-top: 10px; }
+.report_box .result_title { margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 5px; }
+.report_box .hui_table { }
+.report_box .hui_table .hui_table_thtext,
+.report_box .hui_table .hui_table_tdcntr { padding: 5px 0px 5px 5px; }
