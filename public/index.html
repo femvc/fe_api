@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ebbinghaus Intelligent Remember [v1.0]</title>
-<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="main3.css">
 
 <style>
 
@@ -675,23 +675,97 @@ function initSendSMS() {
 <!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
 <div class="page">
     <div class="page_head">
-        <div class="link" style="text-align:right;">
-            uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
+        <div class="page_container">
+            <div class="sign"><a class="sign_in">登录</a><a class="sign_up">注册</a> </div>
+            <div class="logo"><img src="img/logo.png" alt=""></div>
+            <div class="menu">
+                <ul class="menu_list">
+                    <li class="menu_item"><a>首 页</a></li>
+                    <li class="menu_item"><a>测评历史</a></li>
+                    <li class="menu_item"><a>课程介绍</a></li>
+                    <li class="menu_item"><a>高端职位</a></li>
+                    <li class="menu_item"><a>关于我们</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="logo" onclick="showEvaluateReport()">UED</div>
-        <div class="logo" onclick="showTestScore()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div class="logo" onclick="showPaperDetail()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-
     </div>
     <div class="page_body">
-        <div class="page_body_padding">&nbsp;</div>
-        <h1 class="test_title"><span style="display:none">你想知道自己前端技术实力排名吗？</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%" /></h1>
-        <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
-        <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
-        <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
-        <div class="test_btn" onclick="form.show();form.initSubject('newone');" style="display:none;">立即测试</div>  
+        <div class="page_container">
+            <div class="page_body_padding">&nbsp;</div>
+            <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
+            <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
+            <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
+            <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
+            <div class="test_btn" onclick="form.show();form.initSubject('newone');" style123="display:none;">立即测试</div> 
+        </div> 
     </div>
-    <div class="page_foot">&nbsp;&copy; 2014</div>
+    <div class="page_middle">
+        <div class="page_container">
+            <div class="contact">
+                <h3 class="contact_title">试听&amp;咨询</h3>
+                <ul class="test_list">
+                    <li class="item_row">
+                        <h4 class="sub_title">微信咨询</h4>
+                        <div class="sub_list">
+                        <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
+                    </li>
+                    <li class="item_row">
+                        <h4 class="sub_title">电话咨询</h4>
+                        <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
+                    </li>
+                    <li class="item_row">
+                        <h4 class="sub_title">QQ咨询</h4>
+                        <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="description">
+                <h3 class="sub_title">FECamps 前端训练营</h3>
+                <div class="desc_content">
+                <img src="img/qrcode.png" alt="" class="qrcode">
+                前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
+            </div>
+            
+            <div class="test_history">
+                <h3 class="history_title">最新评测结果</h3>
+                <ul class="test_list">
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                </ul>
+            </div>
+            <hr class="clearfix" />
+        </div>
+    </div>
+    <div class="page_foot">
+        <div class="page_container">
+        沪ICP备11008151号 沪公网安备11010802014853 &copy;2015 版权所有
+        </div>
+    </div>
+</div>  
+
+
 
     <div id="subject_add" class="subject_test">
         <div class="subject_box" ui="type:'Boxpanel',formName:'form'" style="display:none">
@@ -783,7 +857,7 @@ function initSendSMS() {
             
         </div>
     </div>
-</div>
+
 
 <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
 
