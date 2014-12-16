@@ -1,0 +1,818 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ebbinghaus Intelligent Remember [v1.0]</title>
+<link rel="stylesheet" type="text/css" href="main.css">
+
+<style>
+
+</style>
+<script type="text/javascript">
+'use strict';
+var form;
+
+function showTestScore() {
+    Requester.get('/ue_api/internal/get_rank', {
+        data: {
+            test_id: window.test_id
+        },
+        onsuccess: function (result) {
+            // form.getByFormName('subject_nxt').setDisabled(false);
+            if (result && result[1]) {
+                var data = result[1];
+                if (data.question) {
+                    hui.g('subject_index').innerHTML = '1';
+                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
+                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
+                    data.question_count = data.question.length;
+                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
+                    hui.Control.getByFormName('result').setValueByTree(data).show();
+                }
+                else {
+                    console.log('Warning: Test not finish')
+                    showPaperDetail();
+                }
+            }
+        }
+    });
+}
+
+function showEvaluateReport() {
+    Requester.get('/ue_api/internal/get_rank', {
+        data: {
+            test_id: window.test_id
+        },
+        onsuccess: function (result) {
+            // form.getByFormName('subject_nxt').setDisabled(false);
+            if (result && result[1]) {
+                var data = result[1];
+                if (data.question) {
+                    var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
+                                {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
+                                {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
+                                {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
+                                {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
+                                {level:'前端专家      ', score:85, annual:35, min:1, max:10},
+                                {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
+                    var level = 0;
+                    for (var i=0,len=grade.length; i<len; i++) {
+                        if (data.score > grade[i].score) {
+                            level = i;
+                        }
+                    }
+
+                    data.cur  = grade[level].level;
+                    data.nxt  = grade[level+1].level.replace('工程师', '');
+                    data.nxt2 = grade[level+1].level;
+                    
+                    data.annual = grade[level].annual;
+                    data.increase = grade[level].min + '~' + grade[level].max;
+                    
+                    data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
+                    
+                    hui.Control.getByFormName('candidate').hide();
+                    hui.Control.getByFormName('report').setValueByTree(data).show();
+                    
+                    var datasource = [
+                        {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                        {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                        {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
+                        {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                        {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
+                        {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
+                        {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                        {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                    ];
+
+                    parseTestResult(function(datasource){
+                        var score = [];
+                        for (var i=0,len=datasource.length; i<len; i++) {
+                            score.push(datasource[i].score);
+                        }
+                        showResultChart(score);
+
+                        var skill_list = hui.Control.getByFormName('skill_list');
+                        skill_list.datasource = datasource;
+                        skill_list.renderBody();
+                    });
+                }
+                else {
+                    console.log('Warning: Test not finish')
+                }
+            }
+        }
+    });
+}
+
+function showResultChart(data){
+
+    $('#skill_chart').highcharts({
+        chart: {
+            polar: true,
+            type: 'line'
+        },
+
+        title: {
+            text: '',
+            y: -80
+        },
+
+        pane: {
+            size: '78%',
+            center: ['62%', '50%']
+        },
+
+        xAxis: {
+            categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            endOnTick: false,
+            max: 108
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0,
+            layout: 'vertical'
+        },
+
+        series: [{
+            name: '中级水平',
+            data: [70, 70, 60, 65, 40, 20, 60, 60],
+            pointPlacement: 'off',
+            color: 'gray'
+        }, {
+            name: '高级水平',
+            data: [80, 80, 75, 80, 65, 50, 70, 75],
+            pointPlacement: 'off',
+            color: '#f90'
+        }, {
+            name: '架构师　',
+            data: [95, 95, 95, 95, 80, 80, 85, 80],
+            pointPlacement: 'off',
+            color: '#f60'
+        }, {
+            name: '目前级别',
+            data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
+            pointPlacement: 'off',
+            color: '#090'
+        }]
+
+    });
+}
+
+window.onload = function () {
+    initForTest();
+    Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
+        onsuccess: function (result) {
+            if (result && !result[0] && result[1]) {
+                hui.g('uid').innerHTML = result[1];
+            }
+        }
+    });
+    
+    showTestHistory();
+    
+    window.test_id = hui.util.getCookie('test_id');
+    showTestButton();
+    
+    hui.util.on(window, 'resize', function(){
+        var btn = hui.Control.getByFormName('subject_skip');
+        var main = btn ? btn.getMain() : undefined;
+        if (main && main.offsetTop) {
+            if (document.body.clientHeight < main.offsetTop + 30) {
+                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
+                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
+            }
+            else {
+                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
+                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
+            }
+        }
+    });
+
+    initSendSMS();
+
+};
+
+function initForTest() {
+    
+    window.listTable = [
+        {
+            width: 100,
+            title: '技能',
+            sortable: true,
+            field: 'index',
+            content: function (item) {
+                return item['skill'];
+            }
+        }, {
+            width: 40,
+            title: '答对',
+            sortable: true,
+            field: 'correct',
+            content: function (item) {
+                return item['correct'];
+            }
+        }, {
+            width: 40,
+            title: '得分',
+            sortable: true,
+            field: 'score',
+            content: function (item) {
+                return item['score'];
+            }
+        }
+    ];
+    window.listData = [
+        // {
+        //     'skill': 'html',
+        //     'correct': 2,
+        //     'score': 40
+        // }, {
+        //     'skill': 'css',
+        //     'correct': 2,
+        //     'score': 40
+        // }
+    ];
+
+    // subject_add
+    hui.Control.init(hui.g('subject_add'));
+    form = hui.Control.getByFormName('form');
+    form.initSubject = function (newstart) {
+        Requester.get('/ue_api/internal/get_next_question', {
+            data: {
+                newstart: !!newstart ? 'newone' : '', 
+                rand: Math.random()
+            },
+            onsuccess: function (result) {
+                if (result && !result[0] && result[1]) {
+                    var data = result[1];
+                    if (data.atcid) {
+                        data.title = hui.util.encodehtml(data.title);
+                        data.atcid = data.atcid;
+                        data.index2 = data.index1 = data.index;
+                        data.title1 = data.title;
+                        if (data.test_id) {
+                            hui.util.setCookie('test_id', data.test_id);
+                            showTestHistory();
+                        }
+
+                        form.setValueByTree(data);
+
+                        form.getByFormName('content').disposeChild();
+                        //var content = form.getByFormName('content').getMain();
+                        var list = data.options;
+                        for (var i in list) {
+                            list[i].index = i;
+                            form.addOption(list[i]);
+                        }
+
+                        $('.subject_nxt').removeAttr('disabled');
+                        $('.form_content').animate({opacity:1}, 400);
+                        $('.form_mask').hide();
+                    }
+                }
+            }
+        });
+    };
+
+    form.addOption = function (obj) {
+        var content = form.getByFormName('content').getMain(),
+            list,
+            index;
+        obj = obj || {};
+        if (!obj.index) {
+            var list = hui.c('td_index');
+            obj.index = 1;
+            for (var i = 0, len = list.length; i < len; i++) {
+                index = parseInt(list[i].innerHTML);
+                if (index >= obj.index) {
+                    obj.index = index + 1;
+                }
+            }
+        }
+        // obj.content = hui.util.encodehtml(obj.content);
+        var tpl =
+            '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
+            '    <div ui="type:\'Label\',id:\'content#{index}\'">#{hui.util.encodehtml(hui.util.decode(content))}</div>' +
+            '    <span class="td_index">#{index}</span>' +
+            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '</li>';
+        hui.util.appendHTML(content, hui.format(tpl, obj));
+        hui.Control.create(hui.g('content' + obj.index));
+    };
+    form.removeOption = function (index) {
+        var content = form.getByFormName('content');
+        content.getByFormName(index).dispose();
+
+    };
+    form.removeAllOption = function () {
+        var content = form.getByFormName('content'),
+            option,
+            main = content.getMain();
+        var list = hui.c('td_index');
+        for (var i = 0, len = list.length; i < len; i++) {
+            index = parseInt(list[i].innerHTML);
+            option = content.getByFormName(i);
+            if (option) {
+                option.dispose();
+            }
+        }
+        main.index = 0;
+    };
+
+    var submit = form.getByFormName('subject_nxt');
+    var submit2 = form.getByFormName('subject_nxt2');
+    submit.onclick = submit2.onclick = function () {
+        var data = hui.Control.getByFormName('form').getParamMap();
+        data.content = window.encodeURIComponent(JSON.stringify(data.content));
+
+        if (data.content.indexOf('yes') !== -1) {
+            subject_skip.onclick();
+        }
+        else if (window.confirm('友情提示：您尚未选择任何答案，确定跳过该题目吗')) {
+            subject_skip.onclick();
+        }
+    };
+    var subject_skip = form.getByFormName('subject_skip');
+    subject_skip.onclick = function () {
+        var data = hui.Control.getByFormName('form').getParamMap();
+        data.content = window.encodeURIComponent(JSON.stringify(data.content));
+        data.test_id = window.test_id;
+        saveTestScore(data);
+        $('.subject_nxt').attr('disabled','disabled');
+        $('.form_content').animate({opacity:0}, 500);
+        // $('.form_mask').show();
+    };
+
+    var subject_pre = form.getByFormName('subject_pre');
+    subject_pre.onclick = function () {
+        var data = {};
+        data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
+
+        saveTestScore(data);
+    };
+
+    var result = hui.Control.getByFormName('result');
+    result.getByFormName('result_nxt').onclick = function () {
+        hui.Control.getByFormName('result').hide();
+        // hui.Control.getByFormName('candidate').show();
+        showEvaluateReport();
+    };
+    /*
+    var candidate = hui.Control.getByFormName('candidate');
+    candidate.getByFormName('candidate_nxt').onclick = function () {
+        var data = candidate.getParamMap();
+        if (data.annual !== '0' && data.career !== '0') {
+            data.test_id = window.test_id;
+            Requester.get('/ue_api/internal/update_rank', {
+                data: data,
+                onsuccess: function (result) {
+                    // form.getByFormName('subject_nxt').setDisabled(false);
+                    if (result && !result[0]) {
+                        showEvaluateReport();
+                    }
+                }
+            });
+        }
+        else {
+            if (data.annual === '0') {
+                hui.g('annual_msg').innerHTML = '请选择！';
+            }
+            if (data.career === '0') {
+                hui.g('career_msg').innerHTML = '请选择！';
+            }
+        }
+    };
+
+    candidate.getByFormName('career').onmove = function () {
+        hui.g('career_msg').innerHTML = '';
+        // if (candidate.getByFormName('career').getValue() !== '0' &&
+        //     candidate.getByFormName('annual').getValue() !== '0') {
+        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // }
+        // else {
+        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        // }
+    };
+    candidate.getByFormName('annual').onmove = function () {
+        hui.g('annual_msg').innerHTML = '';
+        // if (candidate.getByFormName('career').getValue() !== '0' &&
+        //     candidate.getByFormName('annual').getValue() !== '0') {
+        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // }
+        // else {
+        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        // }
+    };
+    // hui.Control.getByFormName('report').show();
+
+    hui.Validator.setRule('career', {
+        'validate': function (text) {
+            if (text === null || text === undefined || text === '') {
+                return 1;
+            }
+            return 0;
+        },
+        'noticeText': {
+            1: '不能为空'
+        }
+    }, 'force');
+    hui.Validator.setRule('annual', {
+        'validate': function (text) {
+            if (text === null || text === undefined || text === '') {
+                return 1;
+            }
+            return 0;
+        },
+        'noticeText': {
+            1: '不能为空'
+        }
+    }, 'force'); //*/
+};
+
+function saveTestScore(data) {
+    Requester.get('/ue_api/internal/save_next_question', {
+        data: data,
+        onsuccess: function (result) {
+            // form.getByFormName('subject_nxt').setDisabled(false);
+            if (result && result[1] && result[1][0] && result[1][0].index) {
+                form.initSubject();
+                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
+            }
+            else {
+                hui.Control.getByFormName('form').hide();
+                showTestScore();
+                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
+            }
+        }
+    });
+}
+
+function showPaperDetail() {
+
+    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+        onsuccess: function(result){
+            if (result && !result[0] && result[1]) {
+                var data = result[1];
+                var referenceMap = {};
+                var list, atcid, item;
+                
+                list = data.reference_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    referenceMap[atcid] = list[i];
+                }
+                
+                list = data.your_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    if (referenceMap[atcid]) {
+                        referenceMap[atcid].answer = list[i].content;
+                    }
+                }
+
+                list = data.paper;
+                for (var i=0,len=list.length; i<len; i++) {
+                    item = referenceMap[list[i]];
+                    if (item.answer) {
+                        for (var j in item.options) {
+                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                        }
+                    }
+                }
+
+                var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
+                    tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
+                var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
+                for (var j=0,len2=list.length; j<len2; j++) {
+                    item = referenceMap[list[j]];
+                    if (!item.answer && !finish) continue;
+                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
+                    html += '<ul class="option_list">';
+                    for (var i in item.options) {
+                        item.options[i].index = i;
+                        html += hui.format(tpl, item.options[i]);
+                    }
+                    html += '</ul>\n';
+                }
+                hui.g('detail_container').innerHTML = html;
+                hui.Control.getByFormName('detail').show();
+                
+                // console.log(html);
+            }
+        }
+    });
+}
+
+function showTestHistory() {
+    var test_id = hui.util.getCookie('test_id') || '';
+    var test_history = hui.util.getCookie('test_history') || '';
+    var uniq = {};
+    var list = (test_history + ',' + test_id).split(',');
+    test_history = [];
+    for (var i=0,len=list.length; i<len; i++) {
+        if (list[i] && !uniq[list[i]]) {
+            uniq[list[i]] = list[i];
+            test_history.push(list[i]);
+        }
+    }
+    hui.util.setCookie('test_history', test_history.join(','));
+    var tpl = '<a style="cursor:pointer" onclick="window.test_id=this.id;showTestButton()" id="#{0}">#{0}</a><br />';
+    var html = '';
+    for (var i=0,len=test_history.length; i<len; i++) {
+        html += hui.util.format(tpl, test_history[i]);
+    }
+    hui.g('tid').innerHTML = html;
+}
+
+function showTestButton() {
+    var test_id = window.test_id;
+    $('#resume_btn').hide();
+    $('#btn_report').hide();
+    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
+        $('#btn_report').show();
+    }
+    else if (test_id && String(test_id).length > 20) {
+        $('#resume_btn').show();
+    }
+    
+    $('.test_btn').show();
+}
+
+function parseTestResult(cb) {
+
+    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+        onsuccess: function(result){
+            if (result && !result[0] && result[1]) {
+                var data = result[1];
+                var referenceMap = {};
+                var list, atcid, item, key;
+                
+                list = data.reference_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    referenceMap[atcid] = list[i];
+                }
+                
+                list = data.your_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    if (referenceMap[atcid]) {
+                        referenceMap[atcid].answer = list[i].content;
+                    }
+                }
+
+                list = data.paper;
+                for (var i=0,len=list.length; i<len; i++) {
+                    item = referenceMap[list[i]];
+                    if (item.answer) {
+                        for (var j in item.options) {
+                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                        }
+                    }
+                }
+
+                var category = {};
+                var correct;
+                
+                for (var j=0,len2=list.length; j<len2; j++) {
+                    item = referenceMap[list[j]];
+                    if (!item.answer) continue;
+                    correct = true;
+                    for (var i in item.options) {
+                        if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                            (item.options[i].correct === '' && item.options[i].answer == '')){
+                            continue;
+                        }
+                        else {
+                            correct = false;
+                            break;
+                        }
+                    }
+
+                    for (var i in item.label) {
+                        var key = item.label[i];
+                        category[key] = category[key] || {};
+                        category[key].sum = category[key].sum || 0;
+                        category[key].sum += 1;
+                        category[key].right = category[key].right || 0;
+                        category[key].right += correct ? 1 : 0;
+                    }
+                }
+
+                console.log(category);
+                var datasource = [
+                    {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                    {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                    {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
+                    {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                    {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                    {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
+                    {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                    {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                ];
+                for (var i=0,len=datasource.length; i<len; i++) {
+                    if (datasource[i] && category[datasource[i].skill]) {
+                        item = datasource[i];
+                        key = category[item.skill];
+                        item.correct = key.right;
+                        item.score = Math.floor(key.right*100/key.sum);
+                    }
+                }
+
+                cb && cb(datasource);
+            }
+        }
+    });
+}
+
+
+function initSendSMS() {
+    var send_sms = hui.Control.getByFormName('send_sms');
+    var send = send_sms.getByFormName('send');
+    send.onclick = function () {
+        var data = hui.Control.getByFormName('send_sms').getParamMap();
+        Requester.get('/ue_api/account/send_sms', {
+            data: data,
+            onsuccess: function (result) {
+                // form.getByFormName('subject_nxt').setDisabled(false);
+                if (result && result[1]) {
+                    send.showError('Send success.');
+                }
+                else if (result && result.err_msg) {
+                    send.showError(result.err_msg);
+                }
+                else {
+                    send.showError('Send fail.');
+                }
+            }
+        });
+    };
+}
+//-->
+</script>
+
+</head>
+
+<body style="" onload123="initForTest()">
+<!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
+<div class="page">
+    <div class="page_head">
+        <div class="link" style="text-align:right;">
+            uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
+        </div>
+        <div class="logo" onclick="showEvaluateReport()">UED</div>
+        <div class="logo" onclick="showTestScore()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="logo" onclick="showPaperDetail()" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+    </div>
+    <div class="page_body">
+        <div class="page_body_padding">&nbsp;</div>
+        <h1 class="test_title"><span style="display:none">你想知道自己前端技术实力排名吗？</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%" /></h1>
+        <div class="test_desc">2014年，北京、上海的互联网公司已超过3,000家，其中前端开发人员已超过100,000人，<br/>你想知道自己技术实力的排名吗</div>
+        <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
+        <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
+        <div class="test_btn" onclick="form.show();form.initSubject('newone');" style="display:none;">立即测试</div>  
+    </div>
+    <div class="page_foot">&nbsp;&copy; 2014</div>
+
+    <div id="subject_add" class="subject_test">
+        <div class="subject_box" ui="type:'Boxpanel',formName:'form'" style="display:none">
+            <div class="subject_action">
+                <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
+                <input type="hidden" ui="type:'TextInput',formName:'title'" />
+                <input type="hidden" ui="type:'TextInput',formName:'index'" />
+                <a href="javascript:" class="subject_end" onclick="form.hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
+                <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
+                <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
+            </div>
+            <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
+            <div class="form_content">
+                <div class="form_mask"><img src="img/loading.gif" /></div>
+                <div class="subject_title">
+                    <span ui="type:'Label',formName:'index2'">1</span>、<pre ui="type:'Label',formName:'title1'"></pre>
+                </div>
+                <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
+                </ol>
+                <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formName:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
+            </div>
+
+        </div>
+
+        <div class="result_box" ui="type:'Boxpanel',formName:'result',size:{width:'640px'}" style="display:none">
+            <div class="box_content">
+                <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
+                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
+                
+                <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
+                <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
+                <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
+                <div class="result_tip">点击“下一步”继续进行评估。</div>
+                <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
+            </div>
+        </div>
+        <div class="candidate_box" ui="type:'Boxpanel',formName:'candidate',size:{width:'640px',height: '400px'}" style="display:none">
+            <div class="box_content">
+                <div class="row_item row_career">
+                    <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
+                    <div ui="type:'Slider',formName:'career',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320,smallChange:0.1,value:0"></div>
+                </div>
+                <hr class="clearfix" />
+                <div class="row_item row_package">
+                    <div class="title">目前年薪档位（万）：<span class="validate_text" id="annual_msg"></span></div>
+                    <div ui="type:'Slider',formName:'annual',labels:false,ticks:true,tickStep:5,minValue:0,maxValue:40,width:320,smallChange:1,value:0"></div>
+                </div>
+                <hr class="clearfix" />
+                <div class="candidate_tip">点击“下一步”会根据您目前的 &nbsp;<b>工作经验</b> 、&nbsp; <b>年薪档位</b> &nbsp;及&nbsp; <b>测试结果</b> &nbsp;准确计算出您的 <b class="strong">薪资收入</b> 提升空间!</div>
+                <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt',disabled:false" tabindex="100">下一步</button>
+            </div>
+            
+        </div>
+        <div class="report_box" ui="type:'Boxpanel',formName:'report',size:{width:'800px'}" style="display:none">    
+            <div class="box_content">
+                <div class="fe_level" style="display:none;">
+                初级前端工程师 0-33    5~10W   1000人 <br/>
+                中级前端工程师 34-55   8~20W   200 <br/>
+                高级前端工程师 50-70  18~26W   300 <br/>
+                前端架构师     65-85  22~36W   10 <br/>
+                前端专家       80-100 34~99W   1  <br/>  
+                </div>                  
+                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <span style="display:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></span></div>
+                <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
+                <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
+  
+                <div class="result_title"> 测评报告 &nbsp;&nbsp;<a onclick="showPaperDetail()" style="cursor:pointer;"><small>(查看详情)</small></a></div>
+                <div class="result_detail">
+                    <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
+                    <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
+                </div>    
+
+            </div>
+        </div>
+
+        <div class="report_box" ui="type:'Boxpanel',formName:'detail',size:{width:'800px'}" style="display:none">    
+            <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
+                
+
+            </div>
+        </div>
+
+        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'640px',height: '400px'}" style="display:none">
+            <div class="box_content" style="padding: 30px;">
+                Mobile: <input type="text" ui="type:'TextInput',formName:'mobile'" /> <br/><br/>
+                Randcode: <input type="text" ui="type:'TextInput',formName:'randcode'" /> <br/><br/>
+                <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">发 送</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
+
+<!--script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script-->
+
+<script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_validator@0.0.1/hui_validator.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_util@0.0.1/hui_util.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_dropdown@0.0.1/hui_dropdown.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_control@0.0.1/hui_control.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_radiobox@0.0.1/hui_radiobox.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_checkbox@0.0.1/hui_checkbox.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_slider@0.0.1/hui_slider.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_draggable@0.0.1/hui_draggable.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_label@0.0.1/hui_label.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_boxpanel@0.0.1/hui_boxpanel.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_checklabel@0.0.1/hui_checklabel.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_template@0.0.1/hui_template.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_button@0.0.1/hui_button.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_textinput@0.0.1/hui_textinput.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_table@0.0.1/hui_table.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_panel@0.0.1/hui_panel.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_action@0.0.1/hui_action.js"></script>
+<script type="text/javascript" src="http://bpmjs.org/js/??hui_requester@0.0.1/hui_requester.js"></script>
+
+<!-- Only for highrchart!!  -->
+<script type="text/javascript" src="src/jquery1.9.1.js         "></script>
+<script type="text/javascript" src="src/highcharts.js          "></script>
+<script type="text/javascript" src="src/highcharts-more.js     "></script>
+</body>
+
+</html>
