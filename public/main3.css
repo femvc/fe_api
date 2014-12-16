@@ -3,7 +3,7 @@ body { padding: 0px; margin: 0px; background-color: #222; }
 .clearfix { *zoom: 1 }
 .clearfix:after { display: table; content: " "; clear: both; }
 hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; clear: both; border: 0px; padding: 0px; margin: -1px 0px 0px 0px; list-style: none; border-style: none; background: none; visibility: hidden; }
-.page { background-image: url(img/page.png); background-position: center -61px; margin: auto; font-family: microsoft yahei; }
+.page { margin: auto; font-family: microsoft yahei; }
 .page_container { width: 1100px; margin: auto; overflow: hidden; }
 .page_body { margin: auto; position: relative; z-index: 2; }
 .page_body:after { content: ''; display: block; position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; left: 0; background: url(img/bg_grid.png) repeat center center; opacity: 0.4; }
@@ -52,6 +52,21 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .test_history .item_row .t_score { float: left; width: 21px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
 .page_foot { padding-top: 20px; text-align: center; font-size: 13px; height: 52px; background-color: rgb(34, 34, 34); color: rgb(134, 134, 134); }
 
+.page .form_mask {position: absolute;z-index: 10; width: 100%; height: 70%; text-align: center;margin: -37px 0 0 -50px;padding-top: 140px; background-color: #fff;}
+.page .hui_table_tdcntr nobr { white-space: normal; }
+
+.subject_test {font-family: 'microsoft yahei';font-size: 14px;}
+.subject_test a{text-decoration:none}
+.subject_test a:hover {
+color: #ff6500;
+text-decoration: underline;
+}
+.subject_test a {
+color: green;
+text-decoration: none;
+}
+
+.subject_test .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
 .subject_test .hui_boxpanel { }
 .subject_test .subject_box { }
 .subject_test .hui_boxpanel_close { }
@@ -59,6 +74,8 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
 .subject_test .subject_box .form_content { padding: 37px 45px 50px 50px; position: relative; z-index: 1; }
 .subject_test .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
+.subject_test .subject_box .form_content .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word;width: 92%;}
+
 .subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
 .subject_test .subject_box .subject_action { height: 110px; position: absolute; z-index: 1; width: 100% }
 .subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
