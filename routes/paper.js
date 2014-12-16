@@ -249,10 +249,11 @@ function getNextQuestionCallback(req, res, next) {
             req.sessionStore.questionIndex[uid] = 1;
             return response.err(req, res, 'INDEX_OUT_RANGE');
         }
-
+        var single =  0;
         if (req.paramlist.answer != 'yes' && doc && doc.options) {
             var list = doc.options;
             for (var i in list) {
+                single += (list[i].correct ? 1 : 0);
                 delete list[i].correct;
             }
         }
@@ -262,6 +263,7 @@ function getNextQuestionCallback(req, res, next) {
         data.sessionID = req.sessionID;
         data.sum = paperContent.length;
         data.test_id = test_id;
+        data.single = single === 1;
         response.ok(req, res, data);
     });
 }
