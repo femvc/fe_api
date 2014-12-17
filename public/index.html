@@ -452,15 +452,15 @@ function saveTestScore(data) {
         data: data,
         onsuccess: function (result) {
             // form.getByFormName('subject_nxt').setDisabled(false);
-            if (result && result[1] && result[1][0] && result[1][0].index) {
+            //if (result && result[1] && result[1][0] && result[1][0].index) {
                 form.initSubject();
                 hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
-            }
-            else {
-                hui.Control.getByFormName('form').hide();
-                showTestScore();
-                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-            }
+            //}
+            //else {
+                //hui.Control.getByFormName('form').hide();
+                //showTestScore();
+                //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
+            //}
         }
     });
 }
