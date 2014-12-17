@@ -101,6 +101,7 @@ text-decoration: none;
 .subject_test .subject_box .tr_row .td_index { display: none }
 .subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
 .subject_test .hui_checkbox { margin-top: 11px }
+.subject_test .hui_radiobox { margin-top: 11px }
 .subject_test .hui_btn { font-family: 'microsoft yahei'; }
 .subject_test .subject_box .tr_row .subject_nxt { }
 .subject_test .hui_btn_label { }
