@@ -280,6 +280,7 @@ function initForTest() {
                         var list = data.options;
                         for (var i in list) {
                             list[i].index = i;
+                            list[i].single = data.single;
                             form.addOption(list[i]);
                         }
 
