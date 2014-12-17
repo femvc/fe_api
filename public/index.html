@@ -286,12 +286,14 @@ function initForTest() {
 
                         $('.subject_nxt').removeAttr('disabled');
                         $('.form_content').animate({opacity:1}, 400);
-                        $('.form_mask').hide();
+                        //$('.form_mask').hide();
+                        form.hideWaiting();
                     }
                 }
             }
         });
     };
+    form.showWaiting();
 
     form.addOption = function (obj) {
         var content = form.getByFormName('content').getMain(),
@@ -785,7 +787,7 @@ function initSendSMS() {
             </div>
             <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
             <div class="form_content">
-                <div class="form_mask"><img src="img/loading.gif" /></div>
+                <!--div class="form_mask"><img src="img/loading.gif" /></div-->
                 <div class="subject_title">
                     <span ui="type:'Label',formName:'index2'">1</span>、<pre ui="type:'Label',formName:'title1'"></pre>
                 </div>
