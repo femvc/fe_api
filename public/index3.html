@@ -316,7 +316,7 @@ function initForTest() {
             '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
             '    <div ui="type:\'Label\',id:\'content#{index}\'">#{hui.util.encodehtml(hui.util.decode(content))}</div>' +
             '    <span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'#{single}\',targetForm:\'content\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '    <div ui="type:\'#{single}\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
             '</li>';
         hui.util.appendHTML(content, hui.format(tpl, obj));
         hui.Control.create(hui.g('content' + obj.index));
@@ -686,8 +686,18 @@ function initSendSMS() {
 <div class="page">
     <div class="page_head">
         <div class="page_container">
+            <div class="sign"><a class="sign_in">登录</a><a class="sign_up">注册</a> </div>
             <div class="logo"><img src="img/logo.png" alt=""></div>
-            <div class="link" style="text-align:right;display:none">
+            <div class="menu">
+                <ul class="menu_list">
+                    <li class="menu_item"><a>首 页</a></li>
+                    <li class="menu_item"><a>测评历史</a></li>
+                    <li class="menu_item"><a>课程介绍</a></li>
+                    <li class="menu_item"><a>高端职位</a></li>
+                    <li class="menu_item"><a>关于我们</a></li>
+                </ul>
+            </div>
+            <div class="link" style="text-align:right;">
                 uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
             </div>
             
@@ -698,6 +708,9 @@ function initSendSMS() {
             <div class="page_body_padding">&nbsp;</div>
             <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
             <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
+            <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
+            <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
+            <div class="test_btn" onclick="form.show();form.initSubject('newone');" style123="display:none;">立即测试</div> 
         </div> 
     </div>
     <div class="page_middle">
@@ -724,16 +737,44 @@ function initSendSMS() {
                 <h3 class="sub_title">FECamps 前端训练营</h3>
                 <div class="desc_content">
                 <img src="img/qrcode.png" alt="" class="qrcode">
-                前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助移动互联网企业培养高级软件技术人才，提升企业整体竞争力。</div>
+                前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
             </div>
             
-            
+            <div class="test_history">
+                <h3 class="history_title">最新评测结果</h3>
+                <ul class="test_list">
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                    <li class="item_row">
+                        <span class="t_user">tomcat</span>
+                        <span class="t_time">76 m</span>
+                        <span class="t_score">36</span>
+                        <span class="t_date">2014-12-01 16:35</span>
+                    </li>
+                </ul>
+            </div>
             <hr class="clearfix" />
         </div>
     </div>
     <div class="page_foot">
         <div class="page_container">
-        &copy;2015 上海轩禄商务咨询有限公司 版权所有
+        沪ICP备11008151号 沪公网安备11010802014853 &copy;2015 版权所有
         </div>
     </div>
 </div>  
