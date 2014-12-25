@@ -19,7 +19,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_head .menu_list { list-style: none; padding: 0px; margin: 0px; float: left; }
 .page_head .menu_list .menu_item { float: left; margin: 0px 30px 0px 10px; }
 .page_body { text-align: center; height: 490px; background-image: linear-gradient(45deg, #020031 0, #6d3353 100%); }
-.page_body_bg { /* background-image: url(img/bg_grid.png?1231); */ }
+.page_body_bg { /* background-image: url(img/bg_grid.png?1231);  */ }
 .page_body_padding { }
 .page_body .test_title { padding: 0px; margin: 0px; font-size: 50px; color: white; padding-top: 73px; letter-spacing: 2px; height: 70px; }
 .page_body .test_title img { display: none; }
@@ -51,38 +51,22 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .test_history .item_row .t_time { float: left; width: 80px; margin-top: 5px; padding-left: 40px; color: #666; }
 .page_middle .test_history .item_row .t_score { float: left; width: 21px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
 .page_foot { padding-top: 20px; text-align: center; font-size: 13px; height: 52px; background-color: rgb(34, 34, 34); color: rgb(134, 134, 134); }
-
-.page .form_mask {position: absolute;z-index: 10; width: 100%; height: 70%; text-align: center;margin: -37px 0 0 -50px;padding-top: 140px; background-color: #fff;}
+.page .form_mask { position: absolute; z-index: 10; width: 100%; height: 70%; text-align: center; margin: -37px 0 0 -50px; padding-top: 140px; background-color: #fff; }
 .page .hui_table_tdcntr nobr { white-space: normal; }
-
-.subject_test {font-family: 'microsoft yahei';font-size: 14px;}
-.subject_test a{text-decoration:none}
-.subject_test a:hover {
-color: #ff6500;
-text-decoration: underline;
-}
-.subject_test a {
-color: green;
-text-decoration: none;
-}
-
+.subject_test { font-family: 'microsoft yahei'; font-size: 14px; }
+.subject_test a { text-decoration: none }
+.subject_test a:hover { color: #ff6500; text-decoration: underline; }
+.subject_test a { color: green; text-decoration: none; }
 .subject_test .hui_boxpanel { }
-.subject_test .hui_boxpanel_close {
-    color: white;
- }
- .subject_test .hui_boxpanel_close:hover {
-    color: white;
-    text-decoration: none;
-}
+.subject_test .hui_boxpanel_close { color: white; }
+.subject_test .hui_boxpanel_close:hover { color: white; text-decoration: none; }
 .subject_test .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
-.hui_boxpanel .form_mask {position: absolute;z-index: 10; width: 100%; height: 70%; text-align: center;margin: -37px 0 0 -50px;padding-top: 140px; background-color: #fff;}
-
+.hui_boxpanel .form_mask { position: absolute; z-index: 10; width: 100%; height: 70%; text-align: center; margin: -37px 0 0 -50px; padding-top: 140px; background-color: #fff; }
 .subject_test .subject_box .form_title { background-color: #5885c0; color: white; line-height: 1.2em; font-size: 24px; font-weight: normal; text-align: center; padding: 22px 0px 29px 0px; margin: 0px }
 .subject_test .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
 .subject_test .subject_box .form_content { padding: 37px 45px 50px 50px; position: relative; z-index: 1; }
 .subject_test .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
-.subject_test .subject_box .form_content .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word;width: 92%;}
-
+.subject_test .subject_box .form_content .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word; width: 92%; }
 .subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
 .subject_test .subject_box .subject_action { height: 110px; position: absolute; z-index: 1; width: 100% }
 .subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
@@ -102,7 +86,7 @@ text-decoration: none;
 .subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
 .subject_test .hui_checkbox { margin-top: 11px }
 .subject_test .hui_radiobox { margin-top: 11px }
-.subject_test .hui_btn { font-family: 'microsoft yahei'; }
+.subject_test .hui_btn { font-family: 'microsoft yahei'; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
 .subject_test .subject_box .tr_row .subject_nxt { }
 .subject_test .hui_btn_label { }
 .subject_test .subject_box .tr_row .subject_pre { }
@@ -149,8 +133,8 @@ text-decoration: none;
 .report_box .hui_table { }
 .report_box .hui_table .hui_table_thtext,
 .report_box .hui_table .hui_table_tdcntr { padding: 5px 0px 5px 5px; }
-.detail_container .title {padding:0px;margin:0px;margin-top:20px; margin-bottom: 8px; line-height:1.2em;white-space: normal; word-break: break-word;font-size: 15px;}
-.detail_container .your {border: 1px solid orange;}
+.detail_container .title { padding: 0px; margin: 0px; margin-top: 20px; margin-bottom: 8px; line-height: 1.2em; white-space: normal; word-break: break-word; font-size: 15px; }
+.detail_container .your { border: 1px solid orange; }
 .detail_container .option_list { padding: 0px 0px 0px 65px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
 .detail_container .yes { list-style-type: square; color: green }
 .detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
