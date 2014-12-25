@@ -71,7 +71,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test .subject_box .subject_action { height: 110px; position: absolute; z-index: 1; width: 100% }
 .subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
 .subject_test .subject_box .subject_action .subject_nxt { margin-top: 20px; background-color: #BDA97E; }
-.subject_test .subject_box .subject_nxt { float: left;  }
+.subject_test .subject_box .subject_nxt { float: left; padding: 9px 39px }
 .subject_test .subject_box .subject_nxt:hover { background-color: #BDA97E; border: 1px solid rgb(167, 154, 104); padding: 9px 39px }
 .subject_test .subject_box .subject_action .hui_button_disabled,
 .subject_test .subject_box .subject_action .hui_button_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
