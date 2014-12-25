@@ -862,14 +862,15 @@ function initSendSMS() {
             </div>
         </div>
 
-        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'640px',height: '400px'}" style="display:none">
+        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'400px',height: '200px'}" style="display:none">
             <div class="box_content" style="padding: 30px;">
-                Mobile: <input type="text" ui="type:'TextInput',formName:'mobile'" /> <br/><br/>
-                Randcode: <input type="text" ui="type:'TextInput',formName:'randcode'" /> <br/><br/>
+                <label>验证码: <input type="text" ui="type:'TextInput',formName:'randcode'" /></label> <a href="javascript:">免费获取</a><br/><br/>
+                <label>手机号: <input type="text" ui="type:'TextInput',formName:'mobile'" /></label> <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">点击获取</button><br/><br/>
                 <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">发 送</button>
             </div>
             
         </div>
+        
     </div>
 
 
