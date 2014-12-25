@@ -73,8 +73,8 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test .subject_box .subject_action .subject_nxt { margin-top: 20px; background-color: #BDA97E; }
 .subject_test .subject_box .subject_nxt { float: left; border-radius: 3px; font-size: 19px; line-height: 1.2em; padding: 10px 40px; border-width: 0px; margin-left: 20px; background-color: #00aaef; color: white; cursor: pointer; border-radius: 30px; }
 .subject_test .subject_box .subject_nxt:hover { background-color: #BDA97E; border: 1px solid rgb(167, 154, 104); padding: 9px 39px }
-.subject_test .subject_box .subject_action .hui_btn_disabled,
-.subject_test .subject_box .subject_action .hui_btn_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
+.subject_test .subject_box .subject_action .hui_button_disabled,
+.subject_test .subject_box .subject_action .hui_button_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
 .subject_test .subject_box .subject_action .subject_pre { float: left; padding-left: 20px; padding-right: 5px; color: #fff; line-height: 1.2em; font-size: 18px; padding-bottom: 5px; margin-top: 10px; padding-top: 21px; margin-left: 0px }
 .subject_test .subject_box .subject_action .subject_end { float: right; background-image: url(img/icon_exit.png); background-repeat: no-repeat; background-position: 0px 9px; padding-left: 27px; color: #fff; line-height: 1.2em; font-size: 16px; padding-bottom: 5px; margin-top: 21px; padding-top: 10px; margin-right: 40px }
 .subject_test .subject_box .subject_skip { margin-top: 15px; display: inline-block }
@@ -86,9 +86,9 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
 .subject_test .hui_checkbox { margin-top: 11px }
 .subject_test .hui_radiobox { margin-top: 11px }
-.subject_test .hui_btn { font-family: 'microsoft yahei'; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
+.subject_test .hui_button { font-family: 'microsoft yahei'; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
 .subject_test .subject_box .tr_row .subject_nxt { }
-.subject_test .hui_btn_label { }
+.subject_test .hui_button_label { }
 .subject_test .subject_box .tr_row .subject_pre { }
 .subject_test .subject_box .tr_row .subject_end { }
 .result_box { background-position: -144px -137px; background-repeat: no-repeat; color: #333; font-size: 19px; }
@@ -116,7 +116,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .candidate_box .candidate_tip .strong { color: #168de2; }
 .candidate_box .hui_slider .hui_slider_rightside { left: inherit; right: 100%; margin-right: 10px; }
 .candidate_box .hui_slider .hui_slider_rightinput { text-align: right; }
-.candidate_box .hui_btn_disabled { background-color: #ccc; }
+.candidate_box .hui_button_disabled { background-color: #ccc; }
 .report_box { font-size: 19px; color: #333; }
 .report_box .box_content { padding: 20px 20px 30px; line-height: 2em; }
 .report_box .result_detail { padding: 10px 0px 15px; font-size: 14px; line-height: 20px; }
