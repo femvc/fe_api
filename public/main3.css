@@ -103,7 +103,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .result_box .result_rate { padding: 20px 0px 10px; }
 .result_box .result_rate .rate { color: #168de2; padding: 0px 10px; }
 .result_box .result_tip { padding: 20px 0px 30px; }
-.result_box .result_nxt {  }
+.result_box .result_nxt { }
 .candidate_box { font-size: 19px; color: #333; }
 .candidate_box .box_content { padding: 20px 20px 30px; }
 .candidate_box .row_package { padding-bottom: 30px; height: 75px; }
@@ -111,7 +111,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .candidate_box .row_item .title { clear: both; padding-bottom: 10px; }
 .candidate_box .row_career { padding-bottom: 10px; padding-top: 5px; height: 75px; }
 .candidate_box .validate_text { padding-top: 7px; }
-.candidate_box .candidate_nxt {  }
+.candidate_box .candidate_nxt { }
 .candidate_box .candidate_tip { padding: 0px 0px 35px; }
 .candidate_box .candidate_tip .strong { color: #168de2; }
 .candidate_box .hui_slider .hui_slider_rightside { left: inherit; right: 100%; margin-right: 10px; }
@@ -138,9 +138,33 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .detail_container .option_list { padding: 0px 0px 0px 65px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
 .detail_container .yes { list-style-type: square; color: green }
 .detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
+
 .sms_box { }
-.sms_box .box_content { }
-.sms_box .sms_title { }
-.sms_box .sms_item { }
-.sms_box .sms_item .hui_textinput { }
-.sms_box .candidate_nxt { }
+.sms_box .hui_boxpanel_close { }
+.sms_box .box_content { padding: 35px 0px 40px 45px;  }
+.sms_box .box_content .sms_title {  padding: 0px; margin: 0px; padding-bottom: 20px; }
+.sms_box .box_content .validate_error {
+    color: #333;
+ }
+.sms_box .box_content .sms_item {padding-right: 3px;  display: block;min-height: 45px;padding-left: 54px;}
+.sms_box .box_content .sms_item .item_title {
+    position: absolute;
+    z-index: 1;
+    margin-left: -53px;
+    margin-top: 0px;
+}
+.sms_box .box_content .sms_item .item_content {}
+.sms_box .hui_textinput { }
+.sms_box .box_content .sms_item .validate { }
+.sms_box .box_content .sms_item .validate_icon { }
+.sms_box .box_content .sms_item .validate_text {
+    border: 0px;
+ 
+    color: red;
+}
+.sms_box .box_content .send_code {
+    margin-left: 10px;
+ }
+.sms_box .hui_button { }
+.sms_box .box_content .candidate_nxt { margin-top: 5px; }
+.sms_box .hui_button_label { }

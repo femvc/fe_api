@@ -115,7 +115,7 @@ exports.sendSMS = function (req, res, next) {
     req.paramlist.randcode = req.paramlist.randcode || '2095';
 
     var mobile = req.paramlist.mobile;
-    var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=3&t=' + mobile + '&c=' + req.paramlist.randcode;
+    var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=3&t=' + mobile + '&c=推立方测试' + req.paramlist.randcode;
     request(url, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             res.send(body);
