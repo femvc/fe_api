@@ -897,8 +897,8 @@ function initSendSMS() {
         <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'400px',height: '210px'}" style="display:none">
             <div class="box_content" style="padding: 40px 50px;">
                 <h3 class="sms_title">请输入验证码</h3>
-                <label>手机号: <input type="text" ui="type:'TextInput',formName:'mobile',rule:'not_empty&&mobile'" /></label> <a href="javascript:">获取验证码</a><br/><br/>
-                <label>验证码: <input type="text" ui="type:'TextInput',formName:'randcode',rule:'not_empty'" /></label> <br/><br/>
+                <label class="sms_item">手机号: <input type="text" ui="type:'TextInput',formName:'mobile',rule:'not_empty&&mobile'" /></label> <a href="javascript:">获取验证码</a><br/><br/>
+                <label class="sms_item">验证码: <input type="text" ui="type:'TextInput',formName:'randcode',rule:'not_empty'" /></label> <br/><br/>
                 <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">提 交</button>
             </div>
             
