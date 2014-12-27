@@ -138,3 +138,9 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .detail_container .option_list { padding: 0px 0px 0px 65px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
 .detail_container .yes { list-style-type: square; color: green }
 .detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
+.sms_box { }
+.sms_box .box_content { }
+.sms_box .sms_title { }
+.sms_box .sms_item { }
+.sms_box .sms_item .hui_textinput { }
+.sms_box .candidate_nxt { }
