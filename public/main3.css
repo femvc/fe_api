@@ -147,7 +147,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .sms_box { }
 .sms_box .hui_boxpanel_close { }
 .sms_box .box_content { padding: 35px 0px 45px 45px;  }
-.sms_box .box_content .sms_title {  padding: 0px; margin: 0px;   padding-bottom: 20px; }
+.sms_box .box_content .sms_title {  padding: 0px; margin: 0px;   padding-bottom: 30px; }
 .sms_box .validate_error {
     color: #333;
  }
@@ -180,5 +180,5 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
     text-decoration: none;
 }
 .sms_box .hui_button { }
-.sms_box .candidate_nxt { margin-top: 5px; }
+.sms_box .candidate_nxt { margin-top: 15px; }
 .sms_box .hui_button_label { }

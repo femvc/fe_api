@@ -30,7 +30,8 @@ var err_map = {
     MISSING_PARAMETERS: '参数缺失',
     USER_ALREADY_EXIST: '用户已存在',
     USER_ROOM_IS_EMPTY: '该room里没有人',
-    INDEX_OUT_RANGE: '索引值超出范围'
+    INDEX_OUT_RANGE: '索引值超出范围',
+    INVALIDE_VALIDATECODE: '无效验证码'
 };
 
 exports.err = function (req, res, errcode, extra_msg) {

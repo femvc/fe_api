@@ -156,6 +156,9 @@ exports.smsAuth = function (req, res, next) {
     if (randcode && randcode === req.paramlist.randcode) {
         response.ok(req, res, {uid: crypto.createHash('md5').update('fecamps'+req.paramlist.mobile).digest('hex')});
     }
+    else {
+        response.err(req, res, 'INVALIDE_VALIDATECODE');
+    }
     // mobileModel.getItem({
     //     mobile: req.paramlist.mobile,
     //     randcode: req.paramlist.randcode
