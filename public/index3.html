@@ -238,6 +238,8 @@ window.onload = function () {
 
     initSendSMS();
 
+    smsTimerCount();
+
 };
 
 function initForTest() {
@@ -685,7 +687,8 @@ function parseTestResult(cb) {
 
 
 function initSendSMS() {
-    var send = hui.Control.getByFormName('send_sms').getByFormName('send');
+    var send_sms = hui.Control.getByFormName('send_sms');
+    var send = send_sms.getByFormName('send');
     send.onclick = function () {
         var send_sms = hui.Control.getByFormName('send_sms');
         if (send_sms.validate()) {
@@ -708,10 +711,13 @@ function initSendSMS() {
         }
     };
 
-    hui.cc('send_code').onclick = function(){
+    hui.g('send_code').onclick = function(){
         var mobile = hui.Control.getByFormName('send_sms').getByFormName('mobile');
-        if (mobile.validate()) {
-            Requester.get('/ue_api/account/send_sms', {
+        if (mobile.validate() && !hui.util.getCookie('smsTimer')) {
+            hui.util.setCookie('smsTimer', 90);
+            hui.g('send_code').className = 'send_code_disabled';
+            smsTimerCount();
+            Requester.get('/ue_api/account/send_sms1', {
                 data: {mobile: mobile.getValue(),randcode:6868},
                 onsuccess: function (result) {
                     // form.getByFormName('subject_nxt').setDisabled(false);
@@ -728,6 +734,32 @@ function initSendSMS() {
             });
         }
     };
+
+    var mobile = send_sms.getByFormName('mobile');
+    mobile.onchange = function(){
+        // if (this.validate() && !hui.util.getCookie('smsTimer')) {
+        //     hui.g('send_code').className = 'send_code';
+        // }
+        // else {
+        //     hui.g('send_code').className = 'send_code_disabled';
+        // }
+    }
+}
+
+function smsTimerCount(){
+    var leftSec = hui.util.getCookie('smsTimer');
+    if (leftSec>0) {
+        hui.g('send_code').className = 'send_code_disabled';
+        hui.g('send_code').innerHTML = '(' + leftSec + ')秒后重新获取';
+        hui.util.setCookie('smsTimer', --leftSec);
+        window.setTimeout(smsTimerCount, 1000);
+    }
+    else {
+        hui.util.setCookie('smsTimer', '');
+        hui.g('send_code').className = 'send_code';
+        hui.g('send_code').innerHTML = '获取验证码';
+        hui.Control.getByFormName('send_sms').getByFormName('mobile').onchange();
+    }
 }
 //-->
 </script>
@@ -915,14 +947,14 @@ function initSendSMS() {
             </div>
         </div>
 
-        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'400px',height: '250px'}" style="display:none">
+        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'410px'}" style="display:none">
             <div class="box_content">
-                <h3 class="sms_title">请输入验证码</h3>
+                <h3 class="sms_title">请输入短信验证码</h3>
                 <label class="sms_item">
                     <div class="item_title">手机号: </div>
                     <div class="item_content">
                         <input type="text" maxlength="11" ui="type:'TextInput',formName:'mobile',rule:'not_empty&&mobile',autoValidate:true,autoHideError:true,hideBlankError:true" />
-                        <a class="send_code" href="javascript:">获取验证码</a>
+                        <a class="send_code" id="send_code" href="javascript:">获取验证码</a>
                     </div>
                 </label>
                 <label class="sms_item">

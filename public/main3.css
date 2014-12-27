@@ -57,7 +57,12 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test a { text-decoration: none }
 .subject_test a:hover { color: #ff6500; text-decoration: underline; }
 .subject_test a { color: green; text-decoration: none; }
-.subject_test .hui_boxpanel { }
+.subject_test .hui_boxpanel {
+    background-color: rgba(255, 255, 255, 0.8);
+ }
+ .subject_test .box_content {
+    background-color: white;
+}
 .subject_test .hui_boxpanel_close { color: white; }
 .subject_test .hui_boxpanel_close:hover { color: white; text-decoration: none; }
 .subject_test .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
@@ -141,30 +146,39 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 
 .sms_box { }
 .sms_box .hui_boxpanel_close { }
-.sms_box .box_content { padding: 35px 0px 40px 45px;  }
-.sms_box .box_content .sms_title {  padding: 0px; margin: 0px; padding-bottom: 20px; }
-.sms_box .box_content .validate_error {
+.sms_box .box_content { padding: 35px 0px 45px 45px;  }
+.sms_box .box_content .sms_title {  padding: 0px; margin: 0px;   padding-bottom: 20px; }
+.sms_box .validate_error {
     color: #333;
  }
-.sms_box .box_content .sms_item {padding-right: 3px;  display: block;min-height: 45px;padding-left: 54px;}
-.sms_box .box_content .sms_item .item_title {
+.sms_box .sms_item {padding-right: 3px;  display: block;min-height: 45px;padding-left: 54px;}
+.sms_box .sms_item .item_title {
     position: absolute;
     z-index: 1;
     margin-left: -53px;
     margin-top: 0px;
 }
-.sms_box .box_content .sms_item .item_content {}
+.sms_box .sms_item .item_content {}
 .sms_box .hui_textinput { }
-.sms_box .box_content .sms_item .validate { }
-.sms_box .box_content .sms_item .validate_icon { }
-.sms_box .box_content .sms_item .validate_text {
+.sms_box .validate { }
+.sms_box .validate .validate_icon { }
+.sms_box .validate_error .validate_text {
     border: 0px;
  
     color: red;
 }
-.sms_box .box_content .send_code {
-    margin-left: 10px;
- }
+.sms_box .send_code {
+    margin-left: 5px;
+}
+.sms_box .send_code_disabled {
+    margin-left: 5px;
+    color: #999;
+    cursor: default;
+}
+.sms_box .send_code_disabled:hover {
+    color: #999;
+    text-decoration: none;
+}
 .sms_box .hui_button { }
-.sms_box .box_content .candidate_nxt { margin-top: 5px; }
+.sms_box .candidate_nxt { margin-top: 5px; }
 .sms_box .hui_button_label { }
