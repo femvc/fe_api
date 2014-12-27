@@ -697,12 +697,12 @@ function initSendSMS() {
                 data: data,
                 onsuccess: function (result) {
                     // form.getByFormName('subject_nxt').setDisabled(false);
-                    if (result && result[1]) {
+                    if (result && !result[0] && result[1]) {
                         send_sms.hide();
                         form.show();form.initSubject('newone');
                     }
-                    else if (result && result.err_msg) {
-                        submit.showError(result.err_msg);
+                    else if (result && result[0]) {
+                        send_sms.showErrorByTree(result[0]);
                     }
                     else {
                         submit.showError('Send fail.');
