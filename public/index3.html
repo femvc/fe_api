@@ -1,18 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ebbinghaus Intelligent Remember [v1.0]</title>
 <link rel="stylesheet" type="text/css" href="main3.css">
-
 <style>
-
 </style>
 <script type="text/javascript">
 'use strict';
 var form;
-
 function showTestScore() {
     Requester.get('/ue_api/internal/get_rank', {
         data: {
@@ -38,7 +34,6 @@ function showTestScore() {
         }
     });
 }
-
 function showEvaluateReport() {
     Requester.get('/ue_api/internal/get_rank', {
         data: {
@@ -62,7 +57,6 @@ function showEvaluateReport() {
                             level = i;
                         }
                     }
-
                     data.cur  = grade[level].level;
                     data.nxt  = grade[level+1].level.replace('工程师', '');
                     data.nxt2 = grade[level+1].level;
@@ -85,14 +79,12 @@ function showEvaluateReport() {
                         {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
                         {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
                     ];
-
                     parseTestResult(function(datasource){
                         var score = [];
                         for (var i=0,len=datasource.length; i<len; i++) {
                             score.push(datasource[i].score);
                         }
                         showResultChart(score);
-
                         var skill_list = hui.Control.getByFormName('skill_list');
                         skill_list.datasource = datasource;
                         skill_list.renderBody();
@@ -105,31 +97,25 @@ function showEvaluateReport() {
         }
     });
 }
-
 function showResultChart(data){
-
     $('#skill_chart').highcharts({
         chart: {
             polar: true,
             type: 'line'
         },
-
         title: {
             text: '',
             y: -80
         },
-
         pane: {
             size: '78%',
             center: ['62%', '50%']
         },
-
         xAxis: {
             categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
             tickmarkPlacement: 'on',
             lineWidth: 0
         },
-
         yAxis: {
             gridLineInterpolation: 'polygon',
             lineWidth: 0,
@@ -137,12 +123,10 @@ function showResultChart(data){
             endOnTick: false,
             max: 108
         },
-
         tooltip: {
             shared: true,
             pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
         },
-
         legend: {
             align: 'right',
             verticalAlign: 'top',
@@ -150,7 +134,6 @@ function showResultChart(data){
             x: 0,
             layout: 'vertical'
         },
-
         series: [{
             name: '中级水平',
             data: [70, 70, 60, 65, 40, 20, 60, 60],
@@ -172,17 +155,14 @@ function showResultChart(data){
             pointPlacement: 'off',
             color: '#090'
         }]
-
     });
 }
-
 window.onload = function () {
     hui.Validator.setRule('mobile', {
         'validate': function (text) {
             var len = text.length;
             text = text.replace(/[^0-9]/ig, '');
             text = text.replace(/^86/ig, '');
-
             var f = /^(13\d|15\d|18\d|14\d|170)\d{8}$/.test(text);
             if (len === 0) {
                 return 1;
@@ -206,12 +186,12 @@ window.onload = function () {
             4: '手机号已存在'
         }
     }, 'force');
-
     initForTest();
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
-                hui.g('uid').innerHTML = result[1];
+                hui.g('uid').innerHTML = String(result[1]).substr(0, 8);
+                hui.cc('link').style.display = 'block';
             }
         }
     });
@@ -235,13 +215,10 @@ window.onload = function () {
             }
         }
     });
-
     initSendSMS();
-
     smsTimerCount();
-
+    showTab(hui.g('menu_index'), 'home_index');
 };
-
 function initForTest() {
     
     window.listTable = [
@@ -282,7 +259,6 @@ function initForTest() {
         //     'score': 40
         // }
     ];
-
     // subject_add
     hui.Control.init(hui.g('subject_add'));
     form = hui.Control.getByFormName('form');
@@ -304,9 +280,7 @@ function initForTest() {
                             hui.util.setCookie('test_id', data.test_id);
                             showTestHistory();
                         }
-
                         form.setValueByTree(data);
-
                         form.getByFormName('content').disposeChild();
                         //var content = form.getByFormName('content').getMain();
                         var list = data.options;
@@ -315,7 +289,6 @@ function initForTest() {
                             list[i].single = data.single;
                             form.addOption(list[i]);
                         }
-
                         $('.subject_nxt').removeAttr('disabled');
                         $('.form_content').animate({opacity:1}, 400);
                         //$('.form_mask').hide();
@@ -326,7 +299,6 @@ function initForTest() {
         });
     };
     form.showWaiting();
-
     form.addOption = function (obj) {
         var content = form.getByFormName('content').getMain(),
             list,
@@ -356,7 +328,6 @@ function initForTest() {
     form.removeOption = function (index) {
         var content = form.getByFormName('content');
         content.getByFormName(index).dispose();
-
     };
     form.removeAllOption = function () {
         var content = form.getByFormName('content'),
@@ -372,13 +343,11 @@ function initForTest() {
         }
         main.index = 0;
     };
-
     var submit = form.getByFormName('subject_nxt');
     var submit2 = form.getByFormName('subject_nxt2');
     submit.onclick = submit2.onclick = function () {
         var data = hui.Control.getByFormName('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
-
         if (data.content.indexOf('yes') !== -1) {
             subject_skip.onclick();
         }
@@ -396,15 +365,12 @@ function initForTest() {
         $('.form_content').animate({opacity:0}, 500);
         // $('.form_mask').show();
     };
-
     var subject_pre = form.getByFormName('subject_pre');
     subject_pre.onclick = function () {
         var data = {};
         data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
-
         saveTestScore(data);
     };
-
     var result = hui.Control.getByFormName('result');
     result.getByFormName('result_nxt').onclick = function () {
         hui.Control.getByFormName('result').hide();
@@ -436,7 +402,6 @@ function initForTest() {
             }
         }
     };
-
     candidate.getByFormName('career').onmove = function () {
         hui.g('career_msg').innerHTML = '';
         // if (candidate.getByFormName('career').getValue() !== '0' &&
@@ -458,7 +423,6 @@ function initForTest() {
         // }
     };
     // hui.Control.getByFormName('report').show();
-
     hui.Validator.setRule('career', {
         'validate': function (text) {
             if (text === null || text === undefined || text === '') {
@@ -482,7 +446,6 @@ function initForTest() {
         }
     }, 'force'); //*/
 };
-
 function saveTestScore(data) {
     Requester.get('/ue_api/internal/save_next_question', {
         data: data,
@@ -506,9 +469,7 @@ function saveTestScore(data) {
         }
     });
 }
-
 function showPaperDetail() {
-
     Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
         onsuccess: function(result){
             if (result && !result[0] && result[1]) {
@@ -529,7 +490,6 @@ function showPaperDetail() {
                         referenceMap[atcid].answer = list[i].content;
                     }
                 }
-
                 list = data.paper;
                 for (var i=0,len=list.length; i<len; i++) {
                     item = referenceMap[list[i]];
@@ -539,7 +499,6 @@ function showPaperDetail() {
                         }
                     }
                 }
-
                 var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
                     tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
                 var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
@@ -562,7 +521,6 @@ function showPaperDetail() {
         }
     });
 }
-
 function showTestHistory() {
     var test_id = hui.util.getCookie('test_id') || '';
     var test_history = hui.util.getCookie('test_history') || '';
@@ -581,9 +539,8 @@ function showTestHistory() {
     for (var i=0,len=test_history.length; i<len; i++) {
         html += hui.util.format(tpl, test_history[i]);
     }
-    hui.g('tid').innerHTML = html;
+    // hui.g('tid').innerHTML = html;
 }
-
 function showTestButton() {
     var test_id = window.test_id;
     $('#resume_btn').hide();
@@ -597,9 +554,7 @@ function showTestButton() {
     
     $('.test_btn').show();
 }
-
 function parseTestResult(cb) {
-
     Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
         onsuccess: function(result){
             if (result && !result[0] && result[1]) {
@@ -620,7 +575,6 @@ function parseTestResult(cb) {
                         referenceMap[atcid].answer = list[i].content;
                     }
                 }
-
                 list = data.paper;
                 for (var i=0,len=list.length; i<len; i++) {
                     item = referenceMap[list[i]];
@@ -630,7 +584,6 @@ function parseTestResult(cb) {
                         }
                     }
                 }
-
                 var category = {};
                 var correct;
                 
@@ -648,7 +601,6 @@ function parseTestResult(cb) {
                             break;
                         }
                     }
-
                     for (var i in item.label) {
                         var key = item.label[i];
                         category[key] = category[key] || {};
@@ -658,7 +610,6 @@ function parseTestResult(cb) {
                         category[key].right += correct ? 1 : 0;
                     }
                 }
-
                 console.log(category);
                 var datasource = [
                     {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
@@ -678,13 +629,11 @@ function parseTestResult(cb) {
                         item.score = Math.floor(key.right*100/key.sum);
                     }
                 }
-
                 cb && cb(datasource);
             }
         }
     });
 }
-
 
 function initSendSMS() {
     var send_sms = hui.Control.getByFormName('send_sms');
@@ -711,7 +660,6 @@ function initSendSMS() {
             });
         }
     };
-
     hui.g('send_code').onclick = function(){
         var mobile = hui.Control.getByFormName('send_sms').getByFormName('mobile');
         if (mobile.validate() && !hui.util.getCookie('smsTimer')) {
@@ -735,7 +683,6 @@ function initSendSMS() {
             });
         }
     };
-
     var mobile = send_sms.getByFormName('mobile');
     mobile.onchange = function(){
         // if (this.validate() && !hui.util.getCookie('smsTimer')) {
@@ -746,7 +693,6 @@ function initSendSMS() {
         // }
     }
 }
-
 function smsTimerCount(){
     var leftSec = hui.util.getCookie('smsTimer');
     if (leftSec>0) {
@@ -762,13 +708,28 @@ function smsTimerCount(){
         hui.Control.getByFormName('send_sms').getByFormName('mobile').onchange();
     }
 }
+
+function showTab(elem, tab) {
+    hui.g('home_index').style.display = 'none';
+    hui.g('industry').style.display = 'none';
+    hui.g('classcontent').style.display = 'none';
+    hui.g('test_history').style.display = 'none';
+    hui.g('about_us').style.display = 'none';
+
+    hui.g(tab).style.display = 'block';
+
+    var list = elem.parentNode.children;
+    for (var i=0,len=list.length; i<len; i++) {
+        hui.util.removeClass(list[i], 'item_selected');
+    }
+    hui.util.addClass(elem, 'item_selected');
+
+}
 //-->
 </script>
-
 </head>
-
 <body style="" onload123="initForTest()">
-<!--.page>.page_head>.logo^+.page_body>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
+<!--.page>.page_head>.logo^+.page_banner>h1.test_title{你想知道自己前端技术实力排名吗？}+.test_desc{2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，想知道你自己技术实力的排名吗}+.test_btn{立即测试}^+.page_foot{2014-10-17}-->
 <div class="page">
     <div class="page_head">
         <div class="page_container">
@@ -776,58 +737,94 @@ function smsTimerCount(){
             <div class="logo"><img src="img/logo.png" alt=""></div>
             <div class="menu">
                 <ul class="menu_list">
-                    <li class="menu_item"><a>首 页</a></li>
-                    <li class="menu_item"><a>行业现状</a></li>
-                    <li class="menu_item"><a>课程介绍</a></li>
-                    <li class="menu_item"><a>测评历史</a></li>
-                    <li class="menu_item"><a>关于我们</a></li>
+                    <li class="menu_item" id="menu_index" onclick="showTab(this,'home_index')" ><a>首 页</a></li>
+                    <li class="menu_item" onclick="showTab(this,'industry')"><a>行业现状</a></li>
+                    <li class="menu_item" onclick="showTab(this,'classcontent')"><a>课程介绍</a></li>
+                    <li class="menu_item" onclick="showTab(this,'test_history')"><a>测评历史</a></li>
+                    <li class="menu_item" onclick="showTab(this,'about_us')"><a>关于我们</a></li>
                 </ul>
             </div>
-            <div class="link" style="text-align:right;">
-                uid: <span id="uid"></span> <br/>test_id: <span id="tid"></span>
+            <div class="link" style="text-align:right;display:none;">
+                序列号: <span id="uid" class="uid"></span>
             </div>
             
         </div>
     </div>
-    <div class="page_body">
-        <div class="page_container">
-            <div class="page_body_padding">&nbsp;</div>
-            <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
-            <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
-            <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
-            <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
-            <div class="test_btn" onclick1="form.show();form.initSubject('newone');" onclick="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
-        </div> 
+    <div class="page_body" id="home_index">
+        <div class="page_banner">
+            <div class="page_container">
+                <div class="page_banner_padding">&nbsp;</div>
+                <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
+                <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
+                <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
+                <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
+                <div class="test_btn" onclick1="form.show();form.initSubject('newone');" onclick="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
+            </div> 
+        </div>
+        <div class="page_middle">
+            <div class="page_container">
+                <div class="contact">
+                    <h3 class="contact_title">试听&amp;咨询</h3>
+                    <ul class="test_list">
+                        <li class="item_row">
+                            <h4 class="sub_title">微信咨询</h4>
+                            <div class="sub_list">
+                            <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
+                        </li>
+                        <li class="item_row">
+                            <h4 class="sub_title">电话咨询</h4>
+                            <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
+                        </li>
+                        <li class="item_row">
+                            <h4 class="sub_title">QQ咨询</h4>
+                            <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="description">
+                    <h3 class="sub_title">前端训练营FECamps </h3>
+                    <div class="desc_content">
+                    <img src="img/qrcode.png" alt="" class="qrcode">
+                    前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
+                </div>
+                
+                <div class="test_history">
+                    <h3 class="history_title">最新评测结果</h3>
+                    <ul class="test_list">
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                    </ul>
+                </div>
+                <hr class="clearfix" />
+            </div>
+        </div>
     </div>
-    <div class="page_middle">
+    <div class="page_body" id="test_history" style="background-color: white;">
         <div class="page_container">
-            <div class="contact">
-                <h3 class="contact_title">试听&amp;咨询</h3>
-                <ul class="test_list">
-                    <li class="item_row">
-                        <h4 class="sub_title">微信咨询</h4>
-                        <div class="sub_list">
-                        <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
-                    </li>
-                    <li class="item_row">
-                        <h4 class="sub_title">电话咨询</h4>
-                        <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
-                    </li>
-                    <li class="item_row">
-                        <h4 class="sub_title">QQ咨询</h4>
-                        <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="description">
-                <h3 class="sub_title">前端训练营FECamps </h3>
-                <div class="desc_content">
-                <img src="img/qrcode.png" alt="" class="qrcode">
-                前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
-            </div>
-            
             <div class="test_history">
-                <h3 class="history_title">最新评测结果</h3>
+                <h3 class="history_title">评测历史列表</h3>
                 <ul class="test_list">
                     <li class="item_row">
                         <span class="t_user">tomcat</span>
@@ -855,7 +852,352 @@ function smsTimerCount(){
                     </li>
                 </ul>
             </div>
-            <hr class="clearfix" />
+        </div>
+    </div>
+    <div class="page_body" id="industry" style="background-color: white;">
+        <div class="page_container">
+            <img src="img/1232435.png" />
+        </div>
+    </div>
+    <div class="page_body" id="classcontent" style="background-color: white;">
+        <div class="page_container">
+            <div class="kc_content kc_cShow">
+                                <h2 class="kcTit">精通JavaScript开发 — 课程大纲</h2>
+                                <p class="xxCon">本课程适合想成为专业前端工程师的你，我们做的是培养专家.^_^</p>
+                                <div class="hr_40"></div>
+                                <div class="intTxt">
+                                    <h3>大纲说明:</h3>
+                                    <p>1.&nbsp;经常有同学问起新课程的内容问题，干脆就在这里做个对比，方便大家查看；</p>
+                                    <p>2.&nbsp;这里稍微说明一下：“1.0”课程指的2010年推出的那套老课程，“2.0”课程指的2012年的新课程；</p>
+                                    <p>3.&nbsp;老版课程内容以灰色标出，<span style="color:red">2.0版中的新内容</span>，以红色标识；</p>
+                                </div>
+                                
+                            <!--1.0 2.0对比-->
+                            
+                            <div class="kc_content kc_cShow">
+                                <div class="kcBar">
+                                    <div class="kc_title">基础部分</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c3">JS2.0<em>(新课程)</em>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/new.png" alt="new"></p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+<ul class="kc_list kc_list_r">
+<li><p class="kc_c1">JS入门：事件、原理、属性、样式、函数、if判断&nbsp;</p></li>
+<li><p class="kc_c1">JS入门：style和行间样式、函数传参、属性操作两种方式&nbsp;</p></li>
+<li><p class="kc_c2">字符串和变量、字面量和变量&nbsp;</p></li>
+
+<li><p class="kc_c1">提取行间事件、onload、byTagName、数组&nbsp;</p></li>
+<li><p class="kc_c1">循环、全选、选项卡、innerHTML、字符串连接&nbsp;</p></li>
+
+<li><p class="kc_c1">调试工具的使用、如何调试JS&nbsp;</p></li>
+<li><p class="kc_c1">变量类型、typeof、JS常见类型&nbsp;</p></li>
+<li><p class="kc_c1">类型转换、parseInt、NaN、隐式转换&nbsp;</p></li>
+<li><p class="kc_c1">作用域、闭包、命名规范、运算符、流程控制&nbsp;</p></li>
+<li><p class="kc_c2">变量遮蔽&nbsp;</p></li>
+<li><p class="kc_c1">JS中的随机数、随机颜色、随机范围、随机不重复&nbsp;</p></li>
+
+<li><p class="kc_c1">函数返回值&nbsp;</p></li>
+<li><p class="kc_c2">深入理解函数返回值&nbsp;</p></li>
+<li><p class="kc_c1">定时器：interval、timeout、时钟、QQ资料框、自动播放选项卡、京东商城侧边栏&nbsp;</p></li>
+<li><p class="kc_c1">arguments、字符串操作、数组操作、Json&nbsp;</p></li>
+<li><p class="kc_c2">循环外i的问题、函数定义和调用的区别、不变的变量&nbsp;</p></li>
+
+<li><p class="kc_c1">DOM操作基础：创建、添加、删除&nbsp;</p></li>
+<li><p class="kc_c1">BOM基础：窗口操作、UA、location&nbsp;</p></li>
+<li><p class="kc_c1">BOM应用：滚动、scrollTop、offset、clientHeight、浏览器类型检测&nbsp;</p></li>
+<li><p class="kc_c1">事件对象：冒泡、clientX、keyCode、ctrl/alt/shift、默认行为、拖拽&nbsp;</p></li>
+
+<li><p class="kc_c2">QQ邮箱闪烁提示、回放路径的拖拽&nbsp;</p></li>
+<li><p class="kc_c2">树形菜单、多级右键菜单&nbsp;</p></li>
+
+</ul>
+                                </div>
+                                <div class="hr_15"></div>
+                                <div class="kcBar">
+                                    <div class="kc_title">中级部分</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c3">JS2.0</p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+                                    <ul class="kc_list kc_list_r">
+<li><p class="kc_c2">批量设置样式：json、cssText、with&nbsp;</p></li>
+<li><p class="kc_c2">location、hash、query的处理，刷新保存页码&nbsp;</p></li>
+<li><p class="kc_c2">Date对象应用：setFullYear/Month等，时间戳、倒计时&nbsp;</p></li>
+<li><p class="kc_c2">Date高级应用&nbsp;</p></li>
+<li><p class="kc_c2">闭包的应用、封闭命名空间&nbsp;</p></li>
+<li><p class="kc_c1">ajax无刷新数据加载：创建、发送、接收、字符集和缓存&nbsp;</p></li>
+<li><p class="kc_c1">DOM应用：firstChild/lastChild、nextSibling/previousSibling&nbsp;</p></li>
+<li><p class="kc_c2">操作属性的第三种方式、自定义属性的获取、src的相对路径&nbsp;</p></li>
+<li><p class="kc_c2">offsetParent、计算元素的页面绝对位置&nbsp;</p></li>
+<li><p class="kc_c2">图片延迟加载——迅雷&nbsp;</p></li>
+<li><p class="kc_c2">简易瀑布流——花瓣&nbsp;</p></li>
+<li><p class="kc_c2">横向瀑布流——百度&nbsp;</p></li>
+<li><p class="kc_c2">DOM与innerHTML、innerHTML的bug&nbsp;</p></li>
+<li><p class="kc_c2">天猫、淘宝吸顶导航条&nbsp;</p></li>
+<li><p class="kc_c2">天猫、京东placeholder输入框&nbsp;</p></li>
+<li><p class="kc_c2">永远在页面中的右键菜单、提示图片&nbsp;</p></li>
+<li><p class="kc_c1">图片预加载、Image对象的使用&nbsp;</p></li>
+<li><p class="kc_c2">Image对象批量加载&nbsp;</p></li>
+<li><p class="kc_c1">运动基础、匀速运动、运动框架、侧边栏、淡入淡出&nbsp;</p></li>
+<li><p class="kc_c1">缓冲运动、页面提示框&nbsp;</p></li>
+<li><p class="kc_c1">多物体运动框架、万能运动框架、链式运动框架、完美运动框架&nbsp;</p></li>
+<li><p class="kc_c1">布局转换、淘宝幻灯片&nbsp;</p></li>
+<li><p class="kc_c2">运动应用：划动提示层、百度百科数字框、新浪滚动微博&nbsp;</p></li>
+<li><p class="kc_c2">永远在页面中放大的图片&nbsp;</p></li>
+<li><p class="kc_c1">无缝滚动&nbsp;</p></li>
+<li><p class="kc_c2">手风琴幻灯片、淘宝网无缝滚动幻灯片&nbsp;</p></li>
+<li><p class="kc_c1">this的错法、完美拖拽&nbsp;</p></li>
+<li><p class="kc_c2">完美封装可重用代码&nbsp;</p></li>
+<li><p class="kc_c1">完美拖拽、吸附拖拽、带框拖拽&nbsp;</p></li>
+<li><p class="kc_c2">程序思想——如何找思路，如何找规律，如何思考&nbsp;</p></li>
+<li><p class="kc_c1">碰撞检测、模拟窗口拖拽大小&nbsp;</p></li>
+<li><p class="kc_c2">窗口拖拽大小的封装和重用</p></li>
+<li><p class="kc_c1">自定义滚动条、鼠标滚轮&nbsp;</p></li>
+<li><p class="kc_c1">事件绑定、DOM事件流&nbsp;</p></li>
+<li><p class="kc_c1">cookie基础、&nbsp;</p></li>
+
+                                    </ul>
+                                </div>
+                                <div class="hr_15"></div>
+                                <div class="kcBar">
+                                    <div class="kc_title">高级部分</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c1">JS2.0</p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+                                    <ul class="kc_list kc_list_r">
+<li><p class="kc_c2">ajax高级应用：用户注册和登录、表单提交&nbsp;</p></li>
+<li><p class="kc_c2">后台接口的使用、接口文档&nbsp;</p></li>
+<li><p class="kc_c2">编写AJax的基本步骤&nbsp;</p></li>
+<li><p class="kc_c2">Jsonp跨域的方法——百度下拉提示&nbsp;</p></li>
+<li><p class="kc_c2">script标签的怪异特性、callback的使用&nbsp;</p></li>
+<li><p class="kc_c2">Jsonp标签的管理&nbsp;</p></li>
+<li><p class="kc_c2">封装可重用的Jsonp方法&nbsp;</p></li>
+<li><p class="kc_c2">ajax制作简易新浪微博：后台、接口、分页、顶、页码&nbsp;</p></li>
+<li><p class="kc_c2">其他常见数据格式及用法：CSV、XML&nbsp;</p></li>
+
+<li><p class="kc_c2">JS中的预解析机制、script出错时的处理机制&nbsp;</p></li>
+<li><p class="kc_c2">预解析相关面试题&nbsp;</p></li>
+<li><p class="kc_c2">递归及其各种应用&nbsp;</p></li>
+<li><p class="kc_c2">递归相关面试题&nbsp;</p></li>
+<li><p class="kc_c2">递归的性能问题、递归的优化&nbsp;</p></li>
+<li><p class="kc_c2">栈溢出的原因和处理&nbsp;</p></li>
+
+<li><p class="kc_c2">引用、复制&nbsp;</p></li>
+<li><p class="kc_c2">JS中的异常：try...catch的使用&nbsp;</p></li>
+<li><p class="kc_c2">try的嵌套和性能问题&nbsp;</p></li>
+<li><p class="kc_c2">抛出异常、Exception对象、异常和返回值的区别及用途&nbsp;</p></li>
+<li><p class="kc_c2">JS变量生存周期、垃圾回收机制&nbsp;</p></li>
+<li><p class="kc_c2">闭包与JS垃圾回收&nbsp;</p></li>
+<li><p class="kc_c2">闭包的用法、保存i的值&nbsp;</p></li>
+
+<li><p class="kc_c2">JS性能优化——健壮性、维护性、性能的平衡&nbsp;</p></li>
+<li><p class="kc_c2">性能瓶颈的识别——性能检测工具的使用：Chrome profiles、YSlow等&nbsp;</p></li>
+<li><p class="kc_c2">JS阻塞加载、图片延迟加载、网络性能优化、压缩、CDN的使用&nbsp;</p></li>
+<li><p class="kc_c2">JS执行性能优化：DOM操作、循环、数组优化、局部变量、eval、parseInt、系统函数、字符串连接、正则等&nbsp;</p></li>
+
+<li><p class="kc_c1">实例：苹果Dock栏&nbsp;</p></li>
+<li><p class="kc_c1">实例：chrome自定义首页&nbsp;</p></li>
+<li><p class="kc_c2">实例：官网作品页（IE版）&nbsp;</p></li>
+<li><p class="kc_c2">实例：imgAreaSelect组件的编写&nbsp;</p></li>
+<li><p class="kc_c2">实例：颜色选择器组件&nbsp;</p></li>
+<li><p class="kc_c2">实例：输入字数统计&nbsp;</p></li>
+
+<li><p class="kc_c1">正则表达式：RegExp对象、search方法、忽略大小写&nbsp;</p></li>
+<li><p class="kc_c1">match方法和全局匹配、量词的问题、replace方法&nbsp;</p></li>
+<li><p class="kc_c1">字符类、转义字符、行首行为、中文、单词边界、括号&nbsp;</p></li>
+<li><p class="kc_c2">正则应用：可重用的表单校验&nbsp;</p></li>
+<li><p class="kc_c2">自动表单校验、批量表单校验&nbsp;</p></li>
+
+<li><p class="kc_c1">表格操作：tBodies、tHead、tFoot、rows、cells&nbsp;</p></li>
+<li><p class="kc_c1">表格搜索、排序&nbsp;</p></li>
+<li><p class="kc_c2">自定义表单组件&nbsp;</p></li>
+<li><p class="kc_c2">DOM文本节点：创建、兼容、应用&nbsp;</p></li>
+<li><p class="kc_c2">firstChild怪异问题、childNodes的问题&nbsp;</p></li>
+<li><p class="kc_c2">实例：google日历&nbsp;</p></li>
+
+<li><p class="kc_c2">domReady事件：优点、DOMContentLoaded、defer、onload&nbsp;</p></li>
+<li><p class="kc_c2">事件队列、封装ready事件函数&nbsp;</p></li>
+<li><p class="kc_c2">事件委托（事件代理）：冒泡的使用、srcElement属性、target属性、this的检测&nbsp;</p></li>
+<li><p class="kc_c2">call的使用——解决this指向问题&nbsp;</p></li>
+<li><p class="kc_c2">mouseleave事件——作用、封装，彻底解决mouseout冒泡的问题&nbsp;</p></li>
+
+<li><p class="kc_c1">运动高级：弹性运动、碰撞运动&nbsp;</p></li>
+<li><p class="kc_c1">弹性应用：滑动导航&nbsp;</p></li>
+
+                                    </ul>
+                                </div>
+                                <div class="hr_15"></div>
+                                <div class="kcBar">
+                                    <div class="kc_title">面向对象</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c1">JS2.0</p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+                                    <ul class="kc_list kc_list_r">
+<li><p class="kc_c1">面向对象基础：什么是面向对象、对象的组成、OOP的特点、this的本质、Object对象&nbsp;</p></li>
+<li><p class="kc_c1">工厂方式构造对象、原型（prototype）、混合法构造JS对象、实例：面向对象的选项卡&nbsp;</p></li>
+
+<li><p class="kc_c2">JQuery基础：$、选择器、获取元素、添加事件&nbsp;</p></li>
+<li><p class="kc_c2">JQuery的选择器：层级、属性、伪类等&nbsp;</p></li>
+<li><p class="kc_c2">样式和属性操作：css、attr方法、JQuery的链式操作和可选参数&nbsp;</p></li>
+<li><p class="kc_c2">鼠标事件：click、hover、toggle&nbsp;</p></li>
+<li><p class="kc_c2">JQuery特效：slideDown/slideUp、fadeIn/fadeOut&nbsp;</p></li>
+<li><p class="kc_c2">JQuery动画：animate、stop、速度控制、二级菜单&nbsp;</p></li>
+<li><p class="kc_c2">mouseleave和mouseenter事件的使用&nbsp;</p></li>
+<li><p class="kc_c2">实例：JQuery选项卡&nbsp;</p></li>
+<li><p class="kc_c2">JQuery的DOM操作：创建、添加、插入、包裹、删除&nbsp;</p></li>
+<li><p class="kc_c2">JQuery的事件操作：冒泡、默认事件、事件绑定、事件委托、事件对象&nbsp;</p></li>
+<li><p class="kc_c2">JQuery中的大小、位置：height()/width()、outerHeight()、position()、offset()&nbsp;</p></li>
+<li><p class="kc_c2">JQuery中的其他操作：each、和DOM元素的转换、class操作、html()&nbsp;</p></li>
+<li><p class="kc_c2">JQuery工具：$.browser、$.trim()&nbsp;</p></li>
+<li><p class="kc_c2">JQuery的Ajax：$.get()、$.ajax()&nbsp;</p></li>
+<li><p class="kc_c2">实例：JQuery拖拽、JQuery留言板&nbsp;</p></li>
+<li><p class="kc_c2">JQuery的各种bug&nbsp;</p></li>
+<li><p class="kc_c2">JQuery插件的使用：fancybox&nbsp;</p></li>
+<li><p class="kc_c2">编写JQuery插件：静态方法、extend()&nbsp;</p></li>
+<li><p class="kc_c2">实例：自定义JQuery插件——选项卡、自定义组件&nbsp;</p></li>
+
+<li><p class="kc_c1">ZQuery基础：ZQuery选择器、elements、$原理&nbsp;</p></li>
+<li><p class="kc_c1">ZQuery事件：click、hover、toggle&nbsp;</p></li>
+<li><p class="kc_c1">ZQuery方法：CSS、attr、eq、index、find、链式操作、冒泡和默认事件&nbsp;</p></li>
+<li><p class="kc_c1">ZQuery的DOM操作、ZQuery插件机制&nbsp;</p></li>
+
+<li><p class="kc_c1">面向对象继承、命名空间&nbsp;</p></li>
+
+                                    </ul>
+                                </div>
+                                <div class="hr_15"></div>
+                                <div class="kcBar">
+                                    <div class="kc_title">模块化</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c1">JS2.0</p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+                                    <ul class="kc_list kc_list_r">
+<li><p class="kc_c2">JS算法基础：时间复杂度和空间复杂度&nbsp;</p></li>
+<li><p class="kc_c2">数据结构基础：线性和随机、线性表、O表示法、数据结构基本操作&nbsp;</p></li>
+<li><p class="kc_c2">线性表和排序：4大排序算法、适用范围、蜕变和劣化、移动操作开销&nbsp;</p></li>
+<li><p class="kc_c2">树和排序：树的查找、添加和平衡&nbsp;</p></li>
+<li><p class="kc_c2">散列：空间换取时间、空间利用率和算法效率&nbsp;</p></li>
+<li><p class="kc_c2">图：路径算法、预处理和随机处理&nbsp;</p></li>
+
+<li><p class="kc_c2">模块的规划、接口&nbsp;</p></li>
+<li><p class="kc_c2">模块的加载、依赖、循环依赖&nbsp;</p></li>
+<li><p class="kc_c2">模块作用域和export&nbsp;</p></li>
+<li><p class="kc_c2">script加载和同步、请求合并、压缩代码&nbsp;</p></li>
+<li><p class="kc_c2">模块的重用和冲突&nbsp;</p></li>
+
+<li><p class="kc_c2">MVC基础：3层模型和耦合度&nbsp;</p></li>
+<li><p class="kc_c2">耦合的问题和消除&nbsp;</p></li>
+<li><p class="kc_c2">数据独立性、独立数据模型&nbsp;</p></li>
+
+<li><p class="kc_c2">设计模式：优点、常见模式&nbsp;</p></li>
+<li><p class="kc_c2">自定义事件、事件队列管理、事件的传递、事件对象和参数、监听模式的问题&nbsp;</p></li>
+<li><p class="kc_c2">数据队列的管理、反向监听和解耦合、模块独立性&nbsp;</p></li>
+
+                                    </ul>
+                                </div>
+                                <div class="hr_15"></div>
+                                <div class="kcBar">
+                                    <div class="kc_title" style="margin-top:-8px;">HTML5和NodeJS</div>
+                                    
+                                    <ul class="kc_list kc_list_r">
+                                        <li><p class="kc_c1">JS2.0</p></li>
+                                    </ul>
+                                    <a href="javascript:;" class="kc_down"></a>
+                                    <a href="javascript:;" class="kc_up"></a>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="kcBar_content">
+                                    
+                                    
+                                    <ul class="kc_list kc_list_r">
+<li><p class="kc_c2">HTML5新特性：文档头、编码、新的语义标签&nbsp;</p></li>
+<li><p class="kc_c2">JS的query选择器：伪类、层级、属性&nbsp;</p></li>
+<li><p class="kc_c2">JS本地存储、session存储&nbsp;</p></li>
+<li><p class="kc_c2">HTML5表单：新的input type、和手机的结合、placeholder、表单校验&nbsp;</p></li>
+<li><p class="kc_c2">页面文件拖拽、fileReader、geoLocation&nbsp;</p></li>
+<li><p class="kc_c2">canvas、绘制图形、图片的加载和绘制、webGL的使用&nbsp;</p></li>
+<li><p class="kc_c2">HTML5中的video、audio&nbsp;</p></li>
+<li><p class="kc_c2">HTML5离线应用&nbsp;</p></li>
+<li><p class="kc_c2">JS桌面提醒&nbsp;</p></li>
+<li><p class="kc_c2">webSocket的作用和优点&nbsp;</p></li>
+<li><p class="kc_c2">webWorder多线程&nbsp;</p></li>
+<li><p class="kc_c2">webSql页面数据库&nbsp;</p></li>
+<li><p class="kc_c2">HTML5的应用范围、兼容IE6&nbsp;</p></li>
+
+<li><p class="kc_c2">CSS3基础：兼容、浏览器前缀、和JS配合、自定义动画&nbsp;</p></li>
+<li><p class="kc_c2">CSS3：圆角、阴影、阴影叠加、rgba、渐变、渐变应用&nbsp;</p></li>
+<li><p class="kc_c2">CSS3 mask：图形蒙版、文字蒙版&nbsp;</p></li>
+<li><p class="kc_c2">CSS3 transform：旋转、缩放、倾斜、位移&nbsp;</p></li>
+<li><p class="kc_c2">各种CSS3应用和实例&nbsp;</p></li>
+
+<li><p class="kc_c2">PHP基础：变量、函数、传参、返回值、echo&nbsp;</p></li>
+<li><p class="kc_c2">数组、字符串、字符串连接&nbsp;</p></li>
+<li><p class="kc_c2">引号的问题、字符串中的变量、跨行字符串&nbsp;</p></li>
+<li><p class="kc_c2">常用操作：push、pop、substring等&nbsp;</p></li>
+<li><p class="kc_c2">PHP中的面向对象：class、parent、继承、方法和属性&nbsp;</p></li>
+<li><p class="kc_c2">PHP的表单操作：GET、POST、COOKIE和FILE&nbsp;</p></li>
+
+<li><p class="kc_c2">NodeJS基础：优缺点、错误处理、基本语法、环境安装&nbsp;</p></li>
+<li><p class="kc_c2">运行NodeJS程序、常用DOS命令（和Linux命令）&nbsp;</p></li>
+<li><p class="kc_c2">console.log的用法&nbsp;</p></li>
+<li><p class="kc_c2">DOM、BOM方法&nbsp;</p></li>
+<li><p class="kc_c2">编写自己的服务器：HTTP模块、模块的引入、创建服务、监听&nbsp;</p></li>
+<li><p class="kc_c2">处理请求：request对象和response对象&nbsp;</p></li>
+<li><p class="kc_c2">客户端信息：request对象的属性和拆分&nbsp;</p></li>
+<li><p class="kc_c2">write、文件名和404&nbsp;</p></li>
+<li><p class="kc_c2">异步通信&nbsp;</p></li>
+<li><p class="kc_c2">文件操作&nbsp;</p></li>
+
+
+                                    </ul>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <!--1.0 2.0对比-->
+                            </div>
+        </div>
+    </div>
+    <div class="page_body" id="about_us" style="background-color: white;">
+        <div class="page_container">
+            <img src="img/about_us.png" />
         </div>
     </div>
     <div class="page_foot">
@@ -864,8 +1206,6 @@ function smsTimerCount(){
         </div>
     </div>
 </div>  
-
-
 
     <div id="subject_add" class="subject_test">
         <div class="subject_box" ui="type:'Boxpanel',formName:'form',size:{width:'980px'}" style="display:none">
@@ -887,9 +1227,7 @@ function smsTimerCount(){
                 </ol>
                 <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formName:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
             </div>
-
         </div>
-
         <div class="result_box" ui="type:'Boxpanel',formName:'result',size:{width:'640px'}" style="display:none">
             <div class="box_content">
                 <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
@@ -937,17 +1275,13 @@ function smsTimerCount(){
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
                     <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
                 </div>    
-
             </div>
         </div>
-
         <div class="report_box" ui="type:'Boxpanel',formName:'detail',size:{width:'800px'}" style="display:none">    
             <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
                 
-
             </div>
         </div>
-
         <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'410px'}" style="display:none">
             <div class="box_content">
                 <h3 class="sms_title">请输入短信验证码</h3>
@@ -971,11 +1305,8 @@ function smsTimerCount(){
         
     </div>
 
-
 <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
-
 <!--script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script-->
-
 <script type="text/javascript" src="http://bpmjs.org/src/hui@0.0.1/hui.js"></script>
 <script type="text/javascript" src="http://bpmjs.org/src/hui_validator@0.0.1/hui_validator.js"></script>
 <script type="text/javascript" src="http://bpmjs.org/src/hui_util@0.0.1/hui_util.js"></script>
@@ -996,11 +1327,9 @@ function smsTimerCount(){
 <script type="text/javascript" src="http://bpmjs.org/src/hui_panel@0.0.1/hui_panel.js"></script>
 <script type="text/javascript" src="http://bpmjs.org/src/hui_action@0.0.1/hui_action.js"></script>
 <script type="text/javascript" src="http://bpmjs.org/src/hui_requester@0.0.1/hui_requester.js"></script>
-
 <!-- Only for highrchart!!  -->
 <script type="text/javascript" src="src/jquery1.9.1.js         "></script>
 <script type="text/javascript" src="src/highcharts.js          "></script>
 <script type="text/javascript" src="src/highcharts-more.js     "></script>
 </body>
-
 </html>
