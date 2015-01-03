@@ -15,6 +15,9 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_head .menu { float: left; font-size: 17px; color: white; padding-top: 33px; }
 .page_head .menu_list { list-style: none; padding: 0px; margin: 0px; float: left; }
 .page_head .menu_list .menu_item { float: left; margin: 0px 30px 0px 10px; }
+.page_head .menu_list a {
+    text-decoration: none;
+}
 .page_head .link { float: right; /* font-size: 17px; */ color: #9d9d9d; padding-top: 33px; }
 .page_head .link .uid { color: #eee;}
 .page_banner { margin: auto; position: relative; z-index: 2; text-align: center; height: 490px; background-image: linear-gradient(45deg, #020031 0, #6d3353 100%);}

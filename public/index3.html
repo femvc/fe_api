@@ -217,8 +217,118 @@ window.onload = function () {
     });
     initSendSMS();
     smsTimerCount();
-    showTab(hui.g('menu_index'), 'home_index');
+    //showTab(hui.g('menu_index'), 'index');
 
+    /*============================================
+     * 404 page
+     ============================================*/
+    var pageIndex;
+    pageIndex = function () {
+        hui.Action.call(this);
+        this.id = 'pageIndex';
+    };
+    pageIndex.prototype = {
+        getView: function () {
+            var str = hui.g('index').innerHTML;
+            return str;
+        },
+        initBehavior: function () {
+            var me = this;
+            showTab('menu_index');
+
+        }
+    };
+
+    hui.inherits(pageIndex, hui.Action);
+    hui.Router.setRule('/', 'pageIndex');
+    hui.window.pageIndex = pageIndex;
+    
+    // pageIndustry
+    var pageIndustry;
+    pageIndustry = function () {
+        hui.Action.call(this);
+        this.id = 'pageIndustry';
+    };
+    pageIndustry.prototype = {
+        getView: function () {
+            var str = hui.g('industry').innerHTML;
+            return str;
+        },
+        initBehavior: function () {
+            var me = this;
+            showTab('menu_industry');
+        }
+    };
+
+    hui.inherits(pageIndustry, hui.Action);
+    hui.Router.setRule('/industry', 'pageIndustry');
+    hui.window.pageIndustry = pageIndustry;
+    
+    // pageLesson
+    var pageLesson;
+    pageLesson = function () {
+        hui.Action.call(this);
+        this.id = 'pageLesson';
+    };
+    pageLesson.prototype = {
+        getView: function () {
+            var str = hui.g('lesson').innerHTML;
+            return str;
+        },
+        initBehavior: function () {
+            var me = this;
+            showTab('menu_lesson');
+        }
+    };
+
+    hui.inherits(pageLesson, hui.Action);
+    hui.Router.setRule('/lesson', 'pageLesson');
+    hui.window.pageLesson = pageLesson;
+    
+    // pageHistory
+    var pageHistory;
+    pageHistory = function () {
+        hui.Action.call(this);
+        this.id = 'pageHistory';
+    };
+    pageHistory.prototype = {
+        getView: function () {
+            var str = hui.g('history').innerHTML;
+            return str;
+        },
+        initBehavior: function () {
+            var me = this;
+            showTab('menu_history');
+        }
+    };
+
+    hui.inherits(pageHistory, hui.Action);
+    hui.Router.setRule('/history', 'pageHistory');
+    hui.window.pageHistory = pageHistory;
+
+    // pageAbout
+    var pageAbout;
+    pageAbout = function () {
+        hui.Action.call(this);
+        this.id = 'pageAbout';
+    };
+    pageAbout.prototype = {
+        getView: function () {
+            var str = hui.g('about').innerHTML;
+            return str;
+        },
+        initBehavior: function () {
+            var me = this;
+            showTab('menu_about');
+        }
+    };
+
+    hui.inherits(pageAbout, hui.Action);
+    hui.Router.setRule('/about', 'pageAbout');
+    hui.window.pageAbout = pageAbout;
+
+    
+    
     hui.Action.start();
 };
 function initForTest() {
@@ -711,22 +821,17 @@ function smsTimerCount(){
     }
 }
 
-function showTab(elem, tab) {
-    hui.g('home_index').style.display = 'none';
-    hui.g('industry').style.display = 'none';
-    hui.g('classcontent').style.display = 'none';
-    hui.g('test_history').style.display = 'none';
-    hui.g('about_us').style.display = 'none';
-
-    hui.g(tab).style.display = 'block';
-
-    var list = elem.parentNode.children;
-    for (var i=0,len=list.length; i<len; i++) {
-        hui.util.removeClass(list[i], 'item_selected');
-    }
-    hui.util.addClass(elem, 'item_selected');
-
+function showTab(tab) {
+    hui.util.removeClass(hui.g('menu_index'), 'item_selected');
+    hui.util.removeClass(hui.g('menu_industry'), 'item_selected');
+    hui.util.removeClass(hui.g('menu_lesson'), 'item_selected');
+    hui.util.removeClass(hui.g('menu_history'), 'item_selected');
+    hui.util.removeClass(hui.g('menu_about'), 'item_selected');
+    
+    hui.util.addClass(hui.g(tab), 'item_selected');
 }
+
+
 //-->
 </script>
 </head>
@@ -739,11 +844,11 @@ function showTab(elem, tab) {
             <div class="logo"><img src="img/logo.png" alt=""></div>
             <div class="menu">
                 <ul class="menu_list">
-                    <li class="menu_item" id="menu_index" onclick="showTab(this,'home_index')" ><a>首 页</a></li>
-                    <li class="menu_item" onclick="showTab(this,'industry')"><a>行业现状</a></li>
-                    <li class="menu_item" onclick="showTab(this,'classcontent')"><a>课程介绍</a></li>
-                    <li class="menu_item" onclick="showTab(this,'test_history')"><a>测评历史</a></li>
-                    <li class="menu_item" onclick="showTab(this,'about_us')"><a>关于我们</a></li>
+                    <li class="menu_item item_selected" id="menu_index" onclick1="showTab(this,'menu_index')" ><a href="#/">首 页</a></li>
+                    <li class="menu_item" id="menu_industry" onclick1="showTab(this,'menu_industry')"><a href="#/industry">行业现状</a></li>
+                    <li class="menu_item" id="menu_lesson" onclick1="showTab(this,'menu_lesson')"><a href="#/lesson">课程介绍</a></li>
+                    <li class="menu_item" id="menu_history" onclick1="showTab(this,'menu_history')"><a href="#/history">测评历史</a></li>
+                    <li class="menu_item" id="menu_about" onclick1="showTab(this,'menu_about')"><a href="#/about">关于我们</a></li>
                 </ul>
             </div>
             <div class="link" style="text-align:right;display:none;">
@@ -753,7 +858,7 @@ function showTab(elem, tab) {
         </div>
     </div>
     <div id="main">
-        <div class="page_body" id="home_index">
+        <div class="page_body" id="index" style="display: none;">
             <div class="page_banner">
                 <div class="page_container">
                     <div class="page_banner_padding">&nbsp;</div>
@@ -824,7 +929,7 @@ function showTab(elem, tab) {
                 </div>
             </div>
         </div>
-        <div class="page_body" id="test_history" style="background-color: white;">
+        <div class="page_body" id="history" style="background-color: white;display: none;">
             <div class="page_container">
                 <div class="test_history">
                     <h3 class="history_title">评测历史列表</h3>
@@ -857,12 +962,12 @@ function showTab(elem, tab) {
                 </div>
             </div>
         </div>
-        <div class="page_body" id="industry" style="background-color: white;">
+        <div class="page_body" id="industry" style="background-color: white;display: none;">
             <div class="page_container">
                 <img src="img/1232435.png" />
             </div>
         </div>
-        <div class="page_body" id="classcontent" style="background-color: white;">
+        <div class="page_body" id="lesson" style="background-color: white;display: none;">
             <div class="page_container">
                 <div class="kc_content kc_cShow">
                                     <h2 class="kcTit">精通JavaScript开发 — 课程大纲</h2>
@@ -1198,7 +1303,7 @@ function showTab(elem, tab) {
                                 </div>
             </div>
         </div>
-        <div class="page_body" id="about_us" style="background-color: white;">
+        <div class="page_body" id="about" style="background-color: white;display: none;">
             <div class="page_container">
                 <img src="img/about_us.png" />
             </div>
