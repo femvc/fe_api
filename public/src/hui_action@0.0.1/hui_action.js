@@ -362,9 +362,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }, me);
 
             // 初始化Model
-            que.push(me.initModel, me);
+            me.initModel && que.push(me.initModel, me);
             // 初始化View
-            que.push(me.initView, me);
+            me.initView && que.push(me.initView, me);
 
             que.push(function (next) {
                 var me = this;
@@ -374,16 +374,16 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 if (me.main) {
                     tpl = me.getView();
                     mainHTML = hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData());
-                    me.setInnerHTML(me, mainHTML);
+                    me.setInnerHTML && me.setInnerHTML(me, mainHTML);
                 }
-                me.render();
+                me.render && me.render();
                 me.rendered = 'true';
 
                 // 渲染当前view中的控件
                 hui.Action.getExtClass('hui.Control').init(me.getMain(), me.model, me);
 
                 // 控件事件绑定
-                me.initBehavior();
+                me.initBehavior && me.initBehavior();
 
                 // hui.Action.getExtClass('hui.Mask').hideLoading();
                 // 渲染结束，检查渲染期间是否有新请求
@@ -690,6 +690,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     me.historyList.push(url);
                     action.enterControl(args);
                 }
+                else if (action) {
+                    hui.Action.prototype.enterControl.call(action);
+                }
             }
         },
         back: function () {
@@ -800,7 +803,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 hui.window.console.error('Action clazz \''+actionName+'\' not exist.');
             }*/
             else if (className === '[object Function]') {
-                action = new action_name();
+                action = new actionName();
                 hui.window.controlMap.push(action);
             }
 
