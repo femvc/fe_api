@@ -818,7 +818,8 @@ hui.define('hui_control', [], function () {
         createMain: function () {
             var me = this,
                 tagName = this.tagName || 'DIV',
-                elem = me.getDocument().createElement(String(tagName).toUpperCase()),
+                doc = hui.Control.prototype.getDocument.call(me),
+                elem = doc.createElement(String(tagName).toUpperCase()),
                 control = me.parentControl,
                 wrap = null;
 
@@ -826,10 +827,10 @@ hui.define('hui_control', [], function () {
                 wrap = control.getMain();
             }
             if (!wrap && control && control.main) {
-                wrap = me.getDocument().getElementById(control.main);
+                wrap = doc.getElementById(control.main);
             }
             if (!wrap) {
-                wrap = me.getDocument().body || me.getDocument().documentElement;
+                wrap = doc.body || doc.documentElement;
             }
 
             wrap.appendChild(elem);
