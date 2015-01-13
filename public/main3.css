@@ -1,5 +1,6 @@
 html,
 body { padding: 0px; margin: 0px; background-color: #222; }
+body {overflow-y: scroll;}
 .clearfix { *zoom: 1 }
 .clearfix:after { display: table; content: " "; clear: both; }
 hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; clear: both; border: 0px; padding: 0px; margin: -1px 0px 0px 0px; list-style: none; border-style: none; background: none; visibility: hidden; }

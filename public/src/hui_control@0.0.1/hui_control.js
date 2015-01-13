@@ -1516,7 +1516,8 @@ hui.define('hui_control', [], function () {
                 /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                 (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
             return source.replace(/#\{(.+?)\}/g, function (match, key) {
-                var parts = key.split('.'),
+                var encode = String(key).indexOf('!') === 0,
+                    parts = key.replace(/^!/, '').split('.'),
                     part = parts.shift(),
                     cur = data,
                     variable;
@@ -1535,7 +1536,7 @@ hui.define('hui_control', [], function () {
                 if ('[object Function]' === toString.call(variable)) {
                     variable = variable(key);
                 }
-                return (undefined === variable ? '' : variable);
+                return (undefined === variable ? '' : encode ? variable : hui.Control.encodehtml(variable));
             });
         }
         return source;
