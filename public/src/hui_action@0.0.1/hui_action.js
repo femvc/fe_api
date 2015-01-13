@@ -776,7 +776,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             var className = Object.prototype.toString.call(actionName);
             var action = null;
             if (className === '[object Object]') {
-                action = className;
+                action = actionName;
             }
             else if (className === '[object String]') {
                 var list = hui.window.controlMap;
