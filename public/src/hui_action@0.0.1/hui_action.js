@@ -372,7 +372,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     tpl;
                 // 渲染视图
                 if (me.main) {
-                    tpl = me.getView();
+                    tpl = me.getView ? me.getView() : '';
                     mainHTML = hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData());
                     me.setInnerHTML && me.setInnerHTML(me, mainHTML);
                 }
