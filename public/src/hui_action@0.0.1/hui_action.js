@@ -735,7 +735,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         findActionNameByLocation: function (loc, nolog) {
             var me = this,
                 action = me.getExtClass('hui.Router').findAction(loc),
-                actionClazz = action && Object.prototype.toString.call(action) === '[object String]' ? 
+                actionClazz = action && Object.prototype.toString.call(action) === '[object String]' ?
                 hui[action] || hui.Action.getObjectByName(action) : null;
 
             if (Object.prototype.toString.call(action) !== '[object Object]' && !actionClazz) {
@@ -780,7 +780,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             }
             else if (className === '[object String]') {
                 var list = hui.window.controlMap;
-                for (var i=0,len=list.length; i<len; i++) {
+                for (var i = 0, len = list.length; i < len; i++) {
                     if (list[i].id === actionName) {
                         action = list[i];
                     }
@@ -1356,9 +1356,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
     //hui.Router.setRule('/404', 'page404');
 
     hui.Router.setRule('/404', {
-        model: new hui.Action.getExtClass('hui.BaseModel')(),
+        model: new hui.BaseModel(),
 
     });
 
-    
+
 });
