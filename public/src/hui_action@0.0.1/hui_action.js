@@ -369,7 +369,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             que.push(function (next) {
                 var me = this;
                 var mainHTML,
-                    tpl;
+                    tpl,
+                    doc = hui.Control.prototype.getDocument.call(me),
+                    main = me.getMain ? me.getMain() : doc.getElementById(me.main);
                 // 渲染视图
                 if (me.main) {
                     tpl = me.getView ? me.getView() : '';
@@ -380,7 +382,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 me.rendered = 'true';
 
                 // 渲染当前view中的控件
-                hui.Action.getExtClass('hui.Control').init(me.getMain(), me.model, me);
+                hui.Action.getExtClass('hui.Control').init(main, me.model, me);
 
                 // 控件事件绑定
                 me.initBehavior && me.initBehavior();
