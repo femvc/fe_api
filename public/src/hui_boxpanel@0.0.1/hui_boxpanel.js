@@ -50,7 +50,7 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
         },
         show: function () {
             var me = this;
-            hui.on(hui.window, 'resize', me.onresizeHandler);
+            hui.on(window, 'resize', me.onresizeHandler);
             hui.addClass(document.documentElement, me.getClass('html'));
 
             hui.Mask && hui.Mask.show();
@@ -59,7 +59,7 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
         },
         hide: function () {
             var me = this;
-            hui.off(hui.window, 'resize', me.onresizeHandler);
+            hui.off(window, 'resize', me.onresizeHandler);
             hui.removeClass(document.documentElement, me.getClass('html'));
             me.getMain().style.display = 'none';
             hui.Mask && hui.Mask.hide();
