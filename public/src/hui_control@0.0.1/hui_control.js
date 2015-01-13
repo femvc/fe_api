@@ -629,7 +629,7 @@ hui.define('hui_control', [], function () {
         getFormName: function () {
             var me = this,
                 main = me.getMain ? me.getMain() : me.getDocument().getElementById(me.main);
-            var itemName = me.formName || me['name'] || (main ? main.getAttribute('name') : null) || (me.getId ? me.getId() : me.id);
+            var itemName = me.formName || me['name'] || (main ? main.getAttribute('name') : null);
             return itemName;
         },
         /**
@@ -1362,6 +1362,7 @@ hui.define('hui_control', [], function () {
     hui.Control.getByFormNameAll = function (formName, parentNode, all) {
         var list = [],
             childNodes,
+            item,
             /* 强制确认parentControl: 如果传入是parentControl的id，则找出其对应的Control */
             parentControl = hui.Control.getById(undefined, parentNode) || hui.window;
 
@@ -1379,7 +1380,8 @@ hui.define('hui_control', [], function () {
             childNodes = parentControl && parentControl.controlMap ?
                 (all === false ? parentControl.controlMap : hui.Control.findAllControl(parentControl)) : [];
             for (var i = 0, len = childNodes.length; i < len; i++) {
-                if (childNodes[i].getFormName() === formName) {
+                item = childNodes[i];
+                if ((item.getFormName && item.getFormName() === formName) || item['formName'] === formName) {
                     list.push(childNodes[i]);
                 }
             }
