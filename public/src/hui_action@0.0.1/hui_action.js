@@ -340,7 +340,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     return hui.Control.error('Action\'s main element is invalid');
                 }
                 // 便于通过elem.getAttribute('control')找到control
-                elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
+                elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id === undefined ? '' : uiObj.id);
 
                 // 保存通过URL传过来的参数
                 me.queryString = args;
@@ -376,7 +376,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 if (me.main) {
                     tpl = me.getView ? me.getView() : '';
                     mainHTML = hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData());
-                    me.setInnerHTML && me.setInnerHTML(me, mainHTML);
+                    hui.Control.prototype.setInnerHTML(main, mainHTML);
                 }
                 me.render && me.render();
                 me.rendered = 'true';
@@ -420,7 +420,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         dispose: function () {
             var me = this;
 
-            me.leave();
+            me.leave && me.leave();
 
             hui.Control.prototype.dispose.call(me);
 
@@ -431,7 +431,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             me.active = null;
 
-            me.clear();
+            me.clear && me.clear();
         },
         /**
          * @name 后退
@@ -693,6 +693,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     action.enterControl(args);
                 }
                 else if (action) {
+                    me.historyList.push(url);
                     hui.Action.prototype.enterControl.call(action);
                 }
             }
@@ -768,6 +769,9 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
             if (action && action.dispose) {
                 action.dispose();
+            }
+            else if (action) {
+                hui.Action.prototype.dispose.call(action);
             }
 
             return defaultBack;
@@ -1362,7 +1366,10 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
     hui.Router.setRule('/404', {
         model: new hui.BaseModel(),
-
+        getView: function () {
+            var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.queryString);
+            return str;
+        }
     });
 
 

@@ -175,7 +175,7 @@ hui.define('hui_control', [], function () {
             var me = this,
                 // uiAttr = hui.Control.UI_ATTRIBUTE || 'ui';
                 // idPrefix = 'ctrl' + this.type + this.id;
-                idPrefix = me.id;
+                idPrefix = me.id === undefined ? '' : me.id;
 
             if (key) {
                 idPrefix = idPrefix + key;
@@ -639,7 +639,8 @@ hui.define('hui_control', [], function () {
         dispose: function () {
             var me = this,
                 controlMap,
-                main = me.getMain ? me.getMain() : me.getDocument().getElementById(me.main),
+                doc = hui.Control.prototype.getDocument.call(me),
+                main = me.getMain ? me.getMain() : doc.getElementById(me.main),
                 list;
             // 从父控件的controlMap中删除引用
             if (me.parentControl) {
@@ -883,7 +884,7 @@ hui.define('hui_control', [], function () {
     hui.Control.makeElemGUID = (function () {
         var guid = 1;
         return function (id) {
-            return (id !== undefined ? id + hui.Control.getHashCode(id) : ('_' + hui.Control.formatDate(new Date(), 'yyyy_MM_dd_HH_mm') + '_' + (guid++)));
+            return (id !== undefined ? id + hui.Control.getHashCode(id) : ('_' + hui.Control.formatDate(new Date(), 'yyyyMMddHHmm') + '_' + (guid++)));
         };
     })();
     /**
