@@ -138,7 +138,7 @@ hui.define('hui_mask', ['hui_util'], function () {
     };
 
     hui.util.importCssString(
-        '.hj001_mask{background:#000;opacity:0.2;filter:alpha(opacity=20);width:100%;height:100%;position:absolute;top:0;left:0;z-index:50000}' +
+        '.hj001_mask{background:#000;opacity:0.02;filter:alpha(opacity=20);width:100%;height:100%;position:absolute;top:0;left:0;z-index:50000}' +
         '.hj001_mask.hide{display: none;}'
     );
 
