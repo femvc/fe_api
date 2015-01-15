@@ -216,7 +216,7 @@ window.onload = function () {
         },
         initBehavior: function () {
             var me = this;
-            showTab('menu_index');
+            showTab('index');
 
             initForTest();
             showTestHistory();
@@ -261,7 +261,7 @@ window.onload = function () {
         },
         initBehavior: function () {
             var me = this;
-            showTab('menu_industry');
+            showTab('industry');
         }
     };
 
@@ -283,7 +283,7 @@ window.onload = function () {
         },
         initBehavior: function () {
             var me = this;
-            showTab('menu_lesson');
+            showTab('lesson');
         }
     };
 
@@ -305,7 +305,7 @@ window.onload = function () {
         },
         initBehavior: function () {
             var me = this;
-            showTab('menu_history');
+            showTab('history');
         }
     };
 
@@ -327,7 +327,7 @@ window.onload = function () {
         },
         initBehavior: function () {
             var me = this;
-            showTab('menu_about');
+            showTab('about');
         }
     };
 
@@ -849,7 +849,15 @@ function showTab(tab) {
     hui.util.removeClass(hui.g('menu_history'), 'item_selected');
     hui.util.removeClass(hui.g('menu_about'), 'item_selected');
     
-    hui.util.addClass(hui.g(tab), 'item_selected');
+    hui.util.addClass(hui.g('menu_' + tab), 'item_selected');
+
+    hui.g('index').style.display = 'none';
+    hui.g('industry').style.display = 'none';
+    hui.g('lesson').style.display = 'none';
+    hui.g('history').style.display = 'none';
+    hui.g('about').style.display = 'none';
+
+    hui.g(tab).style.display = 'block';
 }
 
 
