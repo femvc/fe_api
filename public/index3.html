@@ -497,7 +497,7 @@ function initForTest() {
         // hui.Control.getByFormName('candidate').show();
         showEvaluateReport();
     };
-    /*
+    
     var candidate = hui.Control.getByFormName('candidate');
     candidate.getByFormName('candidate_nxt').onclick = function () {
         var data = candidate.getParamMap();
@@ -644,7 +644,14 @@ function showPaperDetail() {
 function showTestHistory() {
     hui.Mockup.setRule('/ue_api/internal/get_test_history', [
         null,
-        [{user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}]
+        [
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
+        ]
     ]);
     Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
         onsuccess: function (result) {
