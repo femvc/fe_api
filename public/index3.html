@@ -252,6 +252,7 @@ window.onload = function () {
     pageIndustry = function () {
         hui.Action.call(this);
         this.id = 'pageIndustry';
+        this.main = 'industry';
     };
     pageIndustry.prototype = {
         getView: function () {
@@ -273,6 +274,7 @@ window.onload = function () {
     pageLesson = function () {
         hui.Action.call(this);
         this.id = 'pageLesson';
+        this.main = 'lesson';
     };
     pageLesson.prototype = {
         getView: function () {
@@ -294,6 +296,7 @@ window.onload = function () {
     pageHistory = function () {
         hui.Action.call(this);
         this.id = 'pageHistory';
+        this.main = 'history';
     };
     pageHistory.prototype = {
         getView: function () {
@@ -315,6 +318,7 @@ window.onload = function () {
     pageAbout = function () {
         hui.Action.call(this);
         this.id = 'pageAbout';
+        this.main = 'about';
     };
     pageAbout.prototype = {
         getView: function () {
@@ -645,7 +649,6 @@ function showTestHistory() {
     Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
-                var html = '';
                 var tpl = [
                     '<li class="item_row">',
                     '    <span class="t_user">#{user}</span>',
@@ -656,10 +659,17 @@ function showTestHistory() {
                 ].join('');
                 
                 var list = result[1];
-                for (var i=0,len=list.length; i<len; i++) {
+                var html = '';
+                for (var i=0,len=list.length; i<len && i<6; i++) {
                     html += hui.util.format(tpl, list[i]);
                 }
                 hui.g('test_list').innerHTML = html;
+
+                var html = '';
+                for (var i=0,len=list.length; i<len; i++) {
+                    html += hui.util.format(tpl, list[i]);
+                }
+                hui.g('history_list').innerHTML = html;
             }
         }
     });
