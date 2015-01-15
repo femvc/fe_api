@@ -390,7 +390,7 @@ function initForTest() {
                         data.title1 = data.title;
                         if (data.test_id) {
                             hui.util.setCookie('test_id', data.test_id);
-                            showTestHistory();
+                            // showTestHistory();
                         }
                         form.setValueByTree(data);
                         form.getByFormName('content').disposeChild();
@@ -634,24 +634,27 @@ function showPaperDetail() {
     });
 }
 function showTestHistory() {
-    var test_id = hui.util.getCookie('test_id') || '';
-    var test_history = hui.util.getCookie('test_history') || '';
-    var uniq = {};
-    var list = (test_history + ',' + test_id).split(',');
-    test_history = [];
-    for (var i=0,len=list.length; i<len; i++) {
-        if (list[i] && !uniq[list[i]]) {
-            uniq[list[i]] = list[i];
-            test_history.push(list[i]);
+    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+        null,
+        [{user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}]
+    ]);
+    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+        onsuccess: function (result) {
+            if (result && !result[0] && result[1]) {
+                var html = '';
+                var tpl = [
+                    '<li class="item_row">',
+                    '    <span class="t_user">#{user}</span>',
+                    '    <span class="t_time">#{time}</span>',
+                    '    <span class="t_score">#{score}</span>',
+                    '    <span class="t_date">#{date}</span>',
+                    '</li>'
+                ].join('');
+                hui.g('test_list').innerHTML = html;
+                hui.cc('link').style.display = 'block';
+            }
         }
-    }
-    hui.util.setCookie('test_history', test_history.join(','));
-    var tpl = '<a style="cursor:pointer" onclick="window.test_id=this.id;showTestButton()" id="#{0}">#{0}</a><br />';
-    var html = '';
-    for (var i=0,len=test_history.length; i<len; i++) {
-        html += hui.util.format(tpl, test_history[i]);
-    }
-    // hui.g('tid').innerHTML = html;
+    });
 }
 function showTestButton() {
     var test_id = window.test_id;
@@ -899,7 +902,7 @@ function showTab(tab) {
                     
                     <div class="test_history">
                         <h3 class="history_title">最新评测结果</h3>
-                        <ul class="test_list">
+                        <ul class="test_list" id="test_list">
                             <li class="item_row">
                                 <span class="t_user">tomcat</span>
                                 <span class="t_time">76 m</span>
@@ -934,7 +937,7 @@ function showTab(tab) {
             <div class="page_container">
                 <div class="test_history">
                     <h3 class="history_title">评测历史列表</h3>
-                    <ul class="test_list">
+                    <ul class="test_list" id="history_list">
                         <li class="item_row">
                             <span class="t_user">tomcat</span>
                             <span class="t_time">76 m</span>
@@ -1323,7 +1326,7 @@ function showTab(tab) {
     </div>
     <div class="page_foot">
         <div class="page_container">
-        沪ICP备11008151号 沪公网安备11010802014853 &copy;2015 版权所有
+        沪ICP备15001838号 上海轩禄商务咨询有限公司 ©2015 版权所有
         </div>
     </div>
 </div>  
