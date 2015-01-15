@@ -675,7 +675,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
                 // 首先销毁当前action的实例
                 if (me.historyList[me.historyList.length - 1]) {
-                    me.disposeAction(me.parseLocator(me.historyList[me.historyList.length - 1])['location']);
+                    // me.disposeAction(me.parseLocator(me.historyList[me.historyList.length - 1])['location']);
                 }
 
                 // 找到匹配的路径规则(该过程中会创建action实例)
