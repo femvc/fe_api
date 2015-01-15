@@ -210,6 +210,10 @@ window.onload = function () {
         this.main = 'index';
     };
     pageIndex.prototype = {
+        getView: function () {
+            var str = hui.g('index').innerHTML;
+            return str;
+        },
         initBehavior: function () {
             var me = this;
             showTab('menu_index');
@@ -251,6 +255,10 @@ window.onload = function () {
         this.main = 'industry';
     };
     pageIndustry.prototype = {
+        getView: function () {
+            var str = hui.g('industry').innerHTML;
+            return str;
+        },
         initBehavior: function () {
             var me = this;
             showTab('menu_industry');
@@ -269,6 +277,10 @@ window.onload = function () {
         this.main = 'lesson';
     };
     pageLesson.prototype = {
+        getView: function () {
+            var str = hui.g('lesson').innerHTML;
+            return str;
+        },
         initBehavior: function () {
             var me = this;
             showTab('menu_lesson');
@@ -287,6 +299,10 @@ window.onload = function () {
         this.main = 'history';
     };
     pageHistory.prototype = {
+        getView: function () {
+            var str = hui.g('history').innerHTML;
+            return str;
+        },
         initBehavior: function () {
             var me = this;
             showTab('menu_history');
@@ -305,6 +321,10 @@ window.onload = function () {
         this.main = 'about';
     };
     pageAbout.prototype = {
+        getView: function () {
+            var str = hui.g('about').innerHTML;
+            return str;
+        },
         initBehavior: function () {
             var me = this;
             showTab('menu_about');
