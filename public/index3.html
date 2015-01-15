@@ -186,7 +186,6 @@ window.onload = function () {
             4: '手机号已存在'
         }
     }, 'force');
-    initForTest();
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
@@ -196,27 +195,9 @@ window.onload = function () {
         }
     });
     
-    showTestHistory();
-    
     window.test_id = hui.util.getCookie('test_id');
-    showTestButton();
+            
     
-    hui.util.on(window, 'resize', function(){
-        var btn = hui.Control.getByFormName('subject_skip');
-        var main = btn ? btn.getMain() : undefined;
-        if (main && main.offsetTop) {
-            if (document.body.clientHeight < main.offsetTop + 30) {
-                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
-                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
-            }
-            else {
-                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
-                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
-            }
-        }
-    });
-    initSendSMS();
-    smsTimerCount();
     //showTab(hui.g('menu_index'), 'index');
 
     /*============================================
@@ -235,6 +216,28 @@ window.onload = function () {
         initBehavior: function () {
             var me = this;
             showTab('menu_index');
+
+            initForTest();
+            showTestHistory();
+            
+            showTestButton();
+            
+            hui.util.on(window, 'resize', function(){
+                var btn = hui.Control.getByFormName('subject_skip');
+                var main = btn ? btn.getMain() : undefined;
+                if (main && main.offsetTop) {
+                    if (document.body.clientHeight < main.offsetTop + 30) {
+                        hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
+                        hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
+                    }
+                    else {
+                        hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
+                        hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
+                    }
+                }
+            });
+            initSendSMS();
+            smsTimerCount();
 
         }
     };
