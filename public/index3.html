@@ -189,7 +189,7 @@ window.onload = function () {
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
-                hui.g('uid').innerHTML = String(result[1]).substr(0, 8);
+                hui.g('uid').innerHTML = String(result[1]);
                 hui.cc('link').style.display = 'block';
             }
         }
