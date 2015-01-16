@@ -84,6 +84,7 @@ exports.auth = function (req, res, next) {
 exports.getUid = function (req, res, next) {
     req.sessionStore.user = req.sessionStore.user || {};
     var uid = req.sessionStore.user[req.sessionID];
+    uid = String(crypto.createHash('md5').update('fecamps' + uid).digest('hex')).substr(0, 8);
     response.ok(req, res, uid);
 };
 
