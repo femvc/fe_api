@@ -59,7 +59,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .description .sub_title { padding: 0px; margin: 0px; color: rgb(83, 59, 140); font-size: 18px; font-weight: normal; padding-bottom: 20px; }
 .page_middle .description .desc_content { color: rgb(119, 119, 119); font-size: 14px; line-height: 27px; }
 .page_middle .description .qrcode { width: 120px; float: left; margin-right: 20px; margin-top: 9px; }
-.page_middle .test_history { float: left; margin-left: 35px; width: auto; padding-bottom: 0px;min-height: auto; }
+.page_middle .test_history { float: left; margin-left: 35px; width: auto; padding-bottom: 0px;min-height: 1px; }
 .page_middle .history_title { text-align: left; padding: 0px; margin: 0px; font-weight: bold; font-size: 18px; color: #333; padding-bottom: 25px; background-image: url(img/point.png); background-repeat: no-repeat; background-position: -5px 1px; padding-left: 22px; margin-top: -2px; }
 .page_middle .contact_title { padding: 0px; margin: 0px; font-weight: bold; font-size: 16px; color: #fff; padding-bottom: 23px; background-image: url(img/contact.png); background-repeat: no-repeat; background-position: 0px 0px; padding-left: 50px; margin-top: -6px; padding-top: 6px; }
 .page_middle .test_history .test_list { padding: 0px; margin: 0px; color: #FD841C; font-size: 14px; line-height: 16px; border-top: 1px solid #ccc; list-style: none; }
