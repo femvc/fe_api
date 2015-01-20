@@ -9,34 +9,8 @@
 <script type="text/javascript">
 'use strict';
 var form;
-function showTestScore() {
-    Requester.get('/ue_api/internal/get_rank', {
-        data: {
-            test_id: window.test_id
-        },
-        onsuccess: function (result) {
-            // form.getByFormName('subject_nxt').setDisabled(false);
-            if (result && result[1]) {
-                var data = result[1];
-                if (data.question) {
-                    hui.g('subject_index').innerHTML = '1';
-                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
-                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
-                    data.question_count = data.question.length;
-                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                    hui.Control.getByFormName('result').setValueByTree(data).show();
-                }
-                else {
-                    console.log('Warning: Test not finish')
-                    showPaperDetail();
-                }
-            }
-        }
-    });
-}
 
 window.onload = function () {
-    
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
@@ -47,217 +21,21 @@ window.onload = function () {
     });
     
     window.test_id = hui.util.getCookie('test_id');
-            
-
+    
+    initPageIndex();
+    initPageHistory();
+    initPageIndustry();
+    initPageLesson();
+    initPageAbout();
+    initPageTest();
+    initPageResult();
+    initPageCandidate();
+    initPageReport();
+    initPageDetail();
+    initPageSendSMS();
+    
     hui.Action.start();
 };
-function initForTest() {
-    
-    window.listTable = [
-        {
-            width: 100,
-            title: '技能',
-            sortable: true,
-            field: 'index',
-            content: function (item) {
-                return item['skill'];
-            }
-        }, {
-            width: 40,
-            title: '答对',
-            sortable: true,
-            field: 'correct',
-            content: function (item) {
-                return item['correct'];
-            }
-        }, {
-            width: 40,
-            title: '得分',
-            sortable: true,
-            field: 'score',
-            content: function (item) {
-                return item['score'];
-            }
-        }
-    ];
-    window.listData = [
-        // {
-        //     'skill': 'html',
-        //     'correct': 2,
-        //     'score': 40
-        // }, {
-        //     'skill': 'css',
-        //     'correct': 2,
-        //     'score': 40
-        // }
-    ];
-    // subject_add
-    hui.Control.init(hui.g('subject_add'));
-    form = hui.Control.getByFormName('form');
-    
-    
-    
-    
-};
-function saveTestScore(data) {
-    Requester.get('/ue_api/internal/save_next_question', {
-        data: data,
-        onsuccess: function (result) {
-            // form.getByFormName('subject_nxt').setDisabled(false);
-            if (result && result[1] && result[1].finish) {
-                hui.Control.getByFormName('form').hide();
-                showTestScore();
-                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-            }
-            else {
-                form.initSubject();
-                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
-            }
-            //}
-            //else {
-                //hui.Control.getByFormName('form').hide();
-                //showTestScore();
-                //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-            //}
-        }
-    });
-}
-
-function showTestHistory() {
-    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-        null,
-        [
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-        ]
-    ]);
-    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-        onsuccess: function (result) {
-            if (result && !result[0] && result[1]) {
-                var tpl = [
-                    '<li class="item_row">',
-                    '    <span class="t_user">#{user}</span>',
-                    '    <span class="t_time">#{time}</span>',
-                    '    <span class="t_score">#{score}</span>',
-                    '    <span class="t_date">#{date}</span>',
-                    '</li>'
-                ].join('');
-                
-                var list = result[1];
-                var html = '';
-                for (var i=0,len=list.length; i<len && i<4; i++) {
-                    html += hui.util.format(tpl, list[i]);
-                }
-                hui.g('test_list').innerHTML = html;
-
-                var html = '';
-                for (var i=0,len=list.length; i<len; i++) {
-                    html += hui.util.format(tpl, list[i]);
-                }
-                hui.g('history_list').innerHTML = html;
-            }
-        }
-    });
-}
-function showTestButton() {
-    var test_id = window.test_id;
-    $('#resume_btn').hide();
-    $('#btn_report').hide();
-    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
-        $('#btn_report').show();
-    }
-    else if (test_id && String(test_id).length > 20) {
-        $('#resume_btn').show();
-    }
-    
-    $('.test_btn').show();
-}
-function parseTestResult(cb) {
-    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-        onsuccess: function(result){
-            if (result && !result[0] && result[1]) {
-                var data = result[1];
-                var referenceMap = {};
-                var list, atcid, item, key;
-                
-                list = data.reference_answer;
-                for (var i=0,len=list.length; i<len; i++) {
-                    atcid = list[i].atcid;
-                    referenceMap[atcid] = list[i];
-                }
-                
-                list = data.your_answer;
-                for (var i=0,len=list.length; i<len; i++) {
-                    atcid = list[i].atcid;
-                    if (referenceMap[atcid]) {
-                        referenceMap[atcid].answer = list[i].content;
-                    }
-                }
-                list = data.paper;
-                for (var i=0,len=list.length; i<len; i++) {
-                    item = referenceMap[list[i]];
-                    if (item.answer) {
-                        for (var j in item.options) {
-                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                        }
-                    }
-                }
-                var category = {};
-                var correct;
-                
-                for (var j=0,len2=list.length; j<len2; j++) {
-                    item = referenceMap[list[j]];
-                    if (!item.answer) continue;
-                    correct = true;
-                    for (var i in item.options) {
-                        if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
-                            (item.options[i].correct === '' && item.options[i].answer == '')){
-                            continue;
-                        }
-                        else {
-                            correct = false;
-                            break;
-                        }
-                    }
-                    for (var i in item.label) {
-                        var key = item.label[i];
-                        category[key] = category[key] || {};
-                        category[key].sum = category[key].sum || 0;
-                        category[key].sum += 1;
-                        category[key].right = category[key].right || 0;
-                        category[key].right += correct ? 1 : 0;
-                    }
-                }
-                console.log(category);
-                var datasource = [
-                    {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                    {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                    {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
-                    {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                    {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                    {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
-                    {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                    {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                ];
-                for (var i=0,len=datasource.length; i<len; i++) {
-                    if (datasource[i] && category[datasource[i].skill]) {
-                        item = datasource[i];
-                        key = category[item.skill];
-                        item.correct = key.right;
-                        item.score = Math.floor(key.right*100/key.sum);
-                    }
-                }
-                cb && cb(datasource);
-            }
-        }
-    });
-}
-
-
 
 function showTab(tab) {
     hui.util.removeClass(hui.g('menu_index'), 'item_selected');
@@ -310,9 +88,9 @@ function showTab(tab) {
                     <div class="page_banner_padding">&nbsp;</div>
                     <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
                     <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
-                    <div class="resume_btn" id="btn_report" onclick="form.hide();showTestScore()" style="display:none;">查看报告</div>
-                    <div class="resume_btn" id="resume_btn" onclick="form.show();form.initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="form.show();form.initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
+                    <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
+                    <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
+                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
                     <a class="test_btn" href="#/start_test~tid=100001">立即测试</a>
                 </div> 
             </div>
@@ -382,10 +160,8 @@ function showTab(tab) {
                     var me = this;
                     showTab('index');
 
-                    initForTest();
-                    showTestHistory();
-                    
-                    showTestButton();
+                    me.showTestHistory();
+                    me.showTestButton();
                     
                     hui.util.on(window, 'resize', function(){
                         var btn = hui.Control.getByFormName('subject_skip');
@@ -403,7 +179,59 @@ function showTab(tab) {
                     });
                     initSendSMS();
                     smsTimerCount();
+                },
+                showTestHistory: function() {
+                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                        null,
+                        [
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
+                        ]
+                    ]);
+                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                        onsuccess: function (result) {
+                            if (result && !result[0] && result[1]) {
+                                var tpl = [
+                                    '<li class="item_row">',
+                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_score">#{score}</span>',
+                                    '    <span class="t_date">#{date}</span>',
+                                    '</li>'
+                                ].join('');
+                                
+                                var list = result[1];
+                                var html = '';
+                                for (var i=0,len=list.length; i<len && i<4; i++) {
+                                    html += hui.util.format(tpl, list[i]);
+                                }
+                                hui.g('test_list').innerHTML = html;
 
+                                var html = '';
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    html += hui.util.format(tpl, list[i]);
+                                }
+                                hui.g('history_list').innerHTML = html;
+                            }
+                        }
+                    });
+                },
+                showTestButton: function() {
+                    var test_id = window.test_id;
+                    $('#resume_btn').hide();
+                    $('#btn_report').hide();
+                    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
+                        $('#btn_report').show();
+                    }
+                    else if (test_id && String(test_id).length > 20) {
+                        $('#resume_btn').show();
+                    }
+                    
+                    $('.test_btn').show();
                 }
             };
 
@@ -564,7 +392,7 @@ function showTab(tab) {
                         <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
                         <input type="hidden" ui="type:'TextInput',formName:'title'" />
                         <input type="hidden" ui="type:'TextInput',formName:'index'" />
-                        <a href="javascript:" class="subject_end" onclick="form.hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
+                        <a href="javascript:" class="subject_end" onclick="hui.Control.getByFormName('form').hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
                         <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
                         <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
                     </div>
@@ -634,7 +462,7 @@ function showTab(tab) {
                         showEvaluateReport();
                     };
 
-                    form.initSubject = function (newstart) {
+                    hui.Control.getByFormName('form').initSubject = function (newstart) {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
                                 newstart: !!newstart ? 'newone' : '', 
@@ -652,27 +480,27 @@ function showTab(tab) {
                                             hui.util.setCookie('test_id', data.test_id);
                                             // showTestHistory();
                                         }
-                                        form.setValueByTree(data);
-                                        form.getByFormName('content').disposeChild();
-                                        //var content = form.getByFormName('content').getMain();
+                                        hui.Control.getByFormName('form').setValueByTree(data);
+                                        hui.Control.getByFormName('form').getByFormName('content').disposeChild();
+                                        //var content = hui.Control.getByFormName('form').getByFormName('content').getMain();
                                         var list = data.options;
                                         for (var i in list) {
                                             list[i].index = i;
                                             list[i].single = data.single;
-                                            form.addOption(list[i]);
+                                            hui.Control.getByFormName('form').addOption(list[i]);
                                         }
                                         $('.subject_nxt').removeAttr('disabled');
                                         $('.form_content').animate({opacity:1}, 400);
                                         //$('.form_mask').hide();
-                                        form.hideWaiting();
+                                        hui.Control.getByFormName('form').hideWaiting();
                                     }
                                 }
                             }
                         });
                     };
-                    form.showWaiting();
-                    form.addOption = function (obj) {
-                        var content = form.getByFormName('content').getMain(),
+                    hui.Control.getByFormName('form').showWaiting();
+                    hui.Control.getByFormName('form').addOption = function (obj) {
+                        var content = hui.Control.getByFormName('form').getByFormName('content').getMain(),
                             list,
                             index;
                         obj = obj || {};
@@ -697,12 +525,12 @@ function showTab(tab) {
                         hui.util.appendHTML(content, hui.format(tpl, obj));
                         hui.Control.create(hui.g('content' + obj.index));
                     };
-                    form.removeOption = function (index) {
-                        var content = form.getByFormName('content');
+                    hui.Control.getByFormName('form').removeOption = function (index) {
+                        var content = hui.Control.getByFormName('form').getByFormName('content');
                         content.getByFormName(index).dispose();
                     };
-                    form.removeAllOption = function () {
-                        var content = form.getByFormName('content'),
+                    hui.Control.getByFormName('form').removeAllOption = function () {
+                        var content = hui.Control.getByFormName('form').getByFormName('content'),
                             option,
                             main = content.getMain();
                         var list = hui.c('td_index');
@@ -715,6 +543,56 @@ function showTab(tab) {
                         }
                         main.index = 0;
                     };
+
+                    function showTestScore() {
+                        Requester.get('/ue_api/internal/get_rank', {
+                            data: {
+                                test_id: window.test_id
+                            },
+                            onsuccess: function (result) {
+                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                                if (result && result[1]) {
+                                    var data = result[1];
+                                    if (data.question) {
+                                        hui.g('subject_index').innerHTML = '1';
+                                        data.rate = Math.round(100 * data.index / (data.sum + 0.001));
+                                        data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
+                                        data.question_count = data.question.length;
+                                        hui.g('result_chart').style.width = data.rate * 4 + 'px';
+                                        hui.Control.getByFormName('result').setValueByTree(data).show();
+                                    }
+                                    else {
+                                        console.log('Warning: Test not finish')
+                                        showPaperDetail();
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    function saveTestScore(data) {
+                        Requester.get('/ue_api/internal/save_next_question', {
+                            data: data,
+                            onsuccess: function (result) {
+                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                                if (result && result[1] && result[1].finish) {
+                                    hui.Control.getByFormName('form').hide();
+                                    showTestScore();
+                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
+                                }
+                                else {
+                                    hui.Control.getByFormName('form').initSubject();
+                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
+                                }
+                                //}
+                                //else {
+                                    //hui.Control.getByFormName('form').hide();
+                                    //showTestScore();
+                                    //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
+                                //}
+                            }
+                        });
+                    }
                 }
             };
 
@@ -834,7 +712,7 @@ function showTab(tab) {
                             Requester.get('/ue_api/internal/update_rank', {
                                 data: data,
                                 onsuccess: function (result) {
-                                    // form.getByFormName('subject_nxt').setDisabled(false);
+                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                                     if (result && !result[0]) {
                                         showEvaluateReport();
                                     }
@@ -907,14 +785,14 @@ function showTab(tab) {
         </div>
         <script>
         function initPageReport() {
-            // pageResult
-            var pageResult;
-            pageResult = function () {
+            // pageReport
+            var pageReport;
+            pageReport = function () {
                 hui.Action.call(this);
-                this.id = 'pageResult';
+                this.id = 'pageReport';
                 this.main = 'test';
             };
-            pageResult.prototype = {
+            pageReport.prototype = {
                 getView: function () {
                     var str = hui.g('test').innerHTML;
                     return str;
@@ -926,9 +804,9 @@ function showTab(tab) {
                 }
             };
 
-            hui.inherits(pageResult, hui.Action);
-            hui.Router.setRule('/result', 'pageResult');
-            hui.window.pageResult = pageResult;
+            hui.inherits(pageReport, hui.Action);
+            hui.Router.setRule('/result', 'pageReport');
+            hui.window.pageReport = pageReport;
         }
         function showPaperDetail() {
             Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
@@ -989,7 +867,7 @@ function showTab(tab) {
                     test_id: window.test_id
                 },
                 onsuccess: function (result) {
-                    // form.getByFormName('subject_nxt').setDisabled(false);
+                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                     if (result && result[1]) {
                         var data = result[1];
                         if (data.question) {
@@ -1046,6 +924,86 @@ function showTab(tab) {
                 }
             });
         }
+        function parseTestResult(cb) {
+    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+        onsuccess: function(result){
+            if (result && !result[0] && result[1]) {
+                var data = result[1];
+                var referenceMap = {};
+                var list, atcid, item, key;
+                
+                list = data.reference_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    referenceMap[atcid] = list[i];
+                }
+                
+                list = data.your_answer;
+                for (var i=0,len=list.length; i<len; i++) {
+                    atcid = list[i].atcid;
+                    if (referenceMap[atcid]) {
+                        referenceMap[atcid].answer = list[i].content;
+                    }
+                }
+                list = data.paper;
+                for (var i=0,len=list.length; i<len; i++) {
+                    item = referenceMap[list[i]];
+                    if (item.answer) {
+                        for (var j in item.options) {
+                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                        }
+                    }
+                }
+                var category = {};
+                var correct;
+                
+                for (var j=0,len2=list.length; j<len2; j++) {
+                    item = referenceMap[list[j]];
+                    if (!item.answer) continue;
+                    correct = true;
+                    for (var i in item.options) {
+                        if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                            (item.options[i].correct === '' && item.options[i].answer == '')){
+                            continue;
+                        }
+                        else {
+                            correct = false;
+                            break;
+                        }
+                    }
+                    for (var i in item.label) {
+                        var key = item.label[i];
+                        category[key] = category[key] || {};
+                        category[key].sum = category[key].sum || 0;
+                        category[key].sum += 1;
+                        category[key].right = category[key].right || 0;
+                        category[key].right += correct ? 1 : 0;
+                    }
+                }
+                console.log(category);
+                var datasource = [
+                    {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                    {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                    {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
+                    {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                    {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                    {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
+                    {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                    {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                ];
+                for (var i=0,len=datasource.length; i<len; i++) {
+                    if (datasource[i] && category[datasource[i].skill]) {
+                        item = datasource[i];
+                        key = category[item.skill];
+                        item.correct = key.right;
+                        item.score = Math.floor(key.right*100/key.sum);
+                    }
+                }
+                cb && cb(datasource);
+            }
+        }
+    });
+}
         function showResultChart(data){
             $('#skill_chart').highcharts({
                 chart: {
@@ -1106,6 +1064,44 @@ function showTab(tab) {
                 }]
             });
         }
+        window.listTable = [
+            {
+                width: 100,
+                title: '技能',
+                sortable: true,
+                field: 'index',
+                content: function (item) {
+                    return item['skill'];
+                }
+            }, {
+                width: 40,
+                title: '答对',
+                sortable: true,
+                field: 'correct',
+                content: function (item) {
+                    return item['correct'];
+                }
+            }, {
+                width: 40,
+                title: '得分',
+                sortable: true,
+                field: 'score',
+                content: function (item) {
+                    return item['score'];
+                }
+            }
+        ];
+        window.listData = [
+            // {
+            //     'skill': 'html',
+            //     'correct': 2,
+            //     'score': 40
+            // }, {
+            //     'skill': 'css',
+            //     'correct': 2,
+            //     'score': 40
+            // }
+        ];
         </script>
         <div class="page_body" id="detail" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
@@ -1194,7 +1190,28 @@ function showTab(tab) {
                     4: '手机号已存在'
                 }
             }, 'force');
+            
+            // pageSendSMS
+            var pageSendSMS;
+            pageSendSMS = function () {
+                hui.Action.call(this);
+                this.id = 'pageSendSMS';
+                this.main = 'test';
+            };
+            pageSendSMS.prototype = {
+                getView: function () {
+                    var str = hui.g('test').innerHTML;
+                    return str;
+                },
+                initBehavior: function () {
+                    var me = this;
+                    showTab('index');
+                }
+            };
 
+            hui.inherits(pageSendSMS, hui.Action);
+            hui.Router.setRule('/result', 'pageSendSMS');
+            hui.window.pageSendSMS = pageSendSMS;
 
             function initSendSMS() {
                 var send_sms = hui.Control.getByFormName('send_sms');
@@ -1206,10 +1223,10 @@ function showTab(tab) {
                         Requester.get('/ue_api/account/sms_auth', {
                             data: data,
                             onsuccess: function (result) {
-                                // form.getByFormName('subject_nxt').setDisabled(false);
+                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                                 if (result && !result[0] && result[1]) {
                                     send_sms.hide();
-                                    form.show();form.initSubject('newone');
+                                    hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');
                                 }
                                 else if (result && result[0]) {
                                     send_sms.showErrorByTree(result[0]);
@@ -1230,7 +1247,7 @@ function showTab(tab) {
                         Requester.get('/ue_api/account/send_sms', {
                             data: {mobile: mobile.getValue(),randcode:6868},
                             onsuccess: function (result) {
-                                // form.getByFormName('subject_nxt').setDisabled(false);
+                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                                 if (result && result[1]) {
                                     submit.showError('Send success.');
                                 }
