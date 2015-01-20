@@ -8,7 +8,6 @@
 </style>
 <script type="text/javascript">
 'use strict';
-var form;
 
 window.onload = function () {
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
@@ -27,6 +26,7 @@ window.onload = function () {
     initPageIndustry();
     initPageLesson();
     initPageAbout();
+    
     initPageTest();
     initPageResult();
     initPageCandidate();
@@ -54,8 +54,6 @@ function showTab(tab) {
 
     hui.g(tab).style.display = 'block';
 }
-
-
 //-->
 </script>
 </head>
@@ -177,8 +175,7 @@ function showTab(tab) {
                             }
                         }
                     });
-                    initSendSMS();
-                    smsTimerCount();
+
                 },
                 showTestHistory: function() {
                     hui.Mockup.setRule('/ue_api/internal/get_test_history', [
@@ -808,58 +805,7 @@ function showTab(tab) {
             hui.Router.setRule('/result', 'pageReport');
             hui.window.pageReport = pageReport;
         }
-        function showPaperDetail() {
-            Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-                onsuccess: function(result){
-                    if (result && !result[0] && result[1]) {
-                        var data = result[1];
-                        var referenceMap = {};
-                        var list, atcid, item;
-                        
-                        list = data.reference_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            referenceMap[atcid] = list[i];
-                        }
-                        
-                        list = data.your_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            if (referenceMap[atcid]) {
-                                referenceMap[atcid].answer = list[i].content;
-                            }
-                        }
-                        list = data.paper;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            item = referenceMap[list[i]];
-                            if (item.answer) {
-                                for (var j in item.options) {
-                                    item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                                }
-                            }
-                        }
-                        var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
-                            tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
-                        var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
-                        for (var j=0,len2=list.length; j<len2; j++) {
-                            item = referenceMap[list[j]];
-                            if (!item.answer && !finish) continue;
-                            html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
-                            html += '<ul class="option_list">';
-                            for (var i in item.options) {
-                                item.options[i].index = i;
-                                html += hui.format(tpl, item.options[i]);
-                            }
-                            html += '</ul>\n';
-                        }
-                        hui.g('detail_container').innerHTML = html;
-                        hui.Control.getByFormName('detail').show();
-                        
-                        // console.log(html);
-                    }
-                }
-            });
-        }
+        
 
         function showEvaluateReport() {
             Requester.get('/ue_api/internal/get_rank', {
@@ -925,85 +871,85 @@ function showTab(tab) {
             });
         }
         function parseTestResult(cb) {
-    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-        onsuccess: function(result){
-            if (result && !result[0] && result[1]) {
-                var data = result[1];
-                var referenceMap = {};
-                var list, atcid, item, key;
-                
-                list = data.reference_answer;
-                for (var i=0,len=list.length; i<len; i++) {
-                    atcid = list[i].atcid;
-                    referenceMap[atcid] = list[i];
-                }
-                
-                list = data.your_answer;
-                for (var i=0,len=list.length; i<len; i++) {
-                    atcid = list[i].atcid;
-                    if (referenceMap[atcid]) {
-                        referenceMap[atcid].answer = list[i].content;
-                    }
-                }
-                list = data.paper;
-                for (var i=0,len=list.length; i<len; i++) {
-                    item = referenceMap[list[i]];
-                    if (item.answer) {
-                        for (var j in item.options) {
-                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+            Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+                onsuccess: function(result){
+                    if (result && !result[0] && result[1]) {
+                        var data = result[1];
+                        var referenceMap = {};
+                        var list, atcid, item, key;
+                        
+                        list = data.reference_answer;
+                        for (var i=0,len=list.length; i<len; i++) {
+                            atcid = list[i].atcid;
+                            referenceMap[atcid] = list[i];
                         }
-                    }
-                }
-                var category = {};
-                var correct;
-                
-                for (var j=0,len2=list.length; j<len2; j++) {
-                    item = referenceMap[list[j]];
-                    if (!item.answer) continue;
-                    correct = true;
-                    for (var i in item.options) {
-                        if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
-                            (item.options[i].correct === '' && item.options[i].answer == '')){
-                            continue;
+                        
+                        list = data.your_answer;
+                        for (var i=0,len=list.length; i<len; i++) {
+                            atcid = list[i].atcid;
+                            if (referenceMap[atcid]) {
+                                referenceMap[atcid].answer = list[i].content;
+                            }
                         }
-                        else {
-                            correct = false;
-                            break;
+                        list = data.paper;
+                        for (var i=0,len=list.length; i<len; i++) {
+                            item = referenceMap[list[i]];
+                            if (item.answer) {
+                                for (var j in item.options) {
+                                    item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                                }
+                            }
                         }
-                    }
-                    for (var i in item.label) {
-                        var key = item.label[i];
-                        category[key] = category[key] || {};
-                        category[key].sum = category[key].sum || 0;
-                        category[key].sum += 1;
-                        category[key].right = category[key].right || 0;
-                        category[key].right += correct ? 1 : 0;
+                        var category = {};
+                        var correct;
+                        
+                        for (var j=0,len2=list.length; j<len2; j++) {
+                            item = referenceMap[list[j]];
+                            if (!item.answer) continue;
+                            correct = true;
+                            for (var i in item.options) {
+                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                                    (item.options[i].correct === '' && item.options[i].answer == '')){
+                                    continue;
+                                }
+                                else {
+                                    correct = false;
+                                    break;
+                                }
+                            }
+                            for (var i in item.label) {
+                                var key = item.label[i];
+                                category[key] = category[key] || {};
+                                category[key].sum = category[key].sum || 0;
+                                category[key].sum += 1;
+                                category[key].right = category[key].right || 0;
+                                category[key].right += correct ? 1 : 0;
+                            }
+                        }
+                        console.log(category);
+                        var datasource = [
+                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
+                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
+                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                        ];
+                        for (var i=0,len=datasource.length; i<len; i++) {
+                            if (datasource[i] && category[datasource[i].skill]) {
+                                item = datasource[i];
+                                key = category[item.skill];
+                                item.correct = key.right;
+                                item.score = Math.floor(key.right*100/key.sum);
+                            }
+                        }
+                        cb && cb(datasource);
                     }
                 }
-                console.log(category);
-                var datasource = [
-                    {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                    {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                    {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
-                    {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                    {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                    {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
-                    {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                    {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                ];
-                for (var i=0,len=datasource.length; i<len; i++) {
-                    if (datasource[i] && category[datasource[i].skill]) {
-                        item = datasource[i];
-                        key = category[item.skill];
-                        item.correct = key.right;
-                        item.score = Math.floor(key.right*100/key.sum);
-                    }
-                }
-                cb && cb(datasource);
-            }
+            });
         }
-    });
-}
         function showResultChart(data){
             $('#skill_chart').highcharts({
                 chart: {
@@ -1114,14 +1060,14 @@ function showTab(tab) {
         </div>
         <script>
         function initPageDetail() {
-            // pageResult
-            var pageResult;
-            pageResult = function () {
+            // pageDetail
+            var pageDetail;
+            pageDetail = function () {
                 hui.Action.call(this);
-                this.id = 'pageResult';
-                this.main = 'test';
+                this.id = 'pageDetail';
+                this.main = 'detail';
             };
-            pageResult.prototype = {
+            pageDetail.prototype = {
                 getView: function () {
                     var str = hui.g('test').innerHTML;
                     return str;
@@ -1129,12 +1075,64 @@ function showTab(tab) {
                 initBehavior: function () {
                     var me = this;
                     showTab('index');
+                },
+                showPaperDetail: function () {
+                    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+                        onsuccess: function(result){
+                            if (result && !result[0] && result[1]) {
+                                var data = result[1];
+                                var referenceMap = {};
+                                var list, atcid, item;
+                                
+                                list = data.reference_answer;
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    atcid = list[i].atcid;
+                                    referenceMap[atcid] = list[i];
+                                }
+                                
+                                list = data.your_answer;
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    atcid = list[i].atcid;
+                                    if (referenceMap[atcid]) {
+                                        referenceMap[atcid].answer = list[i].content;
+                                    }
+                                }
+                                list = data.paper;
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    item = referenceMap[list[i]];
+                                    if (item.answer) {
+                                        for (var j in item.options) {
+                                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                                        }
+                                    }
+                                }
+                                var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
+                                    tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
+                                var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
+                                for (var j=0,len2=list.length; j<len2; j++) {
+                                    item = referenceMap[list[j]];
+                                    if (!item.answer && !finish) continue;
+                                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
+                                    html += '<ul class="option_list">';
+                                    for (var i in item.options) {
+                                        item.options[i].index = i;
+                                        html += hui.format(tpl, item.options[i]);
+                                    }
+                                    html += '</ul>\n';
+                                }
+                                hui.g('detail_container').innerHTML = html;
+                                hui.Control.getByFormName('detail').show();
+                                
+                                // console.log(html);
+                            }
+                        }
+                    });
                 }
             };
 
-            hui.inherits(pageResult, hui.Action);
-            hui.Router.setRule('/result', 'pageResult');
-            hui.window.pageResult = pageResult;
+            hui.inherits(pageDetail, hui.Action);
+            hui.Router.setRule('/detail', 'pageDetail');
+            hui.window.pageDetail = pageDetail;
         }
         </script>
         <div class="page_body" id="send_sms" style="background-color: white;display: none;">
@@ -1196,7 +1194,7 @@ function showTab(tab) {
             pageSendSMS = function () {
                 hui.Action.call(this);
                 this.id = 'pageSendSMS';
-                this.main = 'test';
+                this.main = 'send_sms';
             };
             pageSendSMS.prototype = {
                 getView: function () {
@@ -1206,72 +1204,75 @@ function showTab(tab) {
                 initBehavior: function () {
                     var me = this;
                     showTab('index');
+
+                    me.initSendSMS();
+                    smsTimerCount();
+                },
+                initSendSMS: function () {
+                    var send_sms = hui.Control.getByFormName('send_sms');
+                    var submit = send_sms.getByFormName('send');
+                    submit.onclick = function () {
+                        var send_sms = hui.Control.getByFormName('send_sms');
+                        if (send_sms.validate()) {
+                            var data = hui.Control.getByFormName('send_sms').getParamMap();
+                            Requester.get('/ue_api/account/sms_auth', {
+                                data: data,
+                                onsuccess: function (result) {
+                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                                    if (result && !result[0] && result[1]) {
+                                        send_sms.hide();
+                                        hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');
+                                    }
+                                    else if (result && result[0]) {
+                                        send_sms.showErrorByTree(result[0]);
+                                    }
+                                    else {
+                                        submit.showError('Send fail.');
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    hui.g('send_code').onclick = function(){
+                        var mobile = hui.Control.getByFormName('send_sms').getByFormName('mobile');
+                        if (mobile.validate() && !hui.util.getCookie('smsTimer')) {
+                            hui.util.setCookie('smsTimer', 90);
+                            hui.g('send_code').className = 'send_code_disabled';
+                            smsTimerCount();
+                            Requester.get('/ue_api/account/send_sms', {
+                                data: {mobile: mobile.getValue(),randcode:6868},
+                                onsuccess: function (result) {
+                                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                                    if (result && result[1]) {
+                                        submit.showError('Send success.');
+                                    }
+                                    else if (result && result.err_msg) {
+                                        submit.showError(result.err_msg);
+                                    }
+                                    else {
+                                        submit.showError('Send fail.');
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    var mobile = send_sms.getByFormName('mobile');
+                    mobile.onchange = function(){
+                        // if (this.validate() && !hui.util.getCookie('smsTimer')) {
+                        //     hui.g('send_code').className = 'send_code';
+                        // }
+                        // else {
+                        //     hui.g('send_code').className = 'send_code_disabled';
+                        // }
+                    }
                 }
             };
 
             hui.inherits(pageSendSMS, hui.Action);
-            hui.Router.setRule('/result', 'pageSendSMS');
+            hui.Router.setRule('/sendsms', 'pageSendSMS');
             hui.window.pageSendSMS = pageSendSMS;
 
-            function initSendSMS() {
-                var send_sms = hui.Control.getByFormName('send_sms');
-                var submit = send_sms.getByFormName('send');
-                submit.onclick = function () {
-                    var send_sms = hui.Control.getByFormName('send_sms');
-                    if (send_sms.validate()) {
-                        var data = hui.Control.getByFormName('send_sms').getParamMap();
-                        Requester.get('/ue_api/account/sms_auth', {
-                            data: data,
-                            onsuccess: function (result) {
-                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                if (result && !result[0] && result[1]) {
-                                    send_sms.hide();
-                                    hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');
-                                }
-                                else if (result && result[0]) {
-                                    send_sms.showErrorByTree(result[0]);
-                                }
-                                else {
-                                    submit.showError('Send fail.');
-                                }
-                            }
-                        });
-                    }
-                };
-                hui.g('send_code').onclick = function(){
-                    var mobile = hui.Control.getByFormName('send_sms').getByFormName('mobile');
-                    if (mobile.validate() && !hui.util.getCookie('smsTimer')) {
-                        hui.util.setCookie('smsTimer', 90);
-                        hui.g('send_code').className = 'send_code_disabled';
-                        smsTimerCount();
-                        Requester.get('/ue_api/account/send_sms', {
-                            data: {mobile: mobile.getValue(),randcode:6868},
-                            onsuccess: function (result) {
-                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                if (result && result[1]) {
-                                    submit.showError('Send success.');
-                                }
-                                else if (result && result.err_msg) {
-                                    submit.showError(result.err_msg);
-                                }
-                                else {
-                                    submit.showError('Send fail.');
-                                }
-                            }
-                        });
-                    }
-                };
-                var mobile = send_sms.getByFormName('mobile');
-                mobile.onchange = function(){
-                    // if (this.validate() && !hui.util.getCookie('smsTimer')) {
-                    //     hui.g('send_code').className = 'send_code';
-                    // }
-                    // else {
-                    //     hui.g('send_code').className = 'send_code_disabled';
-                    // }
-                }
-            }
-            function smsTimerCount(){
+            window.smsTimerCount = function(){
                 var leftSec = hui.util.getCookie('smsTimer');
                 if (leftSec>0) {
                     hui.g('send_code').className = 'send_code_disabled';
@@ -1285,7 +1286,7 @@ function showTab(tab) {
                     hui.g('send_code').innerHTML = '获取验证码';
                     hui.Control.getByFormName('send_sms').getByFormName('mobile').onchange();
                 }
-            }
+            };
         }
         </script>
     </div>
