@@ -733,25 +733,25 @@ hui.define('hui_control', [], function () {
          */
         enterControl: function () {
             var uiObj = this,
-                elem,
+                main,
                 parentElement,
                 control,
                 parentControl = uiObj.parentControl;
 
             // 注：默认增加一个空元素作为控件主元素!
-            elem = (uiObj.getMain ? uiObj.getMain() : null) || (uiObj.createMain ? uiObj.createMain() : hui.Control.prototype.createMain.call(uiObj));
-            if (!elem) {
+            main = (uiObj.getMain ? uiObj.getMain() : null) || (uiObj.createMain ? uiObj.createMain() : hui.Control.prototype.createMain.call(uiObj));
+            if (!main) {
                 return hui.Control.error('Control\'s main element is invalid');
             }
             // 默认设置value
             if (uiObj.value !== undefined) {
-                elem.value = uiObj.value;
+                main.value = uiObj.value;
             }
-            // 便于通过elem.getAttribute('control')找到control
-            elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
+            // 便于通过main.getAttribute('control')找到control
+            main.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
             // 动态生成control需手动维护me.parentControl
             // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
-            parentElement = elem;
+            parentElement = main;
             while (parentElement && parentElement.tagName && parentElement.parentNode) {
                 parentElement = parentElement.parentNode;
                 //label标签自带control属性!!
@@ -767,33 +767,17 @@ hui.define('hui_control', [], function () {
                 }
             }
 
-            // hui.Control.elemList.push(uiObj);
-            // 设计用来集中缓存索引,最后发现不能建,建了垃圾回收会有问题!!
-
             // 每个控件渲染开始的时间。
             uiObj.startRenderTime = new Date();
             // 1. initView()会在render调用父类的render时自动调用，
             // 2. 不管是批量hui.Control.init()还是hui.Control.create(), 都会通过enterControl来执行render
             // 3. initBehavior()会在后面执行
-            if (elem && elem.getAttribute && elem.getAttribute('_initview') != 'true' && uiObj.render) {
+            if (main.getAttribute && main.getAttribute('_initview') != 'true' && uiObj.render) {
                 uiObj.render();
                 uiObj.rendered = 'true';
             }
-
-            /*注: 如果isRendered为false则默认调用父类的渲染函数,子类的render中有异步情况需特殊处理!
-            if (!uiObj.isRendered){
-                uiObj.constructor.superClass.prototype.render.call(uiObj);
-            }
-            //注释掉的原因：调用父类的render应该由子类自己决定!
-            */
-
-            // 解除obj对DOM的引用!
-            // uiObj.main = elem.getAttribute('id'); // elem.getAttribute('id')无法取到id的
-
-            //注释掉原因,导出到browser的html中不能还原! 
-            //var uiAttr = hui.Control.UI_ATTRIBUTE || 'ui';
-            //elem.setAttribute('_' + uiAttr, elem.getAttribute(uiAttr));
-            //elem.removeAttribute(uiAttr);
+            var data = uiObj.model && uiObj.model.getData && typeof uiObj.model.getData === 'function' ? uiObj.model.getData() : {};
+            hui.Control.init(main, data, uiObj);
 
             uiObj.endRenderTime = new Date();
 
@@ -805,12 +789,6 @@ hui.define('hui_control', [], function () {
             }
 
             uiObj.endInitBehaviorTime = new Date();
-            /*
-        // 注释掉原因：getParamMap时会自动根据isFormItem判断
-        if (uiObj.isFormItem === false) {
-            uiObj.getValue = null;
-        }*/
-
         },
         /**
          * @name 生成DOM
@@ -820,7 +798,7 @@ hui.define('hui_control', [], function () {
             var me = this,
                 tagName = this.tagName || 'DIV',
                 doc = hui.Control.prototype.getDocument.call(me),
-                elem = doc.createElement(String(tagName).toUpperCase()),
+                main = doc.createElement(String(tagName).toUpperCase()),
                 control = me.parentControl,
                 wrap = null;
 
@@ -834,12 +812,12 @@ hui.define('hui_control', [], function () {
                 wrap = doc.body || doc.documentElement;
             }
 
-            wrap.appendChild(elem);
+            wrap.appendChild(main);
 
-            elem.id = hui.Control.makeElemGUID(me.id);
-            me.main = elem.id;
+            main.id = hui.Control.makeElemGUID(me.id);
+            me.main = main.id;
 
-            return elem;
+            return main;
         },
         /**
          * @name 父控件添加子控件. 注: 将子控件加到父控件下面的容器中也可以调用appendSelfTo

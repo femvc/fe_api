@@ -89,7 +89,7 @@ function showTab(tab) {
                     <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
                     <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
                     <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
-                    <a class="test_btn" href="#/start_test~tid=100001">立即测试</a>
+                    <a class="test_btn" href="#/test~tid=100001">立即测试</a>
                 </div> 
             </div>
             <div class="page_middle">
@@ -160,22 +160,6 @@ function showTab(tab) {
 
                     me.showTestHistory();
                     me.showTestButton();
-                    
-                    hui.util.on(window, 'resize', function(){
-                        var btn = hui.Control.getByFormName('subject_skip');
-                        var main = btn ? btn.getMain() : undefined;
-                        if (main && main.offsetTop) {
-                            if (document.body.clientHeight < main.offsetTop + 30) {
-                                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
-                                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
-                            }
-                            else {
-                                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
-                                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
-                            }
-                        }
-                    });
-
                 },
                 showTestHistory: function() {
                     hui.Mockup.setRule('/ue_api/internal/get_test_history', [
@@ -207,12 +191,6 @@ function showTab(tab) {
                                     html += hui.util.format(tpl, list[i]);
                                 }
                                 hui.g('test_list').innerHTML = html;
-
-                                var html = '';
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    html += hui.util.format(tpl, list[i]);
-                                }
-                                hui.g('history_list').innerHTML = html;
                             }
                         }
                     });
@@ -275,7 +253,44 @@ function showTab(tab) {
                 initBehavior: function () {
                     var me = this;
                     showTab('history');
-                }
+
+                    me.showTestHistory();
+                },
+                showTestHistory: function() {
+                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                        null,
+                        [
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
+                        ]
+                    ]);
+                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                        onsuccess: function (result) {
+                            if (result && !result[0] && result[1]) {
+                                var tpl = [
+                                    '<li class="item_row">',
+                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_score">#{score}</span>',
+                                    '    <span class="t_date">#{date}</span>',
+                                    '</li>'
+                                ].join('');
+                                
+                                var list = result[1];
+                                var html = '';
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    html += hui.util.format(tpl, list[i]);
+                                }
+                                hui.g('history_list').innerHTML = html;
+                            }
+                        }
+                    });
+                },
+                
             };
 
             hui.inherits(pageHistory, hui.Action);
@@ -391,7 +406,6 @@ function showTab(tab) {
                         <input type="hidden" ui="type:'TextInput',formName:'index'" />
                         <a href="javascript:" class="subject_end" onclick="hui.Control.getByFormName('form').hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
                         <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
-                        <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
                     </div>
                     <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
                     <div class="form_content">
@@ -424,20 +438,19 @@ function showTab(tab) {
                     var me = this;
                     showTab('index');
 
-                    var submit = me.getByFormName('subject_nxt');
                     var submit2 = me.getByFormName('subject_nxt2');
-                    submit.onclick = submit2.onclick = function () {
+                    submit2.onclick = function () {
                         var data = hui.Control.getByFormName('form').getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
                         if (data.content.indexOf('yes') !== -1) {
-                            subject_skip.onclick();
+                            hui.Control.getByFormName('subject_skip').onclick();
                         }
                         else if (window.confirm('友情提示：您尚未选择任何答案，确定跳过该题目吗')) {
-                            subject_skip.onclick();
+                            hui.Control.getByFormName('subject_skip').onclick();
                         }
                     };
-                    var subject_skip = me.getByFormName('subject_skip');
-                    subject_skip.onclick = function () {
+                    
+                    me.getByFormName('subject_skip').onclick = function () {
                         var data = hui.Control.getByFormName('form').getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
                         data.test_id = window.test_id;
@@ -446,14 +459,12 @@ function showTab(tab) {
                         $('.form_content').animate({opacity:0}, 500);
                         // $('.form_mask').show();
                     };
-                    var subject_pre = me.getByFormName('subject_pre');
-                    subject_pre.onclick = function () {
+                    me.getByFormName('subject_pre').onclick = function () {
                         var data = {};
                         data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
                         saveTestScore(data);
                     };
-                    var result = hui.Control.getByFormName('result');
-                    result.getByFormName('result_nxt').onclick = function () {
+                    hui.Control.getByFormName('result').getByFormName('result_nxt').onclick = function () {
                         hui.Control.getByFormName('result').hide();
                         // hui.Control.getByFormName('candidate').show();
                         showEvaluateReport();
@@ -621,7 +632,7 @@ function showTab(tab) {
             pageResult = function () {
                 hui.Action.call(this);
                 this.id = 'pageResult';
-                this.main = 'test';
+                this.main = 'result';
             };
             pageResult.prototype = {
                 getView: function () {
@@ -691,11 +702,11 @@ function showTab(tab) {
             pageCandidate = function () {
                 hui.Action.call(this);
                 this.id = 'pageCandidate';
-                this.main = 'test';
+                this.main = 'candidate';
             };
             pageCandidate.prototype = {
                 getView: function () {
-                    var str = hui.g('test').innerHTML;
+                    var str = hui.g('candidate').innerHTML;
                     return str;
                 },
                 initBehavior: function () {

@@ -324,33 +324,16 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 var me = this;
                 //Action渲染过程中禁止跳转，否则容易造成死循环。
                 hui.Action.getExtClass('hui.Master').ready = false;
-
                 // 设为活动action 
                 me.active = true;
 
-                var elem,
-                    uiObj = me,
-                    MAIN_ID = document.getElementById(hui.Action.MAIN_ID);
-                // 注：默认增加一个空元素作为控件主元素!
-                elem = (uiObj.getMain ? uiObj.getMain() : null) || (uiObj.createMain ? uiObj.createMain() : hui.Control.prototype.createMain.call(uiObj));
-                if (elem && MAIN_ID) {
-                    document.getElementById(hui.Action.MAIN_ID).appendChild(elem);
-                }
-                if (!elem) {
-                    return hui.Control.error('Action\'s main element is invalid');
-                }
-                // 便于通过elem.getAttribute('control')找到control
-                elem.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id === undefined ? '' : uiObj.id);
-
                 // 保存通过URL传过来的参数
                 me.queryString = args;
-
                 // 判断model是否存在，不存在则新建一个
                 if (!me.model) {
                     var baseModel = hui.Action.getExtClass('hui.BaseModel');
                     me.model = new baseModel();
                 }
-
                 // 先将PARAM_MAP中的key/value装入model
                 for (var k in me.PARAM_MAP) {
                     if (k) {
@@ -378,14 +361,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     mainHTML = hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData());
                     hui.Control.prototype.setInnerHTML(main, mainHTML);
                 }
-                me.render && me.render();
-                me.rendered = 'true';
-
-                // 渲染当前view中的控件
-                hui.Action.getExtClass('hui.Control').init(main, me.model, me);
-
-                // 控件事件绑定
-                me.initBehavior && me.initBehavior();
+                
+                hui.Action.getExtClass('hui.Control').prototype.enterControl.call(me);
 
                 // hui.Action.getExtClass('hui.Mask').hideLoading();
                 // 渲染结束，检查渲染期间是否有新请求
