@@ -6,12 +6,21 @@ var Db = require('mongodb').Db,
 var server = new Server(global.config.mongo.host, global.config.mongo.port, global.config.mongo.host_opts);
 var mongo = new Db(global.config.mongo.dbname, server, global.config.mongo.opts);
 var isReady = false;
-mongo.open(function (err, p_client) {
+
+var username = 'haiyang', password = '51mongodb';
+mongo.open(function(err, db) {
     if (err) {
-        console.log(err);
+        return console.log(err);
     }
-    console.log('mongo ready');
-    isReady = true;
+    db.authenticate(username, password, function(err, result) { 
+        if (err) {
+            db.close();
+            console.log('mongodb authenticate failed!');
+            return;   
+        }
+        console.log('mongo ready');
+        isReady = true;
+    });  
 });
 
 mongo.onReady = function (callback) {
