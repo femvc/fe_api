@@ -46,11 +46,18 @@ function showTab(tab) {
     
     hui.util.addClass(hui.g('menu_' + tab), 'item_selected');
 
-    hui.g('index').style.display = 'none';
-    hui.g('industry').style.display = 'none';
-    hui.g('lesson').style.display = 'none';
-    hui.g('history').style.display = 'none';
-    hui.g('about').style.display = 'none';
+    hui.g('index'    ).style.display = 'none';
+    hui.g('industry' ).style.display = 'none';
+    hui.g('lesson'   ).style.display = 'none';
+    hui.g('history'  ).style.display = 'none';
+    hui.g('about'    ).style.display = 'none';
+
+    hui.g('test'     ).style.display = 'none';
+    hui.g('result'   ).style.display = 'none';
+    hui.g('candidate').style.display = 'none';
+    hui.g('report'   ).style.display = 'none';
+    hui.g('detail'   ).style.display = 'none';
+    hui.g('send_sms' ).style.display = 'none';
 
     hui.g(tab).style.display = 'block';
 }
@@ -252,9 +259,11 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('history');
-
                     me.showTestHistory();
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('history');
                 },
                 showTestHistory: function() {
                     hui.Mockup.setRule('/ue_api/internal/get_test_history', [
@@ -322,8 +331,12 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
+                },
+                finish: function () {
+                    var me = this;
                     showTab('industry');
                 }
+                
             };
 
             hui.inherits(pageIndustry, hui.Action);
@@ -358,6 +371,9 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
+                },
+                finish: function () {
+                    var me = this;
                     showTab('lesson');
                 }
             };
@@ -387,6 +403,9 @@ function showTab(tab) {
                     return str;
                 },
                 initBehavior: function () {
+                    var me = this;
+                },
+                finish: function () {
                     var me = this;
                     showTab('about');
                 }
@@ -435,8 +454,7 @@ function showTab(tab) {
                     return str;
                 },
                 initBehavior: function () {
-                    var me = this;
-                    showTab('index');
+                    var me = this; return;
 
                     var submit2 = me.getByFormName('subject_nxt2');
                     submit2.onclick = function () {
@@ -601,6 +619,10 @@ function showTab(tab) {
                             }
                         });
                     }
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('test');
                 }
             };
 
@@ -641,7 +663,10 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('result');
                 }
             };
 
@@ -711,7 +736,6 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
                     var candidate = hui.Control.getByFormName('candidate');
                     candidate.getByFormName('candidate_nxt').onclick = function () {
                         var data = candidate.getParamMap();
@@ -756,15 +780,16 @@ function showTab(tab) {
                         //     candidate.getByFormName('candidate_nxt').setDisabled();
                         // }
                     };
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('candidate');
                 }
             };
 
             hui.inherits(pageCandidate, hui.Action);
             hui.Router.setRule('/candidate', 'pageCandidate');
             hui.window.pageCandidate = pageCandidate;
-
-                
-            
         }
         </script>
         <div class="page_body" id="report" style="background-color: white;display: none;">
@@ -798,7 +823,7 @@ function showTab(tab) {
             pageReport = function () {
                 hui.Action.call(this);
                 this.id = 'pageReport';
-                this.main = 'test';
+                this.main = 'report';
             };
             pageReport.prototype = {
                 getView: function () {
@@ -807,8 +832,10 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
-
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('report');
                 }
             };
 
@@ -1085,7 +1112,6 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
                 },
                 showPaperDetail: function () {
                     Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
@@ -1138,6 +1164,10 @@ function showTab(tab) {
                             }
                         }
                     });
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('detail');
                 }
             };
 
@@ -1214,7 +1244,6 @@ function showTab(tab) {
                 },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
 
                     me.initSendSMS();
                     smsTimerCount();
@@ -1276,6 +1305,10 @@ function showTab(tab) {
                         //     hui.g('send_code').className = 'send_code_disabled';
                         // }
                     }
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('send_sms');
                 }
             };
 

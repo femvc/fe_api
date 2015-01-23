@@ -48,7 +48,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 main = me.getMain(),
                 title_text = hui.cc(me.getClass('title_text'), main);
             if (!title_text) {
-                var title = me.getDocument().createElement('DIV');
+                var title = document.createElement('DIV');
                 title.className = me.getClass('title');
                 title.innerHTML = '<span class="' + me.getClass('title_text') + '">&nbsp;</span> <i class="' + me.getClass('arrow') + '"><s class="' + me.getClass('arrow_icon') + '">&nbsp;</s></i>';
                 main.appendChild(title);
@@ -63,7 +63,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 main = me.getMain(),
                 optionContainer = hui.cc(me.getClass('options'), main);
             if (!optionContainer) {
-                optionContainer = me.getDocument().createElement('DIV');
+                optionContainer = document.createElement('DIV');
                 optionContainer.className = me.getClass('options');
                 me.getMain().appendChild(optionContainer);
             }
@@ -184,7 +184,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 dataValue = me['data_value'],
                 dataText = me['data_text'];
 
-            var elem = me.getDocument().createElement('DIV');
+            var elem = document.createElement('DIV');
             elem.value = typeof item == 'string' ? item : item[dataValue];
             elem.className = me.getClass('item');
             elem.setAttribute('value', elem.value);

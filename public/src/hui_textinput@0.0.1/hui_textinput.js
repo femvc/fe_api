@@ -179,7 +179,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
                 main = me.getMain(),
                 elem = me.getPlaceholder();
             if (!elem) {
-                elem = me.getDocument().createElement('SPAN');
+                elem = document.createElement('SPAN');
                 elem.className = me.getClass('placeholder');
                 me.setInnerHTML(elem, me.placeholder);
                 if (me.useAgent) {
