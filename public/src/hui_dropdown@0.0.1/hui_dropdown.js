@@ -78,7 +78,6 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             hui.Dropdown.superClass.prototype.render.call(this);
             var me = this;
             // 绘制宽度和高度
-            me.setSize();
             if (me.placeholder && !me.value) {
                 hui.setInnerText(me.getTitle(), me.placeholder);
             }

@@ -37,7 +37,6 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
         render: function (options) {
             hui.Boxpanel.superClass.prototype.render.call(this);
             var me = this;
-            me.setSize();
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
         },

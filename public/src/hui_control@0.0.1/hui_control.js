@@ -804,6 +804,8 @@ hui.define('hui_control', [], function () {
                     }
                     // 便于通过main.getAttribute('ctrid')找到control
                     main.setAttribute('ctrid', uiObj.getId ? uiObj.getId() : uiObj.id);
+                    hui.Control.addClass(main, me.getClass());
+                    me.setSize();
 
                     next && next();
                 }, uiObj);

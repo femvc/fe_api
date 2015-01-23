@@ -452,14 +452,13 @@ function showTab(tab) {
                         var data = form.getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
                         data.test_id = window.test_id;
-                        saveTestScore(data);
+                        me.saveTestScore(data);
                         $('.subject_nxt').attr('disabled','disabled');
                         $('.form_content').animate({opacity:0}, 500);
                         // $('.form_mask').show();
                     };
-                    
 
-                    hui.Control.getByFormName('form').initSubject = function (newstart) {
+                    me.getByFormName('form').initSubject = function (newstart) {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
                                 newstart: !!newstart ? 'newone' : '', 
@@ -495,8 +494,8 @@ function showTab(tab) {
                             }
                         });
                     };
-                    hui.Control.getByFormName('form').showWaiting();
-                    hui.Control.getByFormName('form').addOption = function (obj) {
+                    me.getByFormName('form').showWaiting();
+                    me.getByFormName('form').addOption = function (obj) {
                         var content = hui.Control.getByFormName('form').getByFormName('content').getMain(),
                             list,
                             index;
@@ -522,11 +521,11 @@ function showTab(tab) {
                         hui.util.appendHTML(content, hui.format(tpl, obj));
                         hui.Control.create(hui.g('content' + obj.index));
                     };
-                    hui.Control.getByFormName('form').removeOption = function (index) {
+                    me.getByFormName('form').removeOption = function (index) {
                         var content = hui.Control.getByFormName('form').getByFormName('content');
                         content.getByFormName(index).dispose();
                     };
-                    hui.Control.getByFormName('form').removeAllOption = function () {
+                    me.getByFormName('form').removeAllOption = function () {
                         var content = hui.Control.getByFormName('form').getByFormName('content'),
                             option,
                             main = content.getMain();
@@ -540,36 +539,36 @@ function showTab(tab) {
                         }
                         main.index = 0;
                     };
-
                     
-
-                    function saveTestScore(data) {
-                        Requester.get('/ue_api/internal/save_next_question', {
-                            data: data,
-                            onsuccess: function (result) {
-                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                if (result && result[1] && result[1].finish) {
-                                    hui.Control.getByFormName('form').hide();
-                                    showTestScore();
-                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-                                }
-                                else {
-                                    hui.Control.getByFormName('form').initSubject();
-                                    hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
-                                }
-                                //}
-                                //else {
-                                    //hui.Control.getByFormName('form').hide();
-                                    //showTestScore();
-                                    //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
-                                //}
+                },
+                saveTestScore: function(data) {
+                    Requester.get('/ue_api/internal/save_next_question', {
+                        data: data,
+                        onsuccess: function (result) {
+                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                            if (result && result[1] && result[1].finish) {
+                                hui.Control.getByFormName('form').hide();
+                                window.location.href = '#/result';
+                                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
                             }
-                        });
-                    }
+                            else {
+                                hui.Control.getByFormName('form').initSubject();
+                                hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
+                            }
+                            //}
+                            //else {
+                                //hui.Control.getByFormName('form').hide();
+                                //showTestScore();
+                                //hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
+                            //}
+                        }
+                    });
                 },
                 finish: function () {
                     var me = this;
                     showTab('test');
+
+                    me.getByFormName('form').initSubject();
                 }
             };
 

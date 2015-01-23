@@ -232,7 +232,6 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
             if (me.useEye) {
                 me.renderEye();
             }
-            me.setSize();
         },
         initBehavior: function () {
             var me = this,

@@ -108,7 +108,6 @@ hui.define('hui_table', ['hui_util', 'hui_control'], function () {
                 return;
             }
             // me.setInnerHTML(me, me.getMainHtml());
-            me.setSize();
             // 如果未绘制过，初始化main元素
             if (!me.isRendered) {
                 me._width = me.getWidth();

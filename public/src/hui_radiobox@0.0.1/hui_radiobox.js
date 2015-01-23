@@ -45,7 +45,6 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
             var me = this,
                 main = me.getMain();
             // 绘制宽度和高度
-            me.setSize();
 
             var tpl = me.getTpl();
             hui.appendHTML(main, hui.Control.format(tpl,
