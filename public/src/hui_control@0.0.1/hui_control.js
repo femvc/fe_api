@@ -5,8 +5,8 @@
  * @author wanghaiyang
  * @date 2014/05/05
  */
-hui.define('hui_control', [], function() {
-    hui.EventDispatcher = function() {
+hui.define('hui_control', [], function () {
+    hui.EventDispatcher = function () {
         this._listeners = {};
     };
     hui.EventDispatcher.prototype = {
@@ -16,7 +16,7 @@ hui.define('hui_control', [], function() {
          * @param {String} eventType 事件类型.
          * @param {Function} listener 监听器.
          */
-        on: function(eventType, listener) {
+        on: function (eventType, listener) {
             if (!this._listeners[eventType]) {
                 this._listeners[eventType] = [];
             }
@@ -44,7 +44,7 @@ hui.define('hui_control', [], function() {
          * @param {String} eventType 事件类型.
          * @param {Function} listener 监听器.
          */
-        off: function(eventType, listener) {
+        off: function (eventType, listener) {
             if (!this._listeners[eventType]) {
                 return;
             }
@@ -64,7 +64,7 @@ hui.define('hui_control', [], function() {
          * @name 清除所有监听器
          * @public
          */
-        clear: function(eventType) {
+        clear: function (eventType) {
             // 清除全部
             if (!eventType) {
                 this._listeners = [];
@@ -72,7 +72,8 @@ hui.define('hui_control', [], function() {
             // 只清除指定类型
             else if (this._listeners[eventType]) {
                 this._listeners[eventType] = [];
-            } else if (Object.prototype.toString.call(eventType) === '[object Array]') {
+            }
+            else if (Object.prototype.toString.call(eventType) === '[object Array]') {
                 for (var i = 0, len = eventType.length; i < len; i++) {
                     this.clear(eventType[i]);
                 }
@@ -83,7 +84,7 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {String} eventType 事件类型.
          */
-        trigger: function(eventType) {
+        trigger: function (eventType) {
             if (!this._listeners[eventType]) {
                 return;
             }
@@ -101,7 +102,7 @@ hui.define('hui_control', [], function() {
     };
     hui.EventDispatcher.prototype.constructor = hui.EventDispatcher;
 
-    hui.Flow = function() {
+    hui.Flow = function () {
         this.que = []; // 注：存放要调用的函数列表
         this.id = Math.random(); // 注：仅用于标示，不会被调用（即使删掉也没什么影响）
     };
@@ -111,12 +112,12 @@ hui.define('hui_control', [], function() {
      * @param {Function} fn 需要异步执行的函数
      * @return {this} 返回主体以便于后续操作
      */
-    hui.Flow.prototype.push = function(fn, target) {
+    hui.Flow.prototype.push = function (fn, target) {
         var me = this,
             _fn = target ? hui.fn(fn, target) : fn,
             callback = hui.fn(me.next, me);
 
-        fn = function() {
+        fn = function () {
             _fn(callback);
         };
         me.que.push(fn);
@@ -129,7 +130,7 @@ hui.define('hui_control', [], function() {
      * @param {Function} callback 嵌套时的回调函数，其实就是hui.Flow.prototype.next
      * @return {void}
      */
-    hui.Flow.prototype.next = function(callback) {
+    hui.Flow.prototype.next = function (callback) {
         if (callback) {
             callback();
         }
@@ -179,7 +180,7 @@ hui.define('hui_control', [], function() {
      */
 
     // Define hui_control
-    hui.Control = function(options, pending) {
+    hui.Control = function (options, pending) {
         hui.EventDispatcher.call(this);
 
         // 状态列表
@@ -206,7 +207,7 @@ hui.define('hui_control', [], function() {
          * @protected
          * @param {Object} options 参数集合
          */
-        initOptions: function(options) {
+        initOptions: function (options) {
             for (var k in options) {
                 if (options.hasOwnProperty(k)) {
                     this[k] = options[k];
@@ -220,7 +221,7 @@ hui.define('hui_control', [], function() {
          * @protected
          * @return {String}
          */
-        getClass: function(opt_key) {
+        getClass: function (opt_key) {
             if (!this.type) {
                 return '';
             }
@@ -247,7 +248,7 @@ hui.define('hui_control', [], function() {
          * @public
          * @return {String}
          */
-        getId: function(key) {
+        getId: function (key) {
             var me = this,
                 // uiAttr = hui.Control.UI_ATTRIBUTE || 'ui';
                 // idPrefix = 'ctrl' + this.type + this.id;
@@ -264,18 +265,19 @@ hui.define('hui_control', [], function() {
          * @public
          * @return {String}
          */
-        getMain: function() {
+        getMain: function () {
             var me = this,
                 elem;
             elem = me.main ? document.getElementById(me.main) : null;
             return elem;
         },
-        mainFocus: function() {
+        mainFocus: function () {
             // Fix IE8 bug: hidden elem focus() cause error
             var main = this.getMain();
             try {
                 main.focus();
-            } catch (e) {}
+            }
+            catch (e) {}
         },
         /**
          * @name 获取控件的innerHTML
@@ -283,13 +285,14 @@ hui.define('hui_control', [], function() {
          * @param {HTMLElement} elem 默认为控件主DOM[可选]
          * @return {String}
          */
-        getInnerHTML: function(elem) {
+        getInnerHTML: function (elem) {
             var me = this,
                 elem = elem || me.getMain(),
                 html = '';
             if (elem.getInnerHTML) {
                 html = elem.getInnerHTML();
-            } else if (elem.innerHTML !== undefined) {
+            }
+            else if (elem.innerHTML !== undefined) {
                 html = elem.innerHTML;
             }
             return html;
@@ -301,7 +304,7 @@ hui.define('hui_control', [], function() {
          * @param {HTMLElement} elem 默认为控件主DOM[可选]
          * @return {String}
          */
-        setInnerHTML: function(elem, html) {
+        setInnerHTML: function (elem, html) {
             if (!html && typeof elem === 'string' && this.getMain) {
                 html = elem;
                 elem = this.getMain();
@@ -312,30 +315,29 @@ hui.define('hui_control', [], function() {
          * @name 渲染控件
          * @public
          */
-        render: function() {
-            var me = this,
-                elem = me.getMain();
-            if (elem && elem.getAttribute('_initview') != 'true') {
-                hui.Control.addClass(elem, me.getClass());
-                me.initView();
-                elem.setAttribute('_initview', 'true');
-            }
+        render: function () {
+            // var me = this;
+            // var main = me.getMain();
+            // var data = me.model && me.model.getData && typeof me.model.getData === 'function' ? me.model.getData() : {};
+            // hui.Control.init(main, data, me);
+            // main.setAttribute('_rendered', 'true');
         },
+        // 
         /**
          * @name 生成HTML
          * @public
          */
-        initView: function(callback) {
-            callback && callback();
-        },
+        // initView: function (callback) {
+        //     callback && callback();
+        // },
         /**
          * @name 绑定事件
          * @public
          */
-        initBehavior: function() {
+        initBehavior: function () {
             //var me = this;
         },
-        initBehaviorByTree: function() {
+        initBehaviorByTree: function () {
             var me = this,
                 main = me.getMain();
             if (me.controlMap) {
@@ -352,7 +354,7 @@ hui.define('hui_control', [], function() {
          * @name 验证控件的值
          * @public
          */
-        validate: function(show_error) {
+        validate: function (show_error) {
             var me = this,
                 result = true,
                 controlMap = me.controlMap,
@@ -389,7 +391,7 @@ hui.define('hui_control', [], function() {
 
             return result;
         },
-        hideError: function() {
+        hideError: function () {
             var me = this,
                 Validator = hui.Control.getExtClass('hui.Validator');
             Validator.cancelNotice(me.getMain());
@@ -400,7 +402,7 @@ hui.define('hui_control', [], function() {
             }
             return me;
         },
-        showError: function(errorMsg, code) {
+        showError: function (errorMsg, code) {
             var me = this,
                 Validator = hui.Control.getExtClass('hui.Validator'),
                 rule = Validator.getRule(me.rule);
@@ -411,7 +413,7 @@ hui.define('hui_control', [], function() {
             Validator.showError(me.getMain(), errorMsg);
             return me;
         },
-        showErrorByTree: function(paramMap, code) {
+        showErrorByTree: function (paramMap, code) {
             var me = this,
                 value,
                 list,
@@ -432,7 +434,8 @@ hui.define('hui_control', [], function() {
                                 if (Object.prototype.toString.call(value[i]) === '[object Object]' &&
                                     ctr.controlMap) {
                                     ctr.showErrorByTree(value[i], code);
-                                } else if (ctr.showError) {
+                                }
+                                else if (ctr.showError) {
                                     ctr.showError(value[i], code);
                                 }
                                 ctr = null;
@@ -443,13 +446,13 @@ hui.define('hui_control', [], function() {
             }
             return me;
         },
-        showOK: function() {
+        showOK: function () {
             var me = this,
                 Validator = hui.Control.getExtClass('hui.Validator');
             Validator.showOK(me);
             return me;
         },
-        showWaiting: function() {
+        showWaiting: function () {
             var me = this,
                 Validator = hui.Control.getExtClass('hui.Validator');
             Validator.showWaiting(me);
@@ -460,11 +463,12 @@ hui.define('hui_control', [], function() {
          * @public
          */
         //getValue:   new Function(), // 注: 控件直接返回值(对象/数组/字符串)时才能使用getValue! 获取所有子控件的值,应该用getParamMap
-        setValue: function(paramMap) {
+        setValue: function (paramMap) {
             var me = this;
             if (me.controlMap && (/\[object Object\]/.test(Object.prototype.toString.call(paramMap)))) {
                 me.setValueByTree(this.value);
-            } else {
+            }
+            else {
                 // 注：在setValue/getValue时不允许使用me.getMain().setAttirbute('value', value)和me.getMain()
                 // .getAttirbute('value'),因为value有可能是数组/对象！！
                 // 如果确定value是num或str可以在子类中覆盖setValue/getValue！！
@@ -476,7 +480,7 @@ hui.define('hui_control', [], function() {
          * @name 给控件树一次性赋值
          * @param {Object} v 值
          */
-        setValueByTree: function(paramMap) {
+        setValueByTree: function (paramMap) {
             var me = this,
                 value,
                 list,
@@ -505,13 +509,16 @@ hui.define('hui_control', [], function() {
                                         break;
                                     }
                                 }
-                            } else if (ctr.constructor &&
+                            }
+                            else if (ctr.constructor &&
                                 ctr.setValue &&
                                 ctr.setValue !== hui.Control.prototype.setValue) {
                                 ctr.setValue(value[i]);
-                            } else if (ctr.controlMap) {
+                            }
+                            else if (ctr.controlMap) {
                                 ctr.setValueByTree(value[i]);
-                            } else if (ctr.getMain || ctr.main) {
+                            }
+                            else if (ctr.getMain || ctr.main) {
                                 main = (ctr.getMain ? ctr.getMain() : document.getElementById(ctr.main)) || {};
                                 main.value = value[i];
                             }
@@ -524,7 +531,7 @@ hui.define('hui_control', [], function() {
 
             return me;
         },
-        getValue: function() {
+        getValue: function () {
             var me = this,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main),
                 value = main.value;
@@ -537,7 +544,7 @@ hui.define('hui_control', [], function() {
          * @name 获取子控件的值，返回一个map
          * @public
          */
-        getParamMap: function() {
+        getParamMap: function () {
             var me = this,
                 paramMap = {},
                 ctr,
@@ -553,10 +560,12 @@ hui.define('hui_control', [], function() {
                         if (ctr.getValue) {
                             value = ctr.getValue();
                             paramMap[formName].push(value);
-                        } else if (ctr.getMain || ctr.main) {
+                        }
+                        else if (ctr.getMain || ctr.main) {
                             value = (ctr.getMain ? ctr.getMain() : document.getElementById(ctr.main)).value;
                             paramMap[formName].push(value);
-                        } else if (ctr.controlMap) {
+                        }
+                        else if (ctr.controlMap) {
                             value = ctr.getParamMap();
                             paramMap[formName].push(value);
                         }
@@ -577,15 +586,15 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {String} formName 子控件的formName
          */
-        getByFormName: function(formName) {
+        getByFormName: function (formName) {
             var me = this;
             return hui.Control.getByFormName(formName, me);
         },
-        getByFormNameAll: function(formName, all) {
+        getByFormNameAll: function (formName, all) {
             var me = this;
             return hui.Control.getByFormNameAll(formName, me, all);
         },
-        getById: function(id) {
+        getById: function (id) {
             var me = this;
             return hui.Control.getById(id, me);
         },
@@ -593,7 +602,7 @@ hui.define('hui_control', [], function() {
          * @name 显示控件
          * @public
          */
-        show: function() {
+        show: function () {
             this.getMain().style.display = 'block';
             hui.Control.removeClass(this.getMain(), 'hide');
             return this;
@@ -603,7 +612,7 @@ hui.define('hui_control', [], function() {
          * @name 隐藏控件
          * @public
          */
-        hide: function() {
+        hide: function () {
             hui.Control.addClass(this.getMain(), 'hide');
             this.getMain().style.display = 'none';
             return this;
@@ -613,14 +622,15 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {Boolean} disabled
          */
-        setDisabled: function(disabled) {
+        setDisabled: function (disabled) {
             var me = this,
                 main = me.getMain();
             main.disabled = typeof disabled === 'undefined' ? disabled = true : disabled;
 
             if (main.disabled) {
                 hui.addClass(main, me.getClass('disabled'));
-            } else {
+            }
+            else {
                 hui.removeClass(main, me.getClass('disabled'));
             }
             return me;
@@ -630,7 +640,7 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {Boolean} disabled
          */
-        setReadonly: function(readOnly) {
+        setReadonly: function (readOnly) {
             if (typeof readOnly === 'undefined') {
                 readOnly = true;
             }
@@ -642,17 +652,17 @@ hui.define('hui_control', [], function() {
          * @public
          * @return {boolean}
          */
-        isDisabled: function() {
+        isDisabled: function () {
             return this.getMain().disabled;
         },
-        isReadonly: function() {
+        isReadonly: function () {
             return this.getMain().readOnly;
         },
         /**
          * @name 设置控件width和height
          * @public
          */
-        setSize: function(size) {
+        setSize: function (size) {
             var me = this,
                 main = me.getMain();
             me.size = size ? size : me.size || {};
@@ -688,7 +698,7 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {Object} control
          */
-        getFormName: function() {
+        getFormName: function () {
             var me = this,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main);
             var itemName = me.formName || me['name'] || (main ? main.getAttribute('name') : null);
@@ -698,7 +708,7 @@ hui.define('hui_control', [], function() {
          * @name 释放控件
          * @protected
          */
-        dispose: function() {
+        dispose: function () {
             var me = this,
                 controlMap,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main),
@@ -723,13 +733,15 @@ hui.define('hui_control', [], function() {
                 for (var i = 0, len = list.length; i < len; i++) {
                     try {
                         main[list[i]] = Function('');
-                    } catch (e) {}
+                    }
+                    catch (e) {}
                 }
 
                 // 清空HTML内容
                 if (main.setInnerHTML) {
                     main.setInnerHTML(main, '');
-                } else if (main.innerHTML) {
+                }
+                else if (main.innerHTML) {
                     main.innerHTML = '';
                 }
                 main.parentNode.removeChild(main);
@@ -737,7 +749,7 @@ hui.define('hui_control', [], function() {
 
             // 因为使用的属性而非闭包实现的EventDispatcher，因此无需担心内存回收的问题。
         },
-        disposeChild: function() {
+        disposeChild: function () {
             var me = this;
             // dispose子控件
             if (me.controlMap) {
@@ -769,10 +781,8 @@ hui.define('hui_control', [], function() {
          * @protected
          * @param {Object} argMap arg表.
          */
-        enterControl: function(callback) {
+        enterControl: function (callback) {
             var uiObj = this,
-                parentElement,
-                control,
                 parentControl = uiObj.parentControl;
             // 注：默认增加一个空元素作为控件主元素!
             if (typeof uiObj.getMain !== 'function') {
@@ -782,20 +792,19 @@ hui.define('hui_control', [], function() {
             if (!elem) {
                 return hui.Control.error('Control\'s main element is invalid');
             }
-            
+
             var que = new hui.Flow(); // 注：可以参照hui_flow.js文件。非常简单，不到30行代码
-            if (elem.getAttribute && elem.getAttribute('_initMain') != 'true') {
-                que.push(function(next) {
+            if (elem.getAttribute && !elem.getAttribute('ctrid')) {
+                que.push(function (next) {
                     var me = this;
                     var main = me.getMain();
                     // 默认设置value
                     if (uiObj.value !== undefined) {
                         main.value = uiObj.value;
                     }
-                    // 便于通过main.getAttribute('control')找到control
-                    main.setAttribute('control', uiObj.getId ? uiObj.getId() : uiObj.id);
-                    main.setAttribute('_initMain', 'true');
-                
+                    // 便于通过main.getAttribute('ctrid')找到control
+                    main.setAttribute('ctrid', uiObj.getId ? uiObj.getId() : uiObj.id);
+
                     next && next();
                 }, uiObj);
             }
@@ -803,22 +812,22 @@ hui.define('hui_control', [], function() {
             // 初始化Model
             if (elem.getAttribute && elem.getAttribute('_initModel') != 'true') {
                 if (uiObj.initModel && uiObj.initModelMethod !== 'async' && uiObj.initModelMethod !== 'skip') {
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
-                        var main = me.getMain();
                         me.initModel();
 
                         next && next();
                     }, uiObj);
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
-                        main = me.getMain();
+                        var main = me.getMain();
                         main.getAttribute('_initModel', 'true');
                         next && next();
                     }, uiObj);
-                } else if (uiObj.initModelAsync && uiObj.initModelMethod !== 'sync' && uiObj.initModelMethod !== 'skip') {
+                }
+                else if (uiObj.initModelAsync && uiObj.initModelMethod !== 'sync' && uiObj.initModelMethod !== 'skip') {
                     que.push(uiObj.initModelAsync, uiObj);
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
                         var main = me.getMain();
                         main.getAttribute('_initModel', 'true');
@@ -830,7 +839,7 @@ hui.define('hui_control', [], function() {
             // 渲染视图
             if (elem.getAttribute && elem.getAttribute('_initView') != 'true') {
                 if (uiObj.getView && uiObj.getViewMethod !== 'async' && uiObj.getViewMethod !== 'skip') {
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
                         var main = me.getMain();
                         var tpl = me.getView();
@@ -839,16 +848,17 @@ hui.define('hui_control', [], function() {
 
                         next && next();
                     }, uiObj);
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
                         var main = me.getMain();
                         main.getAttribute('_initView', 'true');
                         next && next();
                     }, uiObj);
-                } else if (uiObj.getViewAsync && uiObj.getViewMethod !== 'sync' && uiObj.getViewMethod !== 'skip') {
-                    que.push(function(next) {
+                }
+                else if (uiObj.getViewAsync && uiObj.getViewMethod !== 'sync' && uiObj.getViewMethod !== 'skip') {
+                    que.push(function (next) {
                         var me = this;
-                        me.getViewAsync(function(tpl) {
+                        me.getViewAsync(function (tpl) {
                             var main = me.getMain();
                             var mainHTML = me.model && me.model.getData ? hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                             hui.Control.prototype.setInnerHTML(main, mainHTML);
@@ -856,26 +866,27 @@ hui.define('hui_control', [], function() {
                             next && next();
                         });
                     }, uiObj);
-                    que.push(function(next) {
+                    que.push(function (next) {
                         var me = this;
                         var main = me.getMain();
                         main.getAttribute('_initView', 'true');
+
                         next && next();
                     }, uiObj);
                 }
             }
 
-            que.push(function(next) {
+            que.push(function (next) {
                 var me = this;
                 var main = me.getMain();
                 // 动态生成control需手动维护me.parentControl
                 // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
-                parentElement = main;
+                var parentElement = main;
                 while (parentElement && parentElement.tagName && parentElement.parentNode) {
                     parentElement = parentElement.parentNode;
                     //label标签自带control属性!!
                     if (parentElement && hui.Control.isControlMain(parentElement)) {
-                        control = hui.Control.getById(parentElement.getAttribute('control'), parentControl);
+                        var control = hui.Control.getById(parentElement.getAttribute('ctrid'), parentControl);
                         hui.Control.appendControl(control, me);
                         break;
                     }
@@ -885,39 +896,45 @@ hui.define('hui_control', [], function() {
                         break;
                     }
                 }
+                next && next();
             }, uiObj);
 
             // 1. initView()会在render调用父类的render时自动调用，
             // 2. 不管是批量hui.Control.init()还是hui.Control.create(), 都会通过enterControl来执行render
             // 3. initBehavior()会在后面执行
-            if (elem.getAttribute && elem.getAttribute('_initTree') != 'true') {
-                que.push(function(next) {
+            if (elem.getAttribute && elem.getAttribute('_rendered') != 'true') {
+                que.push(function (next) {
                     var me = this;
                     var main = me.getMain();
                     me.render && me.render();
 
-                    if (main.getAttribute('_initTree') != 'true') {
+                    if (!me.render || main.getAttribute('_rendered') === 'false') {
                         var data = me.model && me.model.getData && typeof me.model.getData === 'function' ? me.model.getData() : {};
                         hui.Control.init(main, data, me);
-                        main.setAttribute('_initTree', 'true');
+                        main.setAttribute('_rendered', 'true');
                     }
+
+                    next && next();
                 }, uiObj);
             }
             if (elem.getAttribute && elem.getAttribute('_initBehavior') != 'true') {
-                que.push(function(next) {
+                que.push(function (next) {
                     var me = this;
                     if (me.initBehaviorByTree) {
                         me.initBehaviorByTree();
-                    } else if (me.initBehavior) {
+                    }
+                    else if (me.initBehavior) {
                         me.initBehavior();
                     }
-                    
-                    callback && callback();
+
+                    next && next();
                 }, uiObj);
             }
-            que.push(function(next) {
+            que.push(function (next) {
                 var me = this;
-                me.finish && uiObj.finish();
+                me.finish && me.finish();
+
+                callback && callback();
             }, uiObj);
 
             que.next();
@@ -926,7 +943,7 @@ hui.define('hui_control', [], function() {
          * @name 生成DOM
          * @protected
          */
-        createMain: function() {
+        createMain: function () {
             var me = this,
                 tagName = this.tagName || 'DIV',
                 main = document.createElement(String(tagName).toUpperCase()),
@@ -955,7 +972,7 @@ hui.define('hui_control', [], function() {
          * @public
          * @param {Control} uiObj 子控件.
          */
-        appendControl: function(uiObj) {
+        appendControl: function (uiObj) {
             return hui.Control.appendControl(this, uiObj);
         }
     };
@@ -967,14 +984,14 @@ hui.define('hui_control', [], function() {
      * @public
      * @return {String}
      */
-    hui.Control.makeGUID = (function() {
+    hui.Control.makeGUID = (function () {
         var guid = 1;
-        return function(formName) {
+        return function (formName) {
             return (formName ? formName : 'inner') + '_' + hui.Control.getHashCode('inner') + (guid++);
         };
     })();
 
-    hui.Control.getHashCode = function(str) {
+    hui.Control.getHashCode = function (str) {
         var hash = 0;
         if (str.length === 0) return hash;
         for (var i = 0; i < str.length; i++) {
@@ -990,9 +1007,9 @@ hui.define('hui_control', [], function() {
      * @public
      * @return {String}
      */
-    hui.Control.makeElemGUID = (function() {
+    hui.Control.makeElemGUID = (function () {
         var guid = 1;
-        return function(id) {
+        return function (id) {
             return (id !== undefined ? id + hui.Control.getHashCode(id) : ('_' + hui.Control.formatDate(new Date(), 'yyyyMMddHHmm') + '_' + (guid++)));
         };
     })();
@@ -1003,7 +1020,7 @@ hui.define('hui_control', [], function() {
      * @param {Hashmap} opt_propMap 数据model
      * @return {Hashmap}
      */
-    hui.Control.parseCustomAttribute = function(attrStr, opt_propMap) {
+    hui.Control.parseCustomAttribute = function (attrStr, opt_propMap) {
         var attrStr = '{' + attrStr + '}',
             attrs,
             attrValue,
@@ -1037,7 +1054,7 @@ hui.define('hui_control', [], function() {
      * @public
      * @param {String} elem DOM元素
      */
-    hui.Control.isChildControl = function(elem, list) {
+    hui.Control.isChildControl = function (elem, list) {
         var result = false;
         // 回溯找到父控件,若要移动控件,则需手动维护parentControl属性!!
         while (elem && elem.tagName && elem.parentNode) {
@@ -1058,10 +1075,10 @@ hui.define('hui_control', [], function() {
      * @public
      * @param {String} elem DOM元素
      */
-    hui.Control.isControlMain = function(elem) {
+    hui.Control.isControlMain = function (elem) {
         var result = false;
         // label的control是DOM
-        if (elem && elem.getAttribute && elem.getAttribute('control') && elem.getAttribute('ui')) {
+        if (elem && elem.getAttribute && elem.getAttribute('ctrid')) {
             result = true;
         }
         return result;
@@ -1077,8 +1094,8 @@ hui.define('hui_control', [], function() {
      */
     //hui.Control.init('<div ui="type:"></div>');//暂时禁止此方法生成控件树
     //hui.Control.init(hui.bocument.getElementById('content'));
-    hui.Control.init = function(opt_wrap, opt_propMap, parentControl) {
-        if (!opt_wrap || opt_wrap.getAttribute('_initChildControl') === 'true') {
+    hui.Control.init = function (opt_wrap, opt_propMap, parentControl) {
+        if (!opt_wrap || opt_wrap.getAttribute('_rendered') === 'true') {
             return false;
         }
 
@@ -1115,7 +1132,7 @@ hui.define('hui_control', [], function() {
         }
         for (var i = 0, len = uiEls.length; i < len; i++) {
             elem = uiEls[i];
-            if (!hui.Control.isChildControl(elem, uiEls) && elem.getAttribute('_initChildControl') !== 'true') {
+            if (!hui.Control.isChildControl(elem, uiEls) && elem.getAttribute('_rendered') !== 'true') {
 
                 control = hui.Control.create(elem, {
                     parentControl: parentControl
@@ -1150,12 +1167,12 @@ hui.define('hui_control', [], function() {
      * @param {Object} options 控件初始化参数
      * @return {hui.Control} 创建的控件对象
      */
-    hui.Control.create = function(type, options) {
+    hui.Control.create = function (type, options) {
         // 注：扩展了一下，直接支持hui.Control.create(Element);
         if (type && Object.prototype.toString.call(type) != '[object String]' && type.getAttribute) {
             options = options || {};
             if (hui.Control.isControlMain(type)) {
-                var control = hui.Control.getById(type.getAttribute('control'));
+                var control = hui.Control.getById(type.getAttribute('ctrid'));
                 if (control) {
                     hui.Control.appendControl(options.parentControl, control);
                 }
@@ -1165,10 +1182,12 @@ hui.define('hui_control', [], function() {
                 str = type.getAttribute(hui.Control.UI_ATTRIBUTE || 'ui');
                 try {
                     attrs = hui.Control.parseCustomAttribute(str);
-                } catch (e) {
+                }
+                catch (e) {
                     attrs = hui.Control.parseCustomAttribute(str.replace(/\\\'/g, '\'').replace(/\\\"/g, '\"')); //"
                 }
-            } catch (e) {
+            }
+            catch (e) {
                 hui.window.JSON && hui.window.JSON.stringify && hui.window.console && hui.window.console.error && hui.window.console.error('JSON Error: ', str);
                 return;
             }
@@ -1180,14 +1199,17 @@ hui.define('hui_control', [], function() {
                     if (text.indexOf('&') === 0) {
                         key = text.replace('&', '');
                         attrs[i] = hui.window[key];
-                    } else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Action.get) === 'function') {
+                    }
+                    else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Action.get) === 'function') {
                         key = text.replace('&', '');
                         action = hui.Action.get();
                         if (action && action.model && (typeof action.model.get) === 'function') {
                             attrs[i] = action.model.get(key);
-                        } else if (action && action.model) {
+                        }
+                        else if (action && action.model) {
                             attrs[i] = action.model[key];
-                        } else if (action) {
+                        }
+                        else if (action) {
                             attrs[i] = action[key];
                         }
 
@@ -1285,7 +1307,7 @@ hui.define('hui_control', [], function() {
      * @public
      * @param {Control} uiObj 子控件.
      */
-    hui.Control.appendControl = function(parent, uiObj) {
+    hui.Control.appendControl = function (parent, uiObj) {
         // parentControl父控件不传则默认为window对象
         // parentControl父控件默认为window对象, 不是的话后面会再改回来. 
         // var parentControl = hui.window;
@@ -1332,7 +1354,7 @@ hui.define('hui_control', [], function() {
      * @param {HTMLElement} main
      * @param {String} stopAttr 如果元素存在该属性,如'ui',则不遍历其下面的子元素
      */
-    hui.Control.findAllNodes = function(main, stopAttr) {
+    hui.Control.findAllNodes = function (main, stopAttr) {
         var childNode,
             elements,
             list,
@@ -1369,7 +1391,7 @@ hui.define('hui_control', [], function() {
      * @public
      * @param {Object} control
      */
-    hui.Control.findAllControl = function(parentControl) {
+    hui.Control.findAllControl = function (parentControl) {
         var childNode,
             results,
             list,
@@ -1379,13 +1401,14 @@ hui.define('hui_control', [], function() {
             list = hui.Control.findAllNodes(parentControl);
             for (var i = 0, len = list.length; i < len; i++) {
                 if (hui.Control.isControlMain(list[i])) {
-                    control = hui.Control.getById(list[i].getAttribute('control'));
+                    control = hui.Control.getById(list[i].getAttribute('ctrid'));
                     if (control) {
                         results.push(control);
                     }
                 }
             }
-        } else {
+        }
+        else {
             list = [parentControl];
             while (list.length) {
                 childNode = list.pop();
@@ -1410,14 +1433,15 @@ hui.define('hui_control', [], function() {
      * @public
      * @param {Element} parentElement DOM元素
      */
-    hui.Control.findByElem = function(parentElement) {
+    hui.Control.findByElem = function (parentElement) {
         var control = null;
         while (parentElement && parentElement.tagName) {
             //label标签自带control属性!!
             if (parentElement && hui.Control.isControlMain(parentElement)) {
-                control = hui.Control.getById(parentElement.getAttribute('control'));
+                control = hui.Control.getById(parentElement.getAttribute('ctrid'));
                 break;
-            } else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
+            }
+            else if (~',html,body,'.indexOf(',' + String(parentElement.tagName).toLowerCase() + ',')) {
                 break;
             }
             parentElement = parentElement.parentNode;
@@ -1432,7 +1456,7 @@ hui.define('hui_control', [], function() {
      * @id 控件ID
      * @param {String} 控件id
      */
-    hui.Control.getById = function(id, parentControl) {
+    hui.Control.getById = function (id, parentControl) {
         var list,
             result = null;
         // parentControl || hui.Control.getById(parentControl) || hui.Action.get(parentControl) || hui.Action.get() || window
@@ -1445,7 +1469,8 @@ hui.define('hui_control', [], function() {
 
         if (id === undefined || (parentControl && parentControl.getId && id === parentControl.getId())) {
             result = parentControl;
-        } else if (parentControl) {
+        }
+        else if (parentControl) {
             list = hui.Control.findAllControl(parentControl);
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i].id == id) {
@@ -1471,7 +1496,7 @@ hui.define('hui_control', [], function() {
      * @static
      * @param {String} 控件formName
      */
-    hui.Control.getByFormNameAll = function(formName, parentNode, all) {
+    hui.Control.getByFormNameAll = function (formName, parentNode, all) {
         var list = [],
             childNodes,
             item,
@@ -1506,7 +1531,7 @@ hui.define('hui_control', [], function() {
      * @static
      * @param {String} 控件formName
      */
-    hui.Control.getByFormName = function(formName, parentNode) {
+    hui.Control.getByFormName = function (formName, parentNode) {
         var result = null,
             list;
         if (typeof parentNode == 'string') {
@@ -1520,7 +1545,8 @@ hui.define('hui_control', [], function() {
                     break;
                 }
             }
-        } else {
+        }
+        else {
             result = list[0];
         }
 
@@ -1531,7 +1557,7 @@ hui.define('hui_control', [], function() {
      * @static
      * @param {String} list 一组控件
      */
-    hui.Control.disposeList = function(list) {
+    hui.Control.disposeList = function (list) {
         if (Object.prototype.toString.call(list) === '[object Array]') {
             for (var i = 0, len = list.length; i < len; i++) {
                 if (list[i] && list[i].dispose) {
@@ -1546,7 +1572,7 @@ hui.define('hui_control', [], function() {
      * @param {Control} control 控件
      * @param {HTMLElement} parentNode DOM元素
      */
-    hui.Control.checkParentNode = function(control, parentNode) {
+    hui.Control.checkParentNode = function (control, parentNode) {
         var main,
             result = false;
         // 判断控件是否在parentNode元素下
@@ -1556,7 +1582,8 @@ hui.define('hui_control', [], function() {
                 if (main.parentNode === parentNode) {
                     result = true;
                     main = null;
-                } else {
+                }
+                else {
                     main = main.parentNode;
                 }
             }
@@ -1573,27 +1600,29 @@ hui.define('hui_control', [], function() {
      * 使用者应保证提供的className合法性，不应包含不合法字符，className合法字符参考：http://www.w3.org/TR/CSS2/syndata.html。
      * @returns {HTMLElement} 目标元素
      */
-    hui.Control.hasClass = function(element, className) {
+    hui.Control.hasClass = function (element, className) {
         return (~(' ' + element.className + ' ').indexOf(' ' + className + ' '));
     };
-    hui.Control.addClass = function(element, className) {
+    hui.Control.addClass = function (element, className) {
         if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.Control.addClass(element[i], className);
             }
-        } else if (element) {
+        }
+        else if (element) {
             hui.Control.removeClass(element, className);
             element.className = (element.className + ' ' + className).replace(/(\s)+/ig, ' ');
         }
         return element;
     };
     // Support * and ?, like hui.Control.removeClass(elem, 'daneden-*');
-    hui.Control.removeClass = function(element, className) {
+    hui.Control.removeClass = function (element, className) {
         if (~'[object Array][object NodeList]'.indexOf(Object.prototype.toString.call(element))) {
             for (var i = 0, len = element.length; i < len; i++) {
                 hui.Control.removeClass(element[i], className);
             }
-        } else if (element) {
+        }
+        else if (element) {
             var list = className.replace(/\s+/ig, ' ').split(' '),
                 /* Attention: str need two spaces!! */
                 str = (' ' + (element.className || '').replace(/(\s)/ig, '  ') + ' '),
@@ -1613,7 +1642,7 @@ hui.define('hui_control', [], function() {
         return element;
     };
 
-    hui.Control.format = function(source, opts) {
+    hui.Control.format = function (source, opts) {
         source = String(source);
         var data = Array.prototype.slice.call(arguments, 1),
             toString = Object.prototype.toString;
@@ -1621,7 +1650,7 @@ hui.define('hui_control', [], function() {
             data = (data.length == 1 ?
                 /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                 (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-            return source.replace(/#\{(.+?)\}/g, function(match, key) {
+            return source.replace(/#\{(.+?)\}/g, function (match, key) {
                 var encode = String(key).indexOf('!') === 0,
                     parts = key.replace(/^!/, '').split('.'),
                     part = parts.shift(),
@@ -1630,7 +1659,8 @@ hui.define('hui_control', [], function() {
                 while (part) {
                     if (cur[part] !== undefined) {
                         cur = cur[part];
-                    } else {
+                    }
+                    else {
                         cur = undefined;
                         break;
                     }
@@ -1647,7 +1677,7 @@ hui.define('hui_control', [], function() {
         return source;
     };
 
-    hui.Control.formatDate = function(date, fmt) {
+    hui.Control.formatDate = function (date, fmt) {
         if (!date) date = new Date();
         fmt = fmt || 'yyyy-MM-dd HH:mm';
         var o = {
@@ -1690,7 +1720,7 @@ hui.define('hui_control', [], function() {
   parseDate(' 2006-1-1 15:14:16 ') return new Date(2006,0,1,15,14,16);  
   parseDate('不正确的格式') retrun null  
 */
-    hui.Control.parseDate = function(str) {
+    hui.Control.parseDate = function (str) {
         str = String(str).replace(/^[\s\xa0]+|[\s\xa0]+$/ig, '');
         var results = null;
 
@@ -1735,7 +1765,7 @@ hui.define('hui_control', [], function() {
     /**
      * 对特殊字符和换行符编码// .replace(/%/ig,"%-")
      */
-    hui.Control.encode = function(str, decode) {
+    hui.Control.encode = function (str, decode) {
         str = String(str);
         // encodeURIComponent not encode '
         var fr = '%| |&|;|=|+|<|>|,|"|\'|#|/|\\|\n|\r|\t'.split('|'),
@@ -1744,17 +1774,18 @@ hui.define('hui_control', [], function() {
             for (var i = fr.length - 1; i > -1; i--) {
                 str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
             }
-        } else {
+        }
+        else {
             for (var i = 0, l = fr.length; i < l; i++) {
                 str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
             }
         }
         return str;
     };
-    hui.Control.decode = function(str) {
+    hui.Control.decode = function (str) {
         return this.encode(str, 'decode');
     };
-    hui.Control.encodehtml = function(str, decode) {
+    hui.Control.encodehtml = function (str, decode) {
         str = String(str);
         // encodeURIComponent not encode '
         var fr = '&|<|>| |\'|"|\\'.split('|'),
@@ -1763,88 +1794,95 @@ hui.define('hui_control', [], function() {
             for (var i = fr.length - 1; i > -1; i--) {
                 str = str.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
             }
-        } else {
+        }
+        else {
             for (var i = 0, l = fr.length; i < l; i++) {
                 str = str.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
             }
         }
         return str;
     };
-    hui.Control.decodehtml = function(str) {
+    hui.Control.decodehtml = function (str) {
         return this.encodehtml(str, 'decode');
     };
 
 
     //setInnerHTML: function (elem, html){}
-    hui.Control.setInnerHTML = function(elem, html) {
+    hui.Control.setInnerHTML = function (elem, html) {
         elem = elem && elem.getMain ? elem.getMain() : elem;
         if (elem && elem.innerHTML !== undefined) {
             elem.innerHTML = html;
         }
         return elem;
     };
-    hui.Control.setInnerText = function(elem, text) {
+    hui.Control.setInnerText = function (elem, text) {
         if (!elem) return;
         if (elem.textContent !== undefined) {
             elem.textContent = text;
-        } else {
+        }
+        else {
             elem.innerText = text;
         }
     };
 
-    hui.Control.error = function(str) {
+    hui.Control.error = function (str) {
         if (hui.window && hui.window.console && hui.window.console.error) {
             hui.window.console.error(str);
         }
     };
-    hui.Control.log = function(str) {
+    hui.Control.log = function (str) {
         if (hui.window && hui.window.console && hui.window.console.log) {
             hui.window.console.log(str);
         }
     };
-    hui.Control.getExtClass = function(clazz) {
-        var result = function() {};
+    hui.Control.getExtClass = function (clazz) {
+        var result = function () {};
         switch (clazz) {
-            case 'hui.BaseModel':
-                if (typeof hui !== 'undefined' && hui.BaseModel) {
-                    result = hui.BaseModel;
-                } else {
-                    result.get = new Function();
-                    result.set = new Function();
-                }
-                break;
-            case 'hui.Template':
-                if (typeof hui !== 'undefined' && hui && hui.Template) {
-                    result = hui.Template;
-                } else {
-                    result.getTarget = new Function();
-                    result.merge = new Function();
-                }
-                break;
-            case 'hui.Validator':
-                if (typeof hui !== 'undefined' && hui.Validator) {
-                    result = hui.Validator;
-                } else {
-                    result.cancelNotice = new Function();
-                    result.set = new Function();
-                }
-                break;
-            case 'hui.Action':
-                if (typeof hui !== 'undefined' && hui.Validator) {
-                    result = hui.Validator;
-                } else {
-                    result.get = new Function();
-                }
-                break;
-            case 'hui.context':
-                if (typeof hui !== 'undefined' && hui.context) {
-                    result = hui.context;
-                } else {
-                    result = {};
-                    result.get = new Function();
-                }
-                break;
-            default:
+        case 'hui.BaseModel':
+            if (typeof hui !== 'undefined' && hui.BaseModel) {
+                result = hui.BaseModel;
+            }
+            else {
+                result.get = new Function();
+                result.set = new Function();
+            }
+            break;
+        case 'hui.Template':
+            if (typeof hui !== 'undefined' && hui && hui.Template) {
+                result = hui.Template;
+            }
+            else {
+                result.getTarget = new Function();
+                result.merge = new Function();
+            }
+            break;
+        case 'hui.Validator':
+            if (typeof hui !== 'undefined' && hui.Validator) {
+                result = hui.Validator;
+            }
+            else {
+                result.cancelNotice = new Function();
+                result.set = new Function();
+            }
+            break;
+        case 'hui.Action':
+            if (typeof hui !== 'undefined' && hui.Validator) {
+                result = hui.Validator;
+            }
+            else {
+                result.get = new Function();
+            }
+            break;
+        case 'hui.context':
+            if (typeof hui !== 'undefined' && hui.context) {
+                result = hui.context;
+            }
+            else {
+                result = {};
+                result.get = new Function();
+            }
+            break;
+        default:
         }
         return result;
     };

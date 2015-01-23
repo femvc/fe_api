@@ -157,16 +157,15 @@ function showTab(tab) {
                 this.main = 'index';
             };
             pageIndex.prototype = {
-                getView: function () {
-                    var str = hui.g('index').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
-                    showTab('index');
-
+                    
                     me.showTestHistory();
                     me.showTestButton();
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('index');
                 },
                 showTestHistory: function() {
                     hui.Mockup.setRule('/ue_api/internal/get_test_history', [
@@ -253,10 +252,6 @@ function showTab(tab) {
                 this.main = 'history';
             };
             pageHistory.prototype = {
-                getView: function () {
-                    var str = hui.g('history').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                     me.showTestHistory();
@@ -325,10 +320,6 @@ function showTab(tab) {
                 this.main = 'industry';
             };
             pageIndustry.prototype = {
-                getView: function () {
-                    var str = hui.g('industry').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                 },
@@ -365,10 +356,6 @@ function showTab(tab) {
                 this.main = 'lesson';
             };
             pageLesson.prototype = {
-                getView: function () {
-                    var str = hui.g('lesson').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                 },
@@ -398,10 +385,6 @@ function showTab(tab) {
                 this.main = 'about';
             };
             pageAbout.prototype = {
-                getView: function () {
-                    var str = hui.g('about').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                 },
@@ -416,9 +399,9 @@ function showTab(tab) {
             hui.window.pageAbout = pageAbout;
         }
         </script>
-        <div class="page_body" id="test" style="background-color: white;display: none;">
+        <div class="page_body subject_test" id="test" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="subject_box" ui="type:'Panel',formName:'form',size:{width:'980px'}" style="display:none">
+                <div class="subject_box" ui="type:'Panel',formName:'form',size:{width:'980px'}" style="display123:none">
                     <div class="subject_action">
                         <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
                         <input type="hidden" ui="type:'TextInput',formName:'title'" />
@@ -449,15 +432,10 @@ function showTab(tab) {
                 this.main = 'test';
             };
             pageTest.prototype = {
-                getView: function () {
-                    var str = hui.g('test').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
-                    var me = this; return;
+                    var me = this; 
 
-                    var submit2 = me.getByFormName('subject_nxt2');
-                    submit2.onclick = function () {
+                    me.getByFormName('subject_nxt2').onclick = function () {
                         var data = hui.Control.getByFormName('form').getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
                         if (data.content.indexOf('yes') !== -1) {
@@ -469,7 +447,9 @@ function showTab(tab) {
                     };
                     
                     me.getByFormName('subject_skip').onclick = function () {
-                        var data = hui.Control.getByFormName('form').getParamMap();
+                        var me = hui.Control.getById('pageTest');
+                        var form = me.getByFormName('form');
+                        var data = form.getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
                         data.test_id = window.test_id;
                         saveTestScore(data);
@@ -477,16 +457,7 @@ function showTab(tab) {
                         $('.form_content').animate({opacity:0}, 500);
                         // $('.form_mask').show();
                     };
-                    me.getByFormName('subject_pre').onclick = function () {
-                        var data = {};
-                        data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
-                        saveTestScore(data);
-                    };
-                    hui.Control.getByFormName('result').getByFormName('result_nxt').onclick = function () {
-                        hui.Control.getByFormName('result').hide();
-                        // hui.Control.getByFormName('candidate').show();
-                        showEvaluateReport();
-                    };
+                    
 
                     hui.Control.getByFormName('form').initSubject = function (newstart) {
                         Requester.get('/ue_api/internal/get_next_question', {
@@ -570,31 +541,7 @@ function showTab(tab) {
                         main.index = 0;
                     };
 
-                    function showTestScore() {
-                        Requester.get('/ue_api/internal/get_rank', {
-                            data: {
-                                test_id: window.test_id
-                            },
-                            onsuccess: function (result) {
-                                // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                                if (result && result[1]) {
-                                    var data = result[1];
-                                    if (data.question) {
-                                        hui.g('subject_index').innerHTML = '1';
-                                        data.rate = Math.round(100 * data.index / (data.sum + 0.001));
-                                        data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
-                                        data.question_count = data.question.length;
-                                        hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                                        hui.Control.getByFormName('result').setValueByTree(data).show();
-                                    }
-                                    else {
-                                        console.log('Warning: Test not finish')
-                                        showPaperDetail();
-                                    }
-                                }
-                            }
-                        });
-                    }
+                    
 
                     function saveTestScore(data) {
                         Requester.get('/ue_api/internal/save_next_question', {
@@ -633,7 +580,7 @@ function showTab(tab) {
         </script>
         <div class="page_body" id="result" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="result_box" ui="type:'Panel',formName:'result',size:{width:'640px'}" style="display:none">
+                <div class="result_box" ui="type:'Panel',formName:'result',size:{width:'640px'}" style="display123:none">
                     <div class="box_content">
                         <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
                         <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
@@ -657,12 +604,40 @@ function showTab(tab) {
                 this.main = 'result';
             };
             pageResult.prototype = {
-                getView: function () {
-                    var str = hui.g('test').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
+                    me.showTestScore();
+                    me.getByFormName('result_nxt').onclick = function () {
+                        // hui.Control.getByFormName('result').hide();
+                        // hui.Control.getByFormName('candidate').show();
+                        // showEvaluateReport();
+                        window.location.href = '#/report';
+                    };
+                },
+            	showTestScore: function() {
+                    Requester.get('/ue_api/internal/get_rank', {
+                        data: {
+                            test_id: window.test_id
+                        },
+                        onsuccess: function (result) {
+                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                            if (result && result[1]) {
+                                var data = result[1];
+                                if (data.question) {
+                                    hui.g('subject_index').innerHTML = '1';
+                                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
+                                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
+                                    data.question_count = data.question.length;
+                                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
+                                    hui.Control.getByFormName('result').setValueByTree(data).show();
+                                }
+                                else {
+                                    console.log('Warning: Test not finish')
+                                    // showPaperDetail();
+                                }
+                            }
+                        }
+                    });
                 },
                 finish: function () {
                     var me = this;
@@ -677,7 +652,7 @@ function showTab(tab) {
         </script>
         <div class="page_body" id="candidate" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="candidate_box" ui="type:'Panel',formName:'candidate',size:{width:'640px',height: '400px'}" style="display:none">
+                <div class="candidate_box" ui="type:'Panel',formName:'candidate',size:{width:'640px',height: '400px'}" style="display123:none">
                     <div class="box_content">
                         <div class="row_item row_career">
                             <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
@@ -730,10 +705,6 @@ function showTab(tab) {
                 this.main = 'candidate';
             };
             pageCandidate.prototype = {
-                getView: function () {
-                    var str = hui.g('candidate').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                     var candidate = hui.Control.getByFormName('candidate');
@@ -794,7 +765,7 @@ function showTab(tab) {
         </script>
         <div class="page_body" id="report" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="report_box" ui="type:'Panel',formName:'report',size:{width:'800px'}" style="display:none"> 
+                <div class="report_box" ui="type:'Panel',formName:'report',size:{width:'800px'}" style="display123:none"> 
                     <div class="box_content">
                         <div class="fe_level" style="display:none;">
                         初级前端工程师 0-33    5~10W   1000人 <br/>
@@ -826,10 +797,6 @@ function showTab(tab) {
                 this.main = 'report';
             };
             pageReport.prototype = {
-                getView: function () {
-                    var str = hui.g('test').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                 },
@@ -840,7 +807,7 @@ function showTab(tab) {
             };
 
             hui.inherits(pageReport, hui.Action);
-            hui.Router.setRule('/result', 'pageReport');
+            hui.Router.setRule('/report', 'pageReport');
             hui.window.pageReport = pageReport;
         }
         
@@ -877,7 +844,6 @@ function showTab(tab) {
                             
                             data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
                             
-                            hui.Control.getByFormName('candidate').hide();
                             hui.Control.getByFormName('report').setValueByTree(data).show();
                             
                             var datasource = [
@@ -1089,7 +1055,7 @@ function showTab(tab) {
         </script>
         <div class="page_body" id="detail" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="report_box" ui="type:'Panel',formName:'detail',size:{width:'800px'}" style="display:none"> 
+                <div class="report_box" ui="type:'Panel',formName:'detail',size:{width:'800px'}" style="display123:none"> 
                     <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
                         
                     </div>
@@ -1106,10 +1072,6 @@ function showTab(tab) {
                 this.main = 'detail';
             };
             pageDetail.prototype = {
-                getView: function () {
-                    var str = hui.g('test').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
                 },
@@ -1158,7 +1120,6 @@ function showTab(tab) {
                                     html += '</ul>\n';
                                 }
                                 hui.g('detail_container').innerHTML = html;
-                                hui.Control.getByFormName('detail').show();
                                 
                                 // console.log(html);
                             }
@@ -1178,7 +1139,7 @@ function showTab(tab) {
         </script>
         <div class="page_body" id="send_sms" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
-                <div class="sms_box" ui="type:'Panel',formName:'send_sms',size:{width:'410px'}" style="display:none">
+                <div class="sms_box" ui="type:'Panel',formName:'send_sms',size:{width:'410px'}" style="display123:none">
                     <div class="box_content">
                         <h3 class="sms_title">请输入短信验证码</h3>
                         <label class="sms_item">
@@ -1238,10 +1199,6 @@ function showTab(tab) {
                 this.main = 'send_sms';
             };
             pageSendSMS.prototype = {
-                getView: function () {
-                    var str = hui.g('test').innerHTML;
-                    return str;
-                },
                 initBehavior: function () {
                     var me = this;
 

@@ -16,9 +16,9 @@
  * @date 2014/05/05
  * @param {Object} options 控件初始化参数.
  */
-hui.define('hui_action', ['hui_template', 'hui_control'], function() {
+hui.define('hui_action', ['hui_template', 'hui_control'], function () {
 
-    hui.BaseModel = function(data) {
+    hui.BaseModel = function (data) {
         hui.EventDispatcher.call(this);
 
         var _model = {};
@@ -28,7 +28,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {Any} value 属性的值.
          * @comment 接受`"key", value` 和 `{key: value}`两种的方式赋值.
          */
-        this.set = function(propertyName, newValue) {
+        this.set = function (propertyName, newValue) {
             var attr,
                 attrs,
                 changes = [],
@@ -43,7 +43,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             if (className == '[object String]') {
                 attrs = {};
                 attrs[propertyName] = newValue;
-            } else {
+            }
+            else {
                 attrs = propertyName;
             }
 
@@ -51,7 +52,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
                 if (!Object.prototype.hasOwnProperty.call(_model, attr)) {
                     changes.push([attr, undefined, hui.BaseModel.clone(attrs[attr])]);
                     _model[attr] = newValue;
-                } else if (typeof JSON !== 'undefined' && JSON.stringify(_model[attr]) != JSON.stringify(attrs[attr])) {
+                }
+                else if (typeof JSON !== 'undefined' && JSON.stringify(_model[attr]) != JSON.stringify(attrs[attr])) {
                     changes.push([attr, hui.BaseModel.clone(_model[attr]), hui.BaseModel.clone(attrs[attr])]);
                     _model[attr] = attrs[attr];
                 }
@@ -76,14 +78,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} propertyName 属性名.
          * @return {*} 属性的值.
          */
-        this.get = function(propertyName) {
+        this.get = function (propertyName) {
             return hui.BaseModel.clone(_model[propertyName]);
         };
         /**
          * @name 获取所有的属性值
          * @return {Map} 所有的属性值.
          */
-        this.getData = function() {
+        this.getData = function () {
             return hui.BaseModel.clone(_model);
         };
         /**
@@ -91,7 +93,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} propertyName 属性名.
          * @return {*} 属性的值.
          */
-        this.remove = function(propertyName) {
+        this.remove = function (propertyName) {
             var value = _model[propertyName];
             this.set(propertyName, undefined);
             delete _model[propertyName];
@@ -101,7 +103,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name 销毁Model
          * @return {void}
          */
-        this.dispose = function() {
+        this.dispose = function () {
             this._listeners = undefined;
             _model = undefined;
         };
@@ -123,7 +125,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * @param {Array} newArr 目标对象树索引.
      * @return {Any} 拷贝后的新对象.
      */
-    hui.BaseModel.clone = function(source, oldArr, newArr) {
+    hui.BaseModel.clone = function (source, oldArr, newArr) {
         if (typeof source === 'undefined') {
             return undefined;
         }
@@ -142,7 +144,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
 
         if (source instanceof Date) {
             result = new Date(source.getTime());
-        } else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
+        }
+        else if ((source instanceof Array) || (Object.prototype.toString.call(source) == '[object Object]')) {
             for (j = 0, len2 = oldArr.length; j < len2; j++) {
                 if (oldArr[j] == source) {
                     exist = j;
@@ -152,7 +155,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             if (exist != -1) {
                 result = newArr[exist];
                 exist = -1;
-            } else {
+            }
+            else {
                 if (source instanceof Array) {
                     result = [];
                     oldArr.push(source);
@@ -161,7 +165,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
                     for (i = 0, len = source.length; i < len; i++) {
                         result[resultLen++] = hui.util.clone(source[i], oldArr, newArr);
                     }
-                } else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
+                }
+                else if (!!source && Object.prototype.toString.call(source) == '[object Object]') {
                     result = {};
                     oldArr.push(source);
                     newArr.push(result);
@@ -177,7 +182,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
         return result;
     };
 
-    hui.Action = function(options) {
+    hui.Action = function (options) {
         // 防止重复执行!!
         if (this.baseConstructed) {
             return this;
@@ -214,38 +219,32 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @protected
          * @param {Object} argMap arg表.
          */
-        enterControl: function(args) {
+        enterControl: function (args) {
             var me = this;
-            // 创建一个异步队列     
-            var que = new hui.Flow(); // 注：可以参照hui_flow.js文件。非常简单，不到30行代码
-            que.push(function(next) {
-                var me = this;
-                //Action渲染过程中禁止跳转，否则容易造成死循环。
-                hui.Action.getExtClass('hui.Master').ready = false;
-                // 设为活动action 
-                me.active = true;
+            //Action渲染过程中禁止跳转，否则容易造成死循环。
+            hui.Action.getExtClass('hui.Master').ready = false;
+            // 设为活动action 
+            me.active = true;
 
-                // 保存通过URL传过来的参数
-                me.queryString = args;
-                // 判断model是否存在，不存在则新建一个
-                if (!me.model) {
-                    var baseModel = hui.Action.getExtClass('hui.BaseModel');
-                    me.model = new baseModel();
-                }
+            // 保存通过URL传过来的参数
+            me.queryString = args;
+            // 判断model是否存在，不存在则新建一个
+            if (!me.model) {
+                var baseModel = hui.Action.getExtClass('hui.BaseModel');
+                me.model = new baseModel();
+            }
 
-                next && next();
-            }, me);
-
-            que.push(hui.Action.getExtClass('hui.Control').prototype.enterControl, me);
-            que.push(function(next) {
+            hui.Action.getExtClass('hui.Control').prototype.enterControl.call(me, function () {
                 // hui.Action.getExtClass('hui.Mask').hideLoading();
                 // 渲染结束，检查渲染期间是否有新请求
                 hui.Action.getExtClass('hui.Master').checkNewRequest();
-
-                next && next();
-            }, me);
-
-            que.next();
+            });
+        },
+        render: function () {
+            var me = this,
+                main = me.getMain(),
+                data = me.model && me.model.getData && typeof me.model.getData === 'function' ? me.model.getData() : {};
+            hui.Control.init(main, data, me);
         },
         /**
          * @name 初始化数据模型
@@ -261,14 +260,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {Object} data 提交的返回数据.
          */
-        onsubmitfinished: function(data) {
+        onsubmitfinished: function (data) {
             // Todo: 
         },
         /**
          * @name 释放控件
          * @protected
          */
-        dispose: function() {
+        dispose: function () {
             var me = this;
 
             me.leave && me.leave();
@@ -288,14 +287,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name 后退
          * @protected
          */
-        back: function() {
+        back: function () {
             hui.Action.getExtClass('hui.Master').back();
         },
         /**
          * @name 退出
          * @public
          */
-        leave: function() {}
+        leave: function () {}
     };
 
     hui.inherits(hui.Action, hui.Control);
@@ -306,11 +305,11 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * @param {Object} action 对象
      * @public
      */
-    hui.Action.derive = function(action) {
+    hui.Action.derive = function (action) {
         var me,
             i,
             instance,
-            func = function() {},
+            func = function () {},
             type = Object.prototype.toString.call(action);
         // 传进来的是一个Function
         if (type == '[object Function]') {
@@ -353,7 +352,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * @param {Object} opt_obj 父对象
      * @public
      */
-    hui.Action.getObjectByName = function(name, opt_obj) {
+    hui.Action.getObjectByName = function (name, opt_obj) {
         var parts = name.split('.'),
             part,
             cur = opt_obj || hui.window;
@@ -363,59 +362,65 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
         return cur;
     };
 
-    hui.Action.getExtClass = function(clazz) {
-        var result = function() {};
+    hui.Action.getExtClass = function (clazz) {
+        var result = function () {};
         switch (clazz) {
-            case 'hui.Control':
-                if (typeof hui !== 'undefined' && hui && hui.Control) {
-                    result = hui.Control;
-                } else {
-                    result.get = new Function();
-                    result.init = new Function();
-                    result.prototype.validate = new Function();
-                    result.prototype.getParamMap = new Function();
-                    result.prototype.validateAndSubmit = new Function();
-                }
-                break;
-            case 'hui.Template':
-                if (typeof hui !== 'undefined' && hui && hui.Template) {
-                    result = hui.Template;
-                } else {
-                    result.getTarget = new Function();
-                    result.merge = new Function();
-                }
-                break;
-            case 'hui.Flow':
-                if (typeof hui !== 'undefined' && hui && hui.Flow) {
-                    result = hui.Flow;
-                } else {
-                    result.push = new Function();
-                    result.next = new Function();
-                }
-                break;
-            case 'hui.Mask':
-                if (typeof hui !== 'undefined' && hui && hui.Mask) {
-                    result = hui.Mask;
-                } else {
-                    result.hideLoading = new Function();
-                }
-                break;
-            case 'hui.Master':
-                if (typeof hui !== 'undefined' && hui && hui.Master) {
-                    result = hui.Master;
-                } else {
-                    result.checkNewRequest = new Function();
-                    result.back = new Function();
-                }
-                break;
-            case 'hui.BaseModel':
-                if (typeof hui !== 'undefined' && hui && hui.BaseModel) {
-                    result = hui.BaseModel;
-                } else {
-                    result.prototype.set = new Function();
-                }
-                break;
-            default:
+        case 'hui.Control':
+            if (typeof hui !== 'undefined' && hui && hui.Control) {
+                result = hui.Control;
+            }
+            else {
+                result.get = new Function();
+                result.init = new Function();
+                result.prototype.validate = new Function();
+                result.prototype.getParamMap = new Function();
+                result.prototype.validateAndSubmit = new Function();
+            }
+            break;
+        case 'hui.Template':
+            if (typeof hui !== 'undefined' && hui && hui.Template) {
+                result = hui.Template;
+            }
+            else {
+                result.getTarget = new Function();
+                result.merge = new Function();
+            }
+            break;
+        case 'hui.Flow':
+            if (typeof hui !== 'undefined' && hui && hui.Flow) {
+                result = hui.Flow;
+            }
+            else {
+                result.push = new Function();
+                result.next = new Function();
+            }
+            break;
+        case 'hui.Mask':
+            if (typeof hui !== 'undefined' && hui && hui.Mask) {
+                result = hui.Mask;
+            }
+            else {
+                result.hideLoading = new Function();
+            }
+            break;
+        case 'hui.Master':
+            if (typeof hui !== 'undefined' && hui && hui.Master) {
+                result = hui.Master;
+            }
+            else {
+                result.checkNewRequest = new Function();
+                result.back = new Function();
+            }
+            break;
+        case 'hui.BaseModel':
+            if (typeof hui !== 'undefined' && hui && hui.BaseModel) {
+                result = hui.BaseModel;
+            }
+            else {
+                result.prototype.set = new Function();
+            }
+            break;
+        default:
         }
         return result;
     };
@@ -429,7 +434,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @public
          * @param {String} loc 路径
          */
-        findAction: function(loc) {
+        findAction: function (loc) {
             var me = this,
                 pathRules = me.pathRules,
                 i, len, matches, rule,
@@ -461,7 +466,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} rule 路径
          * @param {String} action 对应action
          */
-        setRule: function(rule, action) {
+        setRule: function (rule, action) {
             this.pathRules.push({
                 'location': rule,
                 'action': action
@@ -487,16 +492,17 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} rule 路径
          * @param {String} func 对应action
          */
-        init: function(modules) {
+        init: function (modules) {
             // Todo:
         },
 
         //错误处理
-        error: function(msg) {
+        error: function (msg) {
             msg = 'error: ' + msg;
             if (hui.window.console) {
                 hui.window.console.log(msg);
-            } else throw Error(msg);
+            }
+            else throw Error(msg);
         }
     };
 
@@ -504,7 +510,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
         historyList: [],
         newRequest: null,
         ready: true,
-        checkNewRequest: function() {
+        checkNewRequest: function () {
             var me = this,
                 url = me.newRequest;
 
@@ -517,7 +523,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
         },
 
         //仅供redirect时调用,必须保证url对应的action是有效的,跳转过程中不操作url,不推荐外部直接调用!!!
-        forward: function(url) {
+        forward: function (url) {
             var me = this;
             // 注：由于forward的过程中不改变url，因此将可能改变url的hui.Permission.checkRouter放到hui.Locator.switchToLocation中了
             // 这里不可以通过me.getExtClass()去取!!
@@ -529,7 +535,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             //}
         },
         // 权限验证可能是一个异步过程!!
-        forwardCallback: function(url) {
+        forwardCallback: function (url) {
             var me = this,
                 result, loc, args,
                 action = null;
@@ -561,13 +567,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
 
                     me.historyList.push(url);
                     action.enterControl(args);
-                } else if (action) {
+                }
+                else if (action) {
                     me.historyList.push(url);
                     hui.Action.prototype.enterControl.call(action, args);
                 }
             }
         },
-        back: function() {
+        back: function () {
             var me = this,
                 result, loc;
 
@@ -607,7 +614,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             2. hui.Router.setRule('/a', function(){});
             3. hui.Router.setRule('/a', 'window.Detail';
          */
-        findActionNameByLocation: function(loc, nolog) {
+        findActionNameByLocation: function (loc, nolog) {
             var me = this,
                 action = me.getExtClass('hui.Router').findAction(loc),
                 actionClazz = action && Object.prototype.toString.call(action) === '[object String]' ?
@@ -630,7 +637,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {String} loc
          */
-        disposeAction: function(loc) {
+        disposeAction: function (loc) {
             var me = this,
                 action = me.getActionInstance(me.findActionNameByLocation(loc, 'nolog')),
                 /* getByActionName参数可以接收'变量名'|'单例'|'Action子类' */
@@ -638,7 +645,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
 
             if (action && action.dispose) {
                 action.dispose();
-            } else if (action) {
+            }
+            else if (action) {
                 hui.Action.prototype.dispose.call(action);
             }
 
@@ -649,7 +657,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {ObjectString|Function|} 有效的actionName，无效me.findActionNameByLocation会报错
          */
-        getActionInstance: function(actionName) {
+        getActionInstance: function (actionName) {
             var action = null;
             if (Object.prototype.toString.call(actionName) === '[object String]') {
                 var list = hui.window.controlMap;
@@ -703,7 +711,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {Object} loc
          */
-        parseLocator: function(url) {
+        parseLocator: function (url) {
             url = url === null || url === undefined ? hui.window.location.href : String(url);
             var pair,
                 query = {},
@@ -755,46 +763,50 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} rule 路径
          * @param {String} func 对应action
          */
-        init: function() {
+        init: function () {
             //var me = this;
         },
-        getExtClass: function(clazz) {
-            var result = function() {};
+        getExtClass: function (clazz) {
+            var result = function () {};
             switch (clazz) {
                 //me.getExtClass('hui.Mask')
-                case 'hui.Mask':
-                    if (typeof hui !== 'undefined' && hui && hui.Mask) {
-                        result = hui.Mask;
-                    } else {
-                        result.showLoading = new Function();
-                        result.hideLoading = new Function();
-                    }
-                    break;
-                    //me.getExtClass('hui.Locator')
-                case 'hui.Locator':
-                    if (typeof hui !== 'undefined' && hui && hui.Locator) {
-                        result = hui.Locator;
-                    } else {
-                        result.redirect = new Function();
-                    }
-                    break;
-                    //me.getExtClass('hui.Action')
-                case 'hui.Action':
-                    if (typeof hui !== 'undefined' && hui && hui.Action) {
-                        result = hui.Action;
-                    } else {
-                        result.getByActionName = new Function();
-                    }
-                    break;
-                    //me.getExtClass('hui.Router')
-                case 'hui.Router':
-                    if (typeof hui !== 'undefined' && hui && hui.Router) {
-                        result = hui.Router;
-                    } else {
-                        result.findAction = new Function();
-                    }
-                    break;
-                default:
+            case 'hui.Mask':
+                if (typeof hui !== 'undefined' && hui && hui.Mask) {
+                    result = hui.Mask;
+                }
+                else {
+                    result.showLoading = new Function();
+                    result.hideLoading = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Locator')
+            case 'hui.Locator':
+                if (typeof hui !== 'undefined' && hui && hui.Locator) {
+                    result = hui.Locator;
+                }
+                else {
+                    result.redirect = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Action')
+            case 'hui.Action':
+                if (typeof hui !== 'undefined' && hui && hui.Action) {
+                    result = hui.Action;
+                }
+                else {
+                    result.getByActionName = new Function();
+                }
+                break;
+                //me.getExtClass('hui.Router')
+            case 'hui.Router':
+                if (typeof hui !== 'undefined' && hui && hui.Router) {
+                    result = hui.Router;
+                }
+                else {
+                    result.findAction = new Function();
+                }
+                break;
+            default:
             }
             return result;
         }
@@ -823,7 +835,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @return {String}
          */
-        getLocation: function() {
+        getLocation: function () {
             var hash;
 
             // firefox下location.hash会自动decode
@@ -834,7 +846,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             if (/firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? +RegExp['\x241'] : undefined) {
                 hash = location.href.match(/#(.*)$/);
                 hash && (hash = hash[1]);
-            } else {
+            }
+            else {
                 hash = location.hash;
             }
 
@@ -849,7 +862,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {String} loc
          */
-        updateLocation: function(loc) {
+        updateLocation: function (loc) {
             var me = this,
                 isChange = (me.currentLocation != loc);
 
@@ -869,7 +882,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @param {String} loc location位置
          * @param {Object} opt_option 转向参数
          */
-        redirect: function(loc, opt_option) {
+        redirect: function (loc, opt_option) {
             var me = hui.Locator,
                 opt = opt_option || {},
                 hisList,
@@ -910,7 +923,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
                 // 当location未变化，强制刷新时，直接route
                 if (isLocChanged === false) {
                     hui.Locator.switchToLocation(loc);
-                } else {
+                }
+                else {
                     // location被改变了,非强制跳转
                     me.doRoute(loc);
                 }
@@ -921,7 +935,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {String} loc location位置
          */
-        doRoute: function(loc) {
+        doRoute: function (loc) {
             var me = this;
             // 权限判断以及转向
             var loc302 = me.authorize(loc);
@@ -935,7 +949,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             var ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
             if (ie && ie < 8) {
                 me.ieRoute(loc);
-            } else {
+            }
+            else {
                 me.switchToLocation(loc);
             }
         },
@@ -943,7 +958,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name Location变化调用接口
          * @public
          */
-        switchToLocation: function(url) {
+        switchToLocation: function (url) {
             var me = this,
                 action,
                 loc = url;
@@ -960,7 +975,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
             // checkRouter的过程中可能会改变url
             if (hui.Locator.checkRouter) {
                 hui.Locator.checkRouter(url, hui.fn(me.callMasterForward, me));
-            } else {
+            }
+            else {
                 me.callMasterForward(url);
             }
         },
@@ -975,7 +991,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name 调用Master的forward接口 注：forward接口不推荐外部直接调用!!
          * @private
          */
-        callMasterForward: function(url) {
+        callMasterForward: function (url) {
             if (typeof hui != 'undefined' && hui.Master && hui.Master.forward) {
                 hui.Master.forward(url);
             }
@@ -991,7 +1007,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @method
          * @public
          */
-        'reload': function() {
+        'reload': function () {
             var me = this;
             if (me.currentLocation) {
                 me.redirect(me.currentLocation, {
@@ -1005,7 +1021,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @param {String} loc 地址, iframe内容字符串的转义
          */
-        ieRoute: function(loc) {
+        ieRoute: function (loc) {
             var me = this;
             var iframe = document.getElementById(me.CONTROL_IFRAME_ID),
                 iframeDoc = iframe.contentWindow.document;
@@ -1021,21 +1037,23 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name 初始化locator
          * @public
          */
-        init: function() {
+        init: function () {
             var me = this,
                 ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
             if (ie && ie < 8) {
                 me.ieCreateIframeRecorder();
-                hui.window.setInterval(function() {
+                hui.window.setInterval(function () {
                     me.changeListener();
                 }, 100);
-            } else if ('onhashchange' in hui.window) {
-                hui.window.onhashchange = function(args) {
+            }
+            else if ('onhashchange' in hui.window) {
+                hui.window.onhashchange = function (args) {
                     me.changeListener(args);
                 };
                 me.changeListener();
-            } else {
-                hui.window.setInterval(function() {
+            }
+            else {
+                hui.window.setInterval(function () {
                     me.changeListener();
                 }, 100);
             }
@@ -1045,13 +1063,14 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @method
          * @private
          */
-        changeListener: function() {
+        changeListener: function () {
             var me = this,
                 loc = me.getLocation();
 
             if (!loc && !me.currentLocation) {
                 me.redirect(me.DEFAULT_INDEX);
-            } else if (loc && me.updateLocation(loc)) {
+            }
+            else if (loc && me.updateLocation(loc)) {
                 me.doRoute(loc);
             }
         },
@@ -1060,7 +1079,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @method
          * @private
          */
-        ieCreateIframeRecorder: function() {
+        ieCreateIframeRecorder: function () {
             var me = this;
             var iframe = document.createElement('iframe'),
                 size = 200,
@@ -1091,7 +1110,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @public
          * @param {Function} authorizer 验证器，验证失败时验证器返回转向地址
          */
-        addAuthorizer: function(authorizer) {
+        addAuthorizer: function (authorizer) {
             var me = this;
             if ('function' == typeof authorizer) {
                 me.authorizers.push(authorizer);
@@ -1103,7 +1122,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          * @return {String} 验证失败时验证器返回转向地址
          */
-        authorize: function(currLoc) {
+        authorize: function (currLoc) {
             var me = this,
                 loc,
                 i,
@@ -1141,7 +1160,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * @author wanghaiyang
      * @date 2014/05/05
      */
-    hui.Action.start = function() {
+    hui.Action.start = function () {
         var que = new hui.Flow();
 
         /**
@@ -1156,7 +1175,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @private
          */
         if (hui.Template && hui.Template.loadAllTemplate && hui.Template.TEMPLATE_LIST) {
-            que.push(function(callback) {
+            que.push(function (callback) {
                 hui.Template.onload = callback;
                 hui.Template.loadAllTemplate();
             });
@@ -1174,7 +1193,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
         que.next();
     };
 
-    hui.Action.afterStart = function(callback) {
+    hui.Action.afterStart = function (callback) {
         // Todo
         callback();
     };
@@ -1183,7 +1202,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * @name 模板载入完毕之后,初始化路由列表,启动location侦听
      * @private
      */
-    hui.Template.finishLoad = function(callback) {
+    hui.Template.finishLoad = function (callback) {
         callback && callback();
 
         // 1.防止onload再次执行
@@ -1207,7 +1226,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
      * 404 page
      ============================================*/
     var page404;
-    page404 = function() {
+    page404 = function () {
         hui.Action.call(this);
         /**
          * @name Action索引ID
@@ -1223,20 +1242,20 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
     };
 
     page404.prototype = {
-        getView: function() {
+        getView: function () {
             var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.queryString);
             return str;
         },
-        initModel: function(callback) {
+        initModel: function (callback) {
             var me = this;
             me.model.set('free', 'not free');
         },
-        initModelAsync: function(callback) {
+        initModelAsync: function (callback) {
             //var me = this;
             //me.model.set('free', 'not free');
             callback && callback();
         },
-        render: function() {
+        render: function () {
             //var me = this;
             /*Requester.get('/mockup/user.json', {onsuccess:function(err, data){
                 me.setInnerHTML(me, hui.Control.format(me.getInnerHTML(), {name: data.result}));
@@ -1246,7 +1265,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
          * @name 初始化列表行为
          * @param {Object} controlMap 当前主内容区域绘制的控件集合.
          */
-        initBehavior: function() {
+        initBehavior: function () {
             //var me = this;
 
         }
@@ -1259,11 +1278,11 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function() {
 
     hui.Router.setRule('/404', {
         model: new hui.BaseModel(),
-        getView: function() {
+        getView: function () {
             var str = hui.Control.format('<div style="font-size:10pt;line-height:1.2em; line-height: 1.2em;padding: 15px;text-align: left;background-color: #f1f1f1;"><button style="display:none" ui="type:\'Button\'">ddd</button><h3 style="margin:0px;line-height:3em;">The page cannot be found</h3>' + '<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>' + '<p>Please try the following:</p>' + '<ul><li>If you typed the page address in the Address bar, make sure that it is spelled correctly.<br/></li>' + '<li>Open the <a href="#/">home page</a>, and then look for links to the information you want.</li>' + '<li>Click the <a href="javascript:history.go(-1)">Back</a> button to try another link. </li>' + '</ul><p><br></p>HTTP 404 - File not found<br />Need any help? Please contact the Monsieur #{name}.<br /></div>', this.queryString);
             return str;
         },
-        getViewAsync: function(callback) {
+        getViewAsync: function (callback) {
             callback && callback('Hello #{user}');
         }
     });
