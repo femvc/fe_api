@@ -11,6 +11,8 @@ module.exports = {
     mongo: {
       host: '127.0.0.1',
       port: 27017,
+      username: 'haiyang',
+      password: '51mongodb',
       opts: {
         safe: false
       },

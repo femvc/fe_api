@@ -7,12 +7,11 @@ var server = new Server(global.config.mongo.host, global.config.mongo.port, glob
 var mongo = new Db(global.config.mongo.dbname, server, global.config.mongo.opts);
 var isReady = false;
 
-var username = 'haiyang', password = '51mongodb';
 mongo.open(function(err, db) {
     if (err) {
         return console.log(err);
     }
-    db.authenticate(username, password, function(err, result) { 
+    db.authenticate(global.config.mongo.username, global.config.mongo.password, function(err, result) { 
         if (err) {
             db.close();
             console.log('mongodb authenticate failed!');
