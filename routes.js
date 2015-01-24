@@ -1,3 +1,5 @@
+/* global app */
+'use strict';
 var account = require('./routes/account');
 var question = require('./routes/question');
 var paper = require('./routes/paper');
@@ -48,6 +50,7 @@ app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuest
 app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
 app.all('/ue_api/internal/get_paper_result', account.auth, paper.getPaperResult);
 app.get('/ue_api/internal/reset_question_index', account.auth, paper.resetQuestionIndex);
+app.get('/ue_api/internal/create_question_list', account.auth, paper.createQuestionList);
 
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);

@@ -121,6 +121,7 @@ function getNextQuestion(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
     if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
+        console.log('createQuestionList === newstart');
         createQuestionList(req, res, function () {
             getNextQuestionCallback(req, res, next);
         });
@@ -270,7 +271,6 @@ function getNextQuestionCallback(req, res, next) {
     });
 }
 
-exports.createQuestionList = createQuestionList;
 exports.getNextQuestion = getNextQuestion;
 exports.getPaperResult = getPaperResult;
 
@@ -359,4 +359,14 @@ exports.resetQuestionIndex = function (req, res, next) {
     else {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER', 'question_index');
     }
+};
+
+exports.createQuestionList = function (req, res, next) {
+    var uid = req.sessionStore.user[req.sessionID];
+
+    createQuestionList(req, res, function () {
+        response.ok(req, res, {
+            paper_id: req.sessionStore.paper[uid]
+        });
+    });
 };
