@@ -1,3 +1,5 @@
+/* global global,response,exports */
+
 'use strict';
 var questionModel = require('../models/question').createNew();
 var paperModel = require('../models/paper').createNew();
@@ -249,7 +251,7 @@ function getNextQuestionCallback(req, res, next) {
             req.sessionStore.questionIndex[uid] = 1;
             return response.err(req, res, 'INDEX_OUT_RANGE');
         }
-        var single =  0;
+        var single = 0;
         if (req.paramlist.answer != 'yes' && doc && doc.options) {
             var list = doc.options;
             for (var i in list) {
@@ -279,13 +281,6 @@ exports.saveNextQuestion = function (req, res, next) {
     }
     else {
         req.sessionStore.questionIndex[uid] = 1;
-    }
-
-    if (req.paramlist.reset_index !== undefined) {
-        var reset_index = parseInt(req.paramlist.reset_index, 10);
-        if (reset_index == reset_index) {
-            req.sessionStore.questionIndex[uid] = reset_index;
-        }
     }
 
     if (!req.paramlist.atcid || !req.paramlist.test_id || req.paramlist.test_id.indexOf(uid) == -1) {
@@ -333,12 +328,7 @@ exports.saveNextQuestion = function (req, res, next) {
     question.title = req.paramlist.title;
     question.index = req.paramlist.index;
 
-    if (!req.paramlist.reset_index) {
-        resultModel.insert(question, callback);
-    }
-    else {
-        callback(null, [{}]);
-    }
+    resultModel.insert(question, callback);
 };
 
 exports.getPapers = function (req, res, next) {

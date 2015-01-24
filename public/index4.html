@@ -87,318 +87,7 @@ function showTab(tab) {
         </div>
     </div>
     <div id="main" style="background-color: #222;min-height: 750px;">
-        <div class="page_body" id="index" style="display123: none;">
-            <div class="page_banner">
-                <div class="page_container">
-                    <div class="page_banner_padding">&nbsp;</div>
-                    <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
-                    <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
-                    <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
-                    <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
-                    <a class="test_btn" href="#/test~tid=100001">立即测试</a>
-                </div> 
-            </div>
-            <div class="page_middle">
-                <div class="page_container">
-                    <div class="contact">
-                        <h3 class="contact_title">试听&amp;咨询</h3>
-                        <ul class="test_list">
-                            <li class="item_row">
-                                <h4 class="sub_title">微信咨询</h4>
-                                <div class="sub_list">
-                                <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
-                            </li>
-                            <li class="item_row">
-                                <h4 class="sub_title">电话咨询</h4>
-                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
-                            </li>
-                            <li class="item_row">
-                                <h4 class="sub_title">QQ咨询</h4>
-                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="description">
-                        <h3 class="sub_title">前端训练营FECamps </h3>
-                        <div class="desc_content">
-                        <img src="img/qrcode.png" alt="" class="qrcode">
-                        前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
-                    </div>
-                    
-                    <div class="test_history">
-                        <h3 class="history_title">最新评测结果</h3>
-                        <ul class="test_list" id="test_list">
-                            <li class="item_row">
-                                <span class="t_user">tomcat</span>
-                                <span class="t_time">76 m</span>
-                                <span class="t_score">36</span>
-                                <span class="t_date">2014-12-01 16:35</span>
-                            </li>
-                            <li class="item_row">
-                                <span class="t_user">tomcat</span>
-                                <span class="t_time">76 m</span>
-                                <span class="t_score">36</span>
-                                <span class="t_date">2014-12-01 16:35</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <hr class="clearfix" />
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageIndex() {
-            // pageIndex
-            var pageIndex;
-            pageIndex = function () {
-                hui.Action.call(this);
-                this.id = 'pageIndex';
-                this.main = 'index';
-            };
-            pageIndex.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    
-                    me.showTestHistory();
-                    me.showTestButton();
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('index');
-                },
-                showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-                        onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
-                                var tpl = [
-                                    '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
-                                    '    <span class="t_time">#{time}</span>',
-                                    '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
-                                    '</li>'
-                                ].join('');
-                                
-                                var list = result[1];
-                                var html = '';
-                                for (var i=0,len=list.length; i<len && i<4; i++) {
-                                    html += hui.util.format(tpl, list[i]);
-                                }
-                                hui.g('test_list').innerHTML = html;
-                            }
-                        }
-                    });
-                },
-                showTestButton: function() {
-                    var test_id = window.test_id;
-                    $('#resume_btn').hide();
-                    $('#btn_report').hide();
-                    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
-                        $('#btn_report').show();
-                    }
-                    else if (test_id && String(test_id).length > 20) {
-                        $('#resume_btn').show();
-                    }
-                    
-                    $('.test_btn').show();
-                }
-            };
-
-            hui.inherits(pageIndex, hui.Action);
-            hui.Router.setRule('/', 'pageIndex');
-            hui.window.pageIndex = pageIndex;
-        }
-        </script>
-        <div class="page_body" id="history" style="background-color: white;display: none;">
-            <div class="page_container">
-                <div class="test_history">
-                    <h3 class="history_title">评测历史列表</h3>
-                    <ul class="test_list" id="history_list">
-                        <li class="item_row">
-                            <span class="t_user">tomcat</span>
-                            <span class="t_time">76 m</span>
-                            <span class="t_score">36</span>
-                            <span class="t_date">2014-12-01 16:35</span>
-                        </li>
-                        <li class="item_row">
-                            <span class="t_user">tomcat</span>
-                            <span class="t_time">76 m</span>
-                            <span class="t_score">36</span>
-                            <span class="t_date">2014-12-01 16:35</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <script>
-        function initPageHistory() {
-            // pageHistory
-            var pageHistory;
-            pageHistory = function () {
-                hui.Action.call(this);
-                this.id = 'pageHistory';
-                this.main = 'history';
-            };
-            pageHistory.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                    me.showTestHistory();
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('history');
-                },
-                showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
-                        onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
-                                var tpl = [
-                                    '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
-                                    '    <span class="t_time">#{time}</span>',
-                                    '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
-                                    '</li>'
-                                ].join('');
-                                
-                                var list = result[1];
-                                var html = '';
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    html += hui.util.format(tpl, list[i]);
-                                }
-                                hui.g('history_list').innerHTML = html;
-                            }
-                        }
-                    });
-                },
-                
-            };
-
-            hui.inherits(pageHistory, hui.Action);
-            hui.Router.setRule('/history', 'pageHistory');
-            hui.window.pageHistory = pageHistory;
-        }
-        </script>
-        <div class="page_body" id="industry" style="background-color: white;display: none;">
-            <div class="page_container">
-                <center>
-                <img src="img/1232435.png" />
-                <img src="img/1232436.png" />
-                </center>
-            </div>
-        </div>
-        <script>
-        function initPageIndustry() {
-            // pageIndustry
-            var pageIndustry;
-            pageIndustry = function () {
-                hui.Action.call(this);
-                this.id = 'pageIndustry';
-                this.main = 'industry';
-            };
-            pageIndustry.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('industry');
-                }
-                
-            };
-
-            hui.inherits(pageIndustry, hui.Action);
-            hui.Router.setRule('/industry', 'pageIndustry');
-            hui.window.pageIndustry = pageIndustry;
-        }
-        </script>
-        <div class="page_body" id="lesson" style="background-color: white;display: none;">
-            <div class="page_container">
-                <center>
-                    <h2 class="kcTit">前端架构师 — 课程大纲</h2>
-                    <p class="xxCon">本课程适合想成为专业前端架构师的你，我们做的是培养业界专家.^_^</p>
-                    <img src="img/fe_architect.png" alt="fe architect" />
-                    <br/><br/>
-                </center>
-                
-            </div>
-        </div>
-        <script>
-        function initPageLesson() {
-            // pageLesson
-            var pageLesson;
-            pageLesson = function () {
-                hui.Action.call(this);
-                this.id = 'pageLesson';
-                this.main = 'lesson';
-            };
-            pageLesson.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('lesson');
-                }
-            };
-
-            hui.inherits(pageLesson, hui.Action);
-            hui.Router.setRule('/lesson', 'pageLesson');
-            hui.window.pageLesson = pageLesson;
-        }
-        </script>
-        <div class="page_body" id="about" style="background-color: white;display: none;">
-            <div class="page_container" style="text-align:center">
-                <img src="img/about_us.png" />
-            </div>
-        </div>
-        <script>
-        function initPageAbout() {
-            // pageAbout
-            var pageAbout;
-            pageAbout = function () {
-                hui.Action.call(this);
-                this.id = 'pageAbout';
-                this.main = 'about';
-            };
-            pageAbout.prototype = {
-                initBehavior: function () {
-                    var me = this;
-                },
-                finish: function () {
-                    var me = this;
-                    showTab('about');
-                }
-            };
-
-            hui.inherits(pageAbout, hui.Action);
-            hui.Router.setRule('/about', 'pageAbout');
-            hui.window.pageAbout = pageAbout;
-        }
-        </script>
+        
         <div class="page_body subject_test" id="test" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
                 <div class="subject_box" ui="type:'Panel',formName:'form',size:{width:'980px'}" style="display123:none">
@@ -1289,6 +978,320 @@ function showTab(tab) {
             };
         }
         </script>
+
+		<div class="page_body" id="index" style="display123: none;">
+            <div class="page_banner">
+                <div class="page_container">
+                    <div class="page_banner_padding">&nbsp;</div>
+                    <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
+                    <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
+                    <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
+                    <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
+                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
+                    <a class="test_btn" href="#/test~tid=100001">立即测试</a>
+                </div> 
+            </div>
+            <div class="page_middle">
+                <div class="page_container">
+                    <div class="contact">
+                        <h3 class="contact_title">试听&amp;咨询</h3>
+                        <ul class="test_list">
+                            <li class="item_row">
+                                <h4 class="sub_title">微信咨询</h4>
+                                <div class="sub_list">
+                                <b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">fe_<i style="display:none;">8</i>camps<i style="display:none;">8</i>（8:00-22:00）</b></div>
+                            </li>
+                            <li class="item_row">
+                                <h4 class="sub_title">电话咨询</h4>
+                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">189<i style="display:none;">8</i>64<i style="display:none;">8</i>80<i style="display:none;">8</i>06<i style="display:none;">8</i>60（8:00-22:00）</b></div>
+                            </li>
+                            <li class="item_row">
+                                <h4 class="sub_title">QQ咨询</h4>
+                                <div class="sub_list"><b onmouseover="var list=this.getElementsByTagName('i');for(var i=list.length-1;i>-1;i--){list[i].parentNode&&list[i].parentNode.removeChild(list[i])}">290<i style="display:none;">8</i>016<i style="display:none;">8</i>82<i style="display:none;">8</i>46（8:00-22:00）</b></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="description">
+                        <h3 class="sub_title">前端训练营FECamps </h3>
+                        <div class="desc_content">
+                        <img src="img/qrcode.png" alt="" class="qrcode">
+                        前端训练营致力于WEB前端高端人才培养，引领前端行业未来发展方向，帮助学员提升自身技术实力，实现职业目标。同时助力移动互联网企业高级软件技术人才培养，提升企业整体竞争力。</div>
+                    </div>
+                    
+                    <div class="test_history">
+                        <h3 class="history_title">最新评测结果</h3>
+                        <ul class="test_list" id="test_list">
+                            <li class="item_row">
+                                <span class="t_user">tomcat</span>
+                                <span class="t_time">76 m</span>
+                                <span class="t_score">36</span>
+                                <span class="t_date">2014-12-01 16:35</span>
+                            </li>
+                            <li class="item_row">
+                                <span class="t_user">tomcat</span>
+                                <span class="t_time">76 m</span>
+                                <span class="t_score">36</span>
+                                <span class="t_date">2014-12-01 16:35</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr class="clearfix" />
+                </div>
+            </div>
+        </div>
+        <script>
+        function initPageIndex() {
+            // pageIndex
+            var pageIndex;
+            pageIndex = function () {
+                hui.Action.call(this);
+                this.id = 'pageIndex';
+                this.main = 'index';
+            };
+            pageIndex.prototype = {
+                initBehavior: function () {
+                    var me = this;
+                    
+                    me.showTestHistory();
+                    me.showTestButton();
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('index');
+                },
+                showTestHistory: function() {
+                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                        null,
+                        [
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
+                        ]
+                    ]);
+                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                        onsuccess: function (result) {
+                            if (result && !result[0] && result[1]) {
+                                var tpl = [
+                                    '<li class="item_row">',
+                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_score">#{score}</span>',
+                                    '    <span class="t_date">#{date}</span>',
+                                    '</li>'
+                                ].join('');
+                                
+                                var list = result[1];
+                                var html = '';
+                                for (var i=0,len=list.length; i<len && i<4; i++) {
+                                    html += hui.util.format(tpl, list[i]);
+                                }
+                                hui.g('test_list').innerHTML = html;
+                            }
+                        }
+                    });
+                },
+                showTestButton: function() {
+                    var test_id = window.test_id;
+                    $('#resume_btn').hide();
+                    $('#btn_report').hide();
+                    if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
+                        $('#btn_report').show();
+                    }
+                    else if (test_id && String(test_id).length > 20) {
+                        $('#resume_btn').show();
+                    }
+                    
+                    $('.test_btn').show();
+                }
+            };
+
+            hui.inherits(pageIndex, hui.Action);
+            hui.Router.setRule('/', 'pageIndex');
+            hui.window.pageIndex = pageIndex;
+        }
+        </script>
+        <div class="page_body" id="history" style="background-color: white;display: none;">
+            <div class="page_container">
+                <div class="test_history">
+                    <h3 class="history_title">评测历史列表</h3>
+                    <ul class="test_list" id="history_list">
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                        <li class="item_row">
+                            <span class="t_user">tomcat</span>
+                            <span class="t_time">76 m</span>
+                            <span class="t_score">36</span>
+                            <span class="t_date">2014-12-01 16:35</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+        function initPageHistory() {
+            // pageHistory
+            var pageHistory;
+            pageHistory = function () {
+                hui.Action.call(this);
+                this.id = 'pageHistory';
+                this.main = 'history';
+            };
+            pageHistory.prototype = {
+                initBehavior: function () {
+                    var me = this;
+                    me.showTestHistory();
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('history');
+                },
+                showTestHistory: function() {
+                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
+                        null,
+                        [
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
+                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
+                        ]
+                    ]);
+                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                        onsuccess: function (result) {
+                            if (result && !result[0] && result[1]) {
+                                var tpl = [
+                                    '<li class="item_row">',
+                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_score">#{score}</span>',
+                                    '    <span class="t_date">#{date}</span>',
+                                    '</li>'
+                                ].join('');
+                                
+                                var list = result[1];
+                                var html = '';
+                                for (var i=0,len=list.length; i<len; i++) {
+                                    html += hui.util.format(tpl, list[i]);
+                                }
+                                hui.g('history_list').innerHTML = html;
+                            }
+                        }
+                    });
+                },
+                
+            };
+
+            hui.inherits(pageHistory, hui.Action);
+            hui.Router.setRule('/history', 'pageHistory');
+            hui.window.pageHistory = pageHistory;
+        }
+        </script>
+        <div class="page_body" id="industry" style="background-color: white;display: none;">
+            <div class="page_container">
+                <center>
+                <img src="img/1232435.png" />
+                <img src="img/1232436.png" />
+                </center>
+            </div>
+        </div>
+        <script>
+        function initPageIndustry() {
+            // pageIndustry
+            var pageIndustry;
+            pageIndustry = function () {
+                hui.Action.call(this);
+                this.id = 'pageIndustry';
+                this.main = 'industry';
+            };
+            pageIndustry.prototype = {
+                initBehavior: function () {
+                    var me = this;
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('industry');
+                }
+                
+            };
+
+            hui.inherits(pageIndustry, hui.Action);
+            hui.Router.setRule('/industry', 'pageIndustry');
+            hui.window.pageIndustry = pageIndustry;
+        }
+        </script>
+        <div class="page_body" id="lesson" style="background-color: white;display: none;">
+            <div class="page_container">
+                <center>
+                    <h2 class="kcTit">前端架构师 — 课程大纲</h2>
+                    <p class="xxCon">本课程适合想成为专业前端架构师的你，我们做的是培养业界专家.^_^</p>
+                    <img src="img/fe_architect.png" alt="fe architect" />
+                    <br/><br/>
+                </center>
+                
+            </div>
+        </div>
+        <script>
+        function initPageLesson() {
+            // pageLesson
+            var pageLesson;
+            pageLesson = function () {
+                hui.Action.call(this);
+                this.id = 'pageLesson';
+                this.main = 'lesson';
+            };
+            pageLesson.prototype = {
+                initBehavior: function () {
+                    var me = this;
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('lesson');
+                }
+            };
+
+            hui.inherits(pageLesson, hui.Action);
+            hui.Router.setRule('/lesson', 'pageLesson');
+            hui.window.pageLesson = pageLesson;
+        }
+        </script>
+        <div class="page_body" id="about" style="background-color: white;display: none;">
+            <div class="page_container" style="text-align:center">
+                <img src="img/about_us.png" />
+            </div>
+        </div>
+        <script>
+        function initPageAbout() {
+            // pageAbout
+            var pageAbout;
+            pageAbout = function () {
+                hui.Action.call(this);
+                this.id = 'pageAbout';
+                this.main = 'about';
+            };
+            pageAbout.prototype = {
+                initBehavior: function () {
+                    var me = this;
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('about');
+                }
+            };
+
+            hui.inherits(pageAbout, hui.Action);
+            hui.Router.setRule('/about', 'pageAbout');
+            hui.window.pageAbout = pageAbout;
+        }
+        </script>
+        
     </div>
     <div class="page_foot">
         <div class="page_container">
