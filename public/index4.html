@@ -303,9 +303,10 @@ function showTab(tab) {
                     };
                 },
             	showTestScore: function() {
+                    var me = this;
                     Requester.get('/ue_api/internal/get_rank', {
                         data: {
-                            test_id: window.test_id
+                            test_id: me.querystring.test_id || window.test_id
                         },
                         onsuccess: function (result) {
                             // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
