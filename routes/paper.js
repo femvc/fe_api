@@ -121,7 +121,7 @@ function getNextQuestion(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
     if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
-        console.log('createQuestionList === newstart');
+        console.log('~~~~~~~~~~~ createQuestionList newstart ~~~~~~~~~~');
         createQuestionList(req, res, function () {
             getNextQuestionCallback(req, res, next);
         });
@@ -298,6 +298,7 @@ exports.saveNextQuestion = function (req, res, next) {
 
         // test finished
         if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
+            console.log('~~~~~~~~~~~ test finished ~~~~~~~~~~');
             req.paramlist.internal = true;
             getPaperResult(req, res, function (req, res, rank) {
                 rankRoute.saveRank(req, res, function (err, resp) {
