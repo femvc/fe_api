@@ -288,11 +288,7 @@ exports.saveNextQuestion = function (req, res, next) {
         return response.ok(req, res, [uid, req.paramlist]);
     }
 
-    var id = req.paramlist.atcid,
-        question = {},
-        callback;
-
-    callback = function (err, doc) {
+    var callback = function (err, doc) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
@@ -316,18 +312,19 @@ exports.saveNextQuestion = function (req, res, next) {
         }
     };
 
-    try {
-        question.content = req.paramlist.content ? JSON.parse(decodeURIComponent(req.paramlist.content)) : '';
-    }
-    catch (e) {}
-
-    question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    var question = {},
+        question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
     question.uid = uid;
-    question.atcid = id;
+    question.atcid = req.paramlist.atcid;
     question.test_id = req.paramlist.test_id;
     question.title = req.paramlist.title;
     question.index = req.paramlist.index;
 
+    try {
+        question.content = req.paramlist.content ? JSON.parse(decodeURIComponent(req.paramlist.content)) : '';
+    }
+    catch (e) {}
+    console.log('resultModel.insert');
     resultModel.insert(question, callback);
 };
 
