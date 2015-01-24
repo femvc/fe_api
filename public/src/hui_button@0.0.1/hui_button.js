@@ -118,5 +118,8 @@ hui.define('hui_button', ['hui_util', 'hui_control'], function () {
     /* hui.Button 继承了 hui.Control */
     hui.inherits(hui.Button, hui.Control);
 
+    hui.util.importCssString(
+        '.hui_button { font-family: "microsoft yahei"; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }'
+    );
 
 });

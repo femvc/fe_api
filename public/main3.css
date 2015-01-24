@@ -103,7 +103,6 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
 .subject_test .hui_checkbox { margin-top: 11px }
 .subject_test .hui_radiobox { margin-top: 11px }
-.subject_test .hui_button { font-family: 'microsoft yahei'; background-color: #00aaef; border: 0px; color: white; padding: 6px 30px; border-radius: 30px; font-size: 18px; cursor: pointer; }
 .subject_test .subject_box .tr_row .subject_nxt { }
 .subject_test .hui_button_label { }
 .subject_test .subject_box .tr_row .subject_pre { }
