@@ -324,7 +324,7 @@ exports.saveNextQuestion = function (req, res, next) {
         question.content = req.paramlist.content ? JSON.parse(decodeURIComponent(req.paramlist.content)) : '';
     }
     catch (e) {}
-    console.log('resultModel.insert');
+
     resultModel.insert(question, callback);
 };
 
