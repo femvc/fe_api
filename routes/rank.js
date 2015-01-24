@@ -70,9 +70,10 @@ exports.saveRank = function (req, res, next) {
         if (err) {
             return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-        req.sessionStore.paper[uid] = null;
-        req.sessionStore.paperContent[uid] = null;
-        req.sessionStore.questionIndex[uid] = 0;
+        
+        // req.sessionStore.paper[uid] = null;
+        // req.sessionStore.paperContent[uid] = null;
+        // req.sessionStore.questionIndex[uid] = 0;
 
         next = req.paramlist.internal ? next : response.ok;
         next(req, res, resp);

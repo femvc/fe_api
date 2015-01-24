@@ -11,19 +11,19 @@ var cloudlabel = require('./routes/cloudlabel');
 
 // http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
 app.all('/*', function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    next();
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+	next();
 });
 // handle OPTIONS requests from the browser
 app.options('*', function (req, res, next) {
-    res.send(200);
+	res.send(200);
 });
 
 //Test
 app.get('/hello', function (req, res) {
-    res.send('hello world');
+	res.send('hello world');
 });
 
 // Account
@@ -47,6 +47,7 @@ app.all('/ue_api/internal/get_next_question', account.auth, paper.getNextQuestio
 app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuestion);
 app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
 app.all('/ue_api/internal/get_paper_result', account.auth, paper.getPaperResult);
+app.all('/ue_api/internal/reset_question_index', account.auth, paper.resetQuestionIndex);
 
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);

@@ -1,7 +1,9 @@
+/* global response,exports */
+
 'use strict';
 var userLogic = require('../helpers/user');
 var userModel = require('../models/user').createNew();
-var mobileModel = require('../models/mobile').createNew();
+// var mobileModel = require('../models/mobile').createNew();
 var request = require('request');
 var crypto = require('crypto');
 
@@ -76,7 +78,7 @@ exports.auth = function (req, res, next) {
     }
     else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
-        req.sessionStore.user[req.sessionID] = req.sessionID;
+        req.sessionStore.user[req.sessionID] = String(req.sessionID).toUpperCase().substr(0, 8);
         next();
     }
 };
@@ -85,7 +87,7 @@ exports.getUid = function (req, res, next) {
     req.sessionStore.user = req.sessionStore.user || {};
     var uid = req.sessionStore.user[req.sessionID];
     // uid = String(crypto.createHash('md5').update(uid + 'fecamps').digest('hex')).toUpperCase().substr(0, 8);
-    uid = String(uid).toUpperCase().substr(0, 8);
+    // uid = String(uid).toUpperCase().substr(0, 8);
     response.ok(req, res, uid);
 };
 

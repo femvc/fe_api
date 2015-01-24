@@ -345,3 +345,18 @@ exports.getPapers = function (req, res, next) {
     });
 
 };
+
+exports.resetQuestionIndex = function (req, res, next) {
+    var uid = req.sessionStore.user[req.sessionID];
+
+    var question_index = req.paramlist.question_index;
+    if (question_index !== undefined && question_index > -1 && question_index < 20) {
+        req.sessionStore.questionIndex[uid] = 1;
+        return response.ok(req, res, {
+            question_index
+        });
+    }
+    else {
+        return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER', 'question_index');
+    }
+};
