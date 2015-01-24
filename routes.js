@@ -47,7 +47,7 @@ app.all('/ue_api/internal/get_next_question', account.auth, paper.getNextQuestio
 app.all('/ue_api/internal/save_next_question', account.auth, paper.saveNextQuestion);
 app.all('/ue_api/internal/get_papers', account.auth, paper.getPapers);
 app.all('/ue_api/internal/get_paper_result', account.auth, paper.getPaperResult);
-app.all('/ue_api/internal/reset_question_index', account.auth, paper.resetQuestionIndex);
+app.get('/ue_api/internal/reset_question_index', account.auth, paper.resetQuestionIndex);
 
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);
