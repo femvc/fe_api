@@ -305,65 +305,83 @@ function showTab(tab, main) {
                         // hui.Control.getByFormName('result').hide();
                         // hui.Control.getByFormName('candidate').show();
                         // showEvaluateReport();
-                        window.location.href = '#/report';
+                        window.location.href = '#/candidate';
                     };
+                },
+                showTestScoreCallback: function () {
+                    var me = this;
+                    // hui.g('subject_index').innerHTML = '1';
+                    var list = me.scoreList;
+                    var score = me.testResult.score;
+                    var beyondNum = 0;
+                    for (var i=0,len=list.length; i<len; i++) {
+                        if (score > list[i]) {
+                            beyondNum++;
+                        }
+                    }
+                    
+                    var data = {};
+                    data.score = me.testResult.score;
+                    data.correct = me.testResult.correct;
+                    data.question_count = me.testResult.sum;
+                    data.rate = Math.round(100 * beyondNum / (list.length + 0.001));
+                    data.time = Math.ceil((hui.util.parseDate(me.testResult.time_end).getTime() - hui.util.parseDate(me.testResult.time_start).getTime()) / 60000);
+                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
+                    hui.Control.getByFormName('result').setValueByTree(data).show();
                 },
                 showTestScore: function() {
                     var me = this;
-                    Requester.get('/ue_api/internal/get_rank', {
-                        data: {
-                            test_id: me.querystring.test_id || window.test_id
-                        },
-                        onsuccess: function (result) {
-                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                            if (result && result[1]) {
-                                var data = result[1];
-                                if (data.question) {
-                                    hui.g('subject_index').innerHTML = '1';
-                                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
-                                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
-                                    data.question_count = data.question.length;
-                                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                                    hui.Control.getByFormName('result').setValueByTree(data).show();
-                                }
-                                else {
-                                    console.log('Warning: Test not finish')
-                                    // showPaperDetail();
-                                }
-                            }
-                        }
-                    });
-                    Requester.get('/ue_api/internal/get_rank', {
-                        data: {
-                            test_id: me.querystring.test_id || window.test_id
-                        },
-                        onsuccess: function (result) {
-                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                            if (result && result[1]) {
-                                var data = result[1];
-                                if (data.question) {
-                                    hui.g('subject_index').innerHTML = '1';
-                                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
-                                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
-                                    data.question_count = data.question.length;
-                                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                                    hui.Control.getByFormName('result').setValueByTree(data).show();
-                                }
-                                else {
-                                    console.log('Warning: Test not finish')
-                                    // showPaperDetail();
-                                }
-                            }
-                        }
-                    });
                     Requester.get('/ue_api/internal/get_ranks', {
                         onsuccess: function (result) {
                             if (result && result[1]) {
-                                var data = result[1];
-                                
+                                me.scoreList = result[1].scoreList;
+                                if (me.testResult !== undefined) {
+                                    me.showTestScoreCallback();
+                                }
                             }
                         }
                     });
+                    queryTestResult(function(list, referenceMap){
+                        var num = 0;
+                        var correct;
+                        var time_start;
+                        var time_end;
+                        
+                        for (var j=0,len2=list.length; j<len2; j++) {
+                            item = referenceMap[list[j]];
+                            if (!item.answer) continue;
+                            correct = true;
+                            for (var i in item.options) {
+                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                                    (item.options[i].correct === '' && item.options[i].answer == '')){
+                                    continue;
+                                }
+                                else {
+                                    correct = false;
+                                    break;
+                                }
+                            }
+                            num += correct ? 1 : 0;
+                            if (time_start === undefined || time_start > item.test_time) {
+                                time_start = item.test_time;
+                            }
+                            if (time_end === undefined || time_end < item.test_time) {
+                                time_end = item.test_time;
+                            }
+                        }
+                        
+                        me.testResult = {};
+                        me.testResult.score = Math.round(100 * num / (list.length + 0.0001));
+                        me.testResult.correct = num;
+                        me.testResult.sum = list.length;
+                        me.testResult.time_start = time_start;
+                        me.testResult.time_end = time_end;
+                        
+                        if (me.scoreList !== undefined) {
+                            me.showTestScoreCallback();
+                        }
+                    });
+                    
                 },
                 finish: function () {
                     var me = this;
@@ -575,112 +593,93 @@ function showTab(tab, main) {
                 },
                 showEvaluateReport: function () {
                     var me = this;
-                    Requester.get('/ue_api/internal/get_rank', {
-                        data: {
-                            test_id: me.querystring.test_id || window.test_id
-                        },
-                        onsuccess: function (result) {
-                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                            if (result && result[1]) {
-                                var data = result[1];
-                                if (data.question) {
-                                    var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
-                                                {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
-                                                {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
-                                                {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
-                                                {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
-                                                {level:'前端专家      ', score:85, annual:35, min:1, max:10},
-                                                {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
-                                    var level = 0;
-                                    for (var i=0,len=grade.length; i<len; i++) {
-                                        level = data.score > grade[i].score ? i : level;
-                                    }
-                                    data.cur  = grade[level].level;
-                                    data.nxt  = grade[level+1].level.replace('工程师', '');
-                                    data.nxt2 = grade[level+1].level;
-                                    
-                                    data.annual = grade[level].annual;
-                                    data.increase = grade[level].min + '~' + grade[level].max;
-                                    
-                                    data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
-                                    
-                                    me.getByFormName('report').setValueByTree(data).show();
-                                    
-                                    var datasource = [
-                                        {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                                        {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                                        {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
-                                        {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                                        {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
-                                        {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
-                                        {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                                        {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                                    ];
-                                    queryTestResult(function(list, referenceMap){
-                                        var category = {};
-                                        var correct;
-                                        var key;
-                                        
-                                        for (var j=0,len2=list.length; j<len2; j++) {
-                                            item = referenceMap[list[j]];
-                                            if (!item.answer) continue;
-                                            correct = true;
-                                            for (var i in item.options) {
-                                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
-                                                    (item.options[i].correct === '' && item.options[i].answer == '')){
-                                                    continue;
-                                                }
-                                                else {
-                                                    correct = false;
-                                                    break;
-                                                }
-                                            }
-                                            for (var i in item.label) {
-                                                var key = item.label[i];
-                                                category[key] = category[key] || {};
-                                                category[key].sum = category[key].sum || 0;
-                                                category[key].sum += 1;
-                                                category[key].right = category[key].right || 0;
-                                                category[key].right += correct ? 1 : 0;
-                                            }
-                                        }
-                                        console.log(category);
-                                        var datasource = [
-                                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
-                                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
-                                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                                        ];
-                                        for (var i=0,len=datasource.length; i<len; i++) {
-                                            if (datasource[i] && category[datasource[i].skill]) {
-                                                item = datasource[i];
-                                                key = category[item.skill];
-                                                item.correct = key.right;
-                                                item.score = Math.floor(key.right*100/key.sum);
-                                            }
-                                        }
-                                        
-                                        var score = [];
-                                        for (var i=0,len=datasource.length; i<len; i++) {
-                                            score.push(datasource[i].score);
-                                        }
-                                        me.showResultChart(score);
-                                        var skill_list = hui.Control.getByFormName('skill_list');
-                                        skill_list.datasource = datasource;
-                                        skill_list.renderBody();
-
-                                    });
+                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                    queryTestResult(function(list, referenceMap){
+                        var num = 0;
+                        var category = {};
+                        var correct;
+                        var key;
+                        
+                        for (var j=0,len2=list.length; j<len2; j++) {
+                            item = referenceMap[list[j]];
+                            if (!item.answer) continue;
+                            correct = true;
+                            for (var i in item.options) {
+                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                                    (item.options[i].correct === '' && item.options[i].answer == '')){
+                                    continue;
                                 }
                                 else {
-                                    console.log('Warning: Test not finish')
+                                    correct = false;
+                                    break;
                                 }
                             }
+                            num += correct ? 1 : 0;
+                            
+                            for (var i in item.label) {
+                                var key = item.label[i];
+                                category[key] = category[key] || {};
+                                category[key].sum = category[key].sum || 0;
+                                category[key].sum += 1;
+                                category[key].right = category[key].right || 0;
+                                category[key].right += correct ? 1 : 0;
+                            }
                         }
+                        console.log(category);
+
+                        var data = {};
+                        data.score = Math.round(100 * num / (list.length + 0.0001));
+                        var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
+                                    {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
+                                    {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
+                                    {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
+                                    {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
+                                    {level:'前端专家      ', score:85, annual:35, min:1, max:10},
+                                    {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
+                        var level = 0;
+                        for (var i=0,len=grade.length; i<len; i++) {
+                            level = data.score > grade[i].score ? i : level;
+                        }
+                        data.cur  = grade[level].level;
+                        data.nxt  = grade[level+1].level.replace('工程师', '');
+                        data.nxt2 = grade[level+1].level;
+                        
+                        data.annual = grade[level].annual;
+                        data.increase = grade[level].min + '~' + grade[level].max;
+                        
+                        data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
+                        
+                        me.getByFormName('report').setValueByTree(data).show();
+
+                        var datasource = [
+                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
+                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
+                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                        ];
+                        for (var i=0,len=datasource.length; i<len; i++) {
+                            if (datasource[i] && category[datasource[i].skill]) {
+                                item = datasource[i];
+                                key = category[item.skill];
+                                item.correct = key.right;
+                                item.score = Math.floor(key.right*100/key.sum);
+                            }
+                        }
+                        
+                        var score = [];
+                        for (var i=0,len=datasource.length; i<len; i++) {
+                            score.push(datasource[i].score);
+                        }
+                        me.showResultChart(score);
+                        var skill_list = hui.Control.getByFormName('skill_list');
+                        skill_list.datasource = datasource;
+                        skill_list.renderBody();
                     });
+
                 },
                 showResultChart: function (data){
                     $('#skill_chart').highcharts({
@@ -1324,6 +1323,7 @@ function showTab(tab, main) {
                         atcid = list[i].atcid;
                         if (referenceMap[atcid]) {
                             referenceMap[atcid].answer = list[i].content;
+                            referenceMap[atcid].test_time = list[i].update_time;
                         }
                     }
                     list = data.paper;
