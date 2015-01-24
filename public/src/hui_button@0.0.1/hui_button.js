@@ -71,17 +71,15 @@ hui.define('hui_button', ['hui_util', 'hui_control'], function () {
             if (!me.content && innerDiv && innerDiv.tagName != 'DIV') {
                 me.content = me.getInnerHTML();
             }
-
             me.setInnerHTML(me, me.getMainHtml());
-
             // 初始化状态事件
             main.onclick = me.getHandlerClick();
-
             // 设定宽度
             me.width && (main.style.width = me.width + 'px');
-
             // 设置disabled
             me.setDisabled(!!me.disabled);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
 
         /**
