@@ -312,8 +312,8 @@ exports.saveNextQuestion = function (req, res, next) {
         }
     };
 
-    var question = {},
-        question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    var question = {};
+    question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
     question.uid = uid;
     question.atcid = req.paramlist.atcid;
     question.test_id = req.paramlist.test_id;
