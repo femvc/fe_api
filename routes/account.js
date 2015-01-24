@@ -84,7 +84,8 @@ exports.auth = function (req, res, next) {
 exports.getUid = function (req, res, next) {
     req.sessionStore.user = req.sessionStore.user || {};
     var uid = req.sessionStore.user[req.sessionID];
-    uid = String(crypto.createHash('md5').update(uid + 'fecamps').digest('hex')).toUpperCase().substr(0, 8);
+    // uid = String(crypto.createHash('md5').update(uid + 'fecamps').digest('hex')).toUpperCase().substr(0, 8);
+    uid = String(uid).toUpperCase().substr(0, 8);
     response.ok(req, res, uid);
 };
 
@@ -119,20 +120,23 @@ exports.sendSMS = function (req, res, next) {
 
     if (false) {
         var mobile = req.paramlist.mobile;
-        var sms = '推立方手机验证码服务:您本次的验证码为'+req.paramlist.randcode+'，有效期为1分钟';
-        var url ='http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=3&t=' + mobile + '&c=' + sms;
-        request(url, function(error, response, body) {
+        var sms = '推立方手机验证码服务:您本次的验证码为' + req.paramlist.randcode + '，有效期为1分钟';
+        var url = 'http://www.tui3.com/api/send/?k=81e7349f76fe06b83f42051aa6738883&r=json&p=3&t=' + mobile + '&c=' + sms;
+        request(url, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 res.send(body);
             }
         });
     }
 
-    var randcode = String(Math.random()+'000000000').substr(4, 4);
+    var randcode = String(Math.random() + '000000000').substr(4, 4);
     req.sessionStore.mobile = req.sessionStore.mobile || {};
     req.sessionStore.mobile[req.paramlist.mobile] = randcode;
 
-    response.ok(req, res, {mobile: req.paramlist.mobile, randcode: randcode});
+    response.ok(req, res, {
+        mobile: req.paramlist.mobile,
+        randcode: randcode
+    });
     // mobileModel.insert({
     //     mobile: req.paramlist.mobile,
     //     randcode: req.paramlist.randcode
@@ -155,7 +159,9 @@ exports.smsAuth = function (req, res, next) {
     req.sessionStore.mobile = req.sessionStore.mobile || {};
     var randcode = req.sessionStore.mobile[req.paramlist.mobile];
     if (randcode && randcode === req.paramlist.randcode) {
-        response.ok(req, res, {uid: crypto.createHash('md5').update('fecamps'+req.paramlist.mobile).digest('hex')});
+        response.ok(req, res, {
+            uid: crypto.createHash('md5').update('fecamps' + req.paramlist.mobile).digest('hex')
+        });
     }
     else {
         response.err(req, res, 'INVALIDE_VALIDATECODE');
