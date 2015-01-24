@@ -39,6 +39,8 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
             var me = this;
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this;

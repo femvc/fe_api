@@ -55,7 +55,7 @@ app.get('/ue_api/internal/create_question_list', account.auth, paper.createQuest
 app.all('/ue_api/internal/get_result', account.auth, result.getResult);
 app.all('/ue_api/internal/get_results', account.auth, result.getResults);
 
-app.all('/ue_api/internal/get_rank', account.auth, rank.getRank);
+// app.all('/ue_api/internal/get_rank', account.auth, rank.getRank);
 app.all('/ue_api/internal/get_ranks', account.auth, rank.getRanks);
 app.all('/ue_api/internal/save_rank', account.auth, rank.saveRank);
 app.all('/ue_api/internal/update_rank', account.auth, rank.updateRank);

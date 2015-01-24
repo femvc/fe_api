@@ -82,6 +82,8 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 hui.setInnerText(me.getTitle(), me.placeholder);
             }
             me.renderOptions();
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

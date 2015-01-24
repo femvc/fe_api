@@ -39,6 +39,8 @@ hui.define('hui_panel', ['hui_control'], function () {
             var me = this;
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         showWaiting: function () {
             var me = this,

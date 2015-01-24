@@ -84,6 +84,8 @@ hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
                 me.getClass('icon')
             ));
             me.renderLabel();
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

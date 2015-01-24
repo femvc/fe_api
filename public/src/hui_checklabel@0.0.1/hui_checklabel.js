@@ -57,6 +57,8 @@ hui.define('hui_checklabel', ['hui_checkbox'], function () {
                 me.label,
                 me.getId()
             ));
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

@@ -119,6 +119,8 @@ hui.define('hui_slider', ['hui_util', 'hui_draggable', 'hui_control'], function 
 
             // 设置disabled
             me.setDisabled(!!me.disabled);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

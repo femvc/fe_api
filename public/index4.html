@@ -37,12 +37,13 @@ window.onload = function () {
     hui.Action.start();
 };
 
-function showTab(tab) {
-    hui.util.removeClass(hui.g('menu_index'), 'item_selected');
+function showTab(tab, main) {
+    hui.util.removeClass(hui.g('menu_index'   ), 'item_selected');
     hui.util.removeClass(hui.g('menu_industry'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_lesson'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_history'), 'item_selected');
-    hui.util.removeClass(hui.g('menu_about'), 'item_selected');
+    hui.util.removeClass(hui.g('menu_lesson'  ), 'item_selected');
+    hui.util.removeClass(hui.g('menu_test'    ), 'item_selected');
+    hui.util.removeClass(hui.g('menu_history' ), 'item_selected');
+    hui.util.removeClass(hui.g('menu_about'   ), 'item_selected');
     
     hui.util.addClass(hui.g('menu_' + tab), 'item_selected');
 
@@ -59,8 +60,12 @@ function showTab(tab) {
     hui.g('detail'   ).style.display = 'none';
     hui.g('send_sms' ).style.display = 'none';
 
-    hui.g(tab).style.display = 'block';
+    main = main || tab;
+    hui.g(main).style.display = 'block';
 }
+
+
+
 //-->
 </script>
 </head>
@@ -76,8 +81,9 @@ function showTab(tab) {
                     <li class="menu_item item_selected" id="menu_index" onclick1="showTab(this,'menu_index')" ><a href="#/">首 页</a></li>
                     <li class="menu_item" id="menu_industry" onclick1="showTab(this,'menu_industry')"><a href="#/industry">行业现状</a></li>
                     <li class="menu_item" id="menu_lesson" onclick1="showTab(this,'menu_lesson')"><a href="#/lesson">课程介绍</a></li>
+                    <li class="menu_item" id="menu_test" onclick1="showTab(this,'menu_history')"><a href="#/test">技能测试</a></li>
                     <li class="menu_item" id="menu_history" onclick1="showTab(this,'menu_history')"><a href="#/history">测评历史</a></li>
-                    <li class="menu_item" id="menu_about" onclick1="showTab(this,'menu_about')"><a href="#/about">关于我们</a></li>
+                    <!--li class="menu_item" id="menu_about" onclick1="showTab(this,'menu_about')"><a href="#/about">关于我们</a></li-->
                 </ul>
             </div>
             <div class="link" style="text-align:right;display:none;">
@@ -302,7 +308,7 @@ function showTab(tab) {
                         window.location.href = '#/report';
                     };
                 },
-            	showTestScore: function() {
+                showTestScore: function() {
                     var me = this;
                     Requester.get('/ue_api/internal/get_rank', {
                         data: {
@@ -327,10 +333,41 @@ function showTab(tab) {
                             }
                         }
                     });
+                    Requester.get('/ue_api/internal/get_rank', {
+                        data: {
+                            test_id: me.querystring.test_id || window.test_id
+                        },
+                        onsuccess: function (result) {
+                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                            if (result && result[1]) {
+                                var data = result[1];
+                                if (data.question) {
+                                    hui.g('subject_index').innerHTML = '1';
+                                    data.rate = Math.round(100 * data.index / (data.sum + 0.001));
+                                    data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
+                                    data.question_count = data.question.length;
+                                    hui.g('result_chart').style.width = data.rate * 4 + 'px';
+                                    hui.Control.getByFormName('result').setValueByTree(data).show();
+                                }
+                                else {
+                                    console.log('Warning: Test not finish')
+                                    // showPaperDetail();
+                                }
+                            }
+                        }
+                    });
+                    Requester.get('/ue_api/internal/get_ranks', {
+                        onsuccess: function (result) {
+                            if (result && result[1]) {
+                                var data = result[1];
+                                
+                            }
+                        }
+                    });
                 },
                 finish: function () {
                     var me = this;
-                    showTab('result');
+                    showTab('test', 'result');
                 }
             };
 
@@ -406,7 +443,8 @@ function showTab(tab) {
                                 onsuccess: function (result) {
                                     // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
                                     if (result && !result[0]) {
-                                        showEvaluateReport();
+                                        // showEvaluateReport();
+                                        window.location.href = '#/report';
                                     }
                                 }
                             });
@@ -443,7 +481,7 @@ function showTab(tab) {
                 },
                 finish: function () {
                     var me = this;
-                    showTab('candidate');
+                    showTab('test', 'candidate');
                 }
             };
 
@@ -463,11 +501,11 @@ function showTab(tab) {
                         前端架构师     65-85  22~36W   10 <br/>
                         前端专家       80-100 34~99W   1  <br/>  
                         </div>                  
-                        <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <span style="display:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></span></div>
-                        <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
-                        <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
+                        <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <span style="display123:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></span></div>
+                        <div style="display123:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
+                        <div style="display123:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
           
-                        <div class="result_title"> 测评报告 &nbsp;&nbsp;<a onclick="showPaperDetail()" style="cursor:pointer;"><small>(查看详情)</small></a></div>
+                        <div class="result_title"> 单项评分 &nbsp;&nbsp;<a href="#/detail" onclick123="showPaperDetail()" style="cursor:pointer;"><small>(答题详情)</small></a></div>
                         <div class="result_detail">
                             <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
                             <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
@@ -486,12 +524,223 @@ function showTab(tab) {
                 this.main = 'report';
             };
             pageReport.prototype = {
+                initModel: function () {
+                    window.listTable = [
+                        {
+                            width: 100,
+                            title: '技能',
+                            sortable: true,
+                            field: 'index',
+                            content: function (item) {
+                                return item['skill'];
+                            }
+                        }, {
+                            width: 40,
+                            title: '答对',
+                            sortable: true,
+                            field: 'correct',
+                            content: function (item) {
+                                return item['correct'];
+                            }
+                        }, {
+                            width: 40,
+                            title: '得分',
+                            sortable: true,
+                            field: 'score',
+                            content: function (item) {
+                                return item['score'];
+                            }
+                        }
+                    ];
+                    window.listData = [
+                        // {
+                        //     'skill': 'html',
+                        //     'correct': 2,
+                        //     'score': 40
+                        // }, {
+                        //     'skill': 'css',
+                        //     'correct': 2,
+                        //     'score': 40
+                        // }
+                    ];
+                },
                 initBehavior: function () {
                     var me = this;
                 },
                 finish: function () {
                     var me = this;
-                    showTab('report');
+                    showTab('test', 'report');
+
+                    me.showEvaluateReport();
+                },
+                showEvaluateReport: function () {
+                    var me = this;
+                    Requester.get('/ue_api/internal/get_rank', {
+                        data: {
+                            test_id: me.querystring.test_id || window.test_id
+                        },
+                        onsuccess: function (result) {
+                            // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
+                            if (result && result[1]) {
+                                var data = result[1];
+                                if (data.question) {
+                                    var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
+                                                {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
+                                                {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
+                                                {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
+                                                {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
+                                                {level:'前端专家      ', score:85, annual:35, min:1, max:10},
+                                                {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
+                                    var level = 0;
+                                    for (var i=0,len=grade.length; i<len; i++) {
+                                        level = data.score > grade[i].score ? i : level;
+                                    }
+                                    data.cur  = grade[level].level;
+                                    data.nxt  = grade[level+1].level.replace('工程师', '');
+                                    data.nxt2 = grade[level+1].level;
+                                    
+                                    data.annual = grade[level].annual;
+                                    data.increase = grade[level].min + '~' + grade[level].max;
+                                    
+                                    data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
+                                    
+                                    me.getByFormName('report').setValueByTree(data).show();
+                                    
+                                    var datasource = [
+                                        {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                                        {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                                        {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
+                                        {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                                        {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
+                                        {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
+                                        {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                                        {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                                    ];
+                                    queryTestResult(function(list, referenceMap){
+                                        var category = {};
+                                        var correct;
+                                        var key;
+                                        
+                                        for (var j=0,len2=list.length; j<len2; j++) {
+                                            item = referenceMap[list[j]];
+                                            if (!item.answer) continue;
+                                            correct = true;
+                                            for (var i in item.options) {
+                                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
+                                                    (item.options[i].correct === '' && item.options[i].answer == '')){
+                                                    continue;
+                                                }
+                                                else {
+                                                    correct = false;
+                                                    break;
+                                                }
+                                            }
+                                            for (var i in item.label) {
+                                                var key = item.label[i];
+                                                category[key] = category[key] || {};
+                                                category[key].sum = category[key].sum || 0;
+                                                category[key].sum += 1;
+                                                category[key].right = category[key].right || 0;
+                                                category[key].right += correct ? 1 : 0;
+                                            }
+                                        }
+                                        console.log(category);
+                                        var datasource = [
+                                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
+                                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
+                                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
+                                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
+                                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
+                                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
+                                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
+                                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
+                                        ];
+                                        for (var i=0,len=datasource.length; i<len; i++) {
+                                            if (datasource[i] && category[datasource[i].skill]) {
+                                                item = datasource[i];
+                                                key = category[item.skill];
+                                                item.correct = key.right;
+                                                item.score = Math.floor(key.right*100/key.sum);
+                                            }
+                                        }
+                                        
+                                        var score = [];
+                                        for (var i=0,len=datasource.length; i<len; i++) {
+                                            score.push(datasource[i].score);
+                                        }
+                                        me.showResultChart(score);
+                                        var skill_list = hui.Control.getByFormName('skill_list');
+                                        skill_list.datasource = datasource;
+                                        skill_list.renderBody();
+
+                                    });
+                                }
+                                else {
+                                    console.log('Warning: Test not finish')
+                                }
+                            }
+                        }
+                    });
+                },
+                showResultChart: function (data){
+                    $('#skill_chart').highcharts({
+                        chart: {
+                            polar: true,
+                            type: 'line'
+                        },
+                        title: {
+                            text: '',
+                            y: -80
+                        },
+                        pane: {
+                            size: '78%',
+                            center: ['62%', '50%']
+                        },
+                        xAxis: {
+                            categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
+                            tickmarkPlacement: 'on',
+                            lineWidth: 0
+                        },
+                        yAxis: {
+                            gridLineInterpolation: 'polygon',
+                            lineWidth: 0,
+                            min: 0,
+                            endOnTick: false,
+                            max: 108
+                        },
+                        tooltip: {
+                            shared: true,
+                            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'top',
+                            y: 0,
+                            x: 0,
+                            layout: 'vertical'
+                        },
+                        series: [{
+                            name: '中级水平',
+                            data: [70, 70, 60, 65, 40, 20, 60, 60],
+                            pointPlacement: 'off',
+                            color: 'gray'
+                        }, {
+                            name: '高级水平',
+                            data: [80, 80, 75, 80, 65, 50, 70, 75],
+                            pointPlacement: 'off',
+                            color: '#f90'
+                        }, {
+                            name: '架构师　',
+                            data: [95, 95, 95, 95, 80, 80, 85, 80],
+                            pointPlacement: 'off',
+                            color: '#f60'
+                        }, {
+                            name: '目前级别',
+                            data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
+                            pointPlacement: 'off',
+                            color: '#090'
+                        }]
+                    });
                 }
             };
 
@@ -501,251 +750,14 @@ function showTab(tab) {
         }
         
 
-        function showEvaluateReport() {
-            Requester.get('/ue_api/internal/get_rank', {
-                data: {
-                    test_id: window.test_id
-                },
-                onsuccess: function (result) {
-                    // hui.Control.getByFormName('form').getByFormName('subject_nxt').setDisabled(false);
-                    if (result && result[1]) {
-                        var data = result[1];
-                        if (data.question) {
-                            var grade = [{level:'前端零基础   ', score:0,  annual:2,  min:2, max:4},
-                                        {level:'初级前端工程师', score:10, annual:6,  min:4, max:8},
-                                        {level:'中级前端工程师', score:34, annual:11, min:6, max:12},
-                                        {level:'高级前端工程师', score:55, annual:18, min:6, max:12},
-                                        {level:'前端架构师    ', score:70, annual:26, min:6, max:12},
-                                        {level:'前端专家      ', score:85, annual:35, min:1, max:10},
-                                        {level:'前端专家      ', score:101,annual:45, min:10, max:99}];
-                            var level = 0;
-                            for (var i=0,len=grade.length; i<len; i++) {
-                                if (data.score > grade[i].score) {
-                                    level = i;
-                                }
-                            }
-                            data.cur  = grade[level].level;
-                            data.nxt  = grade[level+1].level.replace('工程师', '');
-                            data.nxt2 = grade[level+1].level;
-                            
-                            data.annual = grade[level].annual;
-                            data.increase = grade[level].min + '~' + grade[level].max;
-                            
-                            data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
-                            
-                            hui.Control.getByFormName('report').setValueByTree(data).show();
-                            
-                            var datasource = [
-                                {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                                {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                                {index: 3, 'skill': 'JS',        'correct': 22,'score': 22},
-                                {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                                {index: 5, 'skill': 'HTML5/CSS3','correct': 22,'score': 22},
-                                {index: 8, 'skill': 'Backend',   'correct': 22,'score': 22},
-                                {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                                {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                            ];
-                            parseTestResult(function(datasource){
-                                var score = [];
-                                for (var i=0,len=datasource.length; i<len; i++) {
-                                    score.push(datasource[i].score);
-                                }
-                                showResultChart(score);
-                                var skill_list = hui.Control.getByFormName('skill_list');
-                                skill_list.datasource = datasource;
-                                skill_list.renderBody();
-                            });
-                        }
-                        else {
-                            console.log('Warning: Test not finish')
-                        }
-                    }
-                }
-            });
-        }
-        function parseTestResult(cb) {
-            Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-                onsuccess: function(result){
-                    if (result && !result[0] && result[1]) {
-                        var data = result[1];
-                        var referenceMap = {};
-                        var list, atcid, item, key;
-                        
-                        list = data.reference_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            referenceMap[atcid] = list[i];
-                        }
-                        
-                        list = data.your_answer;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            atcid = list[i].atcid;
-                            if (referenceMap[atcid]) {
-                                referenceMap[atcid].answer = list[i].content;
-                            }
-                        }
-                        list = data.paper;
-                        for (var i=0,len=list.length; i<len; i++) {
-                            item = referenceMap[list[i]];
-                            if (item.answer) {
-                                for (var j in item.options) {
-                                    item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                                }
-                            }
-                        }
-                        var category = {};
-                        var correct;
-                        
-                        for (var j=0,len2=list.length; j<len2; j++) {
-                            item = referenceMap[list[j]];
-                            if (!item.answer) continue;
-                            correct = true;
-                            for (var i in item.options) {
-                                if ((item.options[i].correct === 'yes' && item.options[i].answer == 'your') ||
-                                    (item.options[i].correct === '' && item.options[i].answer == '')){
-                                    continue;
-                                }
-                                else {
-                                    correct = false;
-                                    break;
-                                }
-                            }
-                            for (var i in item.label) {
-                                var key = item.label[i];
-                                category[key] = category[key] || {};
-                                category[key].sum = category[key].sum || 0;
-                                category[key].sum += 1;
-                                category[key].right = category[key].right || 0;
-                                category[key].right += correct ? 1 : 0;
-                            }
-                        }
-                        console.log(category);
-                        var datasource = [
-                            {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
-                            {index: 2, 'skill': 'CSS',       'correct': 22,'score': 22},
-                            {index: 3, 'skill': 'Javascript','correct': 22,'score': 22},
-                            {index: 4, 'skill': 'DOM',       'correct': 22,'score': 22},
-                            {index: 5, 'skill': 'HTML5CSS3', 'correct': 22,'score': 22},
-                            {index: 8, 'skill': 'Server',    'correct': 22,'score': 22},
-                            {index: 6, 'skill': 'jQuery',    'correct': 22,'score': 22},
-                            {index: 7, 'skill': 'PS',        'correct': 22,'score': 22}
-                        ];
-                        for (var i=0,len=datasource.length; i<len; i++) {
-                            if (datasource[i] && category[datasource[i].skill]) {
-                                item = datasource[i];
-                                key = category[item.skill];
-                                item.correct = key.right;
-                                item.score = Math.floor(key.right*100/key.sum);
-                            }
-                        }
-                        cb && cb(datasource);
-                    }
-                }
-            });
-        }
-        function showResultChart(data){
-            $('#skill_chart').highcharts({
-                chart: {
-                    polar: true,
-                    type: 'line'
-                },
-                title: {
-                    text: '',
-                    y: -80
-                },
-                pane: {
-                    size: '78%',
-                    center: ['62%', '50%']
-                },
-                xAxis: {
-                    categories: ['HTML', 'CSS', 'JS', 'DOM', 'HTML5/CSS3', 'Backend', 'jQuery', 'PS'],
-                    tickmarkPlacement: 'on',
-                    lineWidth: 0
-                },
-                yAxis: {
-                    gridLineInterpolation: 'polygon',
-                    lineWidth: 0,
-                    min: 0,
-                    endOnTick: false,
-                    max: 108
-                },
-                tooltip: {
-                    shared: true,
-                    pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
-                },
-                legend: {
-                    align: 'right',
-                    verticalAlign: 'top',
-                    y: 0,
-                    x: 0,
-                    layout: 'vertical'
-                },
-                series: [{
-                    name: '中级水平',
-                    data: [70, 70, 60, 65, 40, 20, 60, 60],
-                    pointPlacement: 'off',
-                    color: 'gray'
-                }, {
-                    name: '高级水平',
-                    data: [80, 80, 75, 80, 65, 50, 70, 75],
-                    pointPlacement: 'off',
-                    color: '#f90'
-                }, {
-                    name: '架构师　',
-                    data: [95, 95, 95, 95, 80, 80, 85, 80],
-                    pointPlacement: 'off',
-                    color: '#f60'
-                }, {
-                    name: '目前级别',
-                    data: data ? data : [43, 19, 60, 35, 17, 10, 10, 17],
-                    pointPlacement: 'off',
-                    color: '#090'
-                }]
-            });
-        }
-        window.listTable = [
-            {
-                width: 100,
-                title: '技能',
-                sortable: true,
-                field: 'index',
-                content: function (item) {
-                    return item['skill'];
-                }
-            }, {
-                width: 40,
-                title: '答对',
-                sortable: true,
-                field: 'correct',
-                content: function (item) {
-                    return item['correct'];
-                }
-            }, {
-                width: 40,
-                title: '得分',
-                sortable: true,
-                field: 'score',
-                content: function (item) {
-                    return item['score'];
-                }
-            }
-        ];
-        window.listData = [
-            // {
-            //     'skill': 'html',
-            //     'correct': 2,
-            //     'score': 40
-            // }, {
-            //     'skill': 'css',
-            //     'correct': 2,
-            //     'score': 40
-            // }
-        ];
+                
+
         </script>
-        <div class="page_body" id="detail" style="background-color: white;display: none;">
+        <div class="page_body detail_box" id="detail" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
+                <h3 class="detail_title">答题详情</h3>
                 <div class="report_box" ui="type:'Panel',formName:'detail',size:{width:'800px'}" style="display123:none"> 
-                    <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
+                    <div class="box_content detail_container" id="detail_container" style="height:556px;overflow:auto;">
                         
                     </div>
                 </div>
@@ -765,59 +777,44 @@ function showTab(tab) {
                     var me = this;
                 },
                 showPaperDetail: function () {
-                    Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
-                        onsuccess: function(result){
-                            if (result && !result[0] && result[1]) {
-                                var data = result[1];
-                                var referenceMap = {};
-                                var list, atcid, item;
-                                
-                                list = data.reference_answer;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    atcid = list[i].atcid;
-                                    referenceMap[atcid] = list[i];
-                                }
-                                
-                                list = data.your_answer;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    atcid = list[i].atcid;
-                                    if (referenceMap[atcid]) {
-                                        referenceMap[atcid].answer = list[i].content;
-                                    }
-                                }
-                                list = data.paper;
-                                for (var i=0,len=list.length; i<len; i++) {
-                                    item = referenceMap[list[i]];
-                                    if (item.answer) {
-                                        for (var j in item.options) {
-                                            item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
-                                        }
-                                    }
-                                }
-                                var html = '<h4 class="title">格式说明</h4><ul class="option_list"><li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li><li class="yes"><div class="txt">参考答案</div></li></ul>',
-                                    tpl = '<li class="#{correct} #{answer}"><div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div></li>';
-                                var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
-                                for (var j=0,len2=list.length; j<len2; j++) {
-                                    item = referenceMap[list[j]];
-                                    if (!item.answer && !finish) continue;
-                                    html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
-                                    html += '<ul class="option_list">';
-                                    for (var i in item.options) {
-                                        item.options[i].index = i;
-                                        html += hui.format(tpl, item.options[i]);
-                                    }
-                                    html += '</ul>\n';
-                                }
-                                hui.g('detail_container').innerHTML = html;
-                                
-                                // console.log(html);
+                    queryTestResult(function(list, referenceMap){
+                        var html = [
+                                '<h4 class="title">格式说明</h4>',
+                                '<ul class="option_list">',
+                                '    <li class="your" style="list-style-type: circle;"><div class="txt">您选的答案</div></li>',
+                                '    <li class="yes"><div class="txt">参考答案</div></li>',
+                                '</ul>'
+                            ].join('');
+                        var tpl = [
+                                '<li class="#{correct} #{answer}">',
+                                '    <div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div>',
+                                '</li>'
+                            ].join('');
+                        var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
+                        
+                        for (var j=0,len2=list.length; j<len2; j++) {
+                            item = referenceMap[list[j]];
+                            if (!item.answer && !finish) continue;
+                            
+                            html += '<h4 class="title">' + (j + 1) + '、' + hui.util.encodehtml(hui.util.decode(item.title)) + '[' + item.label.join(',') + ']</h4>\n';
+                            
+                            html += '<ul class="option_list">';
+                            for (var i in item.options) {
+                                item.options[i].index = i;
+                                html += hui.format(tpl, item.options[i]);
                             }
+                            html += '</ul>\n';
                         }
+                        hui.g('detail_container').innerHTML = html;
+                        
+                        // console.log(html);
                     });
                 },
                 finish: function () {
                     var me = this;
-                    showTab('detail');
+                    showTab('test', 'detail');
+
+                    me.showPaperDetail();
                 }
             };
 
@@ -954,7 +951,7 @@ function showTab(tab) {
                 },
                 finish: function () {
                     var me = this;
-                    showTab('send_sms');
+                    showTab('test', 'send_sms');
                 }
             };
 
@@ -980,7 +977,7 @@ function showTab(tab) {
         }
         </script>
 
-		<div class="page_body" id="index" style="display123: none;">
+        <div class="page_body" id="index" style="display123: none;">
             <div class="page_banner">
                 <div class="page_container">
                     <div class="page_banner_padding">&nbsp;</div>
@@ -988,7 +985,7 @@ function showTab(tab) {
                     <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
                     <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormName('form').hide();showTestScore()" style="display:none;">查看报告</div>
                     <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style123="display:none;">立即测试</div> 
+                    <div class="test_btn" onclick="hui.Control.getByFormName('form').show();hui.Control.getByFormName('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormName('send_sms');send_sms.hideError();send_sms.show()" style="display:none;">立即测试</div> 
                     <a class="test_btn" href="#/test~tid=100001">立即测试</a>
                 </div> 
             </div>
@@ -1105,7 +1102,7 @@ function showTab(tab) {
                         $('#resume_btn').show();
                     }
                     
-                    $('.test_btn').show();
+                    // $('.test_btn').show();
                 }
             };
 
@@ -1302,13 +1299,48 @@ function showTab(tab) {
 </div>  
 
     <div id="subject_add" class="subject_test">
-                
-                
-                
-                
-                
-        
+
+
     </div>
+    <script>
+    function queryTestResult(cb) {
+        Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+            onsuccess: function(result){
+                if (result && !result[0] && result[1]) {
+                    var data = result[1];
+                    var referenceMap = {};
+                    var list;
+                    var atcid;
+                    var item;
+                    
+                    list = data.reference_answer;
+                    for (var i=0,len=list.length; i<len; i++) {
+                        atcid = list[i].atcid;
+                        referenceMap[atcid] = list[i];
+                    }
+                    
+                    list = data.your_answer;
+                    for (var i=0,len=list.length; i<len; i++) {
+                        atcid = list[i].atcid;
+                        if (referenceMap[atcid]) {
+                            referenceMap[atcid].answer = list[i].content;
+                        }
+                    }
+                    list = data.paper;
+                    for (var i=0,len=list.length; i<len; i++) {
+                        item = referenceMap[list[i]];
+                        if (item.answer) {
+                            for (var j in item.options) {
+                                item.options[j].answer = item.answer[j].correct === 'yes' ? 'your' : '';
+                            }
+                        }
+                    }
+                    cb && cb(list, referenceMap);
+                }
+            }
+        });
+    }
+    </script>
 
 <!-- script type="text/javascript" src="http://bpmjs.org/bpm_api/combo??hui_requester@0.0.1,hui_action@0.0.1,hui_panel@0.0.1,hui_table@0.0.1,hui_checkbox@0.0.1,hui_textinput@0.0.1,hui_button@0.0.1,hui_template@0.0.1,hui_checklabel@0.0.1,hui_boxpanel@0.0.1,hui_label@0.0.1,hui_slider@0.0.1,hui_radiobox@0.0.1,hui_dropdown@0.0.1,hui_validator@0.0.1?debug=true"></script -->
 <!-- script type="text/javascript" src="http://bpmjs.org/js/??hui@0.0.1/hui.js,hui_validator@0.0.1/hui_validator.js,hui_util@0.0.1/hui_util.js,hui_dropdown@0.0.1/hui_dropdown.js,hui_control@0.0.1/hui_control.js,hui_radiobox@0.0.1/hui_radiobox.js,hui_checkbox@0.0.1/hui_checkbox.js,hui_slider@0.0.1/hui_slider.js,hui_draggable@0.0.1/hui_draggable.js,hui_label@0.0.1/hui_label.js,hui_boxpanel@0.0.1/hui_boxpanel.js,hui_checklabel@0.0.1/hui_checklabel.js,hui_template@0.0.1/hui_template.js,hui_button@0.0.1/hui_button.js,hui_textinput@0.0.1/hui_textinput.js,hui_table@0.0.1/hui_table.js,hui_panel@0.0.1/hui_panel.js,hui_action@0.0.1/hui_action.js,hui_requester@0.0.1/hui_requester.js?debug=true"></script -->

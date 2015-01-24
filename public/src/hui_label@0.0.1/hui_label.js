@@ -40,6 +40,8 @@ hui.define('hui_label', ['hui_control'], function () {
             if (me.text !== undefined) {
                 me.setInnerHTML(me, me.text);
             }
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         /**
          * @name 设置文字

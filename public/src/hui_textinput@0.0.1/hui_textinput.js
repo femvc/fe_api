@@ -232,6 +232,8 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
             if (me.useEye) {
                 me.renderEye();
             }
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,
@@ -255,7 +257,6 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
             main.onfocus = me.getFocusHandler;
             main.onblur = me.getBlurHandler;
             main.onchange = me.getChangeHandler;
-
         },
 
         /**

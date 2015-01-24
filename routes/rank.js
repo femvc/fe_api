@@ -1,22 +1,22 @@
 'use strict';
 var rankModel = require('../models/rank').createNew();
 
-exports.getRank = function (req, res, next) {
-    //var uid = req.sessionStore.user[req.sessionID];
-    if (!req.paramlist.test_id) {
-        return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
-    }
+// exports.getRank = function (req, res, next) {
+//     //var uid = req.sessionStore.user[req.sessionID];
+//     if (!req.paramlist.test_id) {
+//         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
+//     }
 
-    rankModel.getItem({
-        test_id: req.paramlist.test_id
-    }, function (err, resp) {
-        if (err) {
-            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        req.paramlist.filter = resp;
-        getRanks(req, res, next);
-    });
-};
+//     rankModel.getItem({
+//         test_id: req.paramlist.test_id
+//     }, function (err, resp) {
+//         if (err) {
+//             return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+//         }
+//         req.paramlist.filter = resp;
+//         getRanks(req, res, next);
+//     });
+// };
 
 function getRanks(req, res, next) {
     //var uid = req.sessionStore.user[req.sessionID];
@@ -33,20 +33,16 @@ function getRanks(req, res, next) {
         update_time: {
             $lt: filter.update_time
         }
-    }, {}, 1, 100000, function (err, resp) {
+    }, {}, 1, 1000000, function (err, resp) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-
-        var index = 0;
+        filter.scoreList = [];
         for (var i = 0, len = resp.length; i < len; i++) {
-            if (resp[i].score < filter.score) {
-                index++;
-            }
+            filter.scoreList.push(resp[i].score);
         }
-        filter.index = index;
         filter.sum = resp.length;
-        // response.ok(req, res, [filter, resp]); // Data ‘resp’ is HUGE！
+        // response.ok(req, res, [filter, resp]); // Data 'resp' is HUGE！!
         response.ok(req, res, filter);
     });
 
@@ -70,7 +66,7 @@ exports.saveRank = function (req, res, next) {
         if (err) {
             return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-        
+
         // req.sessionStore.paper[uid] = null;
         // req.sessionStore.paperContent[uid] = null;
         // req.sessionStore.questionIndex[uid] = 0;

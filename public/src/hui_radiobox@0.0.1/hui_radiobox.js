@@ -54,6 +54,8 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
                 me.getClass('dot')
             ));
             me.renderLabel();
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         initBehavior: function () {
             var me = this,

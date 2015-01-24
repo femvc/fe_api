@@ -245,6 +245,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                 main = me.getMain(),
                 data = me.model && me.model.getData && typeof me.model.getData === 'function' ? me.model.getData() : {};
             hui.Control.init(main, data, me);
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         /**
          * @name 初始化数据模型
@@ -1260,6 +1262,8 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
             /*Requester.get('/mockup/user.json', {onsuccess:function(err, data){
                 me.setInnerHTML(me, hui.Control.format(me.getInnerHTML(), {name: data.result}));
             }});*/
+            // 设置_rendered
+            main.setAttribute('_rendered', 'true');
         },
         /**
          * @name 初始化列表行为
