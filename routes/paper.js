@@ -350,8 +350,8 @@ exports.resetQuestionIndex = function (req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
     var question_index = req.paramlist.question_index;
-    if (question_index !== undefined && question_index > -1 && question_index < 20) {
-        req.sessionStore.questionIndex[uid] = 1;
+    if (question_index !== undefined && question_index > 0 && question_index < 21) {
+        req.sessionStore.questionIndex[uid] = question_index;
         response.ok(req, res, {
             question_index: question_index
         });
