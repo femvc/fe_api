@@ -37,9 +37,22 @@ function getRanks(req, res, next) {
         if (err) {
             response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
         }
-        filter.scoreList = [];
+        filter.rankList = [];
+        var item;
         for (var i = 0, len = resp.length; i < len; i++) {
-            filter.scoreList.push(resp[i].score);
+            item = {
+                test_id: resp[i].test_id,
+                score: resp[i].score,
+                correct: resp[i].correct,
+                time_start: resp[i].time_start,
+                time_end: resp[i].time_end,
+                uid: resp[i].uid,
+                update_time: resp[i].update_time,
+                annual: resp[i].annual,
+                career: resp[i].career
+            };
+
+            filter.rankList.push(item);
         }
         filter.sum = resp.length;
         // response.ok(req, res, [filter, resp]); // Data 'resp' is HUGE！!

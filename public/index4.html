@@ -311,11 +311,11 @@ function showTab(tab, main) {
                 showTestScoreCallback: function () {
                     var me = this;
                     // hui.g('subject_index').innerHTML = '1';
-                    var list = me.scoreList;
+                    var list = me.rankList;
                     var score = me.testResult.score;
                     var beyondNum = 0;
                     for (var i=0,len=list.length; i<len; i++) {
-                        if (score > list[i]) {
+                        if (score > list[i].score) {
                             beyondNum++;
                         }
                     }
@@ -335,7 +335,7 @@ function showTab(tab, main) {
                     Requester.get('/ue_api/internal/get_ranks', {
                         onsuccess: function (result) {
                             if (result && result[1]) {
-                                me.scoreList = result[1].scoreList;
+                                me.rankList = result[1].rankList;
                                 if (me.testResult !== undefined) {
                                     me.showTestScoreCallback();
                                 }
@@ -378,7 +378,7 @@ function showTab(tab, main) {
                         me.testResult.time_start = time_start;
                         me.testResult.time_end = time_end;
                         
-                        if (me.scoreList !== undefined) {
+                        if (me.rankList !== undefined) {
                             me.showTestScoreCallback();
                         }
                     });
