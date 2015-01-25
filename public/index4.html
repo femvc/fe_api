@@ -300,7 +300,7 @@ function showTab(tab, main) {
             pageResult.prototype = {
                 initBehavior: function () {
                     var me = this;
-                    me.showTestScore();
+                    
                     me.getByFormname('result_nxt').onclick = function () {
                         // hui.Control.getByFormname('result').hide();
                         // hui.Control.getByFormname('candidate').show();
@@ -315,6 +315,7 @@ function showTab(tab, main) {
                     var score = me.testResult.score;
                     var beyondNum = 0;
                     for (var i=0,len=list.length; i<len; i++) {
+                        list[i].score = list[i].score === undefined ? 0 : list[i].score;
                         if (score > list[i].score) {
                             beyondNum++;
                         }
@@ -387,6 +388,8 @@ function showTab(tab, main) {
                 finish: function () {
                     var me = this;
                     showTab('test', 'result');
+
+                    me.showTestScore();
                 }
             };
 
