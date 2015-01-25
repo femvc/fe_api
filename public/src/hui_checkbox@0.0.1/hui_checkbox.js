@@ -16,8 +16,8 @@
  * @date 2014-11-16 20:22
  * @param {Object} options 控件初始化参数.
  * @example 
-<label ui="type:'Checkbox',formName:'book',value:'icdn0001',checked:'',label:'基督山'"></label>
-<label ui="type:'Checkbox',formName:'book',value:'icdn0002',checked:''">呼啸山</label>
+<label ui="type:'Checkbox',formname:'book',value:'icdn0001',checked:'',label:'基督山'"></label>
+<label ui="type:'Checkbox',formname:'book',value:'icdn0002',checked:''">呼啸山</label>
  */
 hui.define('hui_checkbox', ['hui_util', 'hui_control'], function () {
 

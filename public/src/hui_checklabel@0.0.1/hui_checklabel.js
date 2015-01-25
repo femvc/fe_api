@@ -15,7 +15,7 @@
  * @author haiyang5210
  * @date 2014-11-16 21:59
  * @example
- <label ui="type:'CheckLabel',formName:'label' ,value:'aaaa', label:'aa',removeblank:false"></label>
+ <label ui="type:'CheckLabel',formname:'label' ,value:'aaaa', label:'aa',removeblank:false"></label>
  */
 hui.define('hui_checklabel', ['hui_checkbox'], function () {
     hui.CheckLabel = function (options, pending) {

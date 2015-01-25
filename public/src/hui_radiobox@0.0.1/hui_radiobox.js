@@ -16,7 +16,7 @@
  * @date 2014-11-16 20:22
  * @param {Object} options 控件初始化参数.
  * @example 
-    <label ui="type:'Radiobox',formName:'gender',targetForm:'result',value:'male'">
+    <label ui="type:'Radiobox',formname:'gender',targetForm:'result',value:'male'">
         <input type="radio" class="hui_radiobox_input" />
         <span class="hui_radiobox_label">男</span>
     </label>
@@ -72,18 +72,18 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
                 targetFormList = me.parentControl === hui.window ? [hui.Control] : [me.parentControl],
                 list,
                 target,
-                formName = me.getFormName();
+                formname = me.getFormname();
             if (me.targetForm) {
                 targetFormList = [];
                 list = me.targetForm.split(',');
                 for (var i = 0, len = list.length; i < len; i++) {
-                    target = hui.Control.getById(me.targetForm) || hui.Control.getByFormName(me.targetForm);
+                    target = hui.Control.getById(me.targetForm) || hui.Control.getByFormname(me.targetForm);
                     (target && targetFormList.push(target));
                 }
             }
 
             for (var j = 0, len2 = targetFormList.length; j < len2; j++) {
-                list = targetFormList[j].getByFormNameAll(formName);
+                list = targetFormList[j].getByFormnameAll(formname);
                 for (var i = 0, len = list.length; i < len; i++) {
                     if (list[i] != me && list[i].getChecked()) {
                         list[i].setChecked(false);

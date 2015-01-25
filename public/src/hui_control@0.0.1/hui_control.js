@@ -189,7 +189,7 @@ hui.define('hui_control', [], function () {
         this.initOptions(options);
         // 生成控件id
         if (!this.id) {
-            this.id = hui.Control.makeGUID(this.formName);
+            this.id = hui.Control.makeGUID(this.formname);
         }
 
         hui.Control.appendControl(options.parentControl, this);
@@ -419,12 +419,12 @@ hui.define('hui_control', [], function () {
                 list,
                 ctr;
             if (me.controlMap && paramMap) {
-                for (var formName in paramMap) {
-                    if (formName && paramMap.hasOwnProperty(formName)) {
-                        value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
-                            [paramMap[formName]] : paramMap[formName];
-                        ctr = me.getById(formName);
-                        list = ctr ? [ctr] : me.getByFormNameAll(formName, false);
+                for (var formname in paramMap) {
+                    if (formname && paramMap.hasOwnProperty(formname)) {
+                        value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
+                            [paramMap[formname]] : paramMap[formname];
+                        ctr = me.getById(formname);
+                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -487,12 +487,12 @@ hui.define('hui_control', [], function () {
                 ctr,
                 main;
             if (me.controlMap && paramMap) {
-                for (var formName in paramMap) {
-                    if (formName && paramMap.hasOwnProperty(formName)) {
-                        value = Object.prototype.toString.call(paramMap[formName]) !== '[object Array]' ?
-                            [paramMap[formName]] : paramMap[formName];
-                        ctr = me.getById(formName);
-                        list = ctr ? [ctr] : me.getByFormNameAll(formName, false);
+                for (var formname in paramMap) {
+                    if (formname && paramMap.hasOwnProperty(formname)) {
+                        value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
+                            [paramMap[formname]] : paramMap[formname];
+                        ctr = me.getById(formname);
+                        list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
                         }
@@ -548,26 +548,26 @@ hui.define('hui_control', [], function () {
             var me = this,
                 paramMap = {},
                 ctr,
-                formName,
+                formname,
                 value;
             // 如果有子控件建议递归调用子控件的getValue!!
             if (me.controlMap) {
                 for (var i = 0, len = me.controlMap.length; i < len; i++) {
                     ctr = me.controlMap[i];
-                    formName = hui.Control.prototype.getFormName.call(ctr);
+                    formname = hui.Control.prototype.getFormname.call(ctr);
                     if (String(ctr.isFormItem) !== 'false') {
-                        paramMap[formName] = paramMap[formName] ? paramMap[formName] : [];
+                        paramMap[formname] = paramMap[formname] ? paramMap[formname] : [];
                         if (ctr.getValue) {
                             value = ctr.getValue();
-                            paramMap[formName].push(value);
+                            paramMap[formname].push(value);
                         }
                         else if (ctr.getMain || ctr.main) {
                             value = (ctr.getMain ? ctr.getMain() : document.getElementById(ctr.main)).value;
-                            paramMap[formName].push(value);
+                            paramMap[formname].push(value);
                         }
                         else if (ctr.controlMap) {
                             value = ctr.getParamMap();
-                            paramMap[formName].push(value);
+                            paramMap[formname].push(value);
                         }
                     }
 
@@ -582,17 +582,17 @@ hui.define('hui_control', [], function () {
             return paramMap;
         },
         /**
-         * @name 通过formName访问子控件
+         * @name 通过formname访问子控件
          * @public
-         * @param {String} formName 子控件的formName
+         * @param {String} formname 子控件的formname
          */
-        getByFormName: function (formName) {
+        getByFormname: function (formname) {
             var me = this;
-            return hui.Control.getByFormName(formName, me);
+            return hui.Control.getByFormname(formname, me);
         },
-        getByFormNameAll: function (formName, all) {
+        getByFormnameAll: function (formname, all) {
             var me = this;
-            return hui.Control.getByFormNameAll(formName, me, all);
+            return hui.Control.getByFormnameAll(formname, me, all);
         },
         getById: function (id) {
             var me = this;
@@ -698,10 +698,10 @@ hui.define('hui_control', [], function () {
          * @public
          * @param {Object} control
          */
-        getFormName: function () {
+        getFormname: function () {
             var me = this,
                 main = me.getMain ? me.getMain() : document.getElementById(me.main);
-            var itemName = me.formName || me['name'] || (main ? main.getAttribute('name') : null);
+            var itemName = me.formname || me['name'] || (main ? main.getAttribute('name') : null);
             return itemName;
         },
         /**
@@ -988,8 +988,8 @@ hui.define('hui_control', [], function () {
      */
     hui.Control.makeGUID = (function () {
         var guid = 1;
-        return function (formName) {
-            return (formName ? formName : 'inner') + '_' + hui.Control.getHashCode('inner') + (guid++);
+        return function (formname) {
+            return (formname ? formname : 'inner') + '_' + hui.Control.getHashCode('inner') + (guid++);
         };
     })();
 
@@ -1225,7 +1225,7 @@ hui.define('hui_control', [], function () {
                 }
             }
             // 注：每个控件必须有id
-            attrs.id = attrs.id ? attrs.id : hui.Control.makeGUID(attrs['formName']);
+            attrs.id = attrs.id ? attrs.id : hui.Control.makeGUID(attrs['formname']);
             // 注：type即elem
             type.id = type.id || hui.Control.makeElemGUID(attrs.id);
             attrs.main = type.id;
@@ -1239,7 +1239,7 @@ hui.define('hui_control', [], function () {
         // 注：创建并渲染控件，每个控件必须有id
         var objId = options.id;
         if (!objId) {
-            objId = hui.Control.makeGUID(options['formName']);
+            objId = hui.Control.makeGUID(options['formname']);
             options.id = objId;
         }
         var existControl = hui.Control.getById(objId);
@@ -1494,24 +1494,24 @@ hui.define('hui_control', [], function () {
         return result;
     };
     /**
-     * @name 根据控件formName找到对应控件
+     * @name 根据控件formname找到对应控件
      * @static
-     * @param {String} 控件formName
+     * @param {String} 控件formname
      */
-    hui.Control.getByFormNameAll = function (formName, parentNode, all) {
+    hui.Control.getByFormnameAll = function (formname, parentNode, all) {
         var list = [],
             childNodes,
             item,
             /* 强制确认parentControl: 如果传入是parentControl的id，则找出其对应的Control */
             parentControl = hui.Control.getById(undefined, parentNode) || hui.window;
 
-        if (formName) {
-            formName = String(formName);
+        if (formname) {
+            formname = String(formname);
 
             // 先查找自身
             childNodes = parentControl && parentControl.controlMap ? parentControl.controlMap : [];
             //childNodes.unshift(parentControl);
-            if (parentControl.getFormName && parentControl.getFormName() === formName) {
+            if (parentControl.getFormname && parentControl.getFormname() === formname) {
                 list.push(parentControl);
             }
 
@@ -1520,7 +1520,7 @@ hui.define('hui_control', [], function () {
                 (all === false ? parentControl.controlMap : hui.Control.findAllControl(parentControl)) : [];
             for (var i = 0, len = childNodes.length; i < len; i++) {
                 item = childNodes[i];
-                if ((item.getFormName && item.getFormName() === formName) || item['formName'] === formName) {
+                if ((item.getFormname && item.getFormname() === formname) || item['formname'] === formname) {
                     list.push(childNodes[i]);
                 }
             }
@@ -1529,17 +1529,17 @@ hui.define('hui_control', [], function () {
         return list;
     };
     /**
-     * @name 根据控件formName找到对应控件
+     * @name 根据控件formname找到对应控件
      * @static
-     * @param {String} 控件formName
+     * @param {String} 控件formname
      */
-    hui.Control.getByFormName = function (formName, parentNode) {
+    hui.Control.getByFormname = function (formname, parentNode) {
         var result = null,
             list;
         if (typeof parentNode == 'string') {
-            parentNode = hui.Control.getById(parentNode) || hui.Control.getByFormName(parentNode);
+            parentNode = hui.Control.getById(parentNode) || hui.Control.getByFormname(parentNode);
         }
-        list = hui.Control.getByFormNameAll(formName, parentNode);
+        list = hui.Control.getByFormnameAll(formname, parentNode);
         if (parentNode && parentNode.parentNode && parentNode.childNodes) {
             for (var i = 0, len = list.length; i < len; i++) {
                 if (hui.Control.checkParentNode(list[i], parentNode)) {

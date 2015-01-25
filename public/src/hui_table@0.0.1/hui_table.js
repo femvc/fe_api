@@ -16,7 +16,7 @@
  * @date 2014-11-14 23:32
  * @param {Object} options 控件初始化参数.
  * @example 
- <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
+ <div ui="type:'Table',formname:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:200}"></div>
 
      window.listTable = [{
         width: 100,

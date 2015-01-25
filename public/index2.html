@@ -19,7 +19,7 @@ function showTestScore() {
             test_id: window.test_id
         },
         onsuccess: function (result) {
-            // form.getByFormName('subject_nxt').setDisabled(false);
+            // form.getByFormname('subject_nxt').setDisabled(false);
             if (result && result[1]) {
                 var data = result[1];
                 if (data.question) {
@@ -28,7 +28,7 @@ function showTestScore() {
                     data.time = Math.ceil((hui.util.parseDate(data.time_end).getTime() - hui.util.parseDate(data.time_start).getTime()) / 60000);
                     data.question_count = data.question.length;
                     hui.g('result_chart').style.width = data.rate * 4 + 'px';
-                    hui.Control.getByFormName('result').setValueByTree(data).show();
+                    hui.Control.getByFormname('result').setValueByTree(data).show();
                 }
                 else {
                     console.log('Warning: Test not finish')
@@ -45,7 +45,7 @@ function showEvaluateReport() {
             test_id: window.test_id
         },
         onsuccess: function (result) {
-            // form.getByFormName('subject_nxt').setDisabled(false);
+            // form.getByFormname('subject_nxt').setDisabled(false);
             if (result && result[1]) {
                 var data = result[1];
                 if (data.question) {
@@ -72,8 +72,8 @@ function showEvaluateReport() {
                     
                     data.target = (data.annual + grade[level].min)  + '~' + (data.annual + grade[level].max);
                     
-                    hui.Control.getByFormName('candidate').hide();
-                    hui.Control.getByFormName('report').setValueByTree(data).show();
+                    hui.Control.getByFormname('candidate').hide();
+                    hui.Control.getByFormname('report').setValueByTree(data).show();
                     
                     var datasource = [
                         {index: 1, 'skill': 'HTML',      'correct': 22,'score': 22},
@@ -93,7 +93,7 @@ function showEvaluateReport() {
                         }
                         showResultChart(score);
 
-                        var skill_list = hui.Control.getByFormName('skill_list');
+                        var skill_list = hui.Control.getByFormname('skill_list');
                         skill_list.datasource = datasource;
                         skill_list.renderBody();
                     });
@@ -192,16 +192,16 @@ window.onload = function () {
     showTestButton();
     
     hui.util.on(window, 'resize', function(){
-        var btn = hui.Control.getByFormName('subject_skip');
+        var btn = hui.Control.getByFormname('subject_skip');
         var main = btn ? btn.getMain() : undefined;
         if (main && main.offsetTop) {
             if (document.body.clientHeight < main.offsetTop + 30) {
-                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'visible';
-                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'hidden';
+                hui.Control.getByFormname('subject_nxt').getMain().style.visibility = 'visible';
+                hui.Control.getByFormname('subject_nxt2').getMain().style.visibility = 'hidden';
             }
             else {
-                hui.Control.getByFormName('subject_nxt').getMain().style.visibility = 'hidden';
-                hui.Control.getByFormName('subject_nxt2').getMain().style.visibility = 'visible';
+                hui.Control.getByFormname('subject_nxt').getMain().style.visibility = 'hidden';
+                hui.Control.getByFormname('subject_nxt2').getMain().style.visibility = 'visible';
             }
         }
     });
@@ -253,7 +253,7 @@ function initForTest() {
 
     // subject_add
     hui.Control.init(hui.g('subject_add'));
-    form = hui.Control.getByFormName('form');
+    form = hui.Control.getByFormname('form');
     form.initSubject = function (newstart) {
         Requester.get('/ue_api/internal/get_next_question', {
             data: {
@@ -275,8 +275,8 @@ function initForTest() {
 
                         form.setValueByTree(data);
 
-                        form.getByFormName('content').disposeChild();
-                        //var content = form.getByFormName('content').getMain();
+                        form.getByFormname('content').disposeChild();
+                        //var content = form.getByFormname('content').getMain();
                         var list = data.options;
                         for (var i in list) {
                             list[i].index = i;
@@ -293,7 +293,7 @@ function initForTest() {
     };
 
     form.addOption = function (obj) {
-        var content = form.getByFormName('content').getMain(),
+        var content = form.getByFormname('content').getMain(),
             list,
             index;
         obj = obj || {};
@@ -309,27 +309,27 @@ function initForTest() {
         }
         // obj.content = hui.util.encodehtml(obj.content);
         var tpl =
-            '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true">' +
+            '<li class="tr_row" id="content#{index}" ui="type:\'Panel\',formname:\'#{index}\',isFormItem: true">' +
             '    <div ui="type:\'Label\',id:\'content#{index}\'">#{hui.util.encodehtml(hui.util.decode(content))}</div>' +
             '    <span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
+            '    <div ui="type:\'Checkbox\',formname:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\'"></div>' +
             '</li>';
         hui.util.appendHTML(content, hui.format(tpl, obj));
         hui.Control.create(hui.g('content' + obj.index));
     };
     form.removeOption = function (index) {
-        var content = form.getByFormName('content');
-        content.getByFormName(index).dispose();
+        var content = form.getByFormname('content');
+        content.getByFormname(index).dispose();
 
     };
     form.removeAllOption = function () {
-        var content = form.getByFormName('content'),
+        var content = form.getByFormname('content'),
             option,
             main = content.getMain();
         var list = hui.c('td_index');
         for (var i = 0, len = list.length; i < len; i++) {
             index = parseInt(list[i].innerHTML);
-            option = content.getByFormName(i);
+            option = content.getByFormname(i);
             if (option) {
                 option.dispose();
             }
@@ -337,10 +337,10 @@ function initForTest() {
         main.index = 0;
     };
 
-    var submit = form.getByFormName('subject_nxt');
-    var submit2 = form.getByFormName('subject_nxt2');
+    var submit = form.getByFormname('subject_nxt');
+    var submit2 = form.getByFormname('subject_nxt2');
     submit.onclick = submit2.onclick = function () {
-        var data = hui.Control.getByFormName('form').getParamMap();
+        var data = hui.Control.getByFormname('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
 
         if (data.content.indexOf('yes') !== -1) {
@@ -350,9 +350,9 @@ function initForTest() {
             subject_skip.onclick();
         }
     };
-    var subject_skip = form.getByFormName('subject_skip');
+    var subject_skip = form.getByFormname('subject_skip');
     subject_skip.onclick = function () {
-        var data = hui.Control.getByFormName('form').getParamMap();
+        var data = hui.Control.getByFormname('form').getParamMap();
         data.content = window.encodeURIComponent(JSON.stringify(data.content));
         data.test_id = window.test_id;
         saveTestScore(data);
@@ -361,7 +361,7 @@ function initForTest() {
         // $('.form_mask').show();
     };
 
-    var subject_pre = form.getByFormName('subject_pre');
+    var subject_pre = form.getByFormname('subject_pre');
     subject_pre.onclick = function () {
         var data = {};
         data.index = parseInt(hui.g('subject_index').innerHTML, 10) - 1;
@@ -369,22 +369,22 @@ function initForTest() {
         saveTestScore(data);
     };
 
-    var result = hui.Control.getByFormName('result');
-    result.getByFormName('result_nxt').onclick = function () {
-        hui.Control.getByFormName('result').hide();
-        // hui.Control.getByFormName('candidate').show();
+    var result = hui.Control.getByFormname('result');
+    result.getByFormname('result_nxt').onclick = function () {
+        hui.Control.getByFormname('result').hide();
+        // hui.Control.getByFormname('candidate').show();
         showEvaluateReport();
     };
     /*
-    var candidate = hui.Control.getByFormName('candidate');
-    candidate.getByFormName('candidate_nxt').onclick = function () {
+    var candidate = hui.Control.getByFormname('candidate');
+    candidate.getByFormname('candidate_nxt').onclick = function () {
         var data = candidate.getParamMap();
         if (data.annual !== '0' && data.career !== '0') {
             data.test_id = window.test_id;
             Requester.get('/ue_api/internal/update_rank', {
                 data: data,
                 onsuccess: function (result) {
-                    // form.getByFormName('subject_nxt').setDisabled(false);
+                    // form.getByFormname('subject_nxt').setDisabled(false);
                     if (result && !result[0]) {
                         showEvaluateReport();
                     }
@@ -401,27 +401,27 @@ function initForTest() {
         }
     };
 
-    candidate.getByFormName('career').onmove = function () {
+    candidate.getByFormname('career').onmove = function () {
         hui.g('career_msg').innerHTML = '';
-        // if (candidate.getByFormName('career').getValue() !== '0' &&
-        //     candidate.getByFormName('annual').getValue() !== '0') {
-        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // if (candidate.getByFormname('career').getValue() !== '0' &&
+        //     candidate.getByFormname('annual').getValue() !== '0') {
+        //     candidate.getByFormname('candidate_nxt').setDisabled(false);
         // }
         // else {
-        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        //     candidate.getByFormname('candidate_nxt').setDisabled();
         // }
     };
-    candidate.getByFormName('annual').onmove = function () {
+    candidate.getByFormname('annual').onmove = function () {
         hui.g('annual_msg').innerHTML = '';
-        // if (candidate.getByFormName('career').getValue() !== '0' &&
-        //     candidate.getByFormName('annual').getValue() !== '0') {
-        //     candidate.getByFormName('candidate_nxt').setDisabled(false);
+        // if (candidate.getByFormname('career').getValue() !== '0' &&
+        //     candidate.getByFormname('annual').getValue() !== '0') {
+        //     candidate.getByFormname('candidate_nxt').setDisabled(false);
         // }
         // else {
-        //     candidate.getByFormName('candidate_nxt').setDisabled();
+        //     candidate.getByFormname('candidate_nxt').setDisabled();
         // }
     };
-    // hui.Control.getByFormName('report').show();
+    // hui.Control.getByFormname('report').show();
 
     hui.Validator.setRule('career', {
         'validate': function (text) {
@@ -451,13 +451,13 @@ function saveTestScore(data) {
     Requester.get('/ue_api/internal/save_next_question', {
         data: data,
         onsuccess: function (result) {
-            // form.getByFormName('subject_nxt').setDisabled(false);
+            // form.getByFormname('subject_nxt').setDisabled(false);
             if (result && result[1] && result[1][0] && result[1][0].index) {
                 form.initSubject();
                 hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
             }
             else {
-                hui.Control.getByFormName('form').hide();
+                hui.Control.getByFormname('form').hide();
                 showTestScore();
                 hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
             }
@@ -513,7 +513,7 @@ function showPaperDetail() {
                     html += '</ul>\n';
                 }
                 hui.g('detail_container').innerHTML = html;
-                hui.Control.getByFormName('detail').show();
+                hui.Control.getByFormname('detail').show();
                 
                 // console.log(html);
             }
@@ -645,14 +645,14 @@ function parseTestResult(cb) {
 
 
 function initSendSMS() {
-    var send_sms = hui.Control.getByFormName('send_sms');
-    var send = send_sms.getByFormName('send');
+    var send_sms = hui.Control.getByFormname('send_sms');
+    var send = send_sms.getByFormname('send');
     send.onclick = function () {
-        var data = hui.Control.getByFormName('send_sms').getParamMap();
+        var data = hui.Control.getByFormname('send_sms').getParamMap();
         Requester.get('/ue_api/account/send_sms', {
             data: data,
             onsuccess: function (result) {
-                // form.getByFormName('subject_nxt').setDisabled(false);
+                // form.getByFormname('subject_nxt').setDisabled(false);
                 if (result && result[1]) {
                     send.showError('Send success.');
                 }
@@ -694,58 +694,58 @@ function initSendSMS() {
     <div class="page_foot">&nbsp;&copy; 2014</div>
 
     <div id="subject_add" class="subject_test">
-        <div class="subject_box" ui="type:'Boxpanel',formName:'form'" style="display:none">
+        <div class="subject_box" ui="type:'Boxpanel',formname:'form'" style="display:none">
             <div class="subject_action">
-                <input type="hidden" ui="type:'TextInput',formName:'atcid'" />
-                <input type="hidden" ui="type:'TextInput',formName:'title'" />
-                <input type="hidden" ui="type:'TextInput',formName:'index'" />
-                <a href="javascript:" class="subject_end" onclick="form.hide();showTestScore()" ui1="type:'Button',formName:'subject_end'">结束测试</a>
-                <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formName:'subject_pre'">上一题</a>
-                <button class="subject_nxt" ui="type:'Button',formName:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
+                <input type="hidden" ui="type:'TextInput',formname:'atcid'" />
+                <input type="hidden" ui="type:'TextInput',formname:'title'" />
+                <input type="hidden" ui="type:'TextInput',formname:'index'" />
+                <a href="javascript:" class="subject_end" onclick="form.hide();showTestScore()" ui1="type:'Button',formname:'subject_end'">结束测试</a>
+                <a style="display:none;" href="javascript:" class="subject_pre" ui="type:'Button',formname:'subject_pre'">上一题</a>
+                <button class="subject_nxt" ui="type:'Button',formname:'subject_nxt'" style="visibility:hidden;" tabindex="100">提 交</button>
             </div>
-            <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formName:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formName:'sum'">100</span> 题）</span></h3>
+            <h3 class="form_title"> 第 <span id="subject_index" ui="type:'Label',formname:'index1'">1</span> 题 <span class="sub">（共 <span id="subject_sum" ui="type:'Label',formname:'sum'">100</span> 题）</span></h3>
             <div class="form_content">
                 <div class="form_mask"><img src="img/loading.gif" /></div>
                 <div class="subject_title">
-                    <span ui="type:'Label',formName:'index2'">1</span>、<pre ui="type:'Label',formName:'title1'"></pre>
+                    <span ui="type:'Label',formname:'index2'">1</span>、<pre ui="type:'Label',formname:'title1'"></pre>
                 </div>
-                <ol class="subject_option" ui="type:'Panel',formName:'content',isFormItem: true">
+                <ol class="subject_option" ui="type:'Panel',formname:'content',isFormItem: true">
                 </ol>
-                <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formName:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formName:'subject_skip'">跳 过</a></div>
+                <div style="text-align: right;"><button class="subject_nxt" ui="type:'Button',formname:'subject_nxt2'" tabindex="100">提 交</button><a href="javascript:" class="subject_skip" ui="type:'Button',formname:'subject_skip'">跳 过</a></div>
             </div>
 
         </div>
 
-        <div class="result_box" ui="type:'Boxpanel',formName:'result',size:{width:'640px'}" style="display:none">
+        <div class="result_box" ui="type:'Boxpanel',formname:'result',size:{width:'640px'}" style="display:none">
             <div class="box_content">
-                <div class="result_score">成绩 <b class="score" ui="type:'Label',formName:'score'">84</b> <span class="score_unit">分</span></div>
-                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formName:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formName:'question_count'">40</b> 题） </div>
+                <div class="result_score">成绩 <b class="score" ui="type:'Label',formname:'score'">84</b> <span class="score_unit">分</span></div>
+                <div class="result_correct">答对 <b class="correct" ui="type:'Label',formname:'correct'">40</b> 题 （共 <b class="correct" ui="type:'Label',formname:'question_count'">40</b> 题） </div>
                 
-                <div class="result_time">耗时 <b class="time" ui="type:'Label',formName:'time'">40</b> 分钟</div>
+                <div class="result_time">耗时 <b class="time" ui="type:'Label',formname:'time'">40</b> 分钟</div>
                 <div class="result_chart_bg"><div class="result_chart" id="result_chart">&nbsp;</div></div>
-                <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formName:'rate'">64</span>%</b>的挑战者!</div>
+                <div class="result_rate">您打败了<b class="rate"><span ui="type:'Label',formname:'rate'">64</span>%</b>的挑战者!</div>
                 <div class="result_tip">点击“下一步”继续进行评估。</div>
-                <button class="result_nxt" ui="type:'Button',formName:'result_nxt'" tabindex="100">下一步</button>
+                <button class="result_nxt" ui="type:'Button',formname:'result_nxt'" tabindex="100">下一步</button>
             </div>
         </div>
-        <div class="candidate_box" ui="type:'Boxpanel',formName:'candidate',size:{width:'640px',height: '400px'}" style="display:none">
+        <div class="candidate_box" ui="type:'Boxpanel',formname:'candidate',size:{width:'640px',height: '400px'}" style="display:none">
             <div class="box_content">
                 <div class="row_item row_career">
                     <div class="title">工作经验（年）：<span class="validate_text" id="career_msg"></span></div>
-                    <div ui="type:'Slider',formName:'career',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320,smallChange:0.1,value:0"></div>
+                    <div ui="type:'Slider',formname:'career',labels:false,ticks:true,tickStep:1,minValue:0,maxValue:10,width:320,smallChange:0.1,value:0"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="row_item row_package">
                     <div class="title">目前年薪档位（万）：<span class="validate_text" id="annual_msg"></span></div>
-                    <div ui="type:'Slider',formName:'annual',labels:false,ticks:true,tickStep:5,minValue:0,maxValue:40,width:320,smallChange:1,value:0"></div>
+                    <div ui="type:'Slider',formname:'annual',labels:false,ticks:true,tickStep:5,minValue:0,maxValue:40,width:320,smallChange:1,value:0"></div>
                 </div>
                 <hr class="clearfix" />
                 <div class="candidate_tip">点击“下一步”会根据您目前的 &nbsp;<b>工作经验</b> 、&nbsp; <b>年薪档位</b> &nbsp;及&nbsp; <b>测试结果</b> &nbsp;准确计算出您的 <b class="strong">薪资收入</b> 提升空间!</div>
-                <button class="candidate_nxt" ui="type:'Button',formName:'candidate_nxt',disabled:false" tabindex="100">下一步</button>
+                <button class="candidate_nxt" ui="type:'Button',formname:'candidate_nxt',disabled:false" tabindex="100">下一步</button>
             </div>
             
         </div>
-        <div class="report_box" ui="type:'Boxpanel',formName:'report',size:{width:'800px'}" style="display:none">    
+        <div class="report_box" ui="type:'Boxpanel',formname:'report',size:{width:'800px'}" style="display:none">    
             <div class="box_content">
                 <div class="fe_level" style="display:none;">
                 初级前端工程师 0-33    5~10W   1000人 <br/>
@@ -754,31 +754,31 @@ function initSendSMS() {
                 前端架构师     65-85  22~36W   10 <br/>
                 前端专家       80-100 34~99W   1  <br/>  
                 </div>                  
-                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formName:'cur'">高级前端工程师</b> <span style="display:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formName:'annual'">20</span>万</b></span></div>
-                <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formName:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formName:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formName:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formName:'target'">26~34</b>万/年以上。 </div>
+                <div class="result_level">目前级别 <b class="strong" ui="type:'Label',formname:'cur'">高级前端工程师</b> <span style="display:none"><b class="b">&nbsp;</b>平均年薪 <b class="b"><span ui="type:'Label',formname:'annual'">20</span>万</b></span></div>
+                <div style="display:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过 <b class="b">前端训练营</b> 的 <b class="strong"><span ui="type:'Label',formname:'nxt'">前端架构师</span>特训</b>，您的能力<br/>能够达到 <b class="strong" ui="type:'Label',formname:'nxt2'">前端架构师</b> 级别，薪资可以提高 <b class="b" ui="type:'Label',formname:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formname:'target'">26~34</b>万/年以上。 </div>
                 <div style="display:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b></div>
   
                 <div class="result_title"> 测评报告 &nbsp;&nbsp;<a onclick="showPaperDetail()" style="cursor:pointer;"><small>(查看详情)</small></a></div>
                 <div class="result_detail">
                     <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
-                    <div ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
+                    <div ui="type:'Table',formname:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
                 </div>    
 
             </div>
         </div>
 
-        <div class="report_box" ui="type:'Boxpanel',formName:'detail',size:{width:'800px'}" style="display:none">    
+        <div class="report_box" ui="type:'Boxpanel',formname:'detail',size:{width:'800px'}" style="display:none">    
             <div class="box_content detail_container" id="detail_container" style="height:540px;overflow:auto;">
                 
 
             </div>
         </div>
 
-        <div class="sms_box" ui="type:'Boxpanel',formName:'send_sms',size:{width:'640px',height: '400px'}" style="display:none">
+        <div class="sms_box" ui="type:'Boxpanel',formname:'send_sms',size:{width:'640px',height: '400px'}" style="display:none">
             <div class="box_content" style="padding: 30px;">
-                Mobile: <input type="text" ui="type:'TextInput',formName:'mobile'" /> <br/><br/>
-                Randcode: <input type="text" ui="type:'TextInput',formName:'randcode'" /> <br/><br/>
-                <button class="candidate_nxt" ui="type:'Button',formName:'send',disabled:false">发 送</button>
+                Mobile: <input type="text" ui="type:'TextInput',formname:'mobile'" /> <br/><br/>
+                Randcode: <input type="text" ui="type:'TextInput',formname:'randcode'" /> <br/><br/>
+                <button class="candidate_nxt" ui="type:'Button',formname:'send',disabled:false">发 送</button>
             </div>
             
         </div>

@@ -94,7 +94,7 @@ window.admin.init = function () {
     });
 
     hui.Control.init(hui.g('subject_add'));
-    window.form = hui.Control.getByFormName('form');
+    window.form = hui.Control.getByFormname('form');
 
     window.form.addOption = function (obj) {
         var content = window.form.getById('options').getMain(),
@@ -112,22 +112,22 @@ window.admin.init = function () {
             }
         }
         var tpl =
-            '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formName:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
-            '    <div ui="type:\'Checkbox\',formName:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\',targetForm:\'options\'"></div>' +
+            '<div class="tr_row" id="content#{index}" ui="type:\'Panel\',formname:\'#{index}\',isFormItem: true"><span class="td_index">#{index}</span>' +
+            '    <div ui="type:\'Checkbox\',formname:\'correct\',id:\'correct#{index}\',value:\'yes\',checked:\'#{correct}\',targetForm:\'options\'"></div>' +
             '    <textarea cols="40" rows="2" name="content" ui="type:\'TextInput\',id:\'content#{index}\',valueEncode:true" tabindex="#{index}">#{content}</textarea>' +
-            '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormName(\'form\').removeOption(\'#{index}\')">remove</a>' +
+            '    <a href="javascript:" class="td_action" onclick="hui.Control.getByFormname(\'form\').removeOption(\'#{index}\')">remove</a>' +
             '</div>';
         hui.util.appendHTML(content, hui.format(tpl, obj));
         hui.Control.create(hui.g('content' + obj.index));
     };
     window.form.removeOption = function (index) {
         var content = window.form.getById('options');
-        content.getByFormName(index).dispose();
+        content.getByFormname(index).dispose();
     };
 
-    var submit = window.form.getByFormName('submit');
+    var submit = window.form.getByFormname('submit');
     submit.onclick = function () {
-        var data = hui.Control.getByFormName('form').getParamMap();
+        var data = hui.Control.getByFormname('form').getParamMap();
         data.options = JSON.stringify(data.options);
         data.major = data.major.join('@').replace(/@+/g, '@').replace(/^@|@$/g, '').split('@');
         data.level = data.level.join('@').replace(/@+/g, '@').replace(/^@|@$/g, '').split('@');
@@ -143,7 +143,7 @@ window.admin.init = function () {
             }
         });
     };
-    var add = window.form.getByFormName('add');
+    var add = window.form.getByFormname('add');
     add.onclick = window.form.addOption;
 
     // subject_add
@@ -201,7 +201,7 @@ window.admin.refreshList = function () {
                 label,
                 container,
                 html = '',
-                tpl = '<label ui="type:\'CheckLabel\',formName:\'label\' ,value:\'#{value}\', label:\'#{label}\'"></label>';
+                tpl = '<label ui="type:\'CheckLabel\',formname:\'label\' ,value:\'#{value}\', label:\'#{label}\'"></label>';
             if (data) {
                 for (var i = 0; i < data.length; i++) {
                     item = data[i];
@@ -235,18 +235,18 @@ window.admin.refreshList = function () {
 <div id="subject_add" class="subject_add" style="display:none">
 <!--target:test-->
 
-    <div ui="type:'Panel',formName:'form',url_save:'/ue_api/internal/save_cloudlabel'">
+    <div ui="type:'Panel',formname:'form',url_save:'/ue_api/internal/save_cloudlabel'">
         <div class="tr_row">
             <span class="row_title">大类：</span>
             <div class="row_major">
-                <div ui="type:'Checkbox',formName:'major',value:'FE',checked:'checked'"       > FE</div>
-                <div ui="type:'Checkbox',formName:'major',value:'PHP'"      > PHP</div>
-                <div ui="type:'Checkbox',formName:'major',value:'J2EE'"     > J2EE</div>
-                <div ui="type:'Checkbox',formName:'major',value:'.NET'"     > .NET</div>
-                <div ui="type:'Checkbox',formName:'major',value:'ROR'"      > ROR</div>
-                <div ui="type:'Checkbox',formName:'major',value:'PYTHON'"   > PYTHON</div>
-                <div ui="type:'Checkbox',formName:'major',value:'DB'"       > DB</div>
-                <div ui="type:'Checkbox',formName:'major',value:'SERVER'"   > SERVER</div>
+                <div ui="type:'Checkbox',formname:'major',value:'FE',checked:'checked'"       > FE</div>
+                <div ui="type:'Checkbox',formname:'major',value:'PHP'"      > PHP</div>
+                <div ui="type:'Checkbox',formname:'major',value:'J2EE'"     > J2EE</div>
+                <div ui="type:'Checkbox',formname:'major',value:'.NET'"     > .NET</div>
+                <div ui="type:'Checkbox',formname:'major',value:'ROR'"      > ROR</div>
+                <div ui="type:'Checkbox',formname:'major',value:'PYTHON'"   > PYTHON</div>
+                <div ui="type:'Checkbox',formname:'major',value:'DB'"       > DB</div>
+                <div ui="type:'Checkbox',formname:'major',value:'SERVER'"   > SERVER</div>
             </div>
             
         </div>
@@ -256,20 +256,20 @@ window.admin.refreshList = function () {
         </h3>
 
         <div class="tr_row">
-            <input type="hidden" ui="type:'TextInput',formName:'atcid'" id="atcid" />
+            <input type="hidden" ui="type:'TextInput',formname:'atcid'" id="atcid" />
             <span class="row_title">题目：</span>
             <textarea cols="40" rows="5" name="title" ui="type:'TextInput',id:'title'" tabindex="1"></textarea>
-            <button ui="type:'Button',formName:'submit'" tabindex="100">Save</button>
-            <button onclick="hui.g('atcid').value = '';window.form.getByFormName('submit').onclick();">Save as New</button>
+            <button ui="type:'Button',formname:'submit'" tabindex="100">Save</button>
+            <button onclick="hui.g('atcid').value = '';window.form.getByFormname('submit').onclick();">Save as New</button>
         </div>
         <div class="tr_row">
             <span class="row_title">级别：</span>
             <div class="row_level">
-                <div ui="type:'Checkbox',formName:'level',value:'1'"> 初级</div>
-                <div ui="type:'Checkbox',formName:'level',value:'3'"> 中级</div>
-                <div ui="type:'Checkbox',formName:'level',value:'5'"> 高级</div>
-                <div ui="type:'Checkbox',formName:'level',value:'7'"> 架构师</div>
-                <div ui="type:'Checkbox',formName:'level',value:'9'"> 专家</div>
+                <div ui="type:'Checkbox',formname:'level',value:'1'"> 初级</div>
+                <div ui="type:'Checkbox',formname:'level',value:'3'"> 中级</div>
+                <div ui="type:'Checkbox',formname:'level',value:'5'"> 高级</div>
+                <div ui="type:'Checkbox',formname:'level',value:'7'"> 架构师</div>
+                <div ui="type:'Checkbox',formname:'level',value:'9'"> 专家</div>
             </div>
         </div>
         <div class="tr_row">
@@ -280,7 +280,7 @@ window.admin.refreshList = function () {
             </div>
         </div>
         <div class="row_head">
-            <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formName:'add'">add</a>
+            <span class="row_title">选项：</span><a href="javascript:" ui="type:'Button',formname:'add'">add</a>
         </div>
         <div ui="type:'Panel',id:'options',isFormItem: true">
         </div>

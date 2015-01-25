@@ -111,7 +111,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .result_box b { font-weight: normal; }
 .result_box .box_content { padding: 50px 50px 60px 0px; }
 .result_box .result_score { padding-bottom: 20px; font-size: 28px; color: #333; }
-.result_box .result_score .score { color: #168de2; font-size: 31px; font-weight: normal; padding: 0px 5px; }
+.result_box .result_score .score { color: #168de2; font-size123: 31px; font-weight: normal; padding: 0px 5px; }
 .result_box .result_correct { padding: 10px 0px; }
 .result_box .result_time { padding: 10px 0px 25px; }
 .result_box .result_chart_bg { background-image: url(img/rate3.png?456); background-repeat: no-repeat; background-position: 0px -50px; height: 39px; width: 400px; padding: 0px 0px; }
@@ -121,27 +121,27 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .result_box .result_tip { padding: 20px 0px 30px; }
 .result_box .result_nxt { }
 .candidate_box { font-size: 19px; color: #333; }
-.candidate_box .box_content { padding: 50px 20px 30px; }
-.candidate_box .row_package { padding-bottom: 30px; height: 75px; }
+.candidate_box .box_content { padding: 50px 0px 30px; }
+.candidate_box .row_package { padding-bottom: 25px; height: 75px; }
 .candidate_box .row_item { }
 .candidate_box .row_item .title { clear: both; padding-bottom: 10px; }
 .candidate_box .row_career { padding-bottom: 10px; padding-top: 5px; height: 75px; }
 .candidate_box .validate_text { padding-top: 7px; }
 .candidate_box .candidate_nxt { }
-.candidate_box .candidate_tip { padding: 0px 0px 35px; }
+.candidate_box .candidate_tip { padding: 0px 0px 35px; font-size: 18px;}
 .candidate_box .candidate_tip .strong { color: #168de2; }
 .candidate_box .hui_slider .hui_slider_rightside { left: inherit; right: 100%; margin-right: 10px; }
 .candidate_box .hui_slider .hui_slider_rightinput { text-align: right; }
 .candidate_box .hui_button_disabled { background-color: #ccc; }
 .report_box { font-size: 18px; color: #333; }
-.report_box .box_content { padding: 0px 20px 30px; line-height: 2em; }
+.report_box .box_content { padding: 50px 0px 30px; line-height: 2em; }
 .report_box .result_detail { padding: 10px 0px 15px; font-size: 14px; line-height: 20px; }
 .report_box .result_detail table { border-collapse: collapse; }
 .report_box .result_detail th { border-bottom: 1px solid #eee; color: #999; }
 .report_box .result_detail td { border-bottom: 1px solid #eee; }
 .report_box .tel { color: #333; }
 .report_box .tel .spam { }
-.report_box .result_level { padding-top: 40px; }
+.report_box .result_level {  }
 .report_box .b { padding-left: 10px; padding-right: 5px; }
 .report_box .strong { color: #00aaef; padding-left: 10px; padding-right: 5px; }
 .report_box .effect { padding-top: 10px; }
@@ -149,13 +149,13 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .report_box .hui_table { }
 .report_box .hui_table .hui_table_thtext,
 .report_box .hui_table .hui_table_tdcntr { padding: 5px 0px 5px 5px; }
-.detail_container .title { padding: 0px; margin: 0px; margin-top: 0px; margin-bottom: 8px; line-height: 1.2em; white-space: normal; word-break: break-word; font-size: 15px; }
-.detail_container .your { border: 1px solid orange; }
-.detail_container .option_list { padding: 0px 0px 0px 65px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
-.detail_container .yes { list-style-type: square; color: green }
-.detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
 .detail_box {}
-.detail_box .detail_title { margin: 0px; padding: 20px;font-size: 22px;font-weight: normal;}
+.detail_box .detail_container {padding-top: 5px;}
+.detail_box .detail_container .title { padding: 0px; margin: 0px; margin-top: 0px; margin-bottom: 8px; line-height: 1.2em; white-space: normal; word-break: break-word; font-size: 17px; font-weight: normal; }
+.detail_box .detail_container .your { border: 1px solid orange; }
+.detail_box .detail_container .option_list { padding: 0px 0px 0px 22px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
+.detail_box .detail_container .yes { list-style-type: square; color: green }
+.detail_box .detail_container .txt { font-size: 14px; line-height: 18px; color: #333 }
 .sms_box { }
 .sms_box .hui_boxpanel_close { }
 .sms_box .box_content { padding: 35px 0px 45px 45px; }
@@ -178,5 +178,36 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_body .result_box    { text-align: left; margin: auto;  }
 .page_body .candidate_box { text-align: left; margin: auto;  }
 .page_body .report_box    { text-align: left; margin: auto;  }
-.page_body .report_box    { text-align: left; margin: auto;  }
+.page_body .detail_box    { text-align: left; margin: auto;  }
 .page_body .sms_box       { text-align: left; margin: auto;  }
+.report_box .highlight {color: #00aaef;}
+.report_box a {text-decoration: none;}
+.report_box a:hover,
+.report_box a:hover .strong {color: #f60;}
+
+.candidate_box .validate_text {color:red;}
+.candidate_box .candidate_title {
+    font-size: 28px;
+    color: #333;
+    margin: 0px;
+    padding: 0px; 
+    padding-bottom: 20px;
+    font-weight: normal;
+}
+.report_box .report_title {
+    font-size: 28px;
+    color: #333;
+    margin: 0px;
+    padding: 0px; 
+    padding-bottom: 20px;
+    font-weight: normal;
+}
+.detail_box .detail_title {
+    font-size: 28px;
+    color: #333;
+    margin: 0px;
+    padding: 0px; 
+    padding-bottom: 20px;
+    font-weight: normal;
+}
+
