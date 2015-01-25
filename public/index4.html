@@ -337,6 +337,7 @@ function showTab(tab, main) {
                         onsuccess: function (result) {
                             if (result && result[1]) {
                                 me.rankList = result[1].rankList;
+                                hui.util.setCookie('rankList', me.rankList);
                                 if (me.testResult !== undefined) {
                                     me.showTestScoreCallback();
                                 }
@@ -1073,34 +1074,30 @@ function showTab(tab, main) {
                     showTab('index');
                 },
                 showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                    Requester.get('/ue_api/internal/get_ranks', {
                         onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
+                            if (result && result[1]) {
                                 var tpl = [
                                     '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_user">#{uid}</span>',
                                     '    <span class="t_time">#{time}</span>',
                                     '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
+                                    '    <span class="t_date">#{time_end}</span>',
                                     '</li>'
                                 ].join('');
                                 
-                                var list = result[1];
+                                var list = result[1].rankList;
                                 var html = '';
                                 for (var i=0,len=list.length; i<len && i<4; i++) {
+                                    list[i].time = Math.ceil((hui.util.parseDate(list[i].time_end).getTime() - hui.util.parseDate(list[i].time_start).getTime()) / 60000);
+                                    list[i].time = isNaN(list[i].time) ? 1 : list[i].time + 1;
+                                    list[i].uid = list[i].uid || '-';
+                                    list[i].score = list[i].score || '-';
+                                    list[i].time_end = list[i].time_end || '-';
+                                    
                                     html += hui.util.format(tpl, list[i]);
                                 }
+                                
                                 hui.g('test_list').innerHTML = html;
                             }
                         }
@@ -1159,41 +1156,38 @@ function showTab(tab, main) {
             pageHistory.prototype = {
                 initBehavior: function () {
                     var me = this;
-                    me.showTestHistory();
                 },
                 finish: function () {
                     var me = this;
                     showTab('history');
+                    
+                    me.showTestHistory();
                 },
                 showTestHistory: function() {
-                    hui.Mockup.setRule('/ue_api/internal/get_test_history', [
-                        null,
-                        [
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'},
-                            {user: 'a001', time: '30 m', score: '35', date: '2015-01-05 16:40'}
-                        ]
-                    ]);
-                    Requester.get('/ue_api/internal/get_test_history?rand=' + Math.random(), {
+                    Requester.get('/ue_api/internal/get_ranks', {
                         onsuccess: function (result) {
-                            if (result && !result[0] && result[1]) {
+                            if (result && result[1]) {
                                 var tpl = [
                                     '<li class="item_row">',
-                                    '    <span class="t_user">#{user}</span>',
+                                    '    <span class="t_user">#{uid}</span>',
                                     '    <span class="t_time">#{time}</span>',
                                     '    <span class="t_score">#{score}</span>',
-                                    '    <span class="t_date">#{date}</span>',
+                                    '    <span class="t_date">#{time_end}</span>',
                                     '</li>'
                                 ].join('');
                                 
-                                var list = result[1];
+                                var list = result[1].rankList;
                                 var html = '';
                                 for (var i=0,len=list.length; i<len; i++) {
+                                    list[i].time = Math.ceil((hui.util.parseDate(list[i].time_end).getTime() - hui.util.parseDate(list[i].time_start).getTime()) / 60000);
+                                    list[i].time = isNaN(list[i].time) ? 1 : list[i].time + 1;
+                                    list[i].uid = list[i].uid || '-';
+                                    list[i].score = list[i].score || '-';
+                                    list[i].time_end = list[i].time_end || '-';
+                                    
                                     html += hui.util.format(tpl, list[i]);
                                 }
+                                
                                 hui.g('history_list').innerHTML = html;
                             }
                         }

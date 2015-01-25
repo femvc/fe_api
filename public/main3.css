@@ -35,7 +35,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_body .test_history .test_list { padding: 0px; margin: 0px; color: #FD841C; font-size: 14px; line-height: 16px; border-top: 1px solid #ccc; list-style: none; }
 .page_body .test_history .item_row { border-bottom: 1px dashed #ccc; height: 34px; padding-left: 0px; padding-top: 8px; list-style-position: inside; }
 .page_body .test_history .item_row:nth-of-type(odd) { background: #efefef; }
-.page_body .test_history .item_row .t_date { float: left; width: 130px; color: #666; margin-top: 5px; margin-left: 100px; }
+.page_body .test_history .item_row .t_date { float: left; width: 150px; color: #666; margin-top: 5px; margin-left: 100px; }
 .page_body .test_history .item_row .t_user { float: left; width: 200px; margin-left: 10px; overflow: hidden; white-space: nowrap; border-width: 1px 2px; margin-top: 3px; background-color: #FD841C; border: 2px solid #FD841C; border-radius: 9px; color: white; text-indent: 1px; text-align: center; }
 .page_body .test_history .item_row .t_time { float: left; width: 160px; margin-top: 5px; padding-left: 0px; color: #666; text-align: center; }
 .page_body .test_history .item_row .t_score { float: left; width: 200px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
@@ -59,10 +59,10 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .test_history .test_list { padding: 0px; margin: 0px; color: #FD841C; font-size: 14px; line-height: 16px; border-top: 1px solid #ccc; list-style: none; }
 .page_middle .test_history .item_row { border-bottom: 1px dashed #ccc; height: 34px; padding-left: 0px; padding-top: 8px; list-style-position: inside; }
 .page_middle .test_history .item_row:nth-of-type(odd) { background: #efefef; }
-.page_middle .test_history .item_row .t_date { float: left; width: 130px; color: #666; margin-top: 5px; margin-left: 50px; }
+.page_middle .test_history .item_row .t_date { float: left; width: 160px; color: #666; margin-top: 5px; margin-left: 40px; }
 .page_middle .test_history .item_row .t_user { float: left; width: 100px; text-indent: 2px; overflow: hidden; white-space: nowrap; border-width: 1px 2px; margin-top: 3px; background-color: #FD841C; border: 2px solid #FD841C; border-radius: 9px; color: white; text-indent: 1px; text-align: center; }
-.page_middle .test_history .item_row .t_time { float: left; width: 80px; margin-top: 5px; padding-left: 40px; color: #666; }
-.page_middle .test_history .item_row .t_score { float: left; width: 21px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
+.page_middle .test_history .item_row .t_time { float: left; width: 90px; margin-top: 5px; padding-left: 10px; color: #666; }
+.page_middle .test_history .item_row .t_score { float: left; width: 30px; margin-top: 5px; text-align: center; font-weight: bold; color: #333; border: 1px solid #BDBDBD; background-color: #E8E8E8; }
 .item_selected a { color: white; }
 .kc_c2 { color: #F00; }
 .page_foot { padding-top: 20px; text-align: center; font-size: 13px; height: 52px; background-color: rgb(34, 34, 34); color: rgb(134, 134, 134); }
