@@ -267,7 +267,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         getFocusHandler: function (e) {
             // this -> control's main element
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
 
             if (me.autoHideError) {
                 me.hideError();
@@ -283,7 +283,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         getBlurHandler: function (e) {
             // this -> control's main element
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
 
             if (me.allowSpace === false) {
                 me.removeSpace();
@@ -320,7 +320,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
          */
         getPressHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
 
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
@@ -331,7 +331,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         },
         getPressDownHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
             e = e || hui.window.event;
             var keyCode = e.keyCode || e.which;
             if (keyCode != 8) { // back/delete
@@ -343,7 +343,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         },
         getPressUpHandler: function (e) {
             var main = this,
-                me = main.getMain ? main : hui.Control.getById(main.getAttribute('control')),
+                me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid')),
                 value = me.getValue();
             (value ? me.hidePlaceholder('force') : me.showPlaceholder());
             // 注：搜狗输入法会默认加个空格占位，去掉的话会导致无法输入！
@@ -359,7 +359,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         },
         getChangeHandler: function (e) {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
             var value = (e && (e.target || e.srcElement)) ? me.getMain().value : e;
             me.onchange(value);
         },
@@ -410,7 +410,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         onchange: new Function(),
         onmousedown: function () {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
             main = me.getMain();
             me.old_type = main.type;
             //main.type = 'text';
@@ -429,7 +429,7 @@ hui.define('hui_textinput', ['hui_control', 'hui_util'], function () {
         },
         onmouseup: function () {
             var main = this;
-            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('control'));
+            var me = main.getMain ? main : hui.Control.getById(main.getAttribute('ctrid'));
             main = me.getMain();
             main.type = me.old_type || 'text';
 
