@@ -827,7 +827,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
          * @default '/'
          * @public
          */
-        DEFAULT_INDEX: '/',
+        DEFAULT_INDEX: '!/',
         /**
          * @name 当前路径.
          * @public
