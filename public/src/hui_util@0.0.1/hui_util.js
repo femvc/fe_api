@@ -371,7 +371,6 @@ hui.define('hui_util', [], function () {
         }
     };
 
-
     /** 
      * @name 对目标字符串进行格式化
      * @public
@@ -380,6 +379,47 @@ hui.define('hui_util', [], function () {
      * @return {String} 格式化后的字符串
      */
     hui.util.format = function (source, opts) {
+        function handler(match, key) {
+            var type = String(key).indexOf('!!') === 0 ? 'decode' : String(key).indexOf('!') === 0 ? '' : 'encode',
+                parts = key.replace(/^!!?/, '').split('.'),
+                part = parts.shift(),
+                cur = data,
+                variable;
+            while (part) {
+                if (cur[part] !== undefined) {
+                    cur = cur[part];
+                }
+                else {
+                    cur = undefined;
+                    break;
+                }
+                part = parts.shift();
+            }
+            
+            variable = cur;
+            if ('[object Function]' === toString.call(variable)) {
+                variable = variable(key);
+            }
+            if (undefined !== variable) {
+                variable = String(variable);
+                // encodeURIComponent not encode '
+                var fr = '&|<|>| |\'|"|\\'.split('|'),
+                    to = '&amp;|&lt;|&gt;|&nbsp;|&apos;|&quot;|&#92;'.split('|');
+                if (type === 'decode') {
+                    for (var i = fr.length - 1; i > -1; i--) {
+                        variable = variable.replace(new RegExp('\\' + to[i], 'ig'), fr[i]);
+                    }
+                }
+                else if (type === 'encode') {
+                    for (var i = 0, l = fr.length; i < l; i++) {
+                        variable = variable.replace(new RegExp('\\' + fr[i], 'ig'), to[i]);
+                    }
+                }
+            }
+
+            return (undefined === variable ? '' : variable);
+        }
+        
         source = String(source);
         var data = Array.prototype.slice.call(arguments, 1),
             toString = Object.prototype.toString;
@@ -387,28 +427,8 @@ hui.define('hui_util', [], function () {
             data = (data.length == 1 ?
                 /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                 (opts !== null && (/\[object (Array|Object)\]/.test(toString.call(opts))) ? opts : data) : data);
-            return source.replace(/#\{(.+?)\}/g, function (match, key) {
-                var parts = key.split('.'),
-                    part = parts.shift(),
-                    cur = data,
-                    variable;
-                while (part) {
-                    if (cur[part] !== undefined) {
-                        cur = cur[part];
-                    }
-                    else {
-                        cur = undefined;
-                        break;
-                    }
-                    part = parts.shift();
-                }
-                variable = cur;
-
-                if ('[object Function]' === toString.call(variable)) {
-                    variable = variable(key);
-                }
-                return (undefined === variable ? '' : variable);
-            });
+            
+            return source.replace(/#\{(.+?)\}/g, handler).replace(/\{\{(.+?)\}\}/g, handler);
         }
         return source;
     };
@@ -685,6 +705,110 @@ hui.define('hui_util', [], function () {
         else {
             elem.innerText = text;
         }
+    };
+
+    // link from Undercore.js 
+    // Internal recursive comparison function for `isEqual`.
+    hui.util.isEqual = function (a, b, aStack, bStack) {
+        // Identical objects are equal. `0 === -0`, but they aren't identical.
+        // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+        if (a === b) {
+            return a !== 0 || 1 / a == 1 / b;
+        }
+        // A strict comparison is necessary because `null == undefined`.
+        if (a == null || b == null) {
+            return a === b;
+        }
+        if (aStack == undefined || bStack == undefined) {
+            aStack = [];
+            bStack = [];
+        }
+        // Compare `[[Class]]` names.
+        var className = Object.prototype.toString.call(a);
+        if (className != Object.prototype.toString.call(b)) {
+            return false;
+        }
+        switch (className) {
+            // Strings, numbers, dates, and booleans are compared by value.
+        case '[object String]':
+            // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+            // equivalent to `new String("5")`.
+            return a == String(b);
+        case '[object Number]':
+            // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+            // other numeric values.
+            return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+        case '[object Date]':
+        case '[object Boolean]':
+            // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+            // millisecond representations. Note that invalid dates with millisecond representations
+            // of `NaN` are not equivalent.
+            return +a == +b;
+            // RegExps are compared by their source patterns and flags.
+        case '[object RegExp]':
+            return a.source == b.source &&
+                a.global == b.global &&
+                a.multiline == b.multiline &&
+                a.ignoreCase == b.ignoreCase;
+        }
+        if (typeof a != 'object' || typeof b != 'object') return false;
+        // Assume equality for cyclic structures. The algorithm for detecting cyclic
+        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+        var length = aStack.length;
+        while (length--) {
+            // Linear search. Performance is inversely proportional to the number of
+            // unique nested structures.
+            if (aStack[length] == a) return bStack[length] == b;
+        }
+        // Add the first object to the stack of traversed objects.
+        aStack.push(a);
+        bStack.push(b);
+
+        var size = 0,
+            result = true;
+        // Recursively compare objects and arrays.
+        if (className == '[object Array]') {
+            // Compare array lengths to determine if a deep comparison is necessary.
+            size = a.length;
+            result = size == b.length;
+            if (result) {
+                // Deep compare the contents, ignoring non-numeric properties.
+                while (size--) {
+                    if (!(result = hui.util.isEqual(a[size], b[size], aStack, bStack))) break;
+                }
+            }
+        }
+        else {
+            // Objects with different constructors are not equivalent, but `Object`s
+            // from different frames are.
+            var aCtor = a.constructor,
+                bCtor = b.constructor;
+            if (aCtor !== bCtor && !(Object.prototype.toString.call(aCtor) == '[object Function]' && (aCtor instanceof aCtor) &&
+                Object.prototype.toString.call(bCtor) == '[object Function]' && (bCtor instanceof bCtor))) {
+                return false;
+            }
+            // Deep compare objects.
+            for (var key in a) {
+                if (Object.prototype.hasOwnProperty.call(a, key)) {
+                    // Count the expected number of properties.
+                    size++;
+                    // Deep compare each member.
+                    if (!(result = Object.prototype.hasOwnProperty.call(b, key) && hui.util.isEqual(a[key], b[key], aStack, bStack))) break;
+                }
+            }
+            // Ensure that both objects contain the same number of properties.
+            if (result) {
+                for (key in b) {
+                    if (Object.prototype.hasOwnProperty.call(b, key) && !(size--)) break;
+                }
+                result = !size;
+            }
+        }
+        // Remove the first object from the stack of traversed objects.
+        aStack.pop();
+        bStack.pop();
+
+        return result;
     };
 
     hui.g = hui.util.g;

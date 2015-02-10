@@ -20,6 +20,7 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
     hui.Boxpanel = function (options, pending) {
         this.isFormItem = false;
         hui.Boxpanel.superClass.call(this, options, 'pending');
+        this.type = 'boxpanel';
 
         this.controlMap = [];
 
@@ -37,8 +38,11 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
         render: function (options) {
             hui.Boxpanel.superClass.prototype.render.call(this);
             var me = this;
+            me.setBodyContent();
+            var main = me.getMain();
+            hui.Control.addClass(main, me.getClass());
             // 渲染对话框
-            hui.Control.init(me.getMain(), {}, me);
+            hui.Control.init(main, {}, me);
             // 设置_rendered
             main.setAttribute('_rendered', 'true');
         },
@@ -128,6 +132,33 @@ hui.define('hui_boxpanel', ['hui_util', 'hui_control'], function () {
             if (waiting) {
                 waiting.style.display = 'none';
             }
+        },
+        /**
+         * @name 绘制对话框Body
+         * @public
+         * @comment 注: 需新设置contentView之后再调用
+         */
+        setBodyContent: function () {
+            var me = this;
+            // 判断是否设置contentView模板
+            if (me.contentView && hui.Template) {
+                me.setBodyContentHtml(hui.Template.merge(
+                    hui.Template.getTarget(me.contentView),
+                    (me.parentControl||{}).model
+                ));
+            }
+        },
+        setBodyContentHtml: function (html) {
+            var me = this,
+                elem = hui.c(me.getClass('body'), me.getMain())[0];
+            // 判断是否设置contentView模板
+            if (!elem) {
+                elem = document.createElement('div');
+                elem.id = me.getId('body');
+                elem.className = me.getClass('body');
+                me.getMain().appendChild(elem);
+            }
+            me.setInnerHTML(elem, html);
         }
 
     };

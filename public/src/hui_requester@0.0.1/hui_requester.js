@@ -682,8 +682,8 @@ hui.define('hui_requester', [], function () {
      */
     Requester.backendError = function (xhr, data) {
         var action;
-        if (window.hui && hui.Action && hui.Action.get) {
-            action = hui.Action.get();
+        if (window.hui && hui.Action && hui.Master.get) {
+            action = hui.Master.get();
             if (action) {
                 action.showErrorByTree(data);
                 return 'finished';

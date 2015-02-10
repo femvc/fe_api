@@ -772,7 +772,7 @@ hui.define('hui_control', [], function () {
         //     if (typeof view === 'function') {
         //         view = view();
         //     }
-        //     view = hui.Action.getExtClass('hui.Template').getTarget(String(view));
+        //     view = hui.Master.getExtClass('hui.Template').getTarget(String(view));
 
         //     return view;
         // },
@@ -845,7 +845,7 @@ hui.define('hui_control', [], function () {
                         var me = this;
                         var main = me.getMain();
                         var tpl = me.getView();
-                        var mainHTML = me.model && me.model.getData ? hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
+                        var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                         hui.Control.prototype.setInnerHTML(main, mainHTML);
 
                         next && next();
@@ -862,7 +862,7 @@ hui.define('hui_control', [], function () {
                         var me = this;
                         me.getViewAsync(function (tpl) {
                             var main = me.getMain();
-                            var mainHTML = me.model && me.model.getData ? hui.Action.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
+                            var mainHTML = me.model && me.model.getData ? hui.Master.getExtClass('hui.Template').merge(tpl, me.model.getData()) : tpl;
                             hui.Control.prototype.setInnerHTML(main, mainHTML);
 
                             next && next();
@@ -1202,9 +1202,9 @@ hui.define('hui_control', [], function () {
                         key = text.replace('&', '');
                         attrs[i] = hui.window[key];
                     }
-                    else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Action.get) === 'function') {
+                    else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Master.get) === 'function') {
                         key = text.replace('&', '');
-                        action = hui.Action.get();
+                        action = hui.Master.get();
                         if (action && action.model && (typeof action.model.get) === 'function') {
                             attrs[i] = action.model.get(key);
                         }
@@ -1314,7 +1314,7 @@ hui.define('hui_control', [], function () {
         // parentControl父控件默认为window对象, 不是的话后面会再改回来. 
         // var parentControl = hui.window;
         // Add: 上面这样做静态没问题，动态生成appendSelfTo就会出问题，因此需要加上options.parentControl
-        // Fixme: 第二次执行到这里hui.Action.get()居然是前一个action？
+        // Fixme: 第二次执行到这里hui.Master.get()居然是前一个action？
         parent = parent || hui.window;
         parent.controlMap = parent.controlMap || [];
 
@@ -1461,13 +1461,13 @@ hui.define('hui_control', [], function () {
     hui.Control.getById = function (id, parentControl) {
         var list,
             result = null;
-        // parentControl || hui.Control.getById(parentControl) || hui.Action.get(parentControl) || hui.Action.get() || window
+        // parentControl || hui.Control.getById(parentControl) || hui.Master.get(parentControl) || hui.Master.get() || window
         if (typeof parentControl == 'string') {
             parentControl = hui.Control.getById(parentControl);
         }
         // 如果传入的parentControl是DOM元素，视为未传入值处理
         parentControl = parentControl && parentControl.getId ? parentControl :
-            (hui.Action && hui.Action.get ? (hui.Action.get(parentControl) || hui.Action.get()) : hui.window);
+            (hui.Action && hui.Master.get ? (hui.Master.get(parentControl) || hui.Master.get()) : hui.window);
 
         if (id === undefined || (parentControl && parentControl.getId && id === parentControl.getId())) {
             result = parentControl;

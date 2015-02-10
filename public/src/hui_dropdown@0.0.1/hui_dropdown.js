@@ -39,7 +39,7 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
          */
         initModel: function () {
             var me = this;
-            if (me.options && typeof me.options == 'string') {
+            if (me.options && me.options.length && typeof me.options == 'string') {
                 me.options = JSON.parse(me.options);
             }
         },
@@ -78,10 +78,8 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
             hui.Dropdown.superClass.prototype.render.call(this);
             var me = this;
             // 绘制宽度和高度
-            if (me.placeholder && !me.value) {
-                hui.setInnerText(me.getTitle(), me.placeholder);
-            }
             me.renderOptions();
+            me.resetDefaultValue();
             // 设置_rendered
             main.setAttribute('_rendered', 'true');
         },
@@ -97,6 +95,9 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
 
             if (me.value !== undefined) {
                 me.setValue(me.value);
+            }
+            else {
+                me.resetDefaultValue();
             }
         },
         onTitleClick: function (e) {
@@ -227,6 +228,34 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
 
             me.options = options;
             me.renderOptions();
+
+            me.resetDefaultValue();
+        },
+        setMainValue: function(value){
+            var me = this;
+            var c = me.getMain().value;
+            me.getMain().value = value;
+            if (me.autoHideError) {
+                me.hideError();
+            }
+            if (me.autoValidate) {
+                me.validate();
+            }
+            if (value !== c && c !== undefined) {
+                me.onchange(value, c);
+            }
+        },
+        resetDefaultValue: function () {
+            var me = this;
+            var selectedIndex = Number(me.default_select);
+
+            if (me.default_select && me.options && me.options.length && !isNaN(selectedIndex) && selectedIndex <= me.options.length) {
+                me.setValue(me.options[selectedIndex - 1]);
+            }
+            else {
+                hui.setInnerText(me.getTitle(), me.placeholder || '');
+                me.setMainValue(undefined);
+            }
         },
         setValue: function (v) {
             var me = this,
@@ -234,7 +263,8 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 dataText = me['data_text'],
                 // main = me.getMain(),
                 options = me.options,
-                c;
+                c,
+                changed = false;
 
             var value = (v && (typeof v) === 'object') ? v[dataValue] : v;
             var text = (v && (typeof v) === 'object') ? v[dataText] : '';
@@ -244,20 +274,17 @@ hui.define('hui_dropdown', ['hui_util', 'hui_control'], function () {
                 if ((typeof c == 'string' && c === value) || c[dataValue] === value || (value === undefined && c[dataText] === text)) {
                     hui.setInnerText(me.getTitle(), typeof c == 'string' ? c : c[dataText]);
                     value = c[dataValue];
-
                     if (value !== me.value) {
-                        c = me.getMain().value;
-                        me.getMain().value = value;
-                        if (me.autoHideError) {
-                            me.hideError();
-                        }
-                        if (me.autoValidate) {
-                            me.validate();
-                        }
-                        me.onchange(value, c);
+                        me.setMainValue(value);
                     }
+                    changed = true;
+                    
                     break;
                 }
+            }
+
+            if (!changed) {
+                me.resetDefaultValue();
             }
         },
         getValue: function () {
