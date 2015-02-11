@@ -1496,7 +1496,9 @@ hui.define('hui_control', [], function () {
     /**
      * @name 根据控件formname找到对应控件
      * @static
-     * @param {String} 控件formname
+     * @param {String} formname 控件formname
+     * @param {Control} parentNode 父控件
+     * @param {Boolean} all 仅查找直接子级，默认所有子级
      */
     hui.Control.getByFormnameAll = function (formname, parentNode, all) {
         var list = [],
@@ -1578,8 +1580,8 @@ hui.define('hui_control', [], function () {
         var main,
             result = false;
         // 判断控件是否在parentNode元素下
-        if (parentNode && result.getMain) {
-            main = result.getMain();
+        if (parentNode && control.getMain) {
+            main = control.getMain();
             while (main) {
                 if (main.parentNode === parentNode) {
                     result = true;
