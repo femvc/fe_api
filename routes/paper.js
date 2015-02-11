@@ -15,16 +15,19 @@ function createQuestionList(req, res, next) {
             'create_time': -1
         },
         filter = {},
-        questionCount = {
-            'HTML': 2,
-            'CSS': 3,
-            'PS': 2,
-            'Server': 2,
-            'HTML5CSS3': 2,
-            'DOM': 3,
-            'jQuery': 2,
-            'Javascript': 4
+        amount = String(req.paramlist.amount),
+        left = amount,
+        questionRate = {
+            'HTML': 1,
+            'CSS': 1,
+            'PS': 0.8,
+            'Server': 0.6,
+            'HTML5CSS3': 1,
+            'DOM': 0.8,
+            'jQuery': 1,
+            'Javascript': 1.8
         },
+        questionCount = {},
         questionList = {
             'HTML': [],
             'CSS': [],
@@ -35,6 +38,15 @@ function createQuestionList(req, res, next) {
             'jQuery': [],
             'Javascript': []
         };
+    
+    if (amount !== '5' && amount !== '20' && amount !== '50') {
+        amount = '5';
+    }
+    for (var i in questionRate) {
+        questionCount[i] = Math.floor(questionRate[i]*amount/5);
+        left = left - questionCount[i];
+    }
+    questionCount['Javascript'] += left;
 
     questionModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
