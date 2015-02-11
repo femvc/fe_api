@@ -126,6 +126,8 @@ function showTab(tab, main) {
                 initBehavior: function () {
                     var me = this; 
                     me.getByFormname('subject_nxt2').onclick = function () {
+                        var amount = me.getParamMap().amount.join('');
+                        hui.setCookie('amount', amount);
                         window.location.href = '#/start~amount=' + me.getParamMap().amount.join('');
                     };
                 },
@@ -203,6 +205,7 @@ function showTab(tab, main) {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
                                 newstart: !!newstart ? 'newone' : '', 
+                                amount: hui.getCookie('amount'),
                                 rand: Math.random()
                             },
                             onsuccess: function (result) {
