@@ -69,44 +69,44 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page .form_mask { position: absolute; z-index: 10; width: 100%; height: 70%; text-align: center; margin: -37px 0 0 -50px; padding-top: 140px; background-color: #fff; }
 .page .hui_table_tdcntr nobr { white-space: normal; }
 .page .hui_action { background-color: #fbfbfb; }
-.subject_test { font-family: 'microsoft yahei'; font-size: 14px; }
-.subject_test a { text-decoration: none }
-.subject_test a:hover { color: #ff6500; text-decoration: underline; }
-.subject_test a { color123: green; text-decoration: none; }
-.subject_test .hui_boxpanel { background-color: rgba(255, 255, 255, 0.8); }
-.subject_test .box_content { background-color: white; }
-.subject_test .hui_boxpanel_close { color: white; }
-.subject_test .hui_boxpanel_close:hover { color: white; text-decoration: none; }
-.subject_test .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
+.subject_start { font-family: 'microsoft yahei'; font-size: 14px; }
+.subject_start a { text-decoration: none }
+.subject_start a:hover { color: #ff6500; text-decoration: underline; }
+.subject_start a { color123: green; text-decoration: none; }
+.subject_start .hui_boxpanel { background-color: rgba(255, 255, 255, 0.8); }
+.subject_start .box_content { background-color: white; }
+.subject_start .hui_boxpanel_close { color: white; }
+.subject_start .hui_boxpanel_close:hover { color: white; text-decoration: none; }
+.subject_start .subject_box { background-color: #f7f8f8; background-repeat: no-repeat; width: 920px }
 .hui_boxpanel .form_mask { position: absolute; z-index: 10; width: 100%; height: 70%; text-align: center; margin: -37px 0 0 -50px; padding-top: 140px; background-color: #fff; }
-.subject_test .subject_box .form_title { background-color: #5885c0; color: white; line-height: 1.2em; font-size: 24px; font-weight: normal; text-align: center; padding: 22px 0px 29px 0px; margin: 0px }
-.subject_test .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
-.subject_test .subject_box .form_content { padding: 37px 45px 50px 50px; position: relative; z-index: 1; min-height: 534px; }
-.subject_test .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
-.subject_test .subject_box .form_content .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word; width: 92%; }
-.subject_test .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
-.subject_test .subject_box .subject_action { height123: 110px; position123: absolute; z-index: 1; width123: 100% }
-.subject_test .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
-.subject_test .subject_box .subject_action .subject_nxt { margin-top: 20px; background-color: #BDA97E; }
-.subject_test .subject_box .subject_nxt { float: left; padding: 10px 40px; border-width: 0px; }
-.subject_test .subject_box .subject_nxt:hover { background-color: #BDA97E; border: 1px solid rgb(167, 154, 104); padding: 9px 39px }
-.subject_test .subject_box .subject_action .hui_button_disabled,
-.subject_test .subject_box .subject_action .hui_button_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
-.subject_test .subject_box .subject_action .subject_pre { float: left; padding-left: 20px; padding-right: 5px; color: #fff; line-height: 1.2em; font-size: 18px; padding-bottom: 5px; margin-top: 10px; padding-top: 21px; margin-left: 0px }
-.subject_test .subject_box .subject_action .subject_end { float: right; background-image: url(img/icon_exit.png); background-repeat: no-repeat; background-position: 0px 9px; padding-left: 27px; color: #fff; line-height: 1.2em; font-size: 16px; padding-bottom: 5px; margin-top: 21px; padding-top: 10px; margin-right: 40px }
-.subject_test .subject_box .subject_skip { margin-top: 15px; display: inline-block }
-.subject_test .subject_box { }
-.subject_test .subject_box { }
-.subject_test .subject_box .hui_panel { }
-.subject_test .subject_box .tr_row { color: #939393; line-height: 2em; font-size: 25px; padding: 15px 0px 10px 34px; list-style-position: inside; border-bottom: 1px solid #ddd }
-.subject_test .subject_box .tr_row .td_index { display: none }
-.subject_test .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
-.subject_test .hui_checkbox { margin-top: 11px }
-.subject_test .hui_radiobox { margin-top: 11px }
-.subject_test .subject_box .tr_row .subject_nxt { }
-.subject_test .hui_button_label { }
-.subject_test .subject_box .tr_row .subject_pre { }
-.subject_test .subject_box .tr_row .subject_end { }
+.subject_start .subject_box .form_title { background-color: #5885c0; color: white; line-height: 1.2em; font-size: 24px; font-weight: normal; text-align: center; padding: 22px 0px 29px 0px; margin: 0px }
+.subject_start .subject_box .form_title .sub { font-weight: normal; font-size: 14px; line-height: 1.2em; position: absolute; z-index: 1; margin-top: 10px; margin-left: 5px }
+.subject_start .subject_box .form_content { padding: 37px 45px 50px 50px; position: relative; z-index: 1; min-height: 534px; }
+.subject_start .subject_box .form_content .subject_title { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-left: 2px }
+.subject_start .subject_box .form_content .subject_title pre { margin: 0px; display: inline-block; vertical-align: top; font-family: inherit; font-family: sans-serif; word-break: break-word; width: 92%; }
+.subject_start .subject_box .form_content .subject_option { font-size: 25px; color: #333333; line-height: 1.2em; font-size: 20px; padding-top: 14px; padding-bottom: 10px; padding-left: 0px; margin: 0px 0px 0px 0px; list-style-type: none; min-height: 340px }
+.subject_start .subject_box .subject_action { height123: 110px; position123: absolute; z-index: 1; width123: 100% }
+.subject_start .subject_box .subject_action a:hover { color: #f60; text-decoration: none }
+.subject_start .subject_box .subject_action .subject_nxt { margin-top: 20px; background-color: #BDA97E; }
+.subject_start .subject_box .subject_nxt { float: left; padding: 10px 40px; border-width: 0px; }
+.subject_start .subject_box .subject_nxt:hover { background-color: #BDA97E; border: 1px solid rgb(167, 154, 104); padding: 9px 39px }
+.subject_start .subject_box .subject_action .hui_button_disabled,
+.subject_start .subject_box .subject_action .hui_button_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
+.subject_start .subject_box .subject_action .subject_pre { float: left; padding-left: 20px; padding-right: 5px; color: #fff; line-height: 1.2em; font-size: 18px; padding-bottom: 5px; margin-top: 10px; padding-top: 21px; margin-left: 0px }
+.subject_start .subject_box .subject_action .subject_end { float: right; background-image: url(img/icon_exit.png); background-repeat: no-repeat; background-position: 0px 9px; padding-left: 27px; color: #fff; line-height: 1.2em; font-size: 16px; padding-bottom: 5px; margin-top: 21px; padding-top: 10px; margin-right: 40px }
+.subject_start .subject_box .subject_skip { margin-top: 15px; display: inline-block }
+.subject_start .subject_box { }
+.subject_start .subject_box { }
+.subject_start .subject_box .hui_panel { }
+.subject_start .subject_box .tr_row { color: #939393; line-height: 2em; font-size: 25px; padding: 15px 0px 10px 34px; list-style-position: inside; border-bottom: 1px solid #ddd }
+.subject_start .subject_box .tr_row .td_index { display: none }
+.subject_start .subject_box .tr_row .hui_label { color: #363636; font-size: 19px; line-height: 1.2em; padding-left: 15px; vertical-align: top; padding-top: 9px; width: 90%; white-space: normal; word-break: break-word; display: inline-block; *display: block }
+.subject_start .hui_checkbox { margin-top: 11px }
+.subject_start .hui_radiobox { margin-top: 11px }
+.subject_start .subject_box .tr_row .subject_nxt { }
+.subject_start .hui_button_label { }
+.subject_start .subject_box .tr_row .subject_pre { }
+.subject_start .subject_box .tr_row .subject_end { }
 .result_box { background-position: -144px -137px; background-repeat: no-repeat; color: #333; font-size: 19px; }
 .result_box b { font-weight: normal; }
 .result_box .box_content { padding: 50px 50px 60px 0px; }
