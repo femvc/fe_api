@@ -1540,20 +1540,21 @@ hui.define('hui_control', [], function () {
             min = Number.MAX_VALUE,
             deep,
             ctr;
-        if (parentNode && typeof parentNode == 'object') {
-            list = hui.Control.getByFormnameAll(formname, parentNode);
-            // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
-            for (var i = 0, len = list.length; i < len && min > 0; i++) {
-                deep = 0;
-                ctr = list[i];
-                while (ctr.parentControl && ctr.parentControl !== parentNode) {
-                    deep++;
-                    ctr = ctr.parentControl;
-                }
-                if (deep < min) {
-                    min = deep;
-                    result = list[i];
-                }
+        
+        parentNode = parentNode && typeof parentNode === 'object' ? parentNode : hui.window;
+        
+        list = hui.Control.getByFormnameAll(formname, parentNode);
+        // 注：默认返回直接子级第一个,直接子级没有才会返回最近子级的第一个
+        for (var i = 0, len = list.length; i < len && min > 0; i++) {
+            deep = 0;
+            ctr = list[i];
+            while (ctr.parentControl && ctr.parentControl !== parentNode) {
+                deep++;
+                ctr = ctr.parentControl;
+            }
+            if (deep < min) {
+                min = deep;
+                result = list[i];
             }
         }
 
