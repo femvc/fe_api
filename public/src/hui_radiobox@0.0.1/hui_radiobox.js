@@ -78,7 +78,15 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
                     targetFormList = [];
                     list = me.targetForm.split(',');
                     for (var i = 0, len = list.length; i < len; i++) {
-                        target = hui.Control.getById(me.targetForm) || hui.Control.getByFormname(me.targetForm);
+                        target = hui.Control.getByFormname(list[i]);
+                        (target && targetFormList.push(target));
+                    }
+                }
+                else if (me.targetParent) {
+                    targetFormList = [];
+                    list = me.targetParent.split(',');
+                    for (var i = 0, len = list.length; i < len; i++) {
+                        target = hui.Control.getById(list[i]);
                         (target && targetFormList.push(target));
                     }
                 }
