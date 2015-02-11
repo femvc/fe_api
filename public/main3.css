@@ -70,7 +70,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page .hui_table_tdcntr nobr { white-space: normal; }
 .page .hui_action { background-color: #fbfbfb; }
 .subject_test {}
-.subject_test .test_amount {}
+.subject_test .test_amount {width: 100px;height: 100px;margin: auto;}
 .subject_start { font-family: 'microsoft yahei'; font-size: 14px; }
 .subject_start a { text-decoration: none }
 .subject_start a:hover { color: #ff6500; text-decoration: underline; }
