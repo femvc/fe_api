@@ -572,6 +572,7 @@ hui.define('hui_control', [], function () {
                     }
 
                 }
+                // 注：默认都用数组包装，此处还原为值
                 for (var i in paramMap) {
                     if (paramMap[i] && paramMap[i].length < 2) {
                         paramMap[i] = paramMap[i][0] !== undefined ? paramMap[i][0] : '';
@@ -1531,27 +1532,27 @@ hui.define('hui_control', [], function () {
         return list;
     };
     /**
-     * @name 根据控件formname找到对应控件
+     * @name 根据控件formname找到对应控件，只返回一个结果
      * @static
      * @param {String} 控件formname
      */
     hui.Control.getByFormname = function (formname, parentNode) {
         var result = null,
             list;
-        if (typeof parentNode == 'string') {
-            parentNode = hui.Control.getById(parentNode) || hui.Control.getByFormname(parentNode);
-        }
-        list = hui.Control.getByFormnameAll(formname, parentNode);
-        if (parentNode && parentNode.parentNode && parentNode.childNodes) {
-            for (var i = 0, len = list.length; i < len; i++) {
-                if (hui.Control.checkParentNode(list[i], parentNode)) {
-                    result = list[i];
-                    break;
+        if (parentNode && typeof parentNode == 'object') {
+            list = hui.Control.getByFormnameAll(formname, parentNode);
+            // 注：默认返回直接子级第一个,直接子级没有才会返回所有子级的第一个
+            if (parentNode.parentNode && parentNode.childNodes) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    if (hui.Control.checkParentNode(list[i], parentNode)) {
+                        result = list[i];
+                        break;
+                    }
                 }
             }
-        }
-        else {
-            result = list[0];
+            else {
+                result = list[0];
+            }
         }
 
         return result;

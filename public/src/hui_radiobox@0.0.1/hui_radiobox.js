@@ -93,7 +93,7 @@ hui.define('hui_radiobox', ['hui_checkbox'], function () {
                 for (var j = 0, len2 = targetFormList.length; j < len2; j++) {
                     list = targetFormList[j].getByFormnameAll(formname);
                     for (var i = 0, len = list.length; i < len; i++) {
-                        if (list[i] != me && list[i].getChecked()) {
+                        if (list[i] != me && list[i].getChecked && list[i].getChecked()) {
                             list[i].setChecked(false);
                         }
                     }
