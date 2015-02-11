@@ -423,7 +423,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getById(formname);
+                        ctr = me.getByFormname(formname);
                         list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
@@ -491,7 +491,7 @@ hui.define('hui_control', [], function () {
                     if (formname && paramMap.hasOwnProperty(formname)) {
                         value = Object.prototype.toString.call(paramMap[formname]) !== '[object Array]' ?
                             [paramMap[formname]] : paramMap[formname];
-                        ctr = me.getById(formname);
+                        ctr = me.getByFormname(formname);
                         list = ctr ? [ctr] : me.getByFormnameAll(formname, false);
                         if (list.length < 1) {
                             continue;
@@ -594,10 +594,6 @@ hui.define('hui_control', [], function () {
         getByFormnameAll: function (formname, all) {
             var me = this;
             return hui.Control.getByFormnameAll(formname, me, all);
-        },
-        getById: function (id) {
-            var me = this;
-            return hui.Control.getById(id, me);
         },
         /**
          * @name 显示控件
