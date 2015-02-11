@@ -69,6 +69,8 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page .form_mask { position: absolute; z-index: 10; width: 100%; height: 70%; text-align: center; margin: -37px 0 0 -50px; padding-top: 140px; background-color: #fff; }
 .page .hui_table_tdcntr nobr { white-space: normal; }
 .page .hui_action { background-color: #fbfbfb; }
+.subject_test {}
+.subject_test .test_amount {}
 .subject_start { font-family: 'microsoft yahei'; font-size: 14px; }
 .subject_start a { text-decoration: none }
 .subject_start a:hover { color: #ff6500; text-decoration: underline; }

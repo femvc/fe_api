@@ -28,6 +28,7 @@ window.onload = function () {
     initPageAbout();
     
     initPageTest();
+    initPageStart();
     initPageResult();
     initPageCandidate();
     initPageReport();
@@ -54,6 +55,7 @@ function showTab(tab, main) {
     hui.g('about'    ).style.display = 'none';
 
     hui.g('test'     ).style.display = 'none';
+    hui.g('start'    ).style.display = 'none';
     hui.g('result'   ).style.display = 'none';
     hui.g('candidate').style.display = 'none';
     hui.g('report'   ).style.display = 'none';
@@ -96,6 +98,50 @@ function showTab(tab, main) {
         
         <div class="page_body subject_test" id="test" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
+                <h3 class="test_title">请选择测试类型：</h3>
+                <div class="test_amount">
+                    <label ui="type:'Radiobox',formname:'amount',value:'5',targetControl:'pageTest',checked:'true'">
+                        <span class="hui_radiobox_label">5 道题</span>
+                    </label>
+                    <label ui="type:'Radiobox',formname:'amount',value:'20',targetControl:'pageTest'">
+                        <span class="hui_radiobox_label">20 道题</span>
+                    </label>
+                    <label ui="type:'Radiobox',formname:'amount',value:'20',targetControl:'pageTest'">
+                        <span class="hui_radiobox_label">50 道题</span>
+                    </label>
+                </div>
+                <button class="subject_nxt" ui="type:'Button',formname:'subject_nxt2'" tabindex="100">提 交</button>
+            </div>
+        </div>
+        <script>
+        function initPageTest() {
+            // pageTest
+            var pageTest;
+            pageTest = function () {
+                hui.Action.call(this);
+                this.id = 'pageTest';
+                this.main = 'test';
+            };
+            pageTest.prototype = {
+                initBehavior: function () {
+                    var me = this; 
+                    me.getByFormname('subject_nxt2').onclick = function () {
+                        window.location.href = '#/start~amount=' + me.getParamMap().amount.join('');
+                    };
+                },
+                finish: function () {
+                    var me = this;
+                    showTab('test');
+                }
+            };
+
+            hui.inherits(pageTest, hui.Action);
+            hui.Router.setRule('/test', 'pageTest');
+            hui.window.pageTest = pageTest;
+        }
+        </script>
+        <div class="page_body subject_start" id="start" style="background-color: white;display: none;">
+            <div class="page_container" style="text-align:center">
                 <div class="subject_box" ui="type:'Panel',formname:'form',size:{width:'980px'}" style="display123:none">
                     <div class="subject_action">
                         <input type="hidden" ui="type:'TextInput',formname:'atcid'" />
@@ -118,15 +164,15 @@ function showTab(tab, main) {
             </div>
         </div>
         <script>
-        function initPageTest() {
-            // pageTest
-            var pageTest;
-            pageTest = function () {
+        function initPageStart() {
+            // pageStart
+            var pageStart;
+            pageStart = function () {
                 hui.Action.call(this);
-                this.id = 'pageTest';
-                this.main = 'test';
+                this.id = 'pageStart';
+                this.main = 'start';
             };
-            pageTest.prototype = {
+            pageStart.prototype = {
                 initBehavior: function () {
                     var me = this; 
 
@@ -142,7 +188,7 @@ function showTab(tab, main) {
                     };
                     
                     me.getByFormname('subject_skip').onclick = function () {
-                        var me = hui.Control.getById('pageTest');
+                        var me = hui.Control.getById('pageStart');
                         var form = me.getByFormname('form');
                         var data = form.getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
@@ -261,15 +307,15 @@ function showTab(tab, main) {
                 },
                 finish: function () {
                     var me = this;
-                    showTab('test');
+                    showTab('test', 'start');
 
                     me.getByFormname('form').initSubject();
                 }
             };
 
-            hui.inherits(pageTest, hui.Action);
-            hui.Router.setRule('/test', 'pageTest');
-            hui.window.pageTest = pageTest;
+            hui.inherits(pageStart, hui.Action);
+            hui.Router.setRule('/start', 'pageStart');
+            hui.window.pageStart = pageStart;
         }
         </script>
         <div class="page_body" id="result" style="background-color: white;display: none;">
@@ -305,7 +351,7 @@ function showTab(tab, main) {
                         // hui.Control.getByFormname('result').hide();
                         // hui.Control.getByFormname('candidate').show();
                         // showEvaluateReport();
-                        window.location.href = '#!/candidate';
+                        window.location.href = '#/candidate';
                     };
                 },
                 showTestScoreCallback: function () {
