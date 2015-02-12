@@ -17,7 +17,7 @@ function createQuestionList(req, res, next) {
         filter = {},
         amount = String(req.paramlist.amount),
         questionRate = [
-            'Javascript', 1.8,
+            'Javascript', 1.2,
             'HTML', 1,
             'CSS', 1,
             'jQuery', 1,
