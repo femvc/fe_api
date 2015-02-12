@@ -17,14 +17,14 @@ function createQuestionList(req, res, next) {
         filter = {},
         amount = String(req.paramlist.amount),
         questionRate = [
-            'Javascript', 1.6,
-            'HTML', 1,
-            'CSS', 1,
-            'jQuery', 1,
-            'PS', 0.8,
-            'DOM', 0.8,
-            'HTML5CSS3', 1,
-            'Server', 0.6
+            'Javascript', 4,
+            'HTML', 3,
+            'CSS', 3,
+            'jQuery', 3,
+            'PS', 2,
+            'DOM', 2,
+            'HTML5CSS3', 2,
+            'Server', 1
         ];
     
     // amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
@@ -54,7 +54,7 @@ function createQuestionList(req, res, next) {
         for (var i=0,len=questionRate.length; i<len; i+=2) {
             var k = questionRate[i];
             var v = questionRate[i+1];
-            questionCount[k] = Math.min(left, Math.round(v*amount/sum));
+            questionCount[k] = Math.min(left, Math.ceil(v*amount/sum));
             
             console.log('>>>>>>>>>>>left>>>>>>>>>>>');
             console.log('left=' + left + '&k=' + k + '&v=' + v + '&count=' + questionCount[k]);
