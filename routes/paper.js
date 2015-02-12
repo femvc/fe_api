@@ -29,8 +29,6 @@ function createQuestionList(req, res, next) {
     
     // amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
     amount = amount === String(Number(amount)) && Number(amount) > 0 && Number(amount) < 101  ? Number(amount) : 5;
-    console.log('>>>>>>>>>>>>>>>>>>');
-    console.log(amount);
 
     questionModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
@@ -44,24 +42,20 @@ function createQuestionList(req, res, next) {
             questionMap[doc[i].atcid] = doc[i];
         }
 
-        question = global.common.randomOrder(question);
+        question = global.common.randomOrder(global.common.randomOrder(question));
 
         var sum = 0;
         for (var i=0,len=questionRate.length; i<len; i+=2) {
             sum += questionRate[i+1];
         }
-        console.log('>>>>>>>>>sum>>>>>>>>>');
-        console.log(sum);
             
         var left = amount;
         var questionCount = {};
         for (var i=0,len=questionRate.length; i<len; i+=2) {
             var k = questionRate[i];
             var v = questionRate[i+1];
-            console.log('>>>>>>>>>'+k+'>>>>>>>>>');
-            console.log(left);
             
-            questionCount[k] = Math.floor(v*amount/sum);
+            questionCount[k] = Math.round(v*amount/sum);
             left = left - questionCount[k];
         }
         questionCount['Javascript'] += left;
@@ -130,8 +124,6 @@ function createQuestionList(req, res, next) {
         // Test id & question list
         paper.test_id = test_id;
         paper.question = req.sessionStore.paperContent[uid];
-        console.log('>>>>>>>>>>>>>>>>>>');
-        console.log(paper.question.length);
         paper.sessionID = req.sessionID;
         var now = new Date();
         var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
@@ -150,7 +142,7 @@ function getNextQuestion(req, res, next) {
     var uid = req.sessionStore.user[req.sessionID];
 
     if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
-        console.log('~~~~~~~~~~~ createQuestionList newstart ~~~~~~~~~~');
+        console.log('>>>>>>>>>>>>> createQuestionList newstart <<<<<<<<<<<<<<');
         createQuestionList(req, res, function () {
             getNextQuestionCallback(req, res, next);
         });
