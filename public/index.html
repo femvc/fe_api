@@ -313,7 +313,7 @@ function showTab(tab, main) {
                     var me = this;
                     showTab('test', 'start');
 
-                    me.getByFormname('form').initSubject();
+                    me.getByFormname('form').initSubject('newone');
                 }
             };
 
@@ -1051,8 +1051,8 @@ function showTab(tab, main) {
                     <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
                     <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormname('form').hide();showTestScore()" style="display:none;">查看报告</div>
                     <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormname('send_sms');send_sms.hideError();send_sms.show()" style="display:none;">立即测试</div> 
-                    <a class="test_btn" href="#!/test~tid=100001">立即测试</a>
+                    <div class="test_btn" onclick="hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormname('send_sms');send_sms.hideError();send_sms.show()" style="display123:none;">立即测试newone</div> 
+                    <a class="test_btn" href="#!/start~amount=5&amp;tid=100001">立即测试</a>
                 </div> 
             </div>
             <div class="page_middle">

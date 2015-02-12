@@ -39,9 +39,8 @@ function createQuestionList(req, res, next) {
             'Javascript': []
         };
     
-    if (amount !== '5' && amount !== '20' && amount !== '50') {
-        amount = '5';
-    }
+    amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
+
     for (var i in questionRate) {
         questionCount[i] = Math.floor(questionRate[i]*amount/5);
         left = left - questionCount[i];
