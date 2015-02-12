@@ -16,7 +16,7 @@ function createQuestionList(req, res, next) {
         },
         filter = {},
         amount = String(req.paramlist.amount),
-        left = amount,
+        left,
         questionRate = {
             'HTML': 1,
             'CSS': 1,
@@ -27,28 +27,13 @@ function createQuestionList(req, res, next) {
             'jQuery': 1,
             'Javascript': 1.8
         },
-        questionCount = {},
-        questionList = {
-            'HTML': [],
-            'CSS': [],
-            'PS': [],
-            'Server': [],
-            'HTML5CSS3': [],
-            'DOM': [],
-            'jQuery': [],
-            'Javascript': []
-        };
+        questionCount,
+        questionList;
     
     // amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
     amount = amount === String(Number(amount)) && Number(amount) > 0 && Number(amount) < 101  ? Number(amount) : 5;
     console.log('>>>>>>>>>>>>>>>>>>');
     console.log(amount);
-
-    for (var i in questionRate) {
-        questionCount[i] = Math.floor(questionRate[i]*amount/5);
-        left = left - questionCount[i];
-    }
-    questionCount['Javascript'] += left;
 
     questionModel.getItems(filter, sort, current, count, function (err, doc) {
         if (err) {
@@ -63,6 +48,28 @@ function createQuestionList(req, res, next) {
         }
 
         question = global.common.randomOrder(question);
+
+        questionCount = {};
+        left = amount;
+        for (var i in questionRate) {
+            console.log('>>>>>>>>>>>>>>>>>>');
+            console.log(left);
+            
+            questionCount[i] = Math.floor(questionRate[i]*amount/5);
+            left = left - questionCount[i];
+        }
+        questionCount['Javascript'] += left;
+
+        questionList = {
+            'HTML': [],
+            'CSS': [],
+            'PS': [],
+            'Server': [],
+            'HTML5CSS3': [],
+            'DOM': [],
+            'jQuery': [],
+            'Javascript': []
+        };
 
         for (var i = 0, len = question.length; i < len; i++) {
             if (questionMap[question[i]].label.indexOf('HTML') !== -1 && questionCount['HTML']) {
