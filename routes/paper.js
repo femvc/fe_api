@@ -54,7 +54,7 @@ function createQuestionList(req, res, next) {
         for (var i=0,len=questionRate.length; i<len; i+=2) {
             var k = questionRate[i];
             var v = questionRate[i+1];
-            questionCount[k] = Math.min(left, Math.ceil(v*amount/sum));
+            questionCount[k] = Math.min(left, Math.max(1, Math.round(v*amount/sum));
             
             console.log('>>>>>>>>>>>left>>>>>>>>>>>');
             console.log('left=' + left + '&k=' + k + '&v=' + v + '&count=' + questionCount[k]);
