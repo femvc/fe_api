@@ -51,8 +51,9 @@ function getRanks(req, res, next) {
                 annual: resp[i].annual,
                 career: resp[i].career
             };
-
-            filter.rankList.push(item);
+            if (resp[i].score !== undefined) {
+                filter.rankList.push(item);
+            }
         }
         filter.sum = resp.length;
         // response.ok(req, res, [filter, resp]); // Data 'resp' is HUGE！!
