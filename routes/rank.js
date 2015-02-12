@@ -91,7 +91,9 @@ exports.saveRank = function (req, res, next) {
 
 exports.updateRank = function (req, res, next) {
     //var uid = req.sessionStore.user[req.sessionID];
-    if (!req.paramlist.test_id || !req.paramlist.annual || !req.paramlist.career) {
+    if (!req.paramlist.test_id || String(req.paramlist.test_id).length !== 40 || 
+        !req.paramlist.annual || req.paramlist.annual !== String(Number(req.paramlist.annual))  || 
+        !req.paramlist.career || req.paramlist.career !== String(Number(req.paramlist.career))) {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
     }
 
