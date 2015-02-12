@@ -41,6 +41,8 @@ function createQuestionList(req, res, next) {
     
     // amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
     amount = amount === String(Number(amount)) && Number(amount) > 0 && Number(amount) < 101  ? Number(amount) : 5;
+    console.log('>>>>>>>>>>>>>>>>>>');
+    console.log(amount);
 
     for (var i in questionRate) {
         questionCount[i] = Math.floor(questionRate[i]*amount/5);
