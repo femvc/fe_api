@@ -16,19 +16,16 @@ function createQuestionList(req, res, next) {
         },
         filter = {},
         amount = String(req.paramlist.amount),
-        left,
-        questionRate = {
-            'HTML': 1,
-            'CSS': 1,
-            'PS': 0.8,
-            'Server': 0.6,
-            'HTML5CSS3': 1,
-            'DOM': 0.8,
-            'jQuery': 1,
-            'Javascript': 1.8
-        },
-        questionCount,
-        questionList;
+        questionRate = [
+            'Javascript', 1.8,
+            'HTML', 1,
+            'CSS', 1,
+            'jQuery', 1,
+            'PS', 0.8,
+            'DOM', 0.8,
+            'HTML5CSS3', 1,
+            'Server', 0.6
+        ];
     
     // amount = amount === '5' || amount === '20' || amount === '50' ? Number(amount) : 5;
     amount = amount === String(Number(amount)) && Number(amount) > 0 && Number(amount) < 101  ? Number(amount) : 5;
@@ -49,18 +46,27 @@ function createQuestionList(req, res, next) {
 
         question = global.common.randomOrder(question);
 
-        questionCount = {};
-        left = amount;
-        for (var i in questionRate) {
-            console.log('>>>>>>>>>>>>>>>>>>');
+        var sum = 0;
+        for (var i=0,len=questionRate.length; i<len; i+=2) {
+            sum += questionRate[i+1];
+        }
+        console.log('>>>>>>>>>sum>>>>>>>>>');
+        console.log(sum);
+            
+        var left = amount;
+        var questionCount = {};
+        for (var i=0,len=questionRate.length; i<len; i+=2) {
+            var k = questionRate[i];
+            var v = questionRate[i+1];
+            console.log('>>>>>>>>>'+k+'>>>>>>>>>');
             console.log(left);
             
-            questionCount[i] = Math.floor(questionRate[i]*amount/5);
-            left = left - questionCount[i];
+            questionCount[k] = Math.floor(v*amount/sum);
+            left = left - questionCount[k];
         }
         questionCount['Javascript'] += left;
 
-        questionList = {
+        var questionList = {
             'HTML': [],
             'CSS': [],
             'PS': [],
