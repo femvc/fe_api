@@ -23,7 +23,7 @@ function getRanks(req, res, next) {
 
     var filter = req.paramlist.filter || {
         update_time: global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-        score: 101
+        score: 102
     };
     if (req.paramlist.filter && !req.paramlist.filter.update_time) {
         filter = JSON.parse(decodeURIComponent(req.paramlist.filter));
