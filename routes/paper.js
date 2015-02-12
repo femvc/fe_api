@@ -17,13 +17,13 @@ function createQuestionList(req, res, next) {
         filter = {},
         amount = String(req.paramlist.amount),
         questionRate = [
-            'Javascript', 4,
-            'HTML', 3,
-            'CSS', 3,
-            'jQuery', 3,
-            'PS', 2,
-            'DOM', 2,
-            'HTML5CSS3', 2,
+            'Javascript', 2,
+            'HTML', 1,
+            'CSS', 2,
+            'jQuery', 1,
+            'PS', 1,
+            'DOM', 1,
+            'HTML5CSS3', 1,
             'Server', 1
         ];
     
