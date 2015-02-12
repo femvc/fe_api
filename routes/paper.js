@@ -54,8 +54,11 @@ function createQuestionList(req, res, next) {
         for (var i=0,len=questionRate.length; i<len; i+=2) {
             var k = questionRate[i];
             var v = questionRate[i+1];
-            
             questionCount[k] = Math.round(v*amount/sum);
+            
+            console.log('>>>>>>>>>>>left>>>>>>>>>>>');
+            console.log('left=' + left + '&k=' + k + '&v=' + v + '&count=' + questionCount[k]);
+            
             left = left - questionCount[k];
         }
         questionCount['Javascript'] += left;
@@ -72,35 +75,35 @@ function createQuestionList(req, res, next) {
         };
 
         for (var i = 0, len = question.length; i < len; i++) {
-            if (questionMap[question[i]].label.indexOf('HTML') !== -1 && questionCount['HTML']) {
+            if (questionMap[question[i]].label.indexOf('HTML') !== -1 && questionCount['HTML'] > 0) {
                 questionList['HTML'].push(questionMap[question[i]].atcid);
                 questionCount['HTML'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('CSS') !== -1 && questionCount['CSS']) {
+            else if (questionMap[question[i]].label.indexOf('CSS') !== -1 && questionCount['CSS'] > 0) {
                 questionList['CSS'].push(questionMap[question[i]].atcid);
                 questionCount['CSS'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('PS') !== -1 && questionCount['PS']) {
+            else if (questionMap[question[i]].label.indexOf('PS') !== -1 && questionCount['PS'] > 0) {
                 questionList['PS'].push(questionMap[question[i]].atcid);
                 questionCount['PS'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('Server') !== -1 && questionCount['Server']) {
+            else if (questionMap[question[i]].label.indexOf('Server') !== -1 && questionCount['Server'] > 0) {
                 questionList['Server'].push(questionMap[question[i]].atcid);
                 questionCount['Server'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('HTML5CSS3') !== -1 && questionCount['HTML5CSS3']) {
+            else if (questionMap[question[i]].label.indexOf('HTML5CSS3') !== -1 && questionCount['HTML5CSS3'] > 0) {
                 questionList['HTML5CSS3'].push(questionMap[question[i]].atcid);
                 questionCount['HTML5CSS3'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('DOM') !== -1 && questionCount['DOM']) {
+            else if (questionMap[question[i]].label.indexOf('DOM') !== -1 && questionCount['DOM'] > 0) {
                 questionList['DOM'].push(questionMap[question[i]].atcid);
                 questionCount['DOM'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('jQuery') !== -1 && questionCount['jQuery']) {
+            else if (questionMap[question[i]].label.indexOf('jQuery') !== -1 && questionCount['jQuery'] > 0) {
                 questionList['jQuery'].push(questionMap[question[i]].atcid);
                 questionCount['jQuery'] --;
             }
-            else if (questionMap[question[i]].label.indexOf('Javascript') !== -1 && questionCount['Javascript']) {
+            else if (questionMap[question[i]].label.indexOf('Javascript') !== -1 && questionCount['Javascript'] > 0) {
                 questionList['Javascript'].push(questionMap[question[i]].atcid);
                 questionCount['Javascript'] --;
             }
