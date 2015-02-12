@@ -55,7 +55,7 @@ function getRanks(req, res, next) {
                 filter.rankList.push(item);
             }
         }
-        filter.sum = resp.length;
+        filter.sum = filter.rankList.length;
         // response.ok(req, res, [filter, resp]); // Data 'resp' is HUGE！!
         response.ok(req, res, filter);
     });
