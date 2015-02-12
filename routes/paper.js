@@ -117,6 +117,8 @@ function createQuestionList(req, res, next) {
         // Test id & question list
         paper.test_id = test_id;
         paper.question = req.sessionStore.paperContent[uid];
+        console.log('>>>>>>>>>>>>>>>>>>');
+        console.log(paper.question.length);
         paper.sessionID = req.sessionID;
         var now = new Date();
         var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
