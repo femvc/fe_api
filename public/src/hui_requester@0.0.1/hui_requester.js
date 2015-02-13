@@ -684,7 +684,7 @@ hui.define('hui_requester', [], function () {
         var action;
         if (window.hui && hui.Action && hui.Master.get) {
             action = hui.Master.get();
-            if (action) {
+            if (action && action.showErrorByTree) {
                 action.showErrorByTree(data);
                 return 'finished';
             }
