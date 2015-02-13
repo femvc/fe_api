@@ -13,29 +13,34 @@ window.onload = function () {
     Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
-                hui.g('uid').innerHTML = String(result[1]);
+                var uid = String(result[1]);
+                hui.g('uid').innerHTML = uid;
                 hui.cc('link').style.display = 'block';
+
+                hui.setCookie('uid', uid);
+
+                window.test_id = hui.util.getCookie('test_id');
+                
+                initPageIndex();
+                initPageHistory();
+                initPageIndustry();
+                initPageLesson();
+                initPageAbout();
+                
+                initPageTest();
+                initPageStart();
+                initPageResult();
+                initPageCandidate();
+                initPageReport();
+                initPageDetail();
+                initPageSendSMS();
+                
+                hui.Action.start();
+
             }
         }
     });
-    
-    window.test_id = hui.util.getCookie('test_id');
-    
-    initPageIndex();
-    initPageHistory();
-    initPageIndustry();
-    initPageLesson();
-    initPageAbout();
-    
-    initPageTest();
-    initPageStart();
-    initPageResult();
-    initPageCandidate();
-    initPageReport();
-    initPageDetail();
-    initPageSendSMS();
-    
-    hui.Action.start();
+
 };
 
 function showTab(tab, main) {
@@ -208,6 +213,7 @@ function showTab(tab, main) {
                                 newstart: !!newstart ? 'newone' : '', 
                                 // amount: hui.getCookie('amount'),
                                 amount: me.querystring.amount || hui.getCookie('amount'),
+                                uid: hui.getCookie('uid'),
                                 rand: Math.random()
                             },
                             onsuccess: function (result) {
@@ -288,6 +294,7 @@ function showTab(tab, main) {
                     
                 },
                 saveTestScore: function(data) {
+                    data.uid = hui.getCookie('uid');
                     Requester.get('/ue_api/internal/save_next_question', {
                         data: data,
                         onsuccess: function (result) {

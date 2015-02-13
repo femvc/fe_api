@@ -112,7 +112,7 @@ function createQuestionList(req, res, next) {
         // var length = 5;
         var uid = req.sessionStore.user[req.sessionID];
         var now = new Date();
-        var test_id = String(uid).toUpperCase() + '_' + global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
+        var test_id = String(req.sessionID).toUpperCase() + '_' + global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
         req.sessionStore.paper[uid] = test_id;
         req.sessionStore.paperContent[uid] = questionList['HTML'].concat(
             questionList['CSS'],
