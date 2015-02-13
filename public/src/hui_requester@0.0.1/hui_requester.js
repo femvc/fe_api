@@ -682,7 +682,8 @@ hui.define('hui_requester', [], function () {
      */
     Requester.backendError = function (xhr, data) {
         var action;
-        if (window.hui && hui.Action && hui.Master.get) {
+        // 注：hui.Action.started标识框架是否已启动
+        if (window.hui && hui.Action && hui.Action.started && hui.Master.get) {
             action = hui.Master.get();
             if (action && action.showErrorByTree) {
                 action.showErrorByTree(data);
@@ -690,8 +691,6 @@ hui.define('hui_requester', [], function () {
             }
         }
     };
-
-
 
     /**============================================
      * @name 发送JSONP请求
