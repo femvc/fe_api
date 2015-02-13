@@ -625,7 +625,7 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
                     hui.window.console.error('hui.Router.setRule(\'%s\', \'%s\'); Action \'%s\' is not exist.', loc, action, action);
                 }
                 // 找不到则返回404
-                if (loc !== '/404') {
+                if (loc !== '/404' && hui.Action.started) {
                     action = me.findActionNameByLocation('/404');
                 }
             }
@@ -1327,6 +1327,11 @@ hui.define('hui_action', ['hui_template', 'hui_control'], function () {
         if (hui.Action.afterStart) {
             que.push(hui.Action.afterStart);
         }
+
+        que.push(function () {
+            // 注：标识框架是否已经成功启动！
+            hui.Action.started = true;
+        });
 
         que.next();
     };
