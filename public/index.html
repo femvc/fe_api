@@ -206,7 +206,8 @@ function showTab(tab, main) {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
                                 newstart: !!newstart ? 'newone' : '', 
-                                amount: hui.getCookie('amount'),
+                                // amount: hui.getCookie('amount'),
+                                amount: me.querystring.amount || hui.getCookie('amount'),
                                 rand: Math.random()
                             },
                             onsuccess: function (result) {
