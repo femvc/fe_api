@@ -17,7 +17,7 @@ window.onload = function () {
                 hui.g('uid').innerHTML = uid;
                 hui.cc('link').style.display = 'block';
 
-                hui.setCookie('uid', uid);
+                hui.util.setCookie('uid', uid);
 
                 window.test_id = hui.util.getCookie('test_id');
                 
@@ -211,8 +211,8 @@ function showTab(tab, main) {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
                                 newstart: !!newstart ? 'newone' : '', 
-                                // amount: hui.getCookie('amount'),
-                                amount: me.querystring.amount || hui.getCookie('amount'),
+                                // amount: hui.util.getCookie('amount'),
+                                amount: me.querystring.amount || hui.util.getCookie('amount'),
                                 uid: hui.getCookie('uid'),
                                 rand: Math.random()
                             },
