@@ -73,14 +73,15 @@ exports.auth = function (req, res, next) {
     req.sessionStore.paper = req.sessionStore.paper || {};
     req.sessionStore.paperContent = req.sessionStore.paperContent || {};
 
-    if (req.sessionStore.user[req.sessionID]) {
-        next();
-    }
-    else {
+    // if (req.sessionStore.user[req.sessionID]) {
+    //     next();
+    // }
+    // else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
-        req.sessionStore.user[req.sessionID] = String(req.sessionID).toUpperCase().substr(0, 8);
+        var uid = String(req.sessionID).toUpperCase().substr(0, 8);
+        req.sessionStore.user[req.sessionID] = uid;
         next();
-    }
+    // }
 };
 
 exports.getUid = function (req, res, next) {
@@ -90,6 +91,9 @@ exports.getUid = function (req, res, next) {
     // uid = String(uid).toUpperCase().substr(0, 8);
     response.ok(req, res, uid);
 };
+
+
+
 
 exports.getDetail = function (req, res, next) {
     req.sessionStore.user = req.sessionStore.user || {};
