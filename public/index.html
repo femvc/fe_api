@@ -18,7 +18,7 @@ window.onload = function () {
     Requester.get('/ue_api/account/get_uid?' + 'rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
-                var uid = String(result[1]);
+                var uid = String(result[1][0]);
                 hui.g('uid').innerHTML = uid;
                 hui.cc('link').style.display = 'block';
 
