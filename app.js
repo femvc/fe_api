@@ -21,7 +21,7 @@ require('./global').run(function () {
     app.use(express.urlencoded())
     app.use(express.json())
     app.use(express.methodOverride());
-    app.use(express.cookieParser('your secret here'));
+    app.use(express.cookieParser());
 
     var session = require('express-session')
     var RedisStore = require('connect-redis')(session);
