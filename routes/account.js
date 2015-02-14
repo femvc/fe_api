@@ -66,7 +66,7 @@ exports.register = function (req, res, next) {
 };
 
 exports.auth = function (req, res, next) {
-    console.log('============' + req.sessionID + '===============');
+    console.log('============account.auth:' + req.sessionID + '===============');
     req.sessionStore.user = req.sessionStore.user || {};
     req.sessionStore.question = req.sessionStore.question || {};
     req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
