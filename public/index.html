@@ -10,7 +10,7 @@
 'use strict';
 
 window.onload = function () {
-    Requester.get('/ue_api/account/get_uid?rand=' + Math.random(), {
+    Requester.get('/ue_api/account/get_uid?uid=' + (hui.getCookie('uid') || '') + '&rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
                 var uid = String(result[1]);
@@ -203,7 +203,8 @@ function showTab(tab, main) {
                         data.test_id = window.test_id;
                         me.saveTestScore(data);
                         $('.subject_nxt').attr('disabled','disabled');
-                        $('.form_content').animate({opacity:0}, 500);
+                        // $('.form_content').animate({opacity:0}, 500);
+                        $('.form_content').css({opacity:0});
                         // $('.form_mask').show();
                     };
 
@@ -238,7 +239,8 @@ function showTab(tab, main) {
                                             hui.Control.getByFormname('form').addOption(list[i]);
                                         }
                                         $('.subject_nxt').removeAttr('disabled');
-                                        $('.form_content').animate({opacity:1}, 400);
+                                        //$('.form_content').animate({opacity:1}, 400);
+                                        $('.form_content').css({opacity:1});
                                         //$('.form_mask').hide();
                                         hui.Control.getByFormname('form').hideWaiting();
                                     }
