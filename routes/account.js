@@ -84,7 +84,7 @@ exports.auth = function (req, res, next) {
     else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
         var uid = String(req.sessionID).toUpperCase().substr(0, 8);
-        req.sessionStore.user[req.sessionID] = 'uid00000';
+        req.sessionStore.user[req.sessionID] = uid;
         next();
     }
 };
