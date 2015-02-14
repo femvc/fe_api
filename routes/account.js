@@ -72,6 +72,14 @@ exports.auth = function (req, res, next) {
     req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
     req.sessionStore.paper = req.sessionStore.paper || {};
     req.sessionStore.paperContent = req.sessionStore.paperContent || {};
+    console.log('>>>>>>>>>>req.cookies>>>>>>>>>>>>');
+    console.log(req.cookies);
+    console.log('>>>>>>>>>>req.cookie>>>>>>>>>>>>');
+    console.log(req.cookie);
+    console.log('>>>>>>>>>>res.cookies>>>>>>>>>>>>');
+    console.log(res.cookies);
+    console.log('>>>>>>>>>>res.cookie>>>>>>>>>>>>');
+    console.log(res.cookie);
 
     if (req.cookies.uid && req.cookies.uid.length === 8) {
         req.sessionStore.user[req.sessionID] = req.cookies.uid;
