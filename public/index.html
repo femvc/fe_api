@@ -10,7 +10,12 @@
 'use strict';
 
 window.onload = function () {
-    Requester.get('/ue_api/account/get_uid?uid=' + (hui.getCookie('uid') || '') + '&rand=' + Math.random(), {
+    // 注：每次请求必须带上的公共参数,如token
+    Requester.addSysParam(function(data){
+        data.uid = hui.util.getCookie('uid');
+    });
+
+    Requester.get('/ue_api/account/get_uid?' + 'rand=' + Math.random(), {
         onsuccess: function (result) {
             if (result && !result[0] && result[1]) {
                 var uid = String(result[1]);

@@ -219,7 +219,6 @@ hui.define('hui_requester', [], function () {
                     headers = options.headers || {},
 
                     timeout = options.timeout || 0,
-                    key,
                     str,
                     stateChangeHandler;
 
@@ -234,7 +233,7 @@ hui.define('hui_requester', [], function () {
                 // 将options参数中的事件参数复制到eventHandlers对象中 
                 // 这里复制所有options的成员，eventHandlers有冗余 
                 // 但是不会产生任何影响，并且代码紧凑
-                for (key in options) {
+                for (var key in options) {
                     if (options.hasOwnProperty(key)) {
                         xhr.eventHandlers[key] = options[key];
                     }
@@ -247,24 +246,36 @@ hui.define('hui_requester', [], function () {
                 headers['dataType'] = xhr.eventHandlers['dataType'] = xhr.eventHandlers['datatype'] = (options.dataType || 'JSON').toLowerCase();
 
                 try {
+                    var querystring = '';
+                    // 注：每次请求必须带上的公共参数,如token
+                    var param = {};
+                    for (var i = 0, len = Requester.sysParam.length; i < len; i++) {
+                        Requester.sysParam[i](param);
+                    }
+
+                    for (var key in param) {
+                        querystring = querystring + '&' + window.Requester.encode(key) + '=' + window.Requester.encode(sysParam[key]);
+                    }
+
                     // 提交到服务器端的参数是Map则转换为string
                     if (Object.prototype.toString.call(data) === '[object Object]') {
                         str = [];
-                        for (key in data) {
+                        for (var key in data) {
                             if (key && data.hasOwnProperty(key)) {
                                 str.push(window.Requester.encode(key) + '=' + window.Requester.encode(data[key]));
                             }
                         }
-                        data = str.join('&');
+                        querystring = querystring + '&' + str.join('&');
                     }
-                    // 注：每次请求必须带上的公共参数,如token
-                    data = window.Requester.addSysParam(data);
+                    else {
+                        querystring = querystring + '&' + data;
+                    }
 
                     // 使用GET方式提交
                     if (method == 'GET') {
-                        if (data) {
-                            url += (url.indexOf('?') >= 0 ? (data.substr(0, 1) == '&' ? '' : '&') : '?') + data;
-                            data = null;
+                        if (querystring) {
+                            url += (url.indexOf('?') >= 0 ? (querystring.substr(0, 1) == '&' ? '' : '&') : '?') + querystring;
+                            querystring = null;
                         }
                     }
 
@@ -290,7 +301,7 @@ hui.define('hui_requester', [], function () {
                     // 在open之后再进行http请求头设定 
                     // FIXME 是否需要添加; charset=UTF-8呢 
 
-                    for (key in headers) {
+                    for (var key in headers) {
                         if (headers.hasOwnProperty(key)) {
                             xhr.xhr.setRequestHeader(key, headers[key]);
                         }
@@ -306,7 +317,7 @@ hui.define('hui_requester', [], function () {
                             xhr.fire('timeout');
                         }, timeout);
                     }
-                    xhr.xhr.send(data);
+                    xhr.xhr.send(querystring);
 
                     if (!async) {
                         stateChangeHandler.call(xhr);
@@ -446,8 +457,9 @@ hui.define('hui_requester', [], function () {
      * @public
      * @param {String} str 已有参数
      */
-    Requester.addSysParam = function (str) {
-        return str;
+    Requester.sysParam = [];
+    Requester.addSysParam = function (func) {
+        Requester.sysParam.push(func);
     };
 
     /** 
@@ -887,18 +899,18 @@ function doit() {
             var target;
             var list = hui.Mockup.rules;
             //匹配所有符合表达式的路径[正则表达式]
-            for (var i=0,ilen=list.length; i<ilen; i++) {
+            for (var i = 0, ilen = list.length; i < ilen; i++) {
                 if (list[i] && list[i].rule instanceof RegExp && list[i].rule.test(url)) {
                     target = list[i].target;
                 }
             }
             //[优先]匹配单独具体路径
-            for (var i=0,ilen=list.length; i<ilen; i++) {
+            for (var i = 0, ilen = list.length; i < ilen; i++) {
                 if (list[i] && !(list[i].rule instanceof RegExp) && list[i].rule === url) {
                     target = list[i].target;
                 }
             }
-            
+
             if (url && target === undefined) {
                 var str = url.split('#')[0].split('?')[0];
                 if (str !== url) {
@@ -942,12 +954,15 @@ function doit() {
         },
         setRule: function (url, target) {
             hui.Mockup.remove(url, target);
-            hui.Mockup.rules.push({rule: url, 'target': target});
+            hui.Mockup.rules.push({
+                rule: url,
+                'target': target
+            });
         },
         remove: function (url, target) {
             var list = hui.Mockup.rules;
             var equ = hui.Mockup.isEqual;
-            for (var i=0,ilen=list.length; i<ilen; i++) {
+            for (var i = 0, ilen = list.length; i < ilen; i++) {
                 if (list[i] && equ(list[i].rule, url) && (target === undefined || equ(list[i].target, target))) {
                     list[i] = null;
                 }
@@ -963,10 +978,10 @@ function doit() {
                 return a !== 0 || 1 / a == 1 / b;
             }
             // A strict comparison is necessary because `null == undefined`.
-            if (a == null || b == null) {
+            if (a === null || b === null) {
                 return a === b;
             }
-            if (aStack == undefined || bStack == undefined) {
+            if (aStack === undefined || bStack === undefined) {
                 aStack = [];
                 bStack = [];
             }
@@ -984,7 +999,7 @@ function doit() {
             case '[object Number]':
                 // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
                 // other numeric values.
-                return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+                return a != +a ? b != +b : (a === 0 ? 1 / a == 1 / b : a == +b);
             case '[object Date]':
             case '[object Boolean]':
                 // Coerce dates and booleans to numeric primitive values. Dates are compared by their
