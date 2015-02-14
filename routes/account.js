@@ -75,14 +75,18 @@ exports.auth = function (req, res, next) {
     console.log('>>>>>>>>>>req.paramlist>>>>>>>>>>>>');
     console.log(req.paramlist);
 
-    if (req.paramlist.uid && req.paramlist.uid.length === 8) {
+    if (req.paramlist.uid && req.paramlist.uid.join && req.paramlist.uid[0] && req.paramlist.uid[0].length === 8) {
+        req.sessionStore.user[req.sessionID] = req.paramlist.uid[0];
+        next();
+    }
+    if (req.paramlist.uid && !req.paramlist.uid.join && req.paramlist.uid.length === 8) {
         req.sessionStore.user[req.sessionID] = req.paramlist.uid;
         next();
     }
     else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
         var uid = String(req.sessionID).toUpperCase().substr(0, 8);
-        req.sessionStore.user[req.sessionID] = 'uid0000000';
+        req.sessionStore.user[req.sessionID] = 'uid00000';
         next();
     }
 };
