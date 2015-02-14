@@ -72,17 +72,13 @@ exports.auth = function (req, res, next) {
     req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
     req.sessionStore.paper = req.sessionStore.paper || {};
     req.sessionStore.paperContent = req.sessionStore.paperContent || {};
-    console.log('>>>>>>>>>>req.paramlist>>>>>>>>>>>>');
-    console.log(req.paramlist);
-
+    
     if (req.paramlist.uid && req.paramlist.uid.join && req.paramlist.uid[0] && req.paramlist.uid[0].length === 8) {
         req.sessionStore.user[req.sessionID] = req.paramlist.uid[0];
-        console.log('>>>>>>>>>>'+req.sessionStore.user[req.sessionID]+'>>>>>>>>>>>>');
         next();
     }
-    if (req.paramlist.uid && !req.paramlist.uid.join && req.paramlist.uid.length === 8) {
+    else if (req.paramlist.uid && !req.paramlist.uid.join && req.paramlist.uid.length === 8) {
         req.sessionStore.user[req.sessionID] = req.paramlist.uid;
-        console.log('>>>>>>>>>>'+req.sessionStore.user[req.sessionID]+'>>>>>>>>>>>>');
         next();
     }
     else {
