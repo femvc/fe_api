@@ -41,6 +41,7 @@ exports.getResult = function (req, res, next) {
                 }
 
                 response.ok(req, res, {
+                    test_id: req.paramlist.test_id,
                     paper: resp.question,
                     your_answer: doc,
                     reference_answer: question
