@@ -73,22 +73,21 @@ exports.auth = function (req, res, next) {
     req.sessionStore.paper = req.sessionStore.paper || {};
     req.sessionStore.paperContent = req.sessionStore.paperContent || {};
 
-    // if (req.sessionStore.user[req.sessionID]) {
-    //     next();
-    // }
-    // else {
+    if (req.cookies.uid && req.cookies.uid.length === 8) {
+        req.sessionStore.user[req.sessionID] = req.cookies.uid;
+        next();
+    }
+    else {
         //response.err(req, res, 'USER_TOKEN_EXPIRE');
         var uid = String(req.sessionID).toUpperCase().substr(0, 8);
         req.sessionStore.user[req.sessionID] = uid;
         next();
-    // }
+    }
 };
 
 exports.getUid = function (req, res, next) {
     req.sessionStore.user = req.sessionStore.user || {};
-    if (req.paramlist.uid && req.paramlist.uid.length === 8) {
-        req.sessionStore.user[req.sessionID] = req.paramlist.uid;
-    }
+    
     var uid = req.sessionStore.user[req.sessionID];
     // uid = String(crypto.createHash('md5').update(uid + 'fecamps').digest('hex')).toUpperCase().substr(0, 8);
     // uid = String(uid).toUpperCase().substr(0, 8);
