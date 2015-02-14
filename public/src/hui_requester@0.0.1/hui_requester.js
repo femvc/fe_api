@@ -254,7 +254,7 @@ hui.define('hui_requester', [], function () {
                     }
 
                     for (var key in param) {
-                        querystring = querystring + '&' + window.Requester.encode(key) + '=' + window.Requester.encode(sysParam[key]);
+                        querystring = querystring + '&' + window.Requester.encode(key) + '=' + window.Requester.encode(param[key]);
                     }
 
                     // 提交到服务器端的参数是Map则转换为string
