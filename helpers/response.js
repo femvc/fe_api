@@ -24,6 +24,7 @@ var err_map = {
 
     USER_TOKEN_EXPIRE: '登陆信息过期，请重新登陆。',
     USER_LOGIN_JIEPANG_FAIL: '登陆街旁失败',
+    RECORD_NOT_EXIST: '内容不存在',
     USER_USERNAME_NOT_EXIST: '用户不存在',
     USER_PASSWORD_WRONG: '密码错误',
     USER_LOGIN_FAIL: '用户不存在或密码错误',

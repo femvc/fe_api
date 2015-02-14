@@ -1,4 +1,25 @@
 @echo off
-cd C:\
+echo.
+echo  ^     ____.-'£þ£þ£þ£þ£þ'-.____ 
+echo  ^ .--'      +----------+      '--.
+echo  ^(          ^|  MongoDB ^|          )
+echo  ^|`--.____  +----------+  ____.--'^|
+echo  ^|        `-.          .-'        ^|
+echo   `--.____   £þ£þ£þ£þ£þ   ____.--'
+echo  ^|`--.____`-.          .-'____.--'^|
+echo  ^|        `-.£þ£þ£þ£þ£þ.-'        ^|
+echo   `--.____   £þ£þ£þ£þ£þ   ____.--'
+echo  ^|`--.____`-.          .-'____.--'^|
+echo  ^|        `-.£þ£þ£þ£þ£þ.-'        ^|
+echo   `--.____   £þ£þ£þ£þ£þ   ____.--'
+echo  ^|`--.____`-.          .-'____.--'^|
+echo  ^(        `-.£þ£þ£þ£þ£þ.-'        ^)
+echo  ^ `--.____   £þ£þ£þ£þ£þ   ____.--'
+echo  ^         `-.          .-'        
+echo  ^            £þ£þ£þ£þ£þ
+echo on  
+@echo off
 @echo on
-mongodb2.4.10\bin\mongod.exe -f C:\mongodb\mongo.conf
+C:\mongodb2.4.10\bin\mongod.exe -f C:\mongodb\mongo.conf
+::PAUSE
+
