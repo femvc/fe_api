@@ -7,7 +7,7 @@ var resultModel = require('../models/result').createNew();
 var rankRoute = require('./rank');
 
 function createQuestionList(req, res, next) {
-    req.sessionStore.questionIndex[req.sessionStore.user[req.sessionID]] = undefined;
+    // req.sessionStore.questionIndex[req.sessionStore.user[req.sessionID]] = undefined;
     var current = 1,
         count = 10000,
         sort = {
@@ -114,8 +114,9 @@ function createQuestionList(req, res, next) {
         paper.uid = req.sessionStore.user[req.sessionID];
         var now = new Date();
         var test_id = uid + '_' + global.common.formatDate(now, 'yyyyMMddHHmmss') + '_' + (String(Math.random()).replace('0.', '') + '0000000000000000').substr(0, 16);
-        req.sessionStore.paper[uid] = test_id;
-        req.sessionStore.paperContent[uid] = questionList['HTML'].concat(
+        // req.sessionStore.paper[uid] = test_id;
+        // req.sessionStore.paperContent[uid] = questionList['HTML'].concat(
+        var paperContent = questionList['HTML'].concat(
             questionList['CSS'],
             questionList['DOM'],
             questionList['PS'],
@@ -127,7 +128,8 @@ function createQuestionList(req, res, next) {
 
         // Test id & question list
         paper.test_id = test_id;
-        paper.question = req.sessionStore.paperContent[uid];
+        // paper.question = req.sessionStore.paperContent[uid];
+        paper.question = paperContent;
         paper.sessionID = req.sessionID;
         var now = new Date();
         var date = global.common.formatDate(now, 'yyyy-MM-dd HH:mm:ss');
@@ -137,24 +139,178 @@ function createQuestionList(req, res, next) {
             if (err) {
                 response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
             }
-            next();
+            next(doc);
         });
     });
 }
 
-function getNextQuestion(req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
+exports.createQuestionList = function (req, res, next) {
+    // var uid = req.sessionStore.user[req.sessionID];
 
-    if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
-        console.log('>>>>>>>>>>>>> createQuestionList newstart <<<<<<<<<<<<<<');
-        createQuestionList(req, res, function () {
-            getNextQuestionCallback(req, res, next);
+    createQuestionList(req, res, function (doc) {
+        response.ok(req, res, doc ? doc[0] : null);
+    });
+};
+
+function getNextQuestion(req, res, next) {
+    // var uid = req.sessionStore.user[req.sessionID];
+
+    // if (!req.sessionStore.paper[uid] || !req.sessionStore.paperContent[uid] || req.paramlist.newstart) {
+    //     console.log('>>>>>>>>>>>>> createQuestionList newstart <<<<<<<<<<<<<<');
+    //     createQuestionList(req, res, function () {
+    //         getNextQuestionCallback(req, res, next);
+    //     });
+    // }
+    // else {
+    //     getNextQuestionCallback(req, res, next);
+    // }
+    if (!req.paramlist.test_id || String(req.paramlist.test_id).length !== 40) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'test_id');
+    }
+    if (!req.paramlist.test_index || String(Number(req.paramlist.test_index)) !== req.paramlist.test_index || 
+        Number(req.paramlist.test_index) < 1 || isNaN(req.paramlist.test_index)) {
+        req.paramlist.test_index = 1;
+    }
+
+    // var uid = req.sessionStore.user[req.sessionID];
+    // var test_id = req.sessionStore.paper[uid];
+    // var uid = req.paramlist.uid;
+    var test_id = req.paramlist.test_id;
+    // var paperContent = req.sessionStore.paperContent[uid];
+    paperModel.getItem({
+        test_id: test_id
+    }, function (err, doc) {
+        if (err) {
+            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        if (!doc || !doc.question) {
+            return response.err(req, res, 'INTERNAL_DB_RECORD_NOT_EXIST');
+        }
+        
+        var paperContent = doc.question;
+        // if (!req.sessionStore.questionIndex[uid]) {
+        //     req.sessionStore.questionIndex[uid] = 1;
+        // }
+
+        questionModel.getItem({
+            // atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
+            atcid: paperContent[Number(req.paramlist.test_index) - 1]
+        }, function (err, doc) {
+            if (err) {
+                return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+            }
+            // if (!doc) {
+            //     req.sessionStore.questionIndex[uid] = 1;
+            //     return response.err(req, res, 'INDEX_OUT_RANGE');
+            // }
+            console.log('>>>>>>>>>>>>>>>>>>>>>>');
+            console.log(doc);
+            var single = 0;
+            if (req.paramlist.answer != 'yes' && doc && doc.options) {
+                var list = doc.options;
+                for (var i in list) {
+                    single += (list[i].correct ? 1 : 0);
+                    delete list[i].correct;
+                }
+            }
+
+            var data = {};
+            var question = JSON.parse(JSON.stringify(doc));
+            if (question) {
+                for (var i in question) {
+                    data[i] = question[i];
+                }
+            }
+            // data.index = req.sessionStore.questionIndex[uid];
+            data.index = Number(req.paramlist.test_index);
+            data.sessionID = req.sessionID;
+            data.sum = paperContent.length;
+            data.test_id = test_id;
+            data.single = single === 1;
+            response.ok(req, res, data);
         });
-    }
-    else {
-        getNextQuestionCallback(req, res, next);
-    }
+        
+    });
 }
+
+exports.getNextQuestion = getNextQuestion;
+
+exports.saveNextQuestion = function (req, res, next) {
+    var uid = req.sessionStore.user[req.sessionID];
+    // if (req.sessionStore.questionIndex[uid]) {
+    //     req.sessionStore.questionIndex[uid] = parseInt(req.sessionStore.questionIndex[uid], 10) + 1;
+    // }
+    // else {
+    //     req.sessionStore.questionIndex[uid] = 1;
+    // }
+
+    // if (!req.paramlist.atcid || !req.paramlist.test_id || req.paramlist.test_id.indexOf(uid) == -1) {
+    //     //return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
+    //     return response.ok(req, res, [uid, req.paramlist]);
+    // }
+
+    if (!req.paramlist.test_id || String(req.paramlist.test_id).length !== 40) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'test_id');
+    }
+    if (!req.paramlist.atcid || String(req.paramlist.atcid).length !== 31) {
+        return response.err(req, res, 'MISSING_PARAMETERS', 'atcid');
+    }
+
+    paperModel.getItem({
+        test_id: req.paramlist.test_id
+    }, function (err, doc) {
+        if (err) {
+            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+        }
+        if (!doc || !doc.question || doc.question.indexOf(req.paramlist.atcid) === -1) {
+            return response.err(req, res, 'INTERNAL_DB_RECORD_NOT_EXIST');
+        }
+        
+        var paperContent = doc.question;
+        var question = {};
+        
+        question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+        question.uid = uid;
+        question.atcid = req.paramlist.atcid;
+        question.test_id = req.paramlist.test_id;
+        question.title = req.paramlist.title;
+        question.index = req.paramlist.index;
+
+        try {
+            question.content = req.paramlist.content ? JSON.parse(decodeURIComponent(req.paramlist.content)) : '';
+        }
+        catch (e) {}
+
+        resultModel.insert(question, function (err, doc) {
+            if (err) {
+                response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
+            }
+
+            // doc[0].index = req.sessionStore.questionIndex[uid];
+            doc[0].sessionID = req.sessionID;
+
+            // test finished
+            // if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
+            if (paperContent.indexOf(req.paramlist.atcid) === paperContent.length - 1) {
+                console.log('~~~~~~~~~~~ test finished ~~~~~~~~~~');
+                req.paramlist.internal = true;
+                getPaperResult(req, res, function (req, res, rank) {
+                    rankRoute.saveRank(req, res, function (err, resp) {
+                        response.ok(req, res, {
+                            finish: true
+                        });
+                    });
+                });
+            }
+            else {
+                response.ok(req, res, JSON.parse(JSON.stringify(doc)));
+            }
+        });
+    });
+};
+
+exports.getPaperResult = getPaperResult;
+
 
 function getPaperResult(req, res, next) {
     if (!req.paramlist.test_id) {
@@ -259,100 +415,6 @@ function getPaperResult(req, res, next) {
     });
 }
 
-function getNextQuestionCallback(req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
-    var test_id = req.sessionStore.paper[uid];
-    var paperContent = req.sessionStore.paperContent[uid];
-    if (!req.sessionStore.questionIndex[uid]) {
-        req.sessionStore.questionIndex[uid] = 1;
-    }
-
-    questionModel.getItem({
-        atcid: paperContent[req.sessionStore.questionIndex[uid] - 1]
-    }, function (err, doc) {
-        if (err) {
-            return response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-        if (!doc) {
-            req.sessionStore.questionIndex[uid] = 1;
-            return response.err(req, res, 'INDEX_OUT_RANGE');
-        }
-        var single = 0;
-        if (req.paramlist.answer != 'yes' && doc && doc.options) {
-            var list = doc.options;
-            for (var i in list) {
-                single += (list[i].correct ? 1 : 0);
-                delete list[i].correct;
-            }
-        }
-
-        var data = JSON.parse(JSON.stringify(doc));
-        data.index = req.sessionStore.questionIndex[uid];
-        data.sessionID = req.sessionID;
-        data.sum = paperContent.length;
-        data.test_id = test_id;
-        data.single = single === 1;
-        response.ok(req, res, data);
-    });
-}
-
-exports.getNextQuestion = getNextQuestion;
-exports.getPaperResult = getPaperResult;
-
-exports.saveNextQuestion = function (req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
-    if (req.sessionStore.questionIndex[uid]) {
-        req.sessionStore.questionIndex[uid] = parseInt(req.sessionStore.questionIndex[uid], 10) + 1;
-    }
-    else {
-        req.sessionStore.questionIndex[uid] = 1;
-    }
-
-    if (!req.paramlist.atcid || !req.paramlist.test_id || req.paramlist.test_id.indexOf(uid) == -1) {
-        //return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER');
-        return response.ok(req, res, [uid, req.paramlist]);
-    }
-
-    var callback = function (err, doc) {
-        if (err) {
-            response.err(req, res, 'INTERNAL_DB_OPT_FAIL');
-        }
-
-        doc[0].index = req.sessionStore.questionIndex[uid];
-        doc[0].sessionID = req.sessionID;
-
-        // test finished
-        if (req.sessionStore.paperContent[uid] && req.sessionStore.questionIndex[uid] > req.sessionStore.paperContent[uid].length) {
-            console.log('~~~~~~~~~~~ test finished ~~~~~~~~~~');
-            req.paramlist.internal = true;
-            getPaperResult(req, res, function (req, res, rank) {
-                rankRoute.saveRank(req, res, function (err, resp) {
-                    response.ok(req, res, {
-                        finish: true
-                    });
-                });
-            });
-        }
-        else {
-            response.ok(req, res, JSON.parse(JSON.stringify(doc)));
-        }
-    };
-
-    var question = {};
-    question.update_time = global.common.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    question.uid = uid;
-    question.atcid = req.paramlist.atcid;
-    question.test_id = req.paramlist.test_id;
-    question.title = req.paramlist.title;
-    question.index = req.paramlist.index;
-
-    try {
-        question.content = req.paramlist.content ? JSON.parse(decodeURIComponent(req.paramlist.content)) : '';
-    }
-    catch (e) {}
-
-    resultModel.insert(question, callback);
-};
 
 exports.getPapers = function (req, res, next) {
     // var uid = req.sessionStore.user[req.sessionID];
@@ -373,11 +435,11 @@ exports.getPapers = function (req, res, next) {
 };
 
 exports.resetQuestionIndex = function (req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
+    // var uid = req.sessionStore.user[req.sessionID];
 
     var question_index = req.paramlist.question_index;
     if (question_index !== undefined && question_index > 0 && question_index < 21) {
-        req.sessionStore.questionIndex[uid] = question_index;
+        // req.sessionStore.questionIndex[uid] = question_index;
         response.ok(req, res, {
             question_index: question_index
         });
@@ -385,14 +447,4 @@ exports.resetQuestionIndex = function (req, res, next) {
     else {
         return response.err(req, res, 'INTERNAL_INVALIDE_PARAMETER', 'question_index');
     }
-};
-
-exports.createQuestionList = function (req, res, next) {
-    var uid = req.sessionStore.user[req.sessionID];
-
-    createQuestionList(req, res, function () {
-        response.ok(req, res, {
-            paper_id: req.sessionStore.paper[uid]
-        });
-    });
 };

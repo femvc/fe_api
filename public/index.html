@@ -205,21 +205,47 @@ function showTab(tab, main) {
                         var form = me.getByFormname('form');
                         var data = form.getParamMap();
                         data.content = window.encodeURIComponent(JSON.stringify(data.content));
-                        data.test_id = window.test_id;
-                        me.saveTestScore(data);
+                        data.test_id = hui.util.getCookie('test_id');
+                        me.saveNextQuestionResult(data);
                         $('.subject_nxt').attr('disabled','disabled');
                         // $('.form_content').animate({opacity:0}, 500);
-                        $('.form_content').css({opacity:0});
+                        // $('.form_content').css({opacity:0});
                         // $('.form_mask').show();
                     };
 
-                    me.getByFormname('form').initSubject = function (newstart) {
+                    me.getByFormname('form').initSubject = function () {
+                        var test_id = hui.util.getCookie('test_id'),
+                            finish = hui.util.getCookie('testid_' + test_id);
+
+                        if (test_id && finish !== 'finish') {
+                            hui.Control.getByFormname('form').getNextQuestion();
+                        }
+                        else {
+                            Requester.get('/ue_api/internal/create_question_list', {
+                                data: {
+                                    amount: me.querystring.amount || hui.util.getCookie('amount'),
+                                    rand: Math.random()
+                                },
+                                onsuccess: function (result) {
+                                    if (result && !result[0] && result[1] && result[1].test_id) {
+                                        hui.util.setCookie('test_id',  result[1].test_id);
+                                        hui.util.setCookie('testid_' + result[1].test_id, 'unfinish');
+                                        hui.util.setCookie('test_index', 1);
+                                        
+                                        hui.Control.getByFormname('form').getNextQuestion();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    me.getByFormname('form').getNextQuestion = function () {
                         Requester.get('/ue_api/internal/get_next_question', {
                             data: {
-                                newstart: !!newstart ? 'newone' : '', 
+                                // newstart: finish ? 'newone' : '', 
                                 // amount: hui.util.getCookie('amount'),
                                 amount: me.querystring.amount || hui.util.getCookie('amount'),
-                                uid: hui.getCookie('uid'),
+                                test_id: hui.util.getCookie('test_id'),
+                                test_index: Number(hui.getCookie('test_index')),
                                 rand: Math.random()
                             },
                             onsuccess: function (result) {
@@ -229,11 +255,11 @@ function showTab(tab, main) {
                                         data.title = hui.util.encodehtml(data.title);
                                         data.atcid = data.atcid;
                                         data.index2 = data.index1 = data.index;
+
+                                        hui.setCookie('test_index', data.index);
+                                        
                                         data.title1 = data.title;
-                                        if (data.test_id) {
-                                            hui.util.setCookie('test_id', data.test_id);
-                                            // showTestHistory();
-                                        }
+
                                         hui.Control.getByFormname('form').setValueByTree(data);
                                         hui.Control.getByFormname('form').getByFormname('content').disposeChild();
                                         //var content = hui.Control.getByFormname('form').getByFormname('content').getMain();
@@ -300,7 +326,7 @@ function showTab(tab, main) {
                     };
                     
                 },
-                saveTestScore: function(data) {
+                saveNextQuestionResult: function(data) {
                     data.uid = hui.getCookie('uid');
                     Requester.get('/ue_api/internal/save_next_question', {
                         data: data,
@@ -312,8 +338,9 @@ function showTab(tab, main) {
                                 hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'finish');
                             }
                             else {
-                                hui.Control.getByFormname('form').initSubject();
+                                hui.util.setCookie('test_index', Number(hui.util.getCookie('test_index')) + 1);
                                 hui.util.setCookie('testid_' + hui.util.getCookie('test_id'), 'unfinish');
+                                hui.Control.getByFormname('form').getNextQuestion();
                             }
                             //}
                             //else {
@@ -328,7 +355,7 @@ function showTab(tab, main) {
                     var me = this;
                     showTab('test', 'start');
 
-                    me.getByFormname('form').initSubject('newone');
+                    me.getByFormname('form').initSubject();
                 }
             };
 
@@ -527,7 +554,7 @@ function showTab(tab, main) {
                     candidate.getByFormname('candidate_nxt').onclick = function () {
                         var data = candidate.getParamMap();
                         if (data.annual !== '0' && data.career !== '0') {
-                            data.test_id = window.test_id;
+                            data.test_id = hui.util.getCookie('test_id');
                             hui.util.setCookie('user_annual', data.annual);
                             hui.util.setCookie('user_career', data.career);
                             Requester.get('/ue_api/internal/update_rank', {
@@ -871,7 +898,7 @@ function showTab(tab, main) {
                                 '    <div class="txt">#{hui.util.encodehtml(hui.util.decode(content))} </div>',
                                 '</li>'
                             ].join('');
-                        var finish = hui.util.getCookie('testid_' + window.test_id) === 'finish';
+                        var finish = hui.util.getCookie('testid_' + hui.util.getCookie('test_id')) === 'finish';
                         
                         for (var j=0,len2=list.length; j<len2; j++) {
                             item = referenceMap[list[j]];
@@ -985,7 +1012,7 @@ function showTab(tab, main) {
                                     // hui.Control.getByFormname('form').getByFormname('subject_nxt').setDisabled(false);
                                     if (result && !result[0] && result[1]) {
                                         send_sms.hide();
-                                        hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject('newone');
+                                        
                                     }
                                     else if (result && result[0]) {
                                         send_sms.showErrorByTree(result[0]);
@@ -1064,9 +1091,7 @@ function showTab(tab, main) {
                     <div class="page_banner_padding">&nbsp;</div>
                     <h1 class="test_title"><span>你想知道自己的前端技术实力排名吗</span><img alt="你想知道自己前端技术实力排名吗？" src="img/title_bg.png" width="55%"></h1>
                     <div class="test_desc">2014年，北京、上海、广州的互联网公司已超过30,000家，其中前端开发人员已超过100,000人，<br>你想知道自己技术实力的排名吗</div>
-                    <div class="resume_btn" id="btn_report" onclick="hui.Control.getByFormname('form').hide();showTestScore()" style="display:none;">查看报告</div>
-                    <div class="resume_btn" id="resume_btn" onclick="hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject();" style="display:none;">继续测试</div>
-                    <div class="test_btn" onclick="hui.Control.getByFormname('form').show();hui.Control.getByFormname('form').initSubject('newone');" onclick12="var send_sms=hui.Control.getByFormname('send_sms');send_sms.hideError();send_sms.show()" style="display123:none;">立即测试newone</div> 
+                    
                     <a class="test_btn" href="#!/start~amount=5&amp;tid=100001">立即测试</a>
                 </div> 
             </div>
@@ -1145,7 +1170,7 @@ function showTab(tab, main) {
                                 var tpl = [
                                     '<li class="item_row">',
                                     '    <span class="t_user">#{uid}</span>',
-                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_time">#{time} 分钟</span>',
                                     '    <span class="t_score">#{score}</span>',
                                     '    <span class="t_date">#{time_end}</span>',
                                     '</li>'
@@ -1169,7 +1194,7 @@ function showTab(tab, main) {
                     });
                 },
                 showTestButton: function() {
-                    var test_id = window.test_id;
+                    var test_id = hui.util.getCookie('test_id');
                     $('#resume_btn').hide();
                     $('#btn_report').hide();
                     if (test_id && hui.util.getCookie('testid_' + test_id) === 'finish') {
@@ -1192,6 +1217,9 @@ function showTab(tab, main) {
             <div class="page_container">
                 <div class="test_history">
                     <h3 class="history_title">评测历史列表</h3>
+                    <!--<ul class="test_list">
+                        <li class="item_row"><span class="t_user">用户名</span>    <span class="t_time">耗时(分钟)</span><span class="t_score">得分</span>    <span class="t_date">测评时间</span></li>
+                    </ul> -->
                     <ul class="test_list" id="history_list">
                         <li class="item_row">
                             <span class="t_user">tomcat</span>
@@ -1235,7 +1263,7 @@ function showTab(tab, main) {
                                 var tpl = [
                                     '<li class="item_row">',
                                     '    <span class="t_user">#{uid}</span>',
-                                    '    <span class="t_time">#{time}</span>',
+                                    '    <span class="t_time">#{time} 分钟</span>',
                                     '    <span class="t_score">#{score}</span>',
                                     '    <span class="t_date">#{time_end}</span>',
                                     '</li>'
@@ -1378,7 +1406,7 @@ function showTab(tab, main) {
     </div>
     <script>
     function queryTestResult(cb) {
-        Requester.get('/ue_api/internal/get_result?test_id=' + window.test_id, {
+        Requester.get('/ue_api/internal/get_result?test_id=' + hui.util.getCookie('test_id'), {
             onsuccess: function(result){
                 if (result && !result[0] && result[1]) {
                     var data = result[1];

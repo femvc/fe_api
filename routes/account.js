@@ -68,10 +68,10 @@ exports.register = function (req, res, next) {
 exports.auth = function (req, res, next) {
     console.log('============account.auth:' + req.sessionID + '===============');
     req.sessionStore.user = req.sessionStore.user || {};
-    req.sessionStore.question = req.sessionStore.question || {};
-    req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
-    req.sessionStore.paper = req.sessionStore.paper || {};
-    req.sessionStore.paperContent = req.sessionStore.paperContent || {};
+    // req.sessionStore.question = req.sessionStore.question || {};
+    // req.sessionStore.questionIndex = req.sessionStore.questionIndex || {};
+    // req.sessionStore.paper = req.sessionStore.paper || {};
+    // req.sessionStore.paperContent = req.sessionStore.paperContent || {};
     
     if (req.paramlist.uid && req.paramlist.uid.join && req.paramlist.uid[0] && req.paramlist.uid[0].length === 8) {
         req.sessionStore.user[req.sessionID] = req.paramlist.uid[0];
