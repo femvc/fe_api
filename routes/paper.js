@@ -14,7 +14,7 @@ function createQuestionList(req, res, next) {
             'update_time': -1,
             'create_time': -1
         },
-        filter = {},
+        filter = {deleted: '0'},
         amount = String(req.paramlist.amount),
         questionRate = [
             'Javascript', 2,
