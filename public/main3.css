@@ -58,7 +58,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .page_middle .history_title { text-align: left; padding: 0px; margin: 0px; font-weight: bold; font-size: 18px; color: #333; padding-bottom: 25px; background-image: url(img/point.png); background-repeat: no-repeat; background-position: -5px 1px; padding-left: 22px; margin-top: -2px; }
 .page_middle .contact_title { padding: 0px; margin: 0px; font-weight: bold; font-size: 16px; color: #fff; padding-bottom: 23px; background-image: url(img/contact.png); background-repeat: no-repeat; background-position: 0px 0px; padding-left: 50px; margin-top: -6px; padding-top: 6px; }
 .page_middle .test_history .test_list { padding: 0px; margin: 0px; color: #FD841C; font-size: 14px; line-height: 16px; border-top: 1px solid #ccc; list-style: none; }
-.page_middle .test_history .item_row { border-bottom: 1px dashed #ccc; height: 34px; padding-left: 0px; padding-top: 8px; list-style-position: inside; }
+.page_middle .test_history .item_row { border-bottom: 1px dashed #ccc; height: 33px; padding-left: 0px; padding-top: 8px; list-style-position: inside; }
 .page_middle .test_history .item_row:nth-of-type(odd) { background: #efefef; }
 .page_middle .test_history .item_row .t_date { float: left; width: 160px; color: #666; margin-top: 5px; margin-left: 40px; }
 .page_middle .test_history .item_row .t_user { float: left; width: 100px; text-indent: 2px; overflow: hidden; white-space: nowrap; border-width: 1px 2px; margin-top: 3px; background-color: #FD841C; border: 2px solid #FD841C; border-radius: 9px; color: white; text-indent: 1px; text-align: center; }
