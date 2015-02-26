@@ -856,10 +856,6 @@ function showTab(tab, main) {
             hui.Router.setRule('/report', 'pageReport');
             hui.window.pageReport = pageReport;
         }
-        
-
-                
-
         </script>
         <div class="page_body detail_box" id="detail" style="background-color: white;display: none;">
             <div class="page_container" style="text-align:center">
@@ -1263,6 +1259,7 @@ function showTab(tab, main) {
                                 var tpl = [
                                     '<li class="item_row">',
                                     '    <span class="t_user">#{uid}</span>',
+                                    '    <span class="t_time">#{count} 题</span>',
                                     '    <span class="t_time">#{time} 分钟</span>',
                                     '    <span class="t_score">#{score}</span>',
                                     '    <span class="t_date">#{time_end}</span>',
