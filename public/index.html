@@ -1275,7 +1275,7 @@ function showTab(tab, main) {
                                     list[i].score = list[i].score || '-';
                                     list[i].time_end = list[i].time_end || '-';
                                     
-                                    html += hui.util.format(tpl, list[i]);
+                                    html = hui.util.format(tpl, list[i]) + html;
                                 }
                                 
                                 hui.g('history_list').innerHTML = html;
