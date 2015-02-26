@@ -1172,7 +1172,7 @@ function showTab(tab, main) {
                                     '</li>'
                                 ].join('');
                                 
-                                var list = result[1].rankList;
+                                var list = result[1].rankList.reverse();
                                 var html = '';
                                 for (var i=0,len=list.length; i<len && i<4; i++) {
                                     list[i].time = Math.ceil((hui.util.parseDate(list[i].time_end).getTime() - hui.util.parseDate(list[i].time_start).getTime()) / 60000);
@@ -1181,7 +1181,7 @@ function showTab(tab, main) {
                                     list[i].score = list[i].score || '-';
                                     list[i].time_end = list[i].time_end || '-';
                                     
-                                    html = hui.util.format(tpl, list[i]) + html;
+                                    html += hui.util.format(tpl, list[i]);
                                 }
                                 
                                 hui.g('test_list').innerHTML = html;
