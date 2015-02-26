@@ -44,6 +44,7 @@ function getRanks(req, res, next) {
                 test_id: resp[i].test_id,
                 score: resp[i].score,
                 correct: resp[i].correct,
+                count: resp[i].question ? resp[i].question.length : 20,
                 time_start: resp[i].time_start,
                 time_end: resp[i].time_end,
                 uid: resp[i].uid,
