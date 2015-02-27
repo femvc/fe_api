@@ -632,7 +632,7 @@ function showTab(tab, main) {
                         <div class="result_level">测评结果 <b class="strong" ui="type:'Label',formname:'cur'">高级前端工程师</b> <span style="display123:none"> 平均年薪 <b class="b"><span ui="type:'Label',formname:'annual'">20</span>万</b></span>，<span style="display123:none" class="effect" onmousedown="hui.c('spam', this).remove()">预计经过<b class="b">前端训练营</b> 的<a href="#!/lesson"><b class="strong highlight"><span ui="type:'Label',formname:'nxt'">前端架构师</span>特训</b></a><br/>能够达到 <b class="strong" ui="type:'Label',formname:'nxt2'">前端架构师</b> 级别，&nbsp;您的薪资可以提高 <b class="b" ui="type:'Label',formname:'increase'">6~12</b>万，达到 <b class="b" ui="type:'Label',formname:'target'">26~34</b>万/年以上。 </span></div>
                         <div style="display123:none" class="effect">咨询预约：<b class="tel">189<span class="spam" style="display:none;">8</span>18<span class="spam" style="display:none;">8</span>12<span class="spam" style="display:none;">8</span>64<span class="spam" style="display:none;">8</span>28</b> <b class="b">&nbsp;</b>微信：<b class="tel">fe<span class="spam" style="display:none;">8</span>camps</b> &nbsp;&nbsp;&nbsp; [我们的宗旨是] 培养前端专家级人物！</div>
           
-                        <div class="result_title"> 单项评分 &nbsp;&nbsp;<a href="#!/detail" onclick123="showPaperDetail()" style="cursor:pointer;"><small>(答题详情)</small></a></div>
+                        <div class="result_title"> 单项评分 &nbsp;&nbsp;<a href="#!/detail" id="show_detail" onclick123="showPaperDetail()" style="cursor:pointer;"><small>(答题详情)</small></a></div>
                         <div class="result_detail">
                             <div id="skill_chart" style="min-width: 310px; max-width: 310px; height: 300px; position: absolute;z-index:9999;margin-left: 420px;"></div>
                             <div ui="type:'Table',formname:'skill_list',fields:'&listTable',datasource:'&listData',sortable:true,size:{width:390}"></div>
@@ -697,6 +697,8 @@ function showTab(tab, main) {
                 finish: function () {
                     var me = this;
                     showTab('test', 'report');
+
+                    hui.g('show_detail').href = '#!/detail' + (hui.Master.parseLocator().query.test_id || hui.util.getCookie('test_id'));
 
                     me.showEvaluateReport();
                 },
