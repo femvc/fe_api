@@ -397,7 +397,7 @@ function showTab(tab, main) {
                         // hui.Control.getByFormname('result').hide();
                         // hui.Control.getByFormname('candidate').show();
                         // showEvaluateReport();
-                        window.location.href = '#/report';
+                        window.location.href = '#/report~test_id='+ (hui.Master.parseLocator().query.test_id || hui.util.getCookie('test_id'));
                     };
                 },
                 showTestScoreCallback: function () {
