@@ -698,7 +698,7 @@ function showTab(tab, main) {
                     var me = this;
                     showTab('test', 'report');
 
-                    hui.g('show_detail').href = '#!/detail' + (hui.Master.parseLocator().query.test_id || hui.util.getCookie('test_id'));
+                    hui.g('show_detail').href = '#!/detail~test_id=' + (hui.Master.parseLocator().query.test_id || hui.util.getCookie('test_id'));
 
                     me.showEvaluateReport();
                 },
