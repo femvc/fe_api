@@ -99,7 +99,7 @@ hr.clearfix { font-size: 1px; line-height: 1px; height: 1px; overflow: hidden; c
 .subject_start .subject_box .subject_action .hui_button_disabled:hover { background-color: #999; border-color: #999; color: #ccc }
 .subject_start .subject_box .subject_action .subject_pre { float: left; padding-left: 20px; padding-right: 5px; color: #fff; line-height: 1.2em; font-size: 18px; padding-bottom: 5px; margin-top: 10px; padding-top: 21px; margin-left: 0px }
 .subject_start .subject_box .subject_action .subject_end { float: right; background-image: url(img/icon_exit.png); background-repeat: no-repeat; background-position: 0px 9px; padding-left: 27px; color: #fff; line-height: 1.2em; font-size: 16px; padding-bottom: 5px; margin-top: 21px; padding-top: 10px; margin-right: 40px }
-.subject_start .subject_box .subject_skip { margin-top: 15px; display: inline-block }
+.subject_start .subject_box .subject_skip { margin-top: 15px; display: none }
 .subject_start .subject_box { }
 .subject_start .subject_box { }
 .subject_start .subject_box .hui_panel { }

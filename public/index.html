@@ -1403,7 +1403,8 @@ function showTab(tab, main) {
     </div>
     <script>
     function queryTestResult(cb) {
-        Requester.get('/ue_api/internal/get_result?test_id=' + hui.util.getCookie('test_id'), {
+        var test_id = hui && hui.Master && hui.Master.parseLocator ? hui.Master.parseLocator().query.test_id : null;
+        Requester.get('/ue_api/internal/get_result?test_id=' + (test_id || hui.util.getCookie('test_id')), {
             onsuccess: function(result){
                 if (result && !result[0] && result[1]) {
                     var data = result[1];
