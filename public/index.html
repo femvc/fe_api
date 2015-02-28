@@ -663,19 +663,19 @@ function showTab(tab, main) {
                             }
                         }, {
                             width: 40,
+                            title: '题数',
+                            sortable: true,
+                            field: 'count',
+                            content: function (item) {
+                                return item['count'];
+                            }
+                        }, {
+                            width: 40,
                             title: '答对',
                             sortable: true,
                             field: 'correct',
                             content: function (item) {
                                 return item['correct'];
-                            }
-                        }, {
-                            width: 40,
-                            title: '得分',
-                            sortable: true,
-                            field: 'score',
-                            content: function (item) {
-                                return item['score'];
                             }
                         }
                     ];
@@ -776,6 +776,7 @@ function showTab(tab, main) {
                             if (datasource[i] && category[datasource[i].skill]) {
                                 item = datasource[i];
                                 key = category[item.skill];
+                                item.count = key.sum;
                                 item.correct = key.right;
                                 item.score = Math.floor(key.right*100/key.sum);
                             }
