@@ -667,7 +667,7 @@ function showTab(tab, main) {
                             sortable: true,
                             field: 'count',
                             content: function (item) {
-                                return item['count'];
+                                return item['count'] || 0;
                             }
                         }, {
                             width: 40,
@@ -776,9 +776,9 @@ function showTab(tab, main) {
                             if (datasource[i] && category[datasource[i].skill]) {
                                 item = datasource[i];
                                 key = category[item.skill];
-                                item.count = key.sum || 0;
+                                item.count = key.sum;
                                 item.correct = key.right;
-                                item.score = Math.floor(key.right*100/(item.count + 0.00001));
+                                item.score = Math.floor(key.right*100/key.sum);
                             }
                         }
                         
