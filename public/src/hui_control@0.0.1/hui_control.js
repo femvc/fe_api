@@ -1199,7 +1199,7 @@ hui.define('hui_control', [], function () {
                         key = text.replace('&', '');
                         attrs[i] = hui.window[key];
                     }
-                    else if (text.indexOf('@') === 0 && hui.Action && (typeof hui.Master.get) === 'function') {
+                    else if (text.indexOf('@') === 0 && hui.Action && hui.Action.started && (typeof hui.Master.get) === 'function') {
                         key = text.replace('&', '');
                         action = hui.Master.get();
                         if (action && action.model && (typeof action.model.get) === 'function') {
@@ -1464,7 +1464,7 @@ hui.define('hui_control', [], function () {
         }
         // 如果传入的parentControl是DOM元素，视为未传入值处理
         parentControl = parentControl && parentControl.getId ? parentControl :
-            (hui.Action && hui.Master.get ? (hui.Master.get(parentControl) || hui.Master.get()) : hui.window);
+            (hui.Action && hui.Action.started && hui.Master.get ? (hui.Master.get(parentControl) || hui.Master.get()) : hui.window);
 
         if (id === undefined || (parentControl && parentControl.getId && id === parentControl.getId())) {
             result = parentControl;
