@@ -36,7 +36,8 @@ hui.define('hui_panel', ['hui_control'], function () {
          */
         render: function (options) {
             hui.Panel.superClass.prototype.render.call(this);
-            var me = this;
+            var me = this,
+                main = me.getMain();
             // 渲染对话框
             hui.Control.init(me.getMain(), {}, me);
             // 设置_rendered
