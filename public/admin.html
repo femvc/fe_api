@@ -99,7 +99,7 @@ window.admin.init = function () {
     window.form = hui.Control.getByFormname('form');
 
     window.form.addOption = function (obj) {
-        var content = window.form.getById('options').getMain(),
+        var content = hui.Control.getById('options').getMain(),
             list,
             index;
         obj = obj || {};
@@ -123,7 +123,7 @@ window.admin.init = function () {
         hui.Control.create(hui.g('content' + obj.index));
     };
     window.form.removeOption = function (index) {
-        var content = window.form.getById('options');
+        var content = hui.Control.getById('options');
         content.getByFormname(index).dispose();
     };
 
@@ -164,7 +164,7 @@ window.admin.init = function () {
 
                 window.form.setValueByTree(data);
                 window.form.labellist = data.label;
-                window.form.getById('options').disposeChild();
+                hui.Control.getById('options').disposeChild();
 
                 for (var i in data.options) {
                     data.options[i].index = i;
