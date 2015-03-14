@@ -50,15 +50,7 @@ window.admin.init = function () {
             if (data) {
 
                 window.listTable = [{
-                    width: 296,
-                    title: '题目',
-                    sortable: true,
-                    field: 'title',
-                    content: function (item) {
-                        return '';// hui.util.encodehtml(item['title']);
-                    }
-                }, {
-                    width: 296,
+                    width: 1000,
                     title: 'option',
                     field: 'title',
                     content: function (item) {
@@ -68,21 +60,7 @@ window.admin.init = function () {
                             item['options'][i].index = i;
                             html += hui.format(tpl, item['options'][i]);
                         }
-                        return hui.util.encodehtml(item['title']) + '<ul class="option_list">' + html + '</ul>';
-                    }
-                }, {
-                    width: 296,
-                    title: 'update_time',
-                    field: 'update_time',
-                    content: function (item) {
-                        return item['update_time'];
-                    }
-                }, {
-                    width: 296,
-                    title: 'action',
-                    field: 'atcid',
-                    content: function (item) {
-                        return '<a href="?atcid=' + item['atcid'] + '">edit</a>';
+                        return item['update_time'] + '<a href="?atcid=' + item['atcid'] + '">edit</a>' + hui.util.encodehtml(item['title']) + '<ul class="option_list">' + html + '</ul>';
                     }
                 }];
 
