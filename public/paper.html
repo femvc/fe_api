@@ -60,7 +60,7 @@ window.admin.init = function () {
                             item['options'][i].index = i;
                             html += hui.format(tpl, item['options'][i]);
                         }
-                        return item['update_time'] + '<a href="?atcid=' + item['atcid'] + '">edit</a>' + hui.util.encodehtml(item['title']) + '<ul class="option_list">' + html + '</ul>';
+                        return '<div class="atc_action">' + item['update_time'] + '<a href="?atcid=' + item['atcid'] + '">edit</a>' + '</div>' + hui.util.encodehtml(item['title']) + '<ul class="option_list">' + html + '</ul>';
                     }
                 }];
 
