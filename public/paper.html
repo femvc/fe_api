@@ -55,7 +55,7 @@ window.admin.init = function () {
                     sortable: true,
                     field: 'title',
                     content: function (item) {
-                        return hui.util.encodehtml(item['title']);
+                        return '';// hui.util.encodehtml(item['title']);
                     }
                 }, {
                     width: 296,
@@ -68,7 +68,7 @@ window.admin.init = function () {
                             item['options'][i].index = i;
                             html += hui.format(tpl, item['options'][i]);
                         }
-                        return '<ul class="option_list">' + html + '</ul>';
+                        return hui.util.encodehtml(item['title']) + '<ul class="option_list">' + html + '</ul>';
                     }
                 }, {
                     width: 296,
