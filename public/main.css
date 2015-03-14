@@ -11,7 +11,7 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .page .row_head { padding-bottom: 10px; height: 31px; padding-top: 10px }
 .page .subject_add .row_title { width: 55px; padding-top: 10px }
 .page .subject_add .hui_textinput { float: left; border: 1px solid #cccccc }
-.page .subject_list { width: 600px; float: left; }
+.page .subject_list { position: relative; z-index: 2; }
 .page .subject_list .form_title { margin: 17px 0px }
 .page .subject_list .hui_table { }
 .page .subject_list .hui_table table { }
