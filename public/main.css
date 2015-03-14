@@ -30,6 +30,11 @@ background-image: url(img/page_bg.jpg); background-size: 100% 100%; height: 100%
 .page .subject_list .option_list { padding: 0px 0px 0px 20px; list-style-type: circle; font-size: 20px; line-height: 16px; margin: 0px }
 .page .subject_list .option_list .yes { list-style-type: square; color: green }
 .page .subject_list .option_list .txt { font-size: 14px; line-height: 18px; color: #333 }
+.page .subject_list .atc_action {
+	position: absolute;
+  right: 20px;
+  margin-top: 30px;
+}
 .page .subject_add { width: 500px; float: left; }
 .page .subject_add .form_title { padding: 0px; margin: 0px; padding: 24px 0px; text-align: left; font-size: 22px }
 .page .subject_add .tr_row { clear: both; border-bottom: 1px solid #ccc; padding: 10px 0px; overflow: hidden; margin-top: -1px }
